@@ -28,7 +28,9 @@ class ObraCrudController extends AbstractCrudController
         ] as $field) {
             yield $field;
         };
-        yield AssociationField::new('artist')->setHelp('nombre del artista');;
+        yield AssociationField::new('artist')
+            ->autocomplete()
+            ->setHelp('nombre del artista');;
         yield AssociationField::new('location')
             ->setFormTypeOption('choice_label', 'name')
         ;

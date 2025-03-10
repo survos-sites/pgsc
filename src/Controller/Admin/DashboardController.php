@@ -33,6 +33,12 @@ class DashboardController extends AbstractDashboardController
     {
     }
 
+    public function configureCrud(): Crud
+    {
+        return parent::configureCrud()
+            ->showEntityActionsInlined();
+    }
+
     public function index(): Response
     {
         return $this->render('admin/dashboard.html.twig');

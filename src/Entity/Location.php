@@ -33,6 +33,9 @@ class Location implements \Stringable
     #[ORM\Column(length: 24, nullable: true)]
     private ?string $type = null;
 
+    #[ORM\Column(nullable: true)]
+    private int $obraCount = 0;
+
     public function __construct()
     {
         $this->obras = new ArrayCollection();
@@ -78,6 +81,7 @@ class Location implements \Stringable
     public function addObra(Obra $obra): static
     {
         if (!$this->obras->contains($obra)) {
+            $this->obraCount++;
             $this->obras->add($obra);
             $obra->setLocation($this);
         }
@@ -88,6 +92,7 @@ class Location implements \Stringable
     public function removeObra(Obra $obra): static
     {
         if ($this->obras->removeElement($obra)) {
+            $this->obraCount--;
             // set the owning side to null (unless already changed)
             if ($obra->getLocation() === $this) {
                 $obra->setLocation(null);
@@ -122,6 +127,18 @@ class Location implements \Stringable
     public function setType(?string $type): static
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    public function getObraCount(): ?int
+    {
+        return $this->obraCount;
+    }
+
+    public function setObraCount(?int $obraCount): static
+    {
+        $this->obraCount = $obraCount;
 
         return $this;
     }

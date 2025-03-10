@@ -42,6 +42,9 @@ class Artist implements \Stringable
     #[ORM\OneToMany(targetEntity: Obra::class, mappedBy: 'artist', orphanRemoval: true)]
     private Collection $obras;
 
+    #[ORM\Column(nullable: true)]
+    private int $obraCount = 0;
+
     public function __construct()
     {
         $this->obras = new ArrayCollection();
@@ -135,6 +138,7 @@ class Artist implements \Stringable
     public function addObra(Obra $obra): static
     {
         if (!$this->obras->contains($obra)) {
+            $this->obraCount++;
             $this->obras->add($obra);
             $obra->setArtist($this);
         }
@@ -145,6 +149,7 @@ class Artist implements \Stringable
     public function removeObra(Obra $obra): static
     {
         if ($this->obras->removeElement($obra)) {
+            $this->obraCount--;
             // set the owning side to null (unless already changed)
             if ($obra->getArtist() === $this) {
                 $obra->setArtist(null);
@@ -157,5 +162,17 @@ class Artist implements \Stringable
     public function __toString(): string
     {
         return $this->getName()??$this->getId();
+    }
+
+    public function getObraCount(): ?int
+    {
+        return $this->obraCount;
+    }
+
+    public function setObraCount(?int $obraCount): static
+    {
+        $this->obraCount = $obraCount;
+
+        return $this;
     }
 }

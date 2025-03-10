@@ -7,7 +7,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ObraRepository::class)]
-class Obra
+class Obra implements \Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -108,5 +108,10 @@ class Obra
         $this->image = $image;
 
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->getTitle();
     }
 }

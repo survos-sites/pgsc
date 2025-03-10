@@ -1,0 +1,14 @@
+{{ entity.instance.obras|length }}
+<ol>
+    {% for obra in entity.instance.obras %}
+        <li>
+            {% if obra.image %}
+            <img src="/uploads/{{ obra.image }}" style="max-width: 70px" />
+
+            {{ obra.image }}
+            {% endif %}
+            {{ obra.title }}
+        </li>
+    {% endfor %}
+
+</ol>
