@@ -6,6 +6,7 @@ use App\Entity\Obra;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
@@ -31,5 +32,9 @@ class ObraCrudController extends AbstractCrudController
         yield AssociationField::new('location')
             ->setFormTypeOption('choice_label', 'name')
         ;
+        yield ImageField::new('image')
+            ->setBasePath('uploads/')
+            ->setUploadDir('public/uploads');
+
     }
 }

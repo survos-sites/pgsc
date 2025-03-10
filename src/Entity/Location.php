@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: LocationRepository::class)]
-class Location
+class Location implements \Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -29,6 +29,9 @@ class Location
 
     #[ORM\Column(length: 255)]
     private ?string $code = null;
+
+    #[ORM\Column(length: 24, nullable: true)]
+    private ?string $type = null;
 
     public function __construct()
     {
@@ -102,6 +105,23 @@ class Location
     public function setCode(string $code): static
     {
         $this->code = $code;
+
+        return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->getName();
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(?string $type): static
+    {
+        $this->type = $type;
 
         return $this;
     }

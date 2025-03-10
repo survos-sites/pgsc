@@ -7,6 +7,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class LocationCrudController extends AbstractCrudController
 {
@@ -15,14 +16,19 @@ class LocationCrudController extends AbstractCrudController
         return Location::class;
     }
 
-    /*
     public function configureFields(string $pageName): iterable
     {
+        $types = ['museo','galleria','cc']; // @todo: enum?
         return [
-            IdField::new('id'),
-            TextField::new('title'),
-            TextEditorField::new('description'),
+            IdField::new('code'),
+            TextField::new('name'),
+            TextField::new('type')
+                ->setFormType(ChoiceType::class)
+                ->setFormTypeOptions([
+                    'expanded' => true,
+                    'required' => true,
+                    'choices' => array_combine($types,$types),
+                ])
         ];
     }
-    */
 }

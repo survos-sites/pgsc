@@ -5,9 +5,13 @@ namespace App\Controller\Admin;
 use App\Entity\Artist;
 use App\Entity\Location;
 use App\Entity\Obra;
+use App\Repository\ArtistRepository;
+use App\Repository\LocationRepository;
+use App\Repository\ObraRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminDashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -20,6 +24,15 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_ADMIN')]
 class DashboardController extends AbstractDashboardController
 {
+
+    public function __construct(
+        private ArtistRepository $artistRepository,
+        private LocationRepository $locationRepository,
+        private ObraRepository $obraRepository,
+    )
+    {
+    }
+
     public function index(): Response
     {
         return $this->render('admin/dashboard.html.twig');
@@ -53,12 +66,26 @@ class DashboardController extends AbstractDashboardController
 
     public function configureMenuItems(): iterable
     {
-        yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
-         yield MenuItem::linkToCrud('Artistas', 'fas fa-list', Artist::class);
-         yield MenuItem::linkToCrud('Ubi', 'fas fa-list', Location::class);
-         yield MenuItem::linkToCrud('Obras', 'fas fa-list', Obra::class);
+        yield MenuItem::linkToDashboard('Dashboard', 'tabler:home');
+         yield MenuItem::linkToCrud('Artistas', 'tabler:list', Artist::class)
+             ->setBadge($this->artistRepository->count())
+         ;
+         yield MenuItem::linkToCrud('Ubi', 'tabler:location', Location::class)
+             ->setBadge($this->locationRepository->count())
+         ;
+
+         yield MenuItem::linkToCrud('Obras', 'ri:image-line', Obra::class)
+             ->setBadge($this->obraRepository->count())
+         ;
+
     }
 
+    public function configureAssets(): Assets
+    {
+        return Assets::new()
+            ->useCustomIconSet()
+            ;
+    }
     public function configureActions(): Actions
     {
         return parent::configureActions()
