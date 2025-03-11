@@ -28,64 +28,39 @@ Admin from fixtures:
     'plainPassword' => 'adminpass',
 
 
-**Option 2.** [Download Composer][6] and use the `composer` binary installed
-on your computer to run these commands:
+## Project Goals
 
-```bash
-# you can create a new project based on the Symfony Demo project...
-composer create-project symfony/symfony-demo my_project
+To administer the Popup Galleries of San Cris exposition, and provide the data for the associated mobile app.
 
-# ...or you can clone the code repository and install its dependencies
-git clone https://github.com/symfony/demo.git my_project
-cd my_project/
-composer install
-```
+As an administrator, I can
 
-**Option 3.** Click the following button to deploy this project on Platform.sh,
-the official Symfony PaaS, so you can try it without installing anything locally:
+* Add/Edit Locations
+* Add/Edit Artists
+* Add/Edit Artwork
+* Manage Users
+* Print reports 
+  * Artwork by Artist 
+  * Artwork by Location
+  * Catalog
+* Trigger requests for automatic translations of the database
 
-<p align="center">
-<a href="https://console.platform.sh/projects/create-project?template=https://raw.githubusercontent.com/symfonycorp/platformsh-symfony-template-metadata/main/symfony-demo.template.yaml&utm_content=symfonycorp&utm_source=github&utm_medium=button&utm_campaign=deploy_on_platform"><img src="https://platform.sh/images/deploy/lg-blue.svg" alt="Deploy on Platform.sh" width="180px" /></a>
-</p>
+As an artist, I can
 
-Usage
------
+* Add/Edit my artwork, including pricing, description, etc.
+* Update my profile (bio, photo, etc.)
+* Give admin permissions to another user for my artwork
 
-There's no need to configure anything before running the application. There are
-2 different ways of running this application depending on your needs:
+As a registered user, from the website, I can
 
-**Option 1.** [Download Symfony CLI][4] and run this command:
+* "Like" or clap for pieces I like
+* See links to purchase
+* Share items on Social media
 
-```bash
-cd my_project/
-symfony serve
-```
+* As a Visitor, I can
 
-Then access the application in your browser at the given URL (<https://localhost:8000> by default).
+* See the artist and locations
+* See artwork with QR codes
+* Link to the mobile app
 
-**Option 2.** Use a web server like Nginx or Apache to run the application
-(read the documentation about [configuring a web server for Symfony][3]).
 
-On your local machine, you can run this command to use the built-in PHP web server:
-
-```bash
-cd my_project/
-php -S localhost:8000 -t public/
-```
-
-Tests
------
-
-Execute this command to run tests:
-
-```bash
-cd my_project/
-./bin/phpunit
-```
-
-[1]: https://symfony.com/doc/current/best_practices.html
-[2]: https://symfony.com/doc/current/setup.html#technical-requirements
-[3]: https://symfony.com/doc/current/setup/web_server_configuration.html
-[4]: https://symfony.com/download
-[5]: https://symfony.com/book
-[6]: https://getcomposer.org/
+The mobile app requirements are listed elsewhere, this is for the desktop-based website.

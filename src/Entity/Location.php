@@ -9,6 +9,8 @@ use App\Repository\LocationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Survos\CoreBundle\Entity\RouteParametersInterface;
+use Survos\CoreBundle\Entity\RouteParametersTrait;
 use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: LocationRepository::class)]
@@ -19,8 +21,12 @@ use Symfony\Component\Serializer\Attribute\Groups;
         new GetCollection(),
     ]
 )]
-class Location implements \Stringable
+class Location implements \Stringable, RouteParametersInterface
 {
+    use RouteParametersTrait;
+    const array UNIQUE_PARAMETERS=['locationId' => 'id'];
+
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

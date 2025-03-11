@@ -1,0 +1,8 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+
+    <h1>{{ location.name }}</h1>
+    @todo: description, map
+    <twig:Obras :obras="location.obras" :showLocation="false" />
+{% endblock %}

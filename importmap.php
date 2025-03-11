@@ -25,4 +25,17 @@ return [
     '@hotwired/turbo' => [
         'version' => '7.3.0',
     ],
+    '@tabler/core' => [
+        'version' => '1.1.1',
+    ],
+    'autosize' => [
+        'version' => '6.0.1',
+    ],
+    'imask' => [
+        'version' => '7.6.1',
+    ],
+    '@tabler/core/dist/css/tabler.min.css' => [
+        'version' => '1.1.1',
+        'type' => 'css',
+    ],
 ];

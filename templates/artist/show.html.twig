@@ -1,0 +1,11 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+
+    <h1>{{ artist.name }}</h1>
+    <p>
+        {{ artist.bio }}
+    </p>
+    {{ component('Obras', {obras: artist.obras, showArtist: false}) }}
+
+{% endblock %}

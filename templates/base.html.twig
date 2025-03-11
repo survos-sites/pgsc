@@ -1,17 +1,33 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-        {% block stylesheets %}
-        {% endblock %}
+{% extends "@SurvosBootstrap/%s/base.html.twig"|format(theme_option('theme')) %}
+{#{% extends "@SurvosBootstrap/sneat/" ~ layout|default('base') ~ ".html.twig" %}#}
+{#{% extends "@SurvosBootstrap/tabler/layout-" ~ layout|default('vertical') ~ ".html.twig" %}#}
 
-        {% block javascripts %}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
-        {% endblock %}
-    </head>
-    <body data-turbo="false">
-        {% block body %}{% endblock %}
-    </body>
-</html>
+    {% block stylesheets %}
+        {#        <link rel="stylesheet" href="https://kit.fontawesome.com/821a06d4ef.css" crossorigin="anonymous">#}
+{#        <link rel="stylesheet" type="text/css" href="{{ asset('bundles/survosapigrid/style.css') }}" ></link>#}
+                <link rel="stylesheet" type="text/css" href="{{ asset('bundles/survosbootstrap/bootstrap/style.css') }}">
+
+        {{ parent() }}
+    {% endblock %}
+
+
+{% block description "KPA: Kid Pan Alley Archive" %}
+
+
+{% set appShortName = 'KPA' %}
+
+
+{% block logo_mini %}<b>PG@SC</b>{% endblock %}
+{% block logo_large '<b>popup</b> Galleries' %}
+
+{#    {% block stylesheets %}#}
+{#        {{ parent() }}#}
+{#    {% endblock %}#}
+
+    {% block javascripts %}
+        {{ parent() }}
+        {% block importmap %}{{ importmap('app') }}{% endblock %}
+
+    {% endblock %}
+
+

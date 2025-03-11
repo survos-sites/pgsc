@@ -88,6 +88,9 @@
             "config/packages/inspector.yaml"
         ]
     },
+    "knplabs/knp-menu-bundle": {
+        "version": "v3.5.0"
+    },
     "knpuniversity/oauth2-client-bundle": {
         "version": "2.18",
         "recipe": {
@@ -129,6 +132,9 @@
     "survos/auth-bundle": {
         "version": "1.5.529"
     },
+    "survos/bootstrap-bundle": {
+        "version": "1.5.529"
+    },
     "survos/command-bundle": {
         "version": "1.5",
         "recipe": {
@@ -141,6 +147,9 @@
             "config/packages/survos_command.yaml",
             "config/routes/survos_command.yaml"
         ]
+    },
+    "survos/core-bundle": {
+        "version": "1.5.529"
     },
     "survos/deployment-bundle": {
         "version": "1.5.529"

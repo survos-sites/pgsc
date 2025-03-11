@@ -10,6 +10,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Survos\CoreBundle\Entity\RouteParametersInterface;
+use Survos\CoreBundle\Entity\RouteParametersTrait;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -21,8 +23,12 @@ use Symfony\Component\Validator\Constraints as Assert;
         new GetCollection(),
     ]
 )]
-class Artist implements \Stringable
+class Artist implements \Stringable, RouteParametersInterface
 {
+    use RouteParametersTrait;
+    const array UNIQUE_PARAMETERS=['artistId' => 'id'];
+
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

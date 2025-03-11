@@ -1,0 +1,24 @@
+<h3>{{ obras|length }} Obras</h3>
+<ol>
+    {% for obra in obras %}
+        <li>
+            {{ obra.title }}
+            {% if obra.description %}
+                <p>
+                    {{ obra.description }}
+                </p>
+            {% endif %}
+
+                {% if showArtist %}
+                <i>por {{ obra.artist }}</i>
+                {% endif %}
+                {% if showLocation %}
+                        {% if obra.location %}
+                                <code>@{{ obra.location }}</code>
+                        {% else %}
+                                {{ 'no-location'|trans }}
+                        {% endif %}
+                {% endif %}
+        </li>
+    {% endfor %}
+</ol>
