@@ -3,8 +3,8 @@ survos_bootstrap:
     code: pgsc
     abbr: <b>Popup</b>Galleries
 #    logo: /images/museado-sidebar-logo.png
-    logo: /images/museado-sidebar-small-logo.png
-    logo_small: /images/museado-sidebar-small-logo.png
+#    logo: /images/museado-sidebar-small-logo.png
+#    logo_small: /images/museado-sidebar-small-logo.png
   routes:
     homepage: app_homepage
     login: app_login

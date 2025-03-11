@@ -7,6 +7,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
@@ -21,13 +22,17 @@ class ObraCrudController extends AbstractCrudController
     {
         foreach ([
 //            IdField::new('id'),
-        TextField::new('code'),
+            TextField::new('code'),
             TextField::new('title'),
             TextEditorField::new('description'),
 
         ] as $field) {
             yield $field;
         };
+        foreach (['width','height','depth'] as $fieldName) {
+            yield IntegerField::new($fieldName);
+        }
+        yield TextField::new('materials');
         yield AssociationField::new('artist')
             ->autocomplete()
             ->setHelp('nombre del artista');;

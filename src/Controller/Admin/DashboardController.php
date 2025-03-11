@@ -83,6 +83,7 @@ class DashboardController extends AbstractDashboardController
          yield MenuItem::linkToCrud('Obras', 'ri:image-line', Obra::class)
              ->setBadge($this->obraRepository->count())
          ;
+         yield MenuItem::linkToRoute('home', 'tabler:home',  'app_homepage');
 
     }
 

@@ -1,14 +1,17 @@
 {{ entity.instance.obras|length }}
-<ol>
     {% for obra in entity.instance.obras %}
-        <li>
-            {% if obra.image %}
-            <img src="/uploads/{{ obra.image }}" style="max-width: 70px" />
 
-            {{ obra.image }}
+        <div>
+
+            {% if obra.image %}
+            <div>
+                {% set url = obra.image starts with 'https' ? obra.image : "/uploads/" ~ obra.image %}
+                <img src="{{ url }}" style="max-width: 65px"  />
+            </div>
             {% endif %}
-            {{ obra.title }}
-        </li>
+            <div >
+                {{ obra.title }}<br />por {{ obra.artist }}
+            </div>
+        </div>
     {% endfor %}
 
-</ol>

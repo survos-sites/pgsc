@@ -3,6 +3,9 @@
 namespace App\Factory;
 
 use App\Entity\Obra;
+use Bluemmb\Faker\PicsumPhotosProvider;
+use Faker\Provider\FakeCar;
+use FakerRestaurant\Provider\es_PE\Restaurant;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
@@ -36,12 +39,23 @@ final class ObraFactory extends PersistentProxyObjectFactory
      */
     protected function defaults(): array|callable
     {
+
+        $faker = self::faker();
+        $faker->addProvider(new PicsumPhotosProvider($faker));
+//        $faker->addProvider(EnglishWord::class);
+        $faker->addProvider(new FakeCar($faker));
+        $faker->addProvider(new Restaurant($faker));
         $title = join(' ', self::faker()->words(3));
         $title = u($title)->title(true);
+
+        $title = sprintf('%s, %s y %s', $faker->vegetableName(), $faker->beverageName(), $faker->foodName());
+//        $title = $faker->vehicle() . '/' . $faker->veh;
+//        $title = $faker->words()
         return [
             'artist' => ArtistFactory::new(),
             'title' => $title,
             'code' => strtolower($this->asciiSlugger->slug($title)),
+            'image' => $faker->imageUrl(200,200, true, true)
         ];
     }
 

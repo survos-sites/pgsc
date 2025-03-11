@@ -44,7 +44,7 @@ final class AppMenu implements KnpMenuHelperInterface
         $this->menuService->addAuthMenu($menu);
     }
 
-    #[AsEventListener(event: KnpMenuEvent::NAVBAR_MENU)]
+    #[AsEventListener(event: KnpMenuEvent::NAVBAR_MENU2)]
     public function navbarMenu(KnpMenuEvent $event): void
     {
         $menu = $event->getMenu();
@@ -66,6 +66,9 @@ final class AppMenu implements KnpMenuHelperInterface
         foreach (['by_location','by_artist'] as $grouping) {
             $this->add($nestedMenu, 'app_homepage',  label: $grouping);
         }
+        $this->add($menu, 'admin', [
+//            'ic'
+        ]);
 
     }
 }

@@ -1,24 +1,40 @@
 <h3>{{ obras|length }} Obras</h3>
-<ol>
+<table class="table">
+    <thead>
+    <tr>
+        <th>Image</th>
+        <th>Info</th>
+    </tr>
+    </thead>
+    <tbody>
     {% for obra in obras %}
-        <li>
-            {{ obra.title }}
-            {% if obra.description %}
-                <p>
-                    {{ obra.description }}
-                </p>
-            {% endif %}
+        <tr>
+            <td>
+                <img src="{{ obra.image }}"/>
+            </td>
+            <td>
 
+                <h3>{{ obra.title }}</h3>
+                {% if obra.description %}
+                    <p>
+                        {{ obra.description }}
+                    </p>
+                {% endif %}
                 {% if showArtist %}
-                <i>por {{ obra.artist }}</i>
+                    <i>por {{ obra.artist }}</i>
                 {% endif %}
                 {% if showLocation %}
-                        {% if obra.location %}
-                                <code>@{{ obra.location }}</code>
-                        {% else %}
-                                {{ 'no-location'|trans }}
-                        {% endif %}
+                    {% if obra.location %}
+                        <code>@{{ obra.location }}</code>
+                    {% else %}
+                        {{ 'no-location'|trans }}
+                    {% endif %}
                 {% endif %}
-        </li>
+            </td>
+
+        </tr>
     {% endfor %}
+
+    </tbody>
+</table>
 </ol>
