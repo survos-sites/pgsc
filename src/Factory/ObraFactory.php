@@ -55,7 +55,6 @@ final class ObraFactory extends PersistentProxyObjectFactory
             'artist' => ArtistFactory::new(),
             'title' => $title,
             'code' => strtolower($this->asciiSlugger->slug($title)),
-            'image' => $faker->imageUrl(200,200, true, true)
         ];
     }
 

@@ -6,17 +6,19 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use App\Repository\ObraRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: ObraRepository::class)]
 #[ApiResource(
-    normalizationContext: ['groups' => ['obra.read', 'obra.location.read']],
     operations: [
         new Get(),
         new GetCollection(),
-    ]
+    ],
+    normalizationContext: ['groups' => ['obra.read', 'obra.location.read']]
 )]
 class Obra implements \Stringable
 {
@@ -45,9 +47,6 @@ class Obra implements \Stringable
     #[Groups(['artist.obra.read', 'obra.read'])]
     private ?string $code = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $image = null;
-
     #[ORM\Column(nullable: true)]
     private ?int $year = null;
 
@@ -62,6 +61,17 @@ class Obra implements \Stringable
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $materials = null;
+
+    /**
+     * @var Collection<int, ObraImage>
+     */
+    #[ORM\OneToMany(targetEntity: ObraImage::class, mappedBy: 'obra', cascade: ['persist'], orphanRemoval: true)]
+    private Collection $obraImages;
+
+    public function __construct()
+    {
+        $this->obraImages = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -128,18 +138,6 @@ class Obra implements \Stringable
         return $this;
     }
 
-    public function getImage(): ?string
-    {
-        return $this->image;
-    }
-
-    public function setImage(?string $image): static
-    {
-        $this->image = $image;
-
-        return $this;
-    }
-
     public function __toString(): string
     {
         return $this->getTitle();
@@ -201,6 +199,36 @@ class Obra implements \Stringable
     public function setMaterials(?string $materials): static
     {
         $this->materials = $materials;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ObraImage>
+     */
+    public function getObraImages(): Collection
+    {
+        return $this->obraImages;
+    }
+
+    public function addObraImage(ObraImage $obraImage): static
+    {
+        if (!$this->obraImages->contains($obraImage)) {
+            $this->obraImages->add($obraImage);
+            $obraImage->setObra($this);
+        }
+
+        return $this;
+    }
+
+    public function removeObraImage(ObraImage $obraImage): static
+    {
+        if ($this->obraImages->removeElement($obraImage)) {
+            // set the owning side to null (unless already changed)
+            if ($obraImage->getObra() === $this) {
+                $obraImage->setObra(null);
+            }
+        }
 
         return $this;
     }

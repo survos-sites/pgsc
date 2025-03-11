@@ -3,12 +3,12 @@
 
         <div>
 
-            {% if obra.image %}
-            <div>
-                {% set url = obra.image starts with 'https' ? obra.image : "/uploads/" ~ obra.image %}
-                <img src="{{ url }}" style="max-width: 65px"  />
-            </div>
-            {% endif %}
+{#            {% if obra.image %}#}
+{#            <div>#}
+{#                {% set url = obra.image starts with 'https' ? obra.image : "/uploads/" ~ obra.image %}#}
+{#                <img src="{{ url }}" style="max-width: 65px"  />#}
+{#            </div>#}
+{#            {% endif %}#}
             <div >
                 {{ obra.title }}<br />por {{ obra.artist }}
             </div>
