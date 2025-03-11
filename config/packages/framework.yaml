@@ -7,8 +7,8 @@ framework:
 
     trusted_proxies:
       # https://www.cloudflare.com/ips/
-       -        REMOTE_ADDR,
-       -        127.0.0.1,
+       -        REMOTE_ADDR
+       -        127.0.0.1
        -        173.245.48.0/20
        -        103.21.244.0/22
        -        103.22.200.0/22
@@ -24,7 +24,7 @@ framework:
        -        104.24.0.0/14
        -        172.64.0.0/13
        -        131.0.72.0/22'
-       -    # https://symfony.com/doc/current/deployment/proxies.html
+     # https://symfony.com/doc/current/deployment/proxies.html
     trusted_headers: ['forwarded', 'x-forwarded-for', 'x-forwarded-host', 'x-forwarded-proto', 'x-forwarded-port', 'x-forwarded-prefix']
     #esi: true
     #fragments: true
