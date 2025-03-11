@@ -40,12 +40,17 @@ class AppFixtures extends Fixture
             }
         );
 
-//        UserFactory::createOne([
-//                'email' => 'superadmin@example.com',
-//                'plainPassword' => 'adminpass',
-//            ])
-//            ->promoteRole('ROLE_SUPER_ADMIN')
-//            ->create();
+        UserFactory::createOne([
+                'email' => 'superadmin@example.com',
+                'plainPassword' => 'adminpass',
+                'roles' => ['ROLE_SUPER_ADMIN'],
+            ]);
+
+        UserFactory::createOne([
+            'email' => 'admin@example.com',
+            'plainPassword' => 'adminpass',
+            'roles' => ['ROLE_ADMIN'],
+        ]);
 
 //        UserFactory::new()
 //            ->withAttributes([

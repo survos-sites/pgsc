@@ -15,7 +15,9 @@ Installation
 ```bash
 git clone git@github.com:survos-sites/pgsc && cd pgsc
 composer install
-bin/console doctrine:fixtures:load -
+bin/console doctrine:schema:update --force
+bin/console doctrine:fixtures:load -n
+bin/console survos:user:create test@test.com test --roles ROLE_ADMIN
 symfony server:start -d
 symfony open:local
 ```
