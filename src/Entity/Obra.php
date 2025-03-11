@@ -2,11 +2,22 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use App\Repository\ObraRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: ObraRepository::class)]
+#[ApiResource(
+    normalizationContext: ['groups' => ['obra.read', 'obra.location.read']],
+    operations: [
+        new Get(),
+        new GetCollection(),
+    ]
+)]
 class Obra implements \Stringable
 {
     #[ORM\Id]
@@ -15,12 +26,15 @@ class Obra implements \Stringable
     private ?int $id = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['obra.read'])]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['obra.read'])]
     private ?string $description = null;
 
     #[ORM\ManyToOne(inversedBy: 'obras')]
+    #[Groups(['obra.read'])]
     private ?Location $location = null;
 
     #[ORM\ManyToOne(inversedBy: 'obras')]
@@ -28,6 +42,7 @@ class Obra implements \Stringable
     private ?Artist $artist = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['artist.obra.read', 'obra.read'])]
     private ?string $code = null;
 
     #[ORM\Column(length: 255, nullable: true)]

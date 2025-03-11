@@ -2,44 +2,63 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use App\Repository\ArtistRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ArtistRepository::class)]
+#[ApiResource(
+    normalizationContext: ['groups' => ['artist.read', 'artist.obra.read']],
+    operations: [
+        new Get(),
+        new GetCollection(),
+    ]
+)]
 class Artist implements \Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['artist.read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['artist.read'])]
     private ?string $name = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['artist.read'])]
     private ?int $birthYear = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\Email()]
+    #[Groups(['artist.read'])]
     private ?string $email = null;
 
     #[ORM\Column(length: 16, unique: true)]
+    #[Groups(['artist.read'])]
     private ?string $code = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['artist.read'])]
     private ?string $instagram = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['artist.read'])]
     private ?string $bio = null;
 
     /**
      * @var Collection<int, Obra>
      */
     #[ORM\OneToMany(targetEntity: Obra::class, mappedBy: 'artist', orphanRemoval: true)]
+    #[Groups(['artist.obra.read'])]
     private Collection $obras;
 
     #[ORM\Column(nullable: true)]

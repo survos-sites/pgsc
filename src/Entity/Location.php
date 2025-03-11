@@ -2,23 +2,37 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use App\Repository\LocationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: LocationRepository::class)]
+#[ApiResource(
+    normalizationContext: ['groups' => ['location.obra.read', 'location.read']],
+    operations: [
+        new Get(),
+        new GetCollection(),
+    ]
+)]
 class Location implements \Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['obra.location.read','location.read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['location.read'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['location.read'])]
     private ?string $address = null;
 
     /**
@@ -28,12 +42,15 @@ class Location implements \Stringable
     private Collection $obras;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['location.read','obra.location.read'])]
     private ?string $code = null;
 
     #[ORM\Column(length: 24, nullable: true)]
+    #[Groups(['location.read'])]
     private ?string $type = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['location.read'])]
     private int $obraCount = 0;
 
     public function __construct()
