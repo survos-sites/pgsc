@@ -22,6 +22,12 @@ symfony server:start -d
 symfony open:local
 ```
 
+Admin from fixtures:
+
+    'email' => 'admin@example.com',
+    'plainPassword' => 'adminpass',
+
+
 **Option 2.** [Download Composer][6] and use the `composer` binary installed
 on your computer to run these commands:
 

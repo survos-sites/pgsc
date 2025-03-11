@@ -32,8 +32,8 @@ class AppFixtures extends Fixture
         }
 
         ObraFactory::createMany(
-            5, // create 5 comments
-            function() { // note the callback - this ensures that each of the 5 comments has a different Post
+            85,
+            function() { // note the callback - this ensures that each of the artwork has a locations and artists.  @todo: null locations
                 return [
                     'artist' => ArtistFactory::random(),
                     'location' => LocationFactory::random()]; // each comment set to a random Post from those already in the database
