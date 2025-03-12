@@ -10,7 +10,11 @@
     {% for obra in obras %}
         <tr>
             <td>
-                <img src="{{ obra.image }}"/>
+                {% for image in obra.obraImages %}
+                    {{ dump(image) }}
+{#                    <img src="{{ image }}"/>#}
+
+                {% endfor %}
             </td>
             <td>
 

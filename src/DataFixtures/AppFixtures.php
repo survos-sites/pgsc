@@ -58,12 +58,6 @@ class AppFixtures extends Fixture
             'roles' => ['ROLE_ADMIN'],
         ]);
 
-        UserFactory::createOne([
-            'email' => 'admin@example.com',
-            'plainPassword' => 'adminpass',
-            'roles' => ['ROLE_ADMIN'],
-        ]);
-
 //        UserFactory::new()
 //            ->withAttributes([
 //                'email' => 'admin@example.com',
