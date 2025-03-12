@@ -29,6 +29,7 @@ class LocaleSubscriber implements EventSubscriberInterface
 
     public function onKernelRequest(RequestEvent $event)
     {
+        return;
 //        $this->currentLocale = $event->getRequest()->getLocale();
 //        $this->logger->warning("Current Locale: " . $this->currentLocale);
         $request = $event->getRequest();
