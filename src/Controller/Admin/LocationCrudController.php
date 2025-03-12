@@ -3,7 +3,9 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Location;
+use App\Enum\LocationType;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
@@ -20,21 +22,18 @@ class LocationCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
-        $types = ['museo','galleria','cc']; // @todo: enum?
         return [
             IdField::new('code'),
             TextField::new('name'),
             IntegerField::new('obraCount')->onlyOnIndex(),
-            CollectionField::new('obras')
-                ->setTemplatePath('admin/field/obras.html.twig'),
+//            CollectionField::new('obras')
+//                ->setTemplatePath('admin/field/obras.html.twig'),
 
-            TextField::new('type')
-                ->setFormType(ChoiceType::class)
-                ->setFormTypeOptions([
-                    'expanded' => true,
-                    'required' => true,
-                    'choices' => array_combine($types,$types),
-                ])
+            ChoiceField::new('type')
+                ->setChoices(LocationType::choices())
+                ->renderExpanded()
+                ->renderAsBadges()
+                ->setRequired(true)
         ];
     }
 }

@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use App\Enum\LocationType;
 use App\Repository\LocationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -51,9 +52,9 @@ class Location implements \Stringable, RouteParametersInterface
     #[Groups(['location.read','obra.location.read'])]
     private ?string $code = null;
 
-    #[ORM\Column(length: 24, nullable: true)]
+    #[ORM\Column(type: 'string', length: 24, nullable: true, enumType: LocationType::class)]
     #[Groups(['location.read'])]
-    private ?string $type = null;
+    private ?LocationType $type = null;
 
     #[ORM\Column(nullable: true)]
     #[Groups(['location.read'])]
@@ -142,12 +143,12 @@ class Location implements \Stringable, RouteParametersInterface
         return $this->getName();
     }
 
-    public function getType(): ?string
+    public function getType(): ?LocationType
     {
         return $this->type;
     }
 
-    public function setType(?string $type): static
+    public function setType(?LocationType $type): static
     {
         $this->type = $type;
 
