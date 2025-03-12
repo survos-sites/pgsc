@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Obra;
 use App\Form\ObraImageFileType;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
@@ -49,5 +50,13 @@ class ObraCrudController extends AbstractCrudController
         yield CollectionField::new('obraImages')
             ->onlyOnIndex()
             ->setTemplatePath('admin/field/obra_images_small.html.twig');
+    }
+
+
+    public function configureFilters(Filters $filters): Filters
+    {
+        return parent::configureFilters($filters)
+            ->add('location')
+            ->add('artist');
     }
 }
