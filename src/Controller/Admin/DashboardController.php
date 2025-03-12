@@ -94,6 +94,11 @@ class DashboardController extends AbstractDashboardController
 //                MenuItem::linkToCrud('Posts', 'tabler:home', Obra::class),
               ]);
             // ...
+
+        yield MenuItem::linkToUrl('Issues', 'tabler:brand-github', 'https://github.com/survos-sites/pgsc/issues')
+            ->setLinkTarget(
+                '_blank'
+            );
         ;
 
     }
