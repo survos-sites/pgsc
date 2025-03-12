@@ -65,3 +65,8 @@ As a registered user, from the website, I can
 
 The mobile app requirements are listed elsewhere, this is for the desktop-based website.
 .
+
+# Developer notes
+
+composer config repositories.ezmeadia '{"type": "vcs", "url": "git@github.com:tacman/easy-media-bundle.git"}'
+composer req tacman/easy-media-bundle:dev-tac

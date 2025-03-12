@@ -76,6 +76,9 @@
             "config/routes/easyadmin.yaml"
         ]
     },
+    "endroid/qr-code-bundle": {
+        "version": "6.0.0"
+    },
     "inspector-apm/inspector-symfony": {
         "version": "1.8",
         "recipe": {

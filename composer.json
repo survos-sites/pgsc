@@ -3,7 +3,7 @@
     "name": "survos-sites/pgsc",
     "description": "Popup Galleries of San Cristobal",
     "license": "proprietary",
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
         "php": "^8.4",
@@ -17,6 +17,7 @@
         "doctrine/doctrine-migrations-bundle": "^3.4.1",
         "doctrine/orm": "^3.3.2",
         "easycorp/easyadmin-bundle": "4.x-dev",
+        "endroid/qr-code-bundle": "^6.0",
         "inspector-apm/inspector-symfony": "^1.8.2",
         "jzonta/faker-restaurant": "^2.0.1",
         "nelmio/cors-bundle": "^2.5",
@@ -64,6 +65,7 @@
     },
     "config": {
         "allow-plugins": {
+            "endroid/installer": true,
             "php-http/discovery": true,
             "survos/installer": true,
             "symfony/flex": true,

@@ -2,6 +2,7 @@
 <table class="table">
     <thead>
     <tr>
+        <th>QR</th>
         <th>Image</th>
         <th>Info</th>
     </tr>
@@ -10,8 +11,20 @@
     {% for obra in obras %}
         <tr>
             <td>
+                {% set url = url('admin_obra_detail', {crudAction: 'detail', entityId: obra.id}) %}
+                <a href="{{ url }}">
+                    {{ url }}
+                    <img src="{{ qr_code_url(url) }}" />
+
+                    <div class="print-group">
+                        </div>
+
+                </a>
+            </td>
+            <td>
                 {% for image in obra.obraImages %}
-                    {{ dump(image) }}
+                    @todo: image {{ image.imageName }}
+{#                    {{ dump(image) }}#}
 {#                    <img src="{{ image }}"/>#}
 
                 {% endfor %}
@@ -21,7 +34,7 @@
                 <h3>{{ obra.title }}</h3>
                 {% if obra.description %}
                     <p>
-                        {{ obra.description }}
+                        {{ obra.description|raw }}
                     </p>
                 {% endif %}
                 {% if showArtist %}
