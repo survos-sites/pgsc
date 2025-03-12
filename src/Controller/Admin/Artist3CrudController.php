@@ -24,7 +24,7 @@ class Artist3CrudController extends AbstractCrudController
         return [
             TextField::new('name'),
             TextEditorField::new('bio')
-            ->hideOnIndex()
+                ->hideOnIndex()
             ,
             IntegerField::new('obraCount'),
             IntegerField::new('birthYear'),

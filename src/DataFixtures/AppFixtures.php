@@ -32,7 +32,7 @@ class AppFixtures extends Fixture
         }
 
         ObraFactory::createMany(
-            85,
+            15,
             function() { // note the callback - this ensures that each of the artwork has a locations and artists.  @todo: null locations
                 return [
                     'artist' => ArtistFactory::random(),
@@ -45,6 +45,18 @@ class AppFixtures extends Fixture
                 'plainPassword' => 'adminpass',
                 'roles' => ['ROLE_SUPER_ADMIN'],
             ]);
+
+        UserFactory::createOne([
+            'email' => 'admin@example.com',
+            'plainPassword' => 'adminpass',
+            'roles' => ['ROLE_ADMIN'],
+        ]);
+
+        UserFactory::createOne([
+            'email' => 'admin@test.com',
+            'plainPassword' => 'admin',
+            'roles' => ['ROLE_ADMIN'],
+        ]);
 
         UserFactory::createOne([
             'email' => 'admin@example.com',

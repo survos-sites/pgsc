@@ -5,6 +5,12 @@ framework:
     # Note that the session will be started ONLY if you read or write from it.
     session: true
 
+#    set_locale_from_accept_language: true
+#    set_content_language_from_locale: true
+#    default_locale: 'en'
+#    enabled_locales: ['en', 'es']
+
+
     trusted_proxies:
       # https://www.cloudflare.com/ips/
        -        REMOTE_ADDR

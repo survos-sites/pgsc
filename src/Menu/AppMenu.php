@@ -50,25 +50,29 @@ final class AppMenu implements KnpMenuHelperInterface
         $menu = $event->getMenu();
         $options = $event->getOptions();
 
-        //        $this->add($menu, 'app_homepage');
+        $this->add($menu, 'app_homepage');
         // for nested menus, don't add a route, just a label, then use it for the argument to addMenuItem
 
         $nestedMenu = $this->addSubmenu($menu, 'artists');
         foreach ($this->artistRepo->findAll() as $artist) {
-            $this->add($nestedMenu, 'artist_show', $artist, label: $artist->getName(), badge: $artist->getObraCount());
+            $this->add($nestedMenu, 'artist_show', $artist,
+                translationDomain: false,
+                label: $artist->getName(),
+                badge: $artist->getObraCount());
         }
         $nestedMenu = $this->addSubmenu($menu, 'locations');
         foreach ($this->locationRepo->findAll() as $location) {
-            $this->add($nestedMenu, 'location_show', $location, label: $location->getName(), badge: $location->getObraCount());
+            $this->add($nestedMenu, 'location_show', $location,
+                translationDomain: false,
+                label: $location->getName(), badge: $location->getObraCount());
         }
 
         $nestedMenu = $this->addSubmenu($menu, 'artwork');
         foreach (['by_location','by_artist'] as $grouping) {
             $this->add($nestedMenu, 'app_homepage',  label: $grouping);
         }
-        $this->add($menu, 'admin', [
-//            'ic'
-        ]);
+        $this->add($menu, 'admin', translationDomain: false,
+);
 
     }
 }
