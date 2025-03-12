@@ -101,6 +101,16 @@ class DashboardController extends AbstractDashboardController
             );
         ;
 
+
+        foreach ($this->locationRepository->findAll() as $location) {
+            $filters[] =
+                MenuItem::linkToCrud($location->getName(), null, Obra::class)
+                ->setQueryParameter('filters[location][comparison]', '=')
+                ->setQueryParameter('filters[location][value]', $location->getId())
+            ;
+        }
+        yield MenuItem::subMenu('By Location', 'tabler:location')->setSubItems($filters);
+
     }
 
     public function configureAssets(): Assets
