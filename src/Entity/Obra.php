@@ -232,4 +232,15 @@ class Obra implements \Stringable
 
         return $this;
     }
+
+    public function getDimensions(): string
+    {
+        $dimensions = sprintf('%dcm x %dcm', $this->width ?? 0, $this->height ?? 0);
+
+        if ($this->depth) {
+            $dimensions = sprintf('%s x %dcm', $dimensions, $this->depth);
+        }
+
+        return $dimensions;
+    }
 }

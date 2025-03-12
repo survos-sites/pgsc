@@ -31,8 +31,13 @@ class ObraCrudController extends AbstractCrudController
             yield $field;
         }
         foreach (['width','height','depth'] as $fieldName) {
-            yield IntegerField::new($fieldName)->setColumns(3);
+            yield IntegerField::new($fieldName)->setColumns(3)->onlyOnForms();
         }
+        yield TextField::new('dimensions', 'Dimensions')
+            ->setHelp('width x height x depth')
+            ->setLabel('Dimensions (in cm)')
+            ->hideOnForm();
+
         yield TextField::new('materials');
 
         yield AssociationField::new('artist')
