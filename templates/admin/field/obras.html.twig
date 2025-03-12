@@ -1,17 +1,17 @@
-{{ entity.instance.obras|length }}
-    {% for obra in entity.instance.obras %}
-
-        <div>
-
-{#            {% if obra.image %}#}
-{#            <div>#}
-{#                {% set url = obra.image starts with 'https' ? obra.image : "/uploads/" ~ obra.image %}#}
-{#                <img src="{{ url }}" style="max-width: 65px"  />#}
-{#            </div>#}
-{#            {% endif %}#}
-            <div >
-                {{ obra.title }}<br />por {{ obra.artist }}
+{% for obra in entity.instance.obras %}
+    <a href="/admin/obra/{{ obra.id }}/edit">
+        {% if obra.obraImages|length %}
+            <div class="mb-1">
+                {% for obraImage in obra.obraImages %}
+                    <img src="{{ asset('images/obra/' ~ obraImage.imageName) }}" alt="Obra Image" width="65" />
+                {% endfor %}
             </div>
+        {% endif %}
+
+        <div class="text-primary">
+            {{ obra.title }}<br/><b>por {{ obra.artist }}</b>
         </div>
-    {% endfor %}
+    </a>
+    <hr class="my-2">
+{% endfor %}
 

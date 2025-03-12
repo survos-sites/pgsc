@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\Location;
 use App\Enum\LocationType;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
@@ -25,15 +26,21 @@ class LocationCrudController extends AbstractCrudController
         return [
             IdField::new('code'),
             TextField::new('name'),
-            IntegerField::new('obraCount')->onlyOnIndex(),
-//            CollectionField::new('obras')
-//                ->setTemplatePath('admin/field/obras.html.twig'),
-
             ChoiceField::new('type')
                 ->setChoices(LocationType::choices())
                 ->renderExpanded()
                 ->renderAsBadges()
-                ->setRequired(true)
+                ->setRequired(true),
+            IntegerField::new('obraCount', 'Obras Count')
+                ->formatValue(fn ($value, $entity) => $entity->getObras()->count())
+                ->onlyOnIndex(),
+            CollectionField::new('obras')
+                ->setTemplatePath('admin/field/obras.html.twig')
+                ->allowAdd(false)
+                ->allowDelete(false)
+                ->onlyOnDetail(),
+            CollectionField::new('obras')
+                ->onlyOnIndex(),
         ];
     }
 }
