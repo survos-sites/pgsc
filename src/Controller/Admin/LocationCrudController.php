@@ -24,7 +24,7 @@ class LocationCrudController extends AbstractCrudController
         return [
             IdField::new('code'),
             TextField::new('name'),
-            IntegerField::new('obraCount'),
+            IntegerField::new('obraCount')->onlyOnIndex(),
             CollectionField::new('obras')
                 ->setTemplatePath('admin/field/obras.html.twig'),
 

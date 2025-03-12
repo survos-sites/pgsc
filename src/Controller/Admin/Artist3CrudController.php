@@ -26,7 +26,8 @@ class Artist3CrudController extends AbstractCrudController
             TextEditorField::new('bio')
                 ->hideOnIndex()
             ,
-            IntegerField::new('obraCount'),
+            IntegerField::new('obraCount')
+                ->onlyOnIndex(),
             IntegerField::new('birthYear'),
             CollectionField::new('obras')
                 ->setTemplatePath('admin/field/obras.html.twig')

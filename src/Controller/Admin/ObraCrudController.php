@@ -30,13 +30,16 @@ class ObraCrudController extends AbstractCrudController
             yield $field;
         }
         foreach (['width','height','depth'] as $fieldName) {
-            yield IntegerField::new($fieldName);
+            yield IntegerField::new($fieldName)->setColumns(3);
         }
         yield TextField::new('materials');
+
         yield AssociationField::new('artist')
-            ->setHelp('nombre del artista');
+            ->setHelp('nombre del artista')
+            ->setColumns(5);
         yield AssociationField::new('location')
-            ->setFormTypeOption('choice_label', 'name');
+            ->setFormTypeOption('choice_label', 'name')
+            ->setColumns(5);
         yield CollectionField::new('obraImages')
             ->setEntryType(ObraImageFileType::class)
             ->onlyOnForms();
