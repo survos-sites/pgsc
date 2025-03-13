@@ -4,8 +4,119 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "628db414aeacdd541bd6726e908c0a3b",
+    "content-hash": "495f93114df47359466a93a8abea6176",
     "packages": [
+        {
+            "name": "agence-adeliom/easy-admin-user-bundle",
+            "version": "3.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/agence-adeliom/easy-admin-user-bundle.git",
+                "reference": "8807c6e148b5a071b0e6b0b48b96dd0b726a48f8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/agence-adeliom/easy-admin-user-bundle/zipball/8807c6e148b5a071b0e6b0b48b96dd0b726a48f8",
+                "reference": "8807c6e148b5a071b0e6b0b48b96dd0b726a48f8",
+                "shasum": ""
+            },
+            "require": {
+                "agence-adeliom/easy-common-bundle": "^3.0",
+                "easycorp/easyadmin-bundle": "^3.4 || ^v4.0",
+                "php": ">=8.2",
+                "symfony/config": "^6.4 || ^7.0",
+                "symfony/dependency-injection": "^6.4 || ^7.0",
+                "symfony/form": "^6.4 || ^7.0",
+                "symfony/http-kernel": "^6.4 || ^7.0",
+                "symfony/mailer": "^6.4 || ^7.0",
+                "symfony/mime": "^6.4 || ^7.0",
+                "symfony/options-resolver": "^6.4 || ^7.0",
+                "symfony/password-hasher": "^6.4 || ^7.0",
+                "symfony/stopwatch": "^6.4 || ^7.0",
+                "symfony/validator": "^6.4 || ^7.0",
+                "symfonycasts/reset-password-bundle": "^1.0"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-4": {
+                    "Adeliom\\EasyAdminUserBundle\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Arnaud RITTI",
+                    "homepage": "https://github.com/arnaud-ritti"
+                }
+            ],
+            "description": "A Symfony bundle for EasyAdmin that provide basic user authentification flow",
+            "homepage": "https://github.com/agence-adeliom/easy-admin-user-bundle",
+            "keywords": [
+                "easyadmin",
+                "symfony",
+                "user"
+            ],
+            "support": {
+                "issues": "https://github.com/agence-adeliom/easy-admin-user-bundle/issues",
+                "source": "https://github.com/agence-adeliom/easy-admin-user-bundle/tree/3.x"
+            },
+            "time": "2025-03-03T21:15:37+00:00"
+        },
+        {
+            "name": "agence-adeliom/easy-common-bundle",
+            "version": "3.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/agence-adeliom/easy-common-bundle.git",
+                "reference": "585d61c0fa004792922ca101c1dff4056a2283a5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/agence-adeliom/easy-common-bundle/zipball/585d61c0fa004792922ca101c1dff4056a2283a5",
+                "reference": "585d61c0fa004792922ca101c1dff4056a2283a5",
+                "shasum": ""
+            },
+            "require": {
+                "easycorp/easyadmin-bundle": "^3.4 || ^v4.0",
+                "php": ">=8.2",
+                "symfony/config": "^6.4 || ^7.0",
+                "symfony/dependency-injection": "^6.4 || ^7.0",
+                "symfony/http-kernel": "^6.4 || ^7.0",
+                "symfony/serializer": "^6.4 || ^7.0"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-4": {
+                    "Adeliom\\EasyCommonBundle\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Arnaud RITTI",
+                    "homepage": "https://github.com/arnaud-ritti"
+                }
+            ],
+            "description": "A Symfony bundle for EasyAdmin that provide basic entity traits and a enum helper",
+            "homepage": "https://github.com/agence-adeliom/easy-common-bundle",
+            "keywords": [
+                "easyadmin",
+                "enum",
+                "helper",
+                "symfony"
+            ],
+            "support": {
+                "issues": "https://github.com/agence-adeliom/easy-common-bundle/issues",
+                "source": "https://github.com/agence-adeliom/easy-common-bundle/tree/3.x"
+            },
+            "time": "2025-03-05T18:41:48+00:00"
+        },
         {
             "name": "api-platform/doctrine-common",
             "version": "v4.1.0",
@@ -10398,104 +10509,6 @@
             "time": "2024-12-26T07:58:05+00:00"
         },
         {
-            "name": "symfony/ux-turbo",
-            "version": "v2.23.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/ux-turbo.git",
-                "reference": "db96cf04d70a8c820671ce55530e8bf641ada33f"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/ux-turbo/zipball/db96cf04d70a8c820671ce55530e8bf641ada33f",
-                "reference": "db96cf04d70a8c820671ce55530e8bf641ada33f",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=8.1",
-                "symfony/stimulus-bundle": "^2.9.1"
-            },
-            "conflict": {
-                "symfony/flex": "<1.13"
-            },
-            "require-dev": {
-                "dbrekelmans/bdi": "dev-main",
-                "doctrine/doctrine-bundle": "^2.4.3",
-                "doctrine/orm": "^2.8 | 3.0",
-                "phpstan/phpstan": "^1.10",
-                "symfony/asset-mapper": "^6.4|^7.0",
-                "symfony/debug-bundle": "^5.4|^6.0|^7.0",
-                "symfony/expression-language": "^5.4|^6.0|^7.0",
-                "symfony/form": "^5.4|^6.0|^7.0",
-                "symfony/framework-bundle": "^6.4|^7.0",
-                "symfony/mercure-bundle": "^0.3.7",
-                "symfony/messenger": "^5.4|^6.0|^7.0",
-                "symfony/panther": "^2.1",
-                "symfony/phpunit-bridge": "^5.4|^6.0|^7.0",
-                "symfony/process": "^5.4|6.3.*|^7.0",
-                "symfony/property-access": "^5.4|^6.0|^7.0",
-                "symfony/security-core": "^5.4|^6.0|^7.0",
-                "symfony/stopwatch": "^5.4|^6.0|^7.0",
-                "symfony/twig-bundle": "^6.4|^7.0",
-                "symfony/ux-twig-component": "^2.21",
-                "symfony/web-profiler-bundle": "^5.4|^6.0|^7.0"
-            },
-            "type": "symfony-bundle",
-            "extra": {
-                "thanks": {
-                    "url": "https://github.com/symfony/ux",
-                    "name": "symfony/ux"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Symfony\\UX\\Turbo\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Kévin Dunglas",
-                    "email": "kevin@dunglas.fr"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "Hotwire Turbo integration for Symfony",
-            "homepage": "https://symfony.com",
-            "keywords": [
-                "hotwire",
-                "javascript",
-                "mercure",
-                "symfony-ux",
-                "turbo",
-                "turbo-stream"
-            ],
-            "support": {
-                "source": "https://github.com/symfony/ux-turbo/tree/v2.23.0"
-            },
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
-            "time": "2025-02-06T08:47:30+00:00"
-        },
-        {
             "name": "symfony/ux-twig-component",
             "version": "v2.23.0",
             "source": {
@@ -10988,6 +11001,54 @@
                 }
             ],
             "time": "2025-01-07T12:55:42+00:00"
+        },
+        {
+            "name": "symfonycasts/reset-password-bundle",
+            "version": "v1.23.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/SymfonyCasts/reset-password-bundle.git",
+                "reference": "bde42fe5956e0cd523931da886ee41ab660c45b2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/SymfonyCasts/reset-password-bundle/zipball/bde42fe5956e0cd523931da886ee41ab660c45b2",
+                "reference": "bde42fe5956e0cd523931da886ee41ab660c45b2",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "php": ">=8.1.10",
+                "symfony/config": "^5.4 | ^6.0 | ^7.0",
+                "symfony/dependency-injection": "^5.4 | ^6.0 | ^7.0",
+                "symfony/deprecation-contracts": "^2.2 | ^3.0",
+                "symfony/http-kernel": "^5.4 | ^6.0 | ^7.0"
+            },
+            "require-dev": {
+                "doctrine/annotations": "^1.0",
+                "doctrine/doctrine-bundle": "^2.8",
+                "doctrine/orm": "^2.13",
+                "symfony/framework-bundle": "^5.4 | ^6.0 | ^7.0",
+                "symfony/phpunit-bridge": "^5.4 | ^6.0 | ^7.0",
+                "symfony/process": "^6.4 | ^7.0 | ^7.1",
+                "symfonycasts/internal-test-helpers": "dev-main"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-4": {
+                    "SymfonyCasts\\Bundle\\ResetPassword\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Symfony bundle that adds password reset functionality.",
+            "support": {
+                "issues": "https://github.com/SymfonyCasts/reset-password-bundle/issues",
+                "source": "https://github.com/SymfonyCasts/reset-password-bundle/tree/v1.23.1"
+            },
+            "time": "2024-12-09T19:04:36+00:00"
         },
         {
             "name": "symfonycasts/verify-email-bundle",
@@ -11903,6 +11964,340 @@
                 }
             ],
             "time": "2024-12-05T18:35:55+00:00"
+        },
+        {
+            "name": "jawira/db-draw",
+            "version": "v1.8.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jawira/db-draw.git",
+                "reference": "669ab1d795c489026dcef418647b0c6c93def43a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jawira/db-draw/zipball/669ab1d795c489026dcef418647b0c6c93def43a",
+                "reference": "669ab1d795c489026dcef418647b0c6c93def43a",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/dbal": "^3.3 || ^4.0",
+                "jawira/doctrine-diagram-contracts": "^0.1.0",
+                "jawira/the-lost-functions": "^1.1",
+                "php": "^8.1"
+            },
+            "require-dev": {
+                "ext-dom": "*",
+                "ext-mbstring": "*",
+                "ext-xml": "*",
+                "friendsofphp/php-cs-fixer": "^3.64",
+                "jawira/plantuml": "^1.2024.6",
+                "jawira/plantuml-client": "^1.0.3",
+                "jawira/skeleton": "^2.24.1",
+                "phpstan/phpstan": "^1.12.2",
+                "phpunit/phpunit": "^9.6.20"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Jawira\\DbDraw\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jawira Portugal"
+                }
+            ],
+            "description": "📐 Takes a DoctrineORM connection and generates a database diagram in .puml format",
+            "homepage": "https://jawira.github.io/db-draw/",
+            "keywords": [
+                "database",
+                "db",
+                "dbal",
+                "diagram",
+                "doctrine",
+                "php"
+            ],
+            "support": {
+                "issues": "https://github.com/jawira/db-draw/issues",
+                "source": "https://github.com/jawira/db-draw/tree/v1.8.0"
+            },
+            "time": "2025-01-24T22:52:13+00:00"
+        },
+        {
+            "name": "jawira/doctrine-diagram-bundle",
+            "version": "v0.8.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jawira/doctrine-diagram-bundle.git",
+                "reference": "7ae2817cd237610fd5487fcb1ffddc017dbfeda5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jawira/doctrine-diagram-bundle/zipball/7ae2817cd237610fd5487fcb1ffddc017dbfeda5",
+                "reference": "7ae2817cd237610fd5487fcb1ffddc017dbfeda5",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/doctrine-bundle": "^2.5",
+                "doctrine/orm": "^2.9 || ^3.0",
+                "jawira/db-draw": "^1.6",
+                "jawira/plantuml-client": "^1.0",
+                "php": "^8.0",
+                "symfony/console": "^6.0 || ^7.0",
+                "symfony/filesystem": "^6.0 || ^7.0",
+                "symfony/framework-bundle": "^6.0 || ^7.0"
+            },
+            "require-dev": {
+                "ergebnis/composer-normalize": "^2.31",
+                "friendsofphp/php-cs-fixer": "^3.46",
+                "jawira/plantuml": "^1.2023",
+                "jawira/skeleton": "^2.22",
+                "phpstan/extension-installer": "^1.3.1",
+                "phpstan/phpstan": "^1.10.55",
+                "phpstan/phpstan-symfony": "^1.3.7"
+            },
+            "suggest": {
+                "jawira/plantuml": "Install PlantUML executable with Composer."
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-4": {
+                    "Jawira\\DoctrineDiagramBundle\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jawira Portugal",
+                    "homepage": "https://jawira.com"
+                }
+            ],
+            "description": "📐 Symfony Bundle to generate database diagrams",
+            "homepage": "https://github.com/jawira/doctrine-diagram-bundle",
+            "keywords": [
+                "database",
+                "diagram",
+                "doctrine",
+                "symfony-bundle"
+            ],
+            "support": {
+                "issues": "https://github.com/jawira/doctrine-diagram-bundle/issues",
+                "source": "https://github.com/jawira/doctrine-diagram-bundle/tree/v0.8.0"
+            },
+            "time": "2024-02-10T00:27:24+00:00"
+        },
+        {
+            "name": "jawira/doctrine-diagram-contracts",
+            "version": "v0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jawira/doctrine-diagram-contracts.git",
+                "reference": "5f0903327c12c7df934b90f55e581f69bb2eb68d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jawira/doctrine-diagram-contracts/zipball/5f0903327c12c7df934b90f55e581f69bb2eb68d",
+                "reference": "5f0903327c12c7df934b90f55e581f69bb2eb68d",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.68",
+                "jawira/skeleton": "^2.26"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Jawira\\DoctrineDiagramContracts\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jawira Portugal",
+                    "email": "dev@tugal.be"
+                }
+            ],
+            "description": "Generic abstractions related to Doctrine Diagram Bundle",
+            "support": {
+                "issues": "https://github.com/jawira/doctrine-diagram-contracts/issues",
+                "source": "https://github.com/jawira/doctrine-diagram-contracts/tree/v0.1.0"
+            },
+            "time": "2025-01-20T22:43:07+00:00"
+        },
+        {
+            "name": "jawira/plantuml-client",
+            "version": "v1.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jawira/plantuml-client.git",
+                "reference": "28ca92b4e0825bd7f3a82fed10c7f3dbe0657fd5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jawira/plantuml-client/zipball/28ca92b4e0825bd7f3a82fed10c7f3dbe0657fd5",
+                "reference": "28ca92b4e0825bd7f3a82fed10c7f3dbe0657fd5",
+                "shasum": ""
+            },
+            "require": {
+                "jawira/plantuml-encoding": "^1.0",
+                "php": ">=7.4"
+            },
+            "require-dev": {
+                "ergebnis/composer-normalize": "^2.13",
+                "ext-fileinfo": "*",
+                "jawira/skeleton": "^2.16",
+                "phpstan/phpstan": "^1.8",
+                "phpunit/phpunit": "^9.5"
+            },
+            "suggest": {
+                "pds/skeleton": "Standard PHP package skeleton."
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Jawira\\PlantUmlClient\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jawira Portugal",
+                    "email": "dev@tugal.be"
+                }
+            ],
+            "description": "Convert PlantUML diagrams into images.",
+            "keywords": [
+                "diagram",
+                "image",
+                "plantuml",
+                "uml"
+            ],
+            "support": {
+                "issues": "https://github.com/jawira/plantuml-client/issues",
+                "source": "https://github.com/jawira/plantuml-client/tree/v1.0.3"
+            },
+            "time": "2022-11-08T23:48:25+00:00"
+        },
+        {
+            "name": "jawira/plantuml-encoding",
+            "version": "v1.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jawira/plantuml-encoding.git",
+                "reference": "fe8bce2d7ff5bb5cccf374349999cef7d6246a32"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jawira/plantuml-encoding/zipball/fe8bce2d7ff5bb5cccf374349999cef7d6246a32",
+                "reference": "fe8bce2d7ff5bb5cccf374349999cef7d6246a32",
+                "shasum": ""
+            },
+            "require": {
+                "ext-zlib": "*",
+                "php": ">=7.4"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^2"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/plantuml_functions.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jawira Portugal",
+                    "homepage": "https://jawira.com"
+                }
+            ],
+            "description": "PlantUML encoding functions",
+            "keywords": [
+                "encodep",
+                "encoding",
+                "functions",
+                "plantuml",
+                "uml"
+            ],
+            "support": {
+                "issues": "https://github.com/jawira/plantuml-encoding/issues",
+                "source": "https://github.com/jawira/plantuml-encoding/tree/v1.1.1"
+            },
+            "time": "2024-12-22T17:49:30+00:00"
+        },
+        {
+            "name": "jawira/the-lost-functions",
+            "version": "v1.7.0",
+            "source": {
+                "type": "git",
+                "url": "https://gitlab.com/jawira/the-lost-functions.git",
+                "reference": "bcdb3065549870cde26fdc4b1e72337c2913e562"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://gitlab.com/api/v4/projects/jawira%2Fthe-lost-functions/repository/archive.zip?sha=bcdb3065549870cde26fdc4b1e72337c2913e562",
+                "reference": "bcdb3065549870cde26fdc4b1e72337c2913e562",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8"
+            },
+            "require-dev": {
+                "ergebnis/composer-normalize": "^2",
+                "ext-mbstring": "*",
+                "friendsofphp/php-cs-fixer": "^3",
+                "jawira/skeleton": "^2",
+                "phpunit/phpunit": "^9"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/functions.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jawira Portugal",
+                    "email": "dev@tugal.be"
+                }
+            ],
+            "description": "Collection of convenience functions.",
+            "keywords": [
+                "Year",
+                "array",
+                "function",
+                "get_class",
+                "is_initialized"
+            ],
+            "support": {
+                "issues": "https://gitlab.com/jawira/the-lost-functions/-/issues",
+                "source": "https://gitlab.com/jawira/the-lost-functions/-/tree/v1.7.0"
+            },
+            "time": "2024-03-12T20:44:01+00:00"
         },
         {
             "name": "jetbrains/phpstorm-stubs",
@@ -14793,6 +15188,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
+        "agence-adeliom/easy-admin-user-bundle": 20,
         "easycorp/easyadmin-bundle": 20
     },
     "prefer-stable": true,

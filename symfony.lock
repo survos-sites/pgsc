@@ -1,4 +1,10 @@
 {
+    "agence-adeliom/easy-admin-user-bundle": {
+        "version": "3.x-dev"
+    },
+    "agence-adeliom/easy-common-bundle": {
+        "version": "3.x-dev"
+    },
     "api-platform/symfony": {
         "version": "4.1",
         "recipe": {
@@ -89,6 +95,18 @@
         },
         "files": [
             "config/packages/inspector.yaml"
+        ]
+    },
+    "jawira/doctrine-diagram-bundle": {
+        "version": "0.8",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "0.7",
+            "ref": "1c062f7d4e61eb3e7372c45d96d33358cccac15a"
+        },
+        "files": [
+            "config/packages/doctrine_diagram.yaml"
         ]
     },
     "knplabs/knp-menu-bundle": {
@@ -403,15 +421,6 @@
             "assets/icons/symfony.svg"
         ]
     },
-    "symfony/ux-turbo": {
-        "version": "2.23",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "main",
-            "version": "2.20",
-            "ref": "c85ff94da66841d7ff087c19cbcd97a2df744ef9"
-        }
-    },
     "symfony/ux-twig-component": {
         "version": "2.23",
         "recipe": {
@@ -447,6 +456,18 @@
         "files": [
             "config/packages/web_profiler.yaml",
             "config/routes/web_profiler.yaml"
+        ]
+    },
+    "symfonycasts/reset-password-bundle": {
+        "version": "1.23",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "1.0",
+            "ref": "97c1627c0384534997ae1047b93be517ca16de43"
+        },
+        "files": [
+            "config/packages/reset_password.yaml"
         ]
     },
     "symfonycasts/verify-email-bundle": {

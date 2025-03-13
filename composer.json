@@ -10,6 +10,7 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "ext-intl": "*",
+        "agence-adeliom/easy-admin-user-bundle": "3.x-dev",
         "api-platform/doctrine-orm": "^4.1",
         "api-platform/symfony": "^4.1",
         "bluemmb/faker-picsum-photos-provider": "^2.0",
@@ -54,7 +55,6 @@
         "symfony/translation": "^7.2.4",
         "symfony/twig-bundle": "^7.2",
         "symfony/ux-icons": "^2.23",
-        "symfony/ux-turbo": "^2.23",
         "symfony/ux-twig-component": "^2.23",
         "symfony/validator": "^7.2.4",
         "symfony/web-link": "^7.2",
@@ -106,7 +106,9 @@
         ],
         "post-update-cmd": [
             "@auto-scripts"
-        ]
+        ],
+        "diagram": "bin/console doctrine:diagram --filename=assets/images/db.svg --exclude=doctrine_migration_versions,messenger_messages"
+
     },
     "conflict": {
         "symfony/symfony": "*"
@@ -114,11 +116,16 @@
     "extra": {
         "symfony": {
             "allow-contrib": "true",
-            "require": "^7.2"
+            "require": "^7.2",
+            "endpoint": [
+                "https://api.github.com/repos/agence-adeliom/symfony-recipes/contents/index.json?ref=flex/main",
+                "flex://defaults"
+            ]
         }
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^4.0",
+        "jawira/doctrine-diagram-bundle": "^0.8.0",
         "pelmered/fake-car": "^2.1",
         "phpunit/phpunit": "^9.6.22",
         "survos/maker-bundle": "^1.5.503",

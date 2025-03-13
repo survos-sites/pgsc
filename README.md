@@ -27,6 +27,10 @@ Admin from fixtures:
     'email' => 'admin@example.com',
     'plainPassword' => 'adminpass',
 
+## Database
+
+![Database Diagram](./assets/images/db.svg)
+
 
 ## Project Goals
 
