@@ -32,9 +32,9 @@ class Artist3CrudController extends AbstractCrudController
             CollectionField::new('obras')
                 ->setTemplatePath('admin/field/obras.html.twig')
                 ->useEntryCrudForm()
-//                ->setEntryToStringMethod(
-//                    fn (Obra $value): string => $value->getTitle() . '|'
-//                )
+                ->hideOnIndex(),
+            CollectionField::new('obras')
+                ->onlyOnIndex(),
 
         ];
     }
