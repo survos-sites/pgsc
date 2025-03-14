@@ -5,6 +5,18 @@
     "agence-adeliom/easy-common-bundle": {
         "version": "3.x-dev"
     },
+    "agence-adeliom/easy-fields-bundle": {
+        "version": "3.9999999",
+        "recipe": {
+            "repo": "github.com/agence-adeliom/symfony-recipes",
+            "branch": "main",
+            "version": "1.0",
+            "ref": "e56e700e4974e09d72d6e2fc76d86387bff588ca"
+        },
+        "files": [
+            "config/routes/easy_fields.yaml"
+        ]
+    },
     "api-platform/symfony": {
         "version": "4.1",
         "recipe": {
@@ -136,6 +148,18 @@
             "config/packages/nelmio_cors.yaml"
         ]
     },
+    "nyholm/psr7": {
+        "version": "1.8",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "1.0",
+            "ref": "4a8c0345442dcca1d8a2c65633dcf0285dd5a5a2"
+        },
+        "files": [
+            "config/packages/nyholm_psr7.yaml"
+        ]
+    },
     "phpunit/phpunit": {
         "version": "9.6",
         "recipe": {
@@ -148,6 +172,18 @@
             ".env.test",
             "phpunit.xml.dist",
             "tests/bootstrap.php"
+        ]
+    },
+    "stof/doctrine-extensions-bundle": {
+        "version": "1.13",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "1.2",
+            "ref": "e805aba9eff5372e2d149a9ff56566769e22819d"
+        },
+        "files": [
+            "config/packages/stof_doctrine_extensions.yaml"
         ]
     },
     "survos/auth-bundle": {
