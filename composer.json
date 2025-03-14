@@ -114,7 +114,10 @@
         }
     },
     "require-dev": {
+        "bluemmb/faker-picsum-photos-provider": "^2.0",
         "doctrine/doctrine-fixtures-bundle": "^4.0",
+        "jzonta/faker-restaurant": "^2.0",
+        "pelmered/fake-car": "^2.1",
         "phpunit/phpunit": "^9.6.22",
         "survos/maker-bundle": "^1.5.503",
         "symfony/browser-kit": "^7.2.4",
