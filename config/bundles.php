@@ -31,11 +31,6 @@ return [
     Knp\Bundle\MenuBundle\KnpMenuBundle::class => ['all' => true],
     Survos\BootstrapBundle\SurvosBootstrapBundle::class => ['all' => true],
     Vich\UploaderBundle\VichUploaderBundle::class => ['all' => true],
+    Symfony\UX\Turbo\TurboBundle::class => ['all' => true],
     Endroid\QrCodeBundle\EndroidQrCodeBundle::class => ['all' => true],
-    Jawira\DoctrineDiagramBundle\DoctrineDiagramBundle::class => ['all' => true],
-    SymfonyCasts\Bundle\ResetPassword\SymfonyCastsResetPasswordBundle::class => ['all' => true],
-    Adeliom\EasyCommonBundle\EasyCommonBundle::class => ['all' => true],
-    Adeliom\EasyAdminUserBundle\EasyAdminUserBundle::class => ['all' => true],
-    Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle::class => ['all' => true],
-    Adeliom\EasyFieldsBundle\EasyFieldsBundle::class => ['all' => true],
 ];
