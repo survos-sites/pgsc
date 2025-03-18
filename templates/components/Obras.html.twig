@@ -11,10 +11,8 @@
     {% for obra in obras %}
         <tr>
             <td>
-                {{ mobile_base }}
                 {% set url = mobile_base ~ path('mobile_obra', obra.rp) %}
                 <a href="{{ url }}">
-                    {{ url }}
                     <img src="{{ qr_code_url(url) }}" />
 
                     <div class="print-group">
