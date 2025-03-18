@@ -11,8 +11,10 @@
     {% for obra in obras %}
         <tr>
             <td>
+                {% set mobile_base = app.request.get('base', mobile_base)  %}
                 {% set url = mobile_base ~ path('mobile_obra', obra.rp) %}
-                <a href="{{ url }}">
+                {% set url = mobile_base ~ '?id=%d#tab-obras'|format(obra.id) %}
+                <a href="{{ url }}" target="_blank">
                     <img src="{{ qr_code_url(url) }}" />
 
                     <div class="print-group">

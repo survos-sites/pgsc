@@ -60,7 +60,7 @@ As a registered user, from the website, I can
 * See links to purchase
 * Share items on Social media
 
-* As a Visitor, I can
+As a Visitor, I can
 
 * See the artist and locations
 * See artwork with QR codes
@@ -72,5 +72,7 @@ The mobile app requirements are listed elsewhere, this is for the desktop-based 
 
 # Developer notes
 
+```bash
 composer config repositories.ezmeadia '{"type": "vcs", "url": "git@github.com:tacman/easy-media-bundle.git"}'
 composer req tacman/easy-media-bundle:dev-tac
+```
