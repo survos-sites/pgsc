@@ -10,6 +10,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Survos\CoreBundle\Entity\RouteParametersInterface;
+use Survos\CoreBundle\Entity\RouteParametersTrait;
 use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: ObraRepository::class)]
@@ -20,8 +22,11 @@ use Symfony\Component\Serializer\Attribute\Groups;
     ],
     normalizationContext: ['groups' => ['obra.read', 'obra.location.read']]
 )]
-class Obra implements \Stringable
+class Obra implements \Stringable, RouteParametersInterface
 {
+    use RouteParametersTrait;
+    const array UNIQUE_PARAMETERS=['obraId' => 'id'];
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

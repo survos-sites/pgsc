@@ -11,7 +11,8 @@
     {% for obra in obras %}
         <tr>
             <td>
-                {% set url = url('admin_obra_detail', {crudAction: 'detail', entityId: obra.id}) %}
+                {{ mobile_base }}
+                {% set url = mobile_base ~ path('mobile_obra', obra.rp) %}
                 <a href="{{ url }}">
                     {{ url }}
                     <img src="{{ qr_code_url(url) }}" />

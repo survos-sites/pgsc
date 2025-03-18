@@ -1,5 +1,7 @@
 twig:
     file_name_pattern: '*.twig'
+    globals:
+        mobile_base: '%env(MOBILE_BASE_URL)%'
 
 when@test:
     twig:
