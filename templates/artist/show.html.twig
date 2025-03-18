@@ -2,7 +2,18 @@
 
 {% block body %}
 
-    <h1>{{ artist.name }}</h1>
+                    {% set mobile_base = app.request.get('base', mobile_base)  %}
+                {% set url = mobile_base ~ '?ARTISTORWHATEVERid=%d#tab-obras'|format(artist.id) %}
+<a href="{{ url }}" target="_blank">
+    {{ url }}
+    <img src="{{ qr_code_url(url) }}" />
+
+    <div class="print-group">
+    </div>
+
+</a>
+
+<h1>{{ artist.name }}</h1>
     <p>
         {{ artist.bio }}
     </p>
