@@ -11,15 +11,23 @@
     {% for obra in obras %}
         <tr>
             <td>
+                {# this should not be done in TWIG!  quick hack for debugging #}
                 {% set mobile_base = app.request.get('base', mobile_base)  %}
+
+{#                https://pgsc.wip/artists/13?debug=1&base=fw.survos.com#}
+                {% if not (mobile_base matches '/http/') %}
+                    {% set mobile_base = 'https://' ~ mobile_base %}
+                {% endif %}
                 {% set url = mobile_base ~ path('mobile_obra', obra.rp) %}
                 {% set url = mobile_base ~ '?id=%d#tab-obras'|format(obra.id) %}
+
                 <a href="{{ url }}" target="_blank">
                     <img src="{{ qr_code_url(url) }}" />
-
                     <div class="print-group">
-                        </div>
-
+                    </div>
+                    {% if app.request.get('debug', false) %}
+                    {{ url }}
+                    {% endif %}
                 </a>
             </td>
             <td>
