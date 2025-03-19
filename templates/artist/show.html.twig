@@ -3,7 +3,7 @@
 {% block body %}
 
                     {% set mobile_base = app.request.get('base', mobile_base)  %}
-                {% set url = mobile_base ~ '?ARTISTORWHATEVERid=%d#tab-obras'|format(artist.id) %}
+                {% set url = mobile_base ~ '?artistId=%d#tab-artists'|format(artist.id) %}
 <a href="{{ url }}" target="_blank">
     {{ url }}
     <img src="{{ qr_code_url(url) }}" />
