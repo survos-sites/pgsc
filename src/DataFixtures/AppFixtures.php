@@ -32,7 +32,7 @@ class AppFixtures extends Fixture
         }
 
         ObraFactory::createMany(
-            15,
+            150,
             function() { // note the callback - this ensures that each of the artwork has a locations and artists.  @todo: null locations
                 return [
                     'artist' => ArtistFactory::random(),
