@@ -8,7 +8,10 @@
     "require": {
         "php": "^8.4",
         "ext-ctype": "*",
+        "ext-gd": "*",
         "ext-iconv": "*",
+        "ext-imagick": "*",
+        "ext-intl": "*",
         "api-platform/doctrine-orm": "^4.1",
         "api-platform/symfony": "^4.1",
         "doctrine/dbal": "^4.2.3",
@@ -16,13 +19,13 @@
         "doctrine/doctrine-migrations-bundle": "^3.4.1",
         "doctrine/orm": "^3.3.2",
         "easycorp/easyadmin-bundle": "4.x-dev",
-        "endroid/qr-code-bundle": "*",
+        "endroid/qr-code-bundle": ">=6",
         "inspector-apm/inspector-symfony": "^1.8.2",
         "nelmio/cors-bundle": "^2.5",
         "phpdocumentor/reflection-docblock": "^5.6.1",
         "phpstan/phpdoc-parser": "^2.1",
         "survos/auth-bundle": "^1.5.529",
-        "survos/bootstrap-bundle": "^1.5",
+        "survos/bootstrap-bundle": "^1.5.529",
         "survos/command-bundle": "^1.5.529",
         "survos/deployment-bundle": "^1.5.529",
         "symfony/asset": "^7.2",
@@ -58,7 +61,7 @@
         "symfonycasts/verify-email-bundle": "^1.17.3",
         "twig/extra-bundle": "^3.20",
         "twig/twig": "^3.20",
-        "vich/uploader-bundle": "*"
+        "vich/uploader-bundle": ">=2.5.1"
     },
     "config": {
         "allow-plugins": {
@@ -116,7 +119,7 @@
     "require-dev": {
         "bluemmb/faker-picsum-photos-provider": "^2.0",
         "doctrine/doctrine-fixtures-bundle": "^4.0",
-        "jzonta/faker-restaurant": "^2.0",
+        "jzonta/faker-restaurant": "^2.0.1",
         "pelmered/fake-car": "^2.1",
         "phpunit/phpunit": "^9.6.22",
         "survos/maker-bundle": "^1.5.503",
