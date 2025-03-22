@@ -29,8 +29,8 @@ class AppFixtures extends Fixture
             LocationFactory::createOne([
                 'name' => ($name=$row['original_Nombre']),
                 'code' => $row['original_Codigo']??$this->initials($name),
-                'lat' => (float)$row['lat'],
-                'lng' => (float)$row['lon'],
+                'lat' => $row['lat'] ? (float)$row['lat'] : null,
+                'lng' => $row['lon'] ? (float)$row['lon'] : null,
             ]);
         }
 
