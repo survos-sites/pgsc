@@ -4,6 +4,26 @@
 
 {% block body %}
 
+    <div class="row">
+        <div class="col-md-6">
+            {{ ux_map(myMap, { style: 'height: 300px' }) }}
+        </div>
+        <div class="col-md-3">
+            <ol>
+                {% for artist in locations %}
+                    <li>{{ artist.name }}</li>
+                {% endfor %}
+            </ol>
+        </div>
+        <div class="col-md-3">
+            <ol>
+                {% for artist in artists %}
+                    <li>{{ artist.name }}</li>
+                {% endfor %}
+            </ol>
+        </div>
+
+
     <p>
         popup galleries of San Crisobal!
     </p>
