@@ -60,6 +60,14 @@ class Location implements \Stringable, RouteParametersInterface
     #[Groups(['location.read'])]
     private int $obraCount = 0;
 
+    #[ORM\Column(nullable: true)]
+    #[Groups(['location.read'])]
+    private ?float $lat = null;
+
+    #[ORM\Column(nullable: true)]
+    #[Groups(['location.read'])]
+    private ?float $lng = null;
+
     public function __construct()
     {
         $this->obras = new ArrayCollection();
@@ -163,6 +171,30 @@ class Location implements \Stringable, RouteParametersInterface
     public function setObraCount(?int $obraCount): static
     {
         $this->obraCount = $obraCount;
+
+        return $this;
+    }
+
+    public function getLat(): ?float
+    {
+        return $this->lat;
+    }
+
+    public function setLat(?float $lat): static
+    {
+        $this->lat = $lat;
+
+        return $this;
+    }
+
+    public function getLng(): ?float
+    {
+        return $this->lng;
+    }
+
+    public function setLng(?float $lng): static
+    {
+        $this->lng = $lng;
 
         return $this;
     }

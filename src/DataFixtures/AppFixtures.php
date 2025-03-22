@@ -9,6 +9,7 @@ use App\Factory\ObraFactory;
 use App\Factory\UserFactory;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use League\Csv\Reader;
 use function Symfony\Component\String\u;
 
 class AppFixtures extends Fixture
@@ -24,10 +25,12 @@ class AppFixtures extends Fixture
                 'code' => $this->initials($name)
                 ]);
         }
-        foreach ($this->locations() as $name) {
+        foreach ($this->locations() as $row) {
             LocationFactory::createOne([
-                'name' => $name,
-                'code' => $this->initials($name)
+                'name' => ($name=$row['original_Nombre']),
+                'code' => $row['original_Codigo']??$this->initials($name),
+                'lat' => (float)$row['lat'],
+                'lng' => (float)$row['lon'],
             ]);
         }
 
@@ -106,20 +109,29 @@ END
 
     }
 
-    private function locations(): array
+    private function locations(): iterable
     {
-        return explode("\n", <<<END
-Centro cultural Carlos Jurado
-La Enseñanza Casa de la Ciudad 
-Galeria Arteria
-Cerro Brujo 
-Museo de los Altos de Chiapas 
-El Caminante
-Galeria Taxcalate 
-Sabi 
-MUY
-END
-        );
+        $csv = Reader::createFromPath('data/locations.csv', 'r');
+        $csv->setHeaderOffset(0);
+        return $csv->getRecords();
+//
+//        $header = $csv->getHeader(); //returns the CSV header record
+//
+////returns all the records as
+//        $records = $csv->getRecords(); // an Iterator object containing arrays
+//
+//        return explode("\n", <<<END
+//Centro cultural Carlos Jurado
+//La Enseñanza Casa de la Ciudad
+//Galeria Arteria
+//Cerro Brujo
+//Museo de los Altos de Chiapas
+//El Caminante
+//Galeria Taxcalate
+//Sabi
+//MUY
+//END
+//        );
     }
 
     private function initials(string $name): string
