@@ -8,6 +8,9 @@ use Symfony\Bridge\Twig\Attribute\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\UX\Map\Map;
+use Symfony\UX\Map\Marker;
+use Symfony\UX\Map\Point;
 
 final class AppController extends AbstractController
 {
@@ -32,7 +35,26 @@ final class AppController extends AbstractController
     #[Template('location/show.html.twig')]
     public function showLocation(Location $location): Response|array
     {
+
+        $myMap = (new Map());
+        if ($location->getLat()) {
+            $point = new Point($location->getLat(), $location->getLng());
+            $myMap
+                // Explicitly set the center and zoom
+                ->center($point)
+                    ->zoom(16)
+                    // Or automatically fit the bounds to the markers
+//                    ->fitBoundsToMarkers()
+                ->addMarker(new Marker(
+                    position: $point,
+                    title: $location->getName(),
+                ))
+        ;
+
+        }
+
         return [
+            'my_map' => $myMap,
             'location' => $location,
         ];
     }

@@ -3,6 +3,12 @@
 {% block body %}
 
     <h1>{{ location.name }}</h1>
+    @map?
+    {{ location.lat }}, {{ location.lng }}
+
+    {{ ux_map(my_map, { style: 'height: 300px' }) }}
+
+
     @todo: description, map
     <twig:Obras :obras="location.obras" :showLocation="false" />
 {% endblock %}
