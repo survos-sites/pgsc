@@ -13,6 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Survos\CoreBundle\Entity\RouteParametersInterface;
 use Survos\CoreBundle\Entity\RouteParametersTrait;
 use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Serializer\Attribute\SerializedName;
 
 #[ORM\Entity(repositoryClass: LocationRepository::class)]
 #[ApiResource(
@@ -36,6 +37,7 @@ class Location implements \Stringable, RouteParametersInterface
 
     #[ORM\Column(length: 255)]
     #[Groups(['location.read'])]
+    #[SerializedName('label')]
     private ?string $name = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -151,9 +153,16 @@ class Location implements \Stringable, RouteParametersInterface
         return $this->getName();
     }
 
+    #[Groups(['location.read'])]
     public function getType(): ?LocationType
     {
         return $this->type;
+    }
+
+    #[Groups(['location.read'])]
+    public function getTypeString(): ?string
+    {
+        return $this->type?->name;
     }
 
     public function setType(?LocationType $type): static

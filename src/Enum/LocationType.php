@@ -5,8 +5,9 @@ namespace App\Enum;
 enum LocationType: string
 {
     case MUSEO = 'museo';
-    case GALLERIA = 'galleria';
-    case CC = 'cc';
+    case GALLERIA = 'restaurant';
+    case REST = 'galeria';
+    case CC = 'cc'; // cultural center
 
     public static function choices(): array
     {

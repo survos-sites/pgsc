@@ -3,10 +3,15 @@
 {% block body %}
 
     <h1>{{ location.name }}</h1>
+    Type: {{ location.type }} / {{ location.typeString }}
     @map?
     {{ location.lat }}, {{ location.lng }}
 
+    {% if my_map %}
     {{ ux_map(my_map, { style: 'height: 300px' }) }}
+        {% else %}
+        no lat/long
+    {% endif %}
 
 
     @todo: description, map

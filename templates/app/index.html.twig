@@ -10,8 +10,12 @@
         </div>
         <div class="col-md-3">
             <ol>
-                {% for artist in locations %}
-                    <li>{{ artist.name }}</li>
+                {% for loc in locations %}
+                    <li>
+{#                        @todo: icon#}
+                        {{ loc.typeString }}/
+                        {{ loc.name }}
+                    </li>
                 {% endfor %}
             </ol>
         </div>

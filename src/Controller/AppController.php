@@ -68,8 +68,8 @@ final class AppController extends AbstractController
     public function showLocation(Location $location): Response|array
     {
 
-        $myMap = (new Map());
         if ($location->getLat()) {
+            $myMap = (new Map());
             $point = new Point($location->getLat(), $location->getLng());
             $myMap
                 // Explicitly set the center and zoom
@@ -86,7 +86,7 @@ final class AppController extends AbstractController
         }
 
         return [
-            'my_map' => $myMap,
+            'my_map' => $myMap??null,
             'location' => $location,
         ];
     }

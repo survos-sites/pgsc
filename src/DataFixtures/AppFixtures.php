@@ -2,7 +2,10 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Artist;
+use App\Entity\Location;
 use App\Entity\User;
+use App\Enum\LocationType;
 use App\Factory\ArtistFactory;
 use App\Factory\LocationFactory;
 use App\Factory\ObraFactory;
@@ -27,8 +30,9 @@ class AppFixtures extends Fixture
         }
         foreach ($this->locations() as $row) {
             LocationFactory::createOne([
-                'name' => ($name=$row['original_Nombre']),
-                'code' => $row['original_Codigo']??$this->initials($name),
+                'name' => ($name=trim($row['nombre'])),
+                'type' => LocationType::from(trim(strtolower($row['tipo'])))??null,
+                'code' => $row['code'] ?: $this->initials($name),
                 'lat' => $row['lat'] ? (float)$row['lat'] : null,
                 'lng' => $row['lon'] ? (float)$row['lon'] : null,
             ]);
@@ -87,7 +91,14 @@ class AppFixtures extends Fixture
 //            ])
 //            ->create();
 
+        foreach ($manager->getRepository(Location::class)->findAll() as $location) {
+            $location->setObraCount($location->getObras()->count());
+        }
+        foreach ($manager->getRepository(Artist::class)->findAll() as $location) {
+            $location->setObraCount($location->getObras()->count());
+        }
         $manager->flush();
+
     }
 
     private function names(): array
@@ -137,9 +148,9 @@ END
     private function initials(string $name): string
     {
         $name = u($name)->ascii()->toString();
-        return implode('', array_map(function ($name) {
+        return strtolower(implode('', array_map(function ($name) {
             return preg_replace('/(?<=\w)./', '', $name);
-        }, explode(' ', $name)));
+        }, explode(' ', $name))));
 
     }
 
