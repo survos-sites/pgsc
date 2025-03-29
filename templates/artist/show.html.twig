@@ -2,18 +2,30 @@
 
 {% block body %}
 
-                    {% set mobile_base = app.request.get('base', mobile_base)  %}
-                {% set url = mobile_base ~ '?artistId=%d#tab-artists'|format(artist.id) %}
-<a href="{{ url }}" target="_blank">
-    {{ url }}
-    <img src="{{ qr_code_url(url) }}" />
+        <a class="btn btn-success" href="{{ ea_url()
+            .setController('App\\Controller\\Admin\\ArtistCrudController')
+            .setAction('edit')
+            .setEntityId(artist.id)
+        }}">
+            EzEdit
+            {{ ux_icon('tabler:edit') }}
+        </a>
+    {% if is_granted('ROLE_ADMIN') %}
+    {% endif %}
 
-    <div class="print-group">
-    </div>
 
-</a>
+    {% set mobile_base = app.request.get('base', mobile_base) %}
+    {% set url = mobile_base ~ '?artistId=%d#tab-artists'|format(artist.id) %}
+    <a href="{{ url }}" target="_blank">
+        {{ url }}
+        <img src="{{ qr_code_url(url) }}"/>
 
-<h1>{{ artist.name }}</h1>
+        <div class="print-group">
+        </div>
+
+    </a>
+
+    <h1>{{ artist.name }}</h1>
     <p>
         {{ artist.bio }}
     </p>

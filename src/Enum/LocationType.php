@@ -17,4 +17,5 @@ enum LocationType: string
             'CC' => self::CC,
         ];
     }
+
 }

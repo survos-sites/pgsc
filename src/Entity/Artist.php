@@ -70,6 +70,16 @@ class Artist implements \Stringable, RouteParametersInterface
     #[ORM\Column(nullable: true)]
     private int $obraCount = 0;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $socialMedia = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $studioAddress = null;
+
+    #[ORM\Column(length: 9, nullable: true)]
+    #[Va]
+    private ?string $studioVisitable = null;
+
     public function __construct()
     {
         $this->obras = new ArrayCollection();
@@ -197,6 +207,42 @@ class Artist implements \Stringable, RouteParametersInterface
     public function setObraCount(?int $obraCount): static
     {
         $this->obraCount = $obraCount;
+
+        return $this;
+    }
+
+    public function getSocialMedia(): ?string
+    {
+        return $this->socialMedia;
+    }
+
+    public function setSocialMedia(?string $socialMedia): static
+    {
+        $this->socialMedia = $socialMedia;
+
+        return $this;
+    }
+
+    public function getStudioAddress(): ?string
+    {
+        return $this->studioAddress;
+    }
+
+    public function setStudioAddress(?string $studioAddress): static
+    {
+        $this->studioAddress = $studioAddress;
+
+        return $this;
+    }
+
+    public function getStudioVisitable(): ?string
+    {
+        return $this->studioVisitable;
+    }
+
+    public function setStudioVisitable(?string $studioVisitable): static
+    {
+        $this->studioVisitable = $studioVisitable;
 
         return $this;
     }
