@@ -34,4 +34,5 @@ return [
     Symfony\UX\Turbo\TurboBundle::class => ['all' => true],
     Endroid\QrCodeBundle\EndroidQrCodeBundle::class => ['all' => true],
     Symfony\UX\Map\UXMapBundle::class => ['all' => true],
+    Survos\DocBundle\SurvosDocBundle::class => ['dev' => true, 'test' => true],
 ];
