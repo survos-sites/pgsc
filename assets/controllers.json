@@ -22,6 +22,15 @@
                 "enabled": false,
                 "fetch": "eager"
             }
+        },
+        "@survos/simple-datatables-bundle": {
+            "table": {
+                "enabled": true,
+                "fetch": "lazy",
+                "autoimport": {
+                    "@survos/simple-datatables/style.css": true
+                }
+            }
         }
     },
     "entrypoints": []
