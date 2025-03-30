@@ -39,9 +39,9 @@ class ObraCrudController extends AbstractCrudController
             ->hideOnForm();
 
         yield TextField::new('materials');
-        yield IntegerField::new('price');
+        yield IntegerField::new('price', 'price');
 
-        yield AssociationField::new('artist')
+        yield AssociationField::new('artist', 'artist')
             ->setHelp('nombre del artista')
             ->setColumns(5);
         yield AssociationField::new('location')

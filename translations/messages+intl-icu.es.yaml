@@ -1,6 +1,20 @@
 hello: hola
 no-location: sin ubi
 artists: 'artistas'
+artist: 'artista'
+Artist: 'Artista'
 locations: ubis
+location: ubi
+Location: Ubi
+object: obyecto
 objects: obyectos
 dashboard: tablero
+price: precio
+
+code: codigo
+name: nombre
+bio: biografia
+birthYear: año de nac.
+obraCount: '#obras'
+studioVisitable: 'puede visitar?'
+title: titulo

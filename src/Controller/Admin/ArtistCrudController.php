@@ -24,19 +24,19 @@ class ArtistCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            TextField::new('name'),
-            TextField::new('code'),
-            TextEditorField::new('bio')
+            TextField::new('name', 'name'),
+            TextField::new('code', 'code'),
+            TextEditorField::new('bio', 'bio')
                 ->hideOnIndex(),
             TextareaField::new('socialMedia')
                 ->setHelp("URLs, one per line")
                 ->hideOnIndex(),
-            IntegerField::new('obraCount')
+            IntegerField::new('obraCount', 'obraCount')
 //                ->setFormTypeOption('disabled','disabled')
                 ->onlyOnIndex(),
-            IntegerField::new('birthYear'),
+            IntegerField::new('birthYear', 'birthYear'),
 
-            ChoiceField::new('studioVisitable')->setChoices([
+            ChoiceField::new('studioVisitable', 'studioVisitable')->setChoices([
                 'studio.open' => 'open',
                 'studio.appointment' => 'appointment',
                 'studio.closed' => 'closed',
@@ -46,8 +46,6 @@ class ArtistCrudController extends AbstractCrudController
                 ->setTemplatePath('admin/field/obras.html.twig')
                 ->useEntryCrudForm()
                 ->hideOnIndex(),
-            CollectionField::new('obras')
-                ->onlyOnIndex(),
 
         ];
     }
