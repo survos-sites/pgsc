@@ -35,6 +35,6 @@ return [
     Endroid\QrCodeBundle\EndroidQrCodeBundle::class => ['all' => true],
     Symfony\UX\Map\UXMapBundle::class => ['all' => true],
     Survos\DocBundle\SurvosDocBundle::class => ['dev' => true, 'test' => true],
-    Survos\CrawlerBundle\SurvosCrawlerBundle::class => ['all' => true],
+    Survos\CrawlerBundle\SurvosCrawlerBundle::class =>  ['dev' => true, 'test' => true],
     Survos\SimpleDatatables\SurvosSimpleDatatablesBundle::class => ['dev' => true, 'test' => true],
 ];
