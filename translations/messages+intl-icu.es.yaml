@@ -1,3 +1,6 @@
 hello: hola
 no-location: sin ubi
-artists: 'artistas!!'
+artists: 'artistas'
+locations: ubis
+objects: obyectos
+dashboard: tablero

@@ -39,6 +39,7 @@ class ObraCrudController extends AbstractCrudController
             ->hideOnForm();
 
         yield TextField::new('materials');
+        yield IntegerField::new('price');
 
         yield AssociationField::new('artist')
             ->setHelp('nombre del artista')
@@ -46,15 +47,15 @@ class ObraCrudController extends AbstractCrudController
         yield AssociationField::new('location')
             ->setFormTypeOption('choice_label', 'name')
             ->setColumns(5);
-        yield CollectionField::new('obraImages')
-            ->setEntryType(ObraImageFileType::class)
-            ->onlyOnForms();
-        yield CollectionField::new('obraImages')
-            ->onlyOnDetail()
-            ->setTemplatePath('admin/field/obra_images.html.twig');
-        yield CollectionField::new('obraImages')
-            ->onlyOnIndex()
-            ->setTemplatePath('admin/field/obra_images_small.html.twig');
+//        yield CollectionField::new('obraImages')
+//            ->setEntryType(ObraImageFileType::class)
+//            ->onlyOnForms();
+//        yield CollectionField::new('obraImages')
+//            ->onlyOnDetail()
+//            ->setTemplatePath('admin/field/obra_images.html.twig');
+//        yield CollectionField::new('obraImages')
+//            ->onlyOnIndex()
+//            ->setTemplatePath('admin/field/obra_images_small.html.twig');
     }
 
 

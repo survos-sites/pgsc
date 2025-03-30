@@ -53,6 +53,9 @@ final class AppMenu implements KnpMenuHelperInterface
         $this->add($menu, 'app_homepage');
         // for nested menus, don't add a route, just a label, then use it for the argument to addMenuItem
 
+        $subMenu = $this->addSubmenu($menu, 'debug');
+        $this->add($subMenu, 'survos_crawler_data');
+
         $nestedMenu = $this->addSubmenu($menu, 'artists');
         foreach ($this->artistRepo->findAll() as $artist) {
             $this->add($nestedMenu, 'artist_show', $artist,

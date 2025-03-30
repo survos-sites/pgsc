@@ -25,7 +25,7 @@ final class AppController extends AbstractController
 
     }
     #[Route('/', name: 'app_homepage')]
-    public function index(): Response
+    public function home(): Response
     {
         $myMap = (new Map());
             $myMap
@@ -47,7 +47,6 @@ final class AppController extends AbstractController
 
         }
         return $this->render('app/index.html.twig', [
-            'controller_name' => 'AppController',
             'artists' => $this->artistRepository->findAll(),
             'locations' => $this->locationRepository->findAll(),
             'myMap' => $myMap,

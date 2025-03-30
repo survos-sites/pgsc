@@ -48,4 +48,11 @@ return [
     '@symfony/ux-leaflet-map' => [
         'path' => './vendor/symfony/ux-leaflet-map/assets/dist/map_controller.js',
     ],
+    'simple-datatables' => [
+        'version' => '9.2.2',
+    ],
+    'simple-datatables/dist/style.min.css' => [
+        'version' => '9.2.2',
+        'type' => 'css',
+    ],
 ];

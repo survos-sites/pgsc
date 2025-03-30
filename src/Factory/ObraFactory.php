@@ -59,6 +59,7 @@ final class ObraFactory extends PersistentProxyObjectFactory
             'width' => self::faker()->numberBetween(10, 120),
             'depth' => self::faker()->numberBetween(1, 20),
             'year' => self::faker()->numberBetween(2017, 2024),
+            'price' => self::faker()->numberBetween(10, 40) * 100,
             'materials' => $faker->randomElement(['oro', 'plata', 'carton','oleo', 'tela','papel']),
             'code' => strtolower($this->asciiSlugger->slug($title)),
         ];

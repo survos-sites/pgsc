@@ -73,15 +73,15 @@ class DashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
 
-        yield MenuItem::linkToDashboard('Dashboard', 'tabler:home');
-         yield MenuItem::linkToCrud('Artistas', 'tabler:list', Artist::class)
+        yield MenuItem::linkToDashboard('dashboard', 'tabler:home');
+         yield MenuItem::linkToCrud('artists', 'tabler:list', Artist::class)
              ->setBadge($this->artistRepository->count())
          ;
-         yield MenuItem::linkToCrud('Ubi', 'tabler:location', Location::class)
+         yield MenuItem::linkToCrud('locations', 'tabler:location', Location::class)
              ->setBadge($this->locationRepository->count())
          ;
 
-         yield MenuItem::linkToCrud('Obras', 'ri:image-line', Obra::class)
+         yield MenuItem::linkToCrud('objects', 'ri:image-line', Obra::class)
              ->setBadge($this->obraRepository->count())
          ;
          yield MenuItem::linkToRoute('home', 'tabler:home',  'app_homepage');

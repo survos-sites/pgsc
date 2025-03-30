@@ -68,6 +68,7 @@
     },
     "config": {
         "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true,
             "endroid/installer": true,
             "php-http/discovery": true,
             "survos/installer": true,
@@ -124,10 +125,13 @@
         "dbrekelmans/bdi": "^1.4",
         "doctrine/doctrine-fixtures-bundle": "^4.1",
         "jzonta/faker-restaurant": "^2.0.1",
+        "nunomaduro/phpinsights": "dev-master",
         "pelmered/fake-car": "^2.1",
         "phpunit/phpunit": "^12.0.10",
+        "survos/crawler-bundle": "*",
         "survos/doc-bundle": "^1.5",
         "survos/maker-bundle": "^1.5.529",
+        "survos/simple-datatables-bundle": "^1.5",
         "symfony/browser-kit": "^7.2.4",
         "symfony/css-selector": "^7.2",
         "symfony/debug-bundle": "^7.2",

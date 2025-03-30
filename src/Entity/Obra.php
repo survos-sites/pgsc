@@ -73,6 +73,9 @@ class Obra implements \Stringable, RouteParametersInterface
     #[ORM\OneToMany(targetEntity: ObraImage::class, mappedBy: 'obra', cascade: ['persist'], orphanRemoval: true)]
     private Collection $obraImages;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $price = null;
+
     public function __construct()
     {
         $this->obraImages = new ArrayCollection();
@@ -247,5 +250,17 @@ class Obra implements \Stringable, RouteParametersInterface
         }
 
         return $dimensions;
+    }
+
+    public function getPrice(): ?int
+    {
+        return $this->price;
+    }
+
+    public function setPrice(?int $price): static
+    {
+        $this->price = $price;
+
+        return $this;
     }
 }

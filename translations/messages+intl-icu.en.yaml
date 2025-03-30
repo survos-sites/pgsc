@@ -1,3 +1,5 @@
 hello: hello
 no-location: 'No location assigned'
-artists: artists!!
+artists: artists
+locations: locations
+objects: objects
