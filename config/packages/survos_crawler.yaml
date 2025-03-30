@@ -1,9 +1,20 @@
-survos_crawler:
-# if you've run symfony proxy:domain:attach my-project, then the error messages will be displayed with this prefix.  That way, you can simply click on a link to open the page.
-    base_url: 'https://pgsc.wip/'
-    user_class: App\Entity\User
-    users:
-        - admin@test.com
-    max_depth : 3
-    routes_to_ignore :
-        - 'app_logout'
+when@dev:
+    survos_crawler:
+        # if you've run symfony proxy:domain:attach my-project, then the error messages will be displayed with this prefix.  That way, you can simply click on a link to open the page.
+        base_url: 'https://pgsc.wip/'
+        user_class: App\Entity\User
+        users:
+            - admin@test.com
+        max_depth : 3
+        routes_to_ignore :
+            - 'app_logout'
+when@test:
+    survos_crawler:
+    # if you've run symfony proxy:domain:attach my-project, then the error messages will be displayed with this prefix.  That way, you can simply click on a link to open the page.
+        base_url: 'https://pgsc.wip/'
+        user_class: App\Entity\User
+        users:
+            - admin@test.com
+        max_depth : 3
+        routes_to_ignore :
+            - 'app_logout'
