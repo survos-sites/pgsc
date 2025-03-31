@@ -24,7 +24,7 @@ final class AppController extends AbstractController
     {
 
     }
-    #[Route('/', name: 'app_homepage')]
+    #[Route('/home', name: 'app_homepage')]
     public function home(): Response
     {
         $myMap = (new Map());

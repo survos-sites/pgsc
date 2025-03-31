@@ -3,47 +3,16 @@
 {% block title %}Hello AppController!{% endblock %}
 
 {% block body %}
+    {{ include('_dashboard.html.twig') }}
 
-    <div class="row">
-        <div class="col-md-6">
-            {{ ux_map(myMap, { style: 'height: 300px' }) }}
-        </div>
-        <div class="col-md-3">
-            <ol>
-                {% for loc in locations %}
-                    <li>
-{#                        @todo: icon#}
-                        {{ loc.typeString }}/
-                        {{ loc.name }}
-                    </li>
-                {% endfor %}
-            </ol>
-        </div>
-        <div class="col-md-3">
-            <ol>
-                {% for artist in artists %}
-                    <li>
-                        <a href="{{ path('artist_show', artist.rp) }}">
-                            {{ artist.name }}
-                        </a>
-                        <a href="{{ path('admin_artist_detail', {entityId: artist.id}) }}">
-                            {{ ux_icon('tabler:edit') }}
-                            EZ
-                        </a>
-                    </li>
-                {% endfor %}
-            </ol>
-        </div>
-
-
-    <p>
-        popup galleries of San Crisobal!
-    </p>
+        <p>
+            popup galleries of San Crisobal!
+        </p>
         {{ app.environment }}
 
-    {{ 'hello'|trans }}
-    {{ 'artists'|trans }}
+        {{ 'hello'|trans }}
+        {{ 'artists'|trans }}
 
 
-</div>
+    </div>
 {% endblock %}

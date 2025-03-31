@@ -3,18 +3,20 @@
 {% block body %}
 
     {% for action in ['edit','detail'] %}
-        {% set path = path('admin_artist_' ~ action, {entityId: artist.id}) %}
-        <a class="btn btn-success" href="{{ path }}">
-            Ez{{ action|title }}
-            @ico
-{#            {{ ux_icon('tabler:edit') }}#}
-        </a>
+        {% if is_granted('ARTIST_EDIT', artist) %}
+            {% set path = path('admin_artist_' ~ action, {entityId: artist.id}) %}
+            <a class="btn btn-success" href="{{ path }}">
+                Ez{{ action|title }}
+                @ico
+                {#            {{ ux_icon('tabler:edit') }} #}
+            </a>
+        {% endif %}
 
     {% endfor %}
     {% set path = path('admin_artist_detail', {entityId: artist.id}) %}
-        <a class="btn btn-success" href="{{ path }}">
-            {{ ux_icon('tabler:edit') }}
-        </a>
+    <a class="btn btn-success" href="{{ path }}">
+        {{ ux_icon('tabler:edit') }}
+    </a>
     {% if is_granted('ROLE_ADMIN') %}
     {% endif %}
 

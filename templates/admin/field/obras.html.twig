@@ -1,17 +1,21 @@
 {% for obra in entity.instance.obras %}
-    <a href="/admin/obra/{{ obra.id }}/edit">
-        {% if obra.obraImages|length %}
-            <div class="mb-1">
-                {% for obraImage in obra.obraImages %}
-                    <img src="{{ asset('images/obra/' ~ obraImage.imageName) }}" alt="Obra Image" width="65" />
-                {% endfor %}
-            </div>
-        {% endif %}
-
-        <div class="text-primary">
-            {{ obra.title }}<br/><b>por {{ obra.artist }}</b>
+    {% if obra.obraImages|length %}
+        <div class="mb-1">
+            {% for obraImage in obra.obraImages %}
+                <img src="{{ asset('images/obra/' ~ obraImage.imageName) }}" alt="Obra Image" width="65"/>
+            {% endfor %}
         </div>
-    </a>
+    {% endif %}
+
+    <div class="text-primary">
+        {% if is_granted('OBJ_EDIT', obra) %}
+        <a href="{{ path('admin_obra_edit', {entityId: obra.id}) }}">
+{#        <a href="{{ path('admin_obra_edit', obra.erp) }}">#}
+            {{ ux_icon('tabler:edit') }}
+        </a>
+        {% endif %}
+        {{ obra.title }}<br/><b>por {{ obra.artist }}</b>
+    </div>
     <hr class="my-2">
 {% endfor %}
 

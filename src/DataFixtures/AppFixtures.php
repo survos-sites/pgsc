@@ -24,9 +24,19 @@ class AppFixtures extends Fixture
 //        ArtistFactory::createMany(2);
 //        LocationFactory::createMany(2);
         foreach ($this->names() as $name) {
-            ArtistFactory::createOne(['name' => $name,
-                'code' => $this->initials($name)
+            $initials = $this->initials($name);
+            $email =  $initials . '@test.com';
+            // OR create user with role ARTIST?
+            $artist = ArtistFactory::createOne(['name' => $name,
+                'code' => $initials,
+                'email' => $email,
                 ]);
+            UserFactory::createOne([
+                'email' => $email,
+                'plainPassword' => 'test',
+                'roles' => ['ROLE_USER', 'ROLE_ARTIST'],
+            ]);
+
         }
         foreach ($this->locations() as $row) {
             LocationFactory::createOne([

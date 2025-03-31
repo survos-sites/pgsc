@@ -15,6 +15,7 @@ enum LocationType: string
             'Museo' => self::MUSEO,
             'Galleria' => self::GALLERIA,
             'CC' => self::CC,
+            'REST' => self::REST,
         ];
     }
 

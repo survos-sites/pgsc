@@ -1,0 +1,42 @@
+<div class="row">
+    <div class="col-md-6">
+        {% if myMap|default(false) %}
+            {{ ux_map(myMap, { style: 'height: 300px' }) }}
+        {% endif %}
+    </div>
+    <div class="col-md-3">
+        <ol>
+            {% for loc in locations %}
+                <li>
+                    {% if is_granted('LOCATION_EDIT', loc) %}
+                        <a href="{{ path('admin_location_edit', {entityId: loc.id}) }}">
+                            {{ ux_icon('tabler:edit') }}
+                        </a>
+                    {% endif %}
+                    <a href="{{ path('admin_location_detail', {entityId: loc.id}) }}">
+                        {{ loc.name }}
+                        <sup>
+                            {{ loc.typeString }}
+                        </sup>
+                    </a>
+                </li>
+            {% endfor %}
+        </ol>
+    </div>
+    <div class="col-md-3">
+        <ol>
+            {% for artist in artists %}
+                <li>
+                    {% if is_granted('ARTIST_EDIT', artist) %}
+                        <a href="{{ path('admin_artist_detail', {entityId: artist.id}) }}">
+                            {{ ux_icon('tabler:edit') }}
+                        </a>
+                    {% endif %}
+                    <a href="{{ path('artist_show', artist.rp) }}">
+                        {{ artist.name }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ol>
+    </div>
+

@@ -19,9 +19,12 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 use Symfony\Bridge\Twig\Attribute\Template;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\UX\Map\Map;
+use Symfony\UX\Map\Marker;
+use Symfony\UX\Map\Point;
 
-#[AdminDashboard(routePath: '/admin', routeName: 'admin')]
-#[IsGranted('ROLE_ADMIN')]
+#[AdminDashboard(routePath: '/', routeName: 'admin')]
+#[IsGranted('ROLE_USER')]
 class DashboardController extends AbstractDashboardController
 {
 
@@ -41,7 +44,37 @@ class DashboardController extends AbstractDashboardController
 
     public function index(): Response
     {
-        return $this->render('admin/dashboard.html.twig');
+
+        $myMap = (new Map());
+        $myMap
+            // Explicitly set the center and zoom
+//                ->center($point)
+            ->zoom(16)
+            // Or automatically fit the bounds to the markers
+            ->fitBoundsToMarkers()
+
+        ;
+        foreach ($this->locationRepository->findAll() as $location) {
+            if ($location->getLat()) {
+                $point = new Point($location->getLat(), $location->getLng());
+                $myMap->addMarker(new Marker(
+                    position: $point,
+                    title: $location->getName(),
+                ));
+            }
+
+        }
+        return $this->render('admin/dashboard.html.twig', [
+            'artists' => $this->artistRepository->findAll(),
+            'locations' => $this->locationRepository->findAll(),
+            'myMap' => $myMap,
+        ]);
+
+//        return $this->render('admin/dashboard.html.twig', [
+//            'locations' => $this->locationRepository->findAll(),
+//            'artists' => $this->artistRepository->findAll(),
+//            'obras' => $this->obraRepository->findAll(),
+//        ]);
 
         // Option 1. You can make your dashboard redirect to some common page of your backend
         //
@@ -100,6 +133,9 @@ class DashboardController extends AbstractDashboardController
                 '_blank'
             );
         ;
+
+        yield MenuItem::linkToRoute('login', 'tabler:login', 'app_login');
+        yield MenuItem::linkToUrl('login', 'tabler:login', '/login');
 
 
         foreach ($this->locationRepository->findAll() as $location) {

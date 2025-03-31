@@ -37,6 +37,10 @@ security:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
 
+    # https://symfony.com/bundles/EasyAdminBundle/current/security.html#custom-security-voters
+
+    access_decision_manager:
+        strategy: unanimous
 when@test:
     security:
         password_hashers:
