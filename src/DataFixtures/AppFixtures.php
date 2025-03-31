@@ -63,11 +63,14 @@ class AppFixtures extends Fixture
                 'roles' => ['ROLE_SUPER_ADMIN'],
             ]);
 
-        UserFactory::createOne([
-            'email' => 'admin@example.com',
-            'plainPassword' => 'adminpass',
-            'roles' => ['ROLE_ADMIN'],
-        ]);
+        foreach (['tacman@gmail.com','yarenivillada@gmail.com'] as $email) {
+            UserFactory::createOne([
+                'email' => $email,
+                'plainPassword' => 'batsi',
+                'roles' => ['ROLE_ADMIN'],
+            ]);
+
+        }
 
         UserFactory::createOne([
             'email' => 'admin@test.com',
