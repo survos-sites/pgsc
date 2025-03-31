@@ -22,7 +22,15 @@
         <div class="col-md-3">
             <ol>
                 {% for artist in artists %}
-                    <li>{{ artist.name }}</li>
+                    <li>
+                        <a href="{{ path('artist_show', artist.rp) }}">
+                            {{ artist.name }}
+                        </a>
+                        <a href="{{ path('admin_artist_detail', {entityId: artist.id}) }}">
+                            {{ ux_icon('tabler:edit') }}
+                            EZ
+                        </a>
+                    </li>
                 {% endfor %}
             </ol>
         </div>

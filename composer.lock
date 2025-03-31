@@ -4,8 +4,115 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cc417a5d1016a1064d56b8b693d36f38",
+    "content-hash": "028812b3e882d56b607673af9621fd0d",
     "packages": [
+        {
+            "name": "alexandre-fernandez/json-translation-bundle",
+            "version": "1.0.5",
+            "source": {
+                "type": "git",
+                "url": "https://gitlab.com/alexandre-fernandez/json-translation-bundle.git",
+                "reference": "68807a36c98686fffab2c4d8f3bcc6c76d657ffc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://gitlab.com/api/v4/projects/alexandre-fernandez%2Fjson-translation-bundle/repository/archive.zip?sha=68807a36c98686fffab2c4d8f3bcc6c76d657ffc",
+                "reference": "68807a36c98686fffab2c4d8f3bcc6c76d657ffc",
+                "shasum": ""
+            },
+            "require": {
+                "alexandre-fernandez/key-value-form-bundle": "^1.1",
+                "doctrine/doctrine-bundle": "^2.13",
+                "doctrine/orm": "^3.3",
+                "symfony/form": "^7.2",
+                "symfony/framework-bundle": "^7.2",
+                "symfony/translation": "^7.2",
+                "symfony/twig-bundle": "^7.2"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-4": {
+                    "AlexandreFernandez\\JsonTranslationBundle\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Alexandre Fernandez",
+                    "email": "contact.ocean431@passmail.net"
+                }
+            ],
+            "description": "Manage localized content in your Symfony applications.",
+            "homepage": "https://gitlab.com/alexandre-fernandez/json-translation-bundle",
+            "keywords": [
+                "doctrine",
+                "i18n",
+                "orm",
+                "symfony"
+            ],
+            "support": {
+                "issues": "https://gitlab.com/alexandre-fernandez/json-translation-bundle/-/issues",
+                "source": "https://gitlab.com/alexandre-fernandez/json-translation-bundle/-/tree/1.0.5"
+            },
+            "time": "2025-03-12T01:14:14+00:00"
+        },
+        {
+            "name": "alexandre-fernandez/key-value-form-bundle",
+            "version": "1.1.4",
+            "source": {
+                "type": "git",
+                "url": "https://gitlab.com/alexandre-fernandez/key-value-form-bundle.git",
+                "reference": "e3242f15490d967f8da8180778b07691d17581c2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://gitlab.com/api/v4/projects/alexandre-fernandez%2Fkey-value-form-bundle/repository/archive.zip?sha=e3242f15490d967f8da8180778b07691d17581c2",
+                "reference": "e3242f15490d967f8da8180778b07691d17581c2",
+                "shasum": ""
+            },
+            "require": {
+                "symfony/form": "^7.2",
+                "symfony/framework-bundle": "^7.2",
+                "symfony/translation": "^7.2",
+                "symfony/twig-bundle": "^7.2"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-4": {
+                    "AlexandreFernandez\\KeyValueFormBundle\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Alexandre Fernandez",
+                    "email": "contact.ocean431@passmail.net"
+                }
+            ],
+            "description": "Symfony form type to manage associative array data.",
+            "homepage": "https://gitlab.com/alexandre-fernandez/key-value-form-bundle",
+            "keywords": [
+                "Associative",
+                "array",
+                "form",
+                "key",
+                "map",
+                "symfony",
+                "type",
+                "value"
+            ],
+            "support": {
+                "issues": "https://gitlab.com/alexandre-fernandez/key-value-form-bundle/-/issues",
+                "source": "https://gitlab.com/alexandre-fernandez/key-value-form-bundle/-/tree/1.1.4"
+            },
+            "time": "2025-02-25T22:09:19+00:00"
+        },
         {
             "name": "api-platform/doctrine-common",
             "version": "v4.1.4",
@@ -5156,83 +5263,6 @@
                 }
             ],
             "time": "2024-12-09T14:44:56+00:00"
-        },
-        {
-            "name": "survos/simple-datatables-bundle",
-            "version": "1.5.529",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/survos/SurvosSimpleDatatablesBundle.git",
-                "reference": "288fd4c281bc7f139d057f157621609087d4a782"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/survos/SurvosSimpleDatatablesBundle/zipball/288fd4c281bc7f139d057f157621609087d4a782",
-                "reference": "288fd4c281bc7f139d057f157621609087d4a782",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^8.3",
-                "survos/core-bundle": "^1.5",
-                "symfony/config": "^6.4 || ^7.1",
-                "symfony/dependency-injection": "^6.4 || ^7.1",
-                "symfony/http-kernel": "^6.4 || ^7.1",
-                "symfony/options-resolver": "^6.4 || ^7.1",
-                "symfony/stimulus-bundle": "^2.21",
-                "symfony/ux-twig-component": "^2.8",
-                "twig/twig": "^3.4"
-            },
-            "require-dev": {
-                "phpstan/phpstan": "^2.0",
-                "phpunit/phpunit": "^11.4",
-                "rector/rector": "dev-main",
-                "roave/security-advisories": "dev-latest",
-                "symfony/browser-kit": "^6.4 || ^7.1",
-                "symfony/framework-bundle": "^6.4 || ^7.1",
-                "symfony/phpunit-bridge": "^6.4 || ^7.1",
-                "symfony/twig-bundle": "^6.4 || ^7.1",
-                "symfony/var-dumper": "^6.4 || ^7.1"
-            },
-            "suggest": {
-                "monolog/monolog": "Allows more advanced logging of the application flow"
-            },
-            "type": "symfony-bundle",
-            "extra": {
-                "branch-alias": {
-                    "dev-main": "1.6-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Survos\\SimpleDatatables\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Tac Tacelosky",
-                    "email": "tacman@gmail.com"
-                }
-            ],
-            "description": "incorporate simple datatables, using twig and stimulus",
-            "keywords": [
-                "symfony-ux",
-                "symfony6"
-            ],
-            "support": {
-                "issues": "https://github.com/survos/SurvosSimpleDatatablesBundle/issues",
-                "source": "https://github.com/survos/SurvosSimpleDatatablesBundle/tree/1.5.529"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/kbond",
-                    "type": "github"
-                }
-            ],
-            "time": "2024-12-07T14:16:18+00:00"
         },
         {
             "name": "symfony/asset",
