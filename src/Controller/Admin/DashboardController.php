@@ -23,7 +23,7 @@ use Symfony\UX\Map\Map;
 use Symfony\UX\Map\Marker;
 use Symfony\UX\Map\Point;
 
-#[AdminDashboard(routePath: '/', routeName: 'admin')]
+#[AdminDashboard(routePath: '/admin', routeName: 'admin')]
 #[IsGranted('ROLE_USER')]
 class DashboardController extends AbstractDashboardController
 {
@@ -137,7 +137,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToRoute('login', 'tabler:login', 'app_login');
         yield MenuItem::linkToUrl('login', 'tabler:login', '/login');
 
-
+        $filters = [];
         foreach ($this->locationRepository->findAll() as $location) {
             $filters[] =
                 MenuItem::linkToCrud($location->getName(), null, Obra::class)
