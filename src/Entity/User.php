@@ -19,7 +19,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 180)]
+    #[ORM\Column(length: 180, nullable: true)]
     private ?string $email = null;
 
     /**
@@ -39,6 +39,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column]
     private bool $isVerified = false;
+
+    #[ORM\Column(length: 48)]
+    private ?string $code = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $name = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $cel = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $isArtist = null;
 
     public function getPlainPassword(): ?string
     {
@@ -133,6 +145,54 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsVerified(bool $isVerified): static
     {
         $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    public function getCode(): ?string
+    {
+        return $this->code;
+    }
+
+    public function setCode(string $code): static
+    {
+        $this->code = $code;
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): static
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getCel(): ?string
+    {
+        return $this->cel;
+    }
+
+    public function setCel(?string $cel): static
+    {
+        $this->cel = $cel;
+
+        return $this;
+    }
+
+    public function isArtist(): ?bool
+    {
+        return $this->isArtist;
+    }
+
+    public function setIsArtist(?bool $isArtist): static
+    {
+        $this->isArtist = $isArtist;
 
         return $this;
     }

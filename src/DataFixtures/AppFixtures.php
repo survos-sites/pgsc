@@ -13,6 +13,7 @@ use App\Factory\UserFactory;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use League\Csv\Reader;
+
 use function Symfony\Component\String\u;
 
 class AppFixtures extends Fixture
@@ -21,27 +22,31 @@ class AppFixtures extends Fixture
     {
         // $product = new Product();
         // $manager->persist($product);
-//        ArtistFactory::createMany(2);
+//        ArtistFactory::createMany(2);00
 //        LocationFactory::createMany(2);
-        foreach ($this->names() as $name) {
-            $initials = $this->initials($name);
+        $artists = [];
+        foreach ($this->artists() as $artistData) {
+            $initials = $artistData['code'];
             $email =  $initials . '@test.com';
+//            dd($artistData);
             // OR create user with role ARTIST?
-            $artist = ArtistFactory::createOne(['name' => $name,
+            $artist = ArtistFactory::createOne(['name' => $artistData['nombre'],
                 'code' => $initials,
                 'email' => $email,
                 ]);
             UserFactory::createOne([
+                'code' => $initials,
                 'email' => $email,
+                'cel' => $artistData['whatsapp'],
                 'plainPassword' => 'test',
                 'roles' => ['ROLE_USER', 'ROLE_ARTIST'],
             ]);
-
+            $artists[] = $artist;
         }
         foreach ($this->locations() as $row) {
             LocationFactory::createOne([
-                'name' => ($name=trim($row['nombre'])),
-                'type' => LocationType::from(trim(strtolower($row['tipo'])))??null,
+                'name' => ($name = trim($row['nombre'])),
+                'type' => LocationType::from(trim(strtolower($row['tipo']))) ?? null,
                 'code' => $row['code'] ?: $this->initials($name),
                 'lat' => $row['lat'] ? (float)$row['lat'] : null,
                 'lng' => $row['lon'] ? (float)$row['lon'] : null,
@@ -50,14 +55,16 @@ class AppFixtures extends Fixture
 
         ObraFactory::createMany(
             85,
-            function() { // note the callback - this ensures that each of the artwork has a locations and artists.  @todo: null locations
-                return [
-                    'artist' => ArtistFactory::random(),
-                    'location' => LocationFactory::random()]; // each comment set to a random Post from those already in the database
-            }
+            fn() =>
+            // note the callback - this ensures that each of the artwork has a locations and artists.  @todo: null locations
+                 [
+                    'artist' => ArtistFactory::random(), //  array_rand($artists)[rand(0, count($artists))],  // ::random(),
+                    'location' => LocationFactory::random()
+                 ]// each comment set to a random Post from those already in the database
         );
 
         UserFactory::createOne([
+            'code' => 'superadmin',
                 'email' => 'superadmin@example.com',
                 'plainPassword' => 'adminpass',
                 'roles' => ['ROLE_SUPER_ADMIN'],
@@ -65,14 +72,15 @@ class AppFixtures extends Fixture
 
         foreach (['tacman@gmail.com','yarenivillada@gmail.com'] as $email) {
             UserFactory::createOne([
+                'code' => $initials,
                 'email' => $email,
                 'plainPassword' => 'batsi',
                 'roles' => ['ROLE_ADMIN'],
             ]);
-
         }
 
         UserFactory::createOne([
+            'code' => 'admin',
             'email' => 'admin@test.com',
             'plainPassword' => 'admin',
             'roles' => ['ROLE_ADMIN'],
@@ -111,26 +119,13 @@ class AppFixtures extends Fixture
             $location->setObraCount($location->getObras()->count());
         }
         $manager->flush();
-
     }
 
-    private function names(): array
+    private function artists(): iterable
     {
-        return explode("\n", <<<END
-Juan Chawuk
-Luis Herrera 
-Cristian Espinosa
-Enrique Peko
-Alejandra Gutierrez
-Maruch
-Fonky Eduardo 
-Margarita Martinez
-Teraz
-Anton Vazquez 
-Peta Joel
-END
-        );
-
+        $csv = Reader::createFromPath('data/artists.csv', 'r');
+        $csv->setHeaderOffset(0);
+        return $csv->getRecords();
     }
 
     private function locations(): iterable
@@ -164,8 +159,5 @@ END
         return strtolower(implode('', array_map(function ($name) {
             return preg_replace('/(?<=\w)./', '', $name);
         }, explode(' ', $name))));
-
     }
-
-
 }

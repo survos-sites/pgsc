@@ -34,7 +34,7 @@ class LocationCrudController extends AbstractCrudController
                 ->renderExpanded()
                 ->renderAsBadges()
                 ->setRequired(true),
-            IntegerField::new('obraCount', 'Obras Count')
+            IntegerField::new('obraCount', '#obj')
                 ->formatValue(fn ($value, $entity) => $entity->getObras()->count())
                 ->onlyOnIndex(),
             CollectionField::new('obras')
@@ -42,19 +42,17 @@ class LocationCrudController extends AbstractCrudController
                 ->allowAdd(false)
                 ->allowDelete(false)
                 ->onlyOnDetail(),
-            CollectionField::new('obras')
-                ->onlyOnIndex(),
         ];
     }
 
     public function configureActions(Actions $actions): Actions
     {
-//        $viewInvoice = Action::new('invoice', 'View invoice', 'fa fa-file-invoice')
-//            ->linkToCrudAction('renderInvoice');
+        $label = Action::new('label', 'print.label', 'tabler:printer')
+            ->linkToCrudAction('renderInvoice');
 
         return $actions
             // ...
-//            ->add(Crud::PAGE_EDIT, $viewInvoice)
+//            ->add('label', $label)
             // use the 'setPermission()' method to set the permission of actions
             // (the same permission is granted to the action on all pages)
 //            ->setPermission('invoice', LocationVoter::EDIT)

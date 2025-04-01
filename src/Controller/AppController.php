@@ -4,22 +4,28 @@ namespace App\Controller;
 
 use App\Entity\Artist;
 use App\Entity\Location;
+use App\Entity\Obra;
+use App\Form\ArtistFormType;
 use App\Repository\ArtistRepository;
 use App\Repository\LocationRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Attribute\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\UX\Map\Map;
 use Symfony\UX\Map\Marker;
 use Symfony\UX\Map\Point;
 
+#[Route('/{_locale}')]
 final class AppController extends AbstractController
 {
 
     public function __construct(
         private LocationRepository $locationRepository,
         private ArtistRepository $artistRepository,
+        private EntityManagerInterface $entityManager,
     )
     {
 
@@ -59,6 +65,53 @@ final class AppController extends AbstractController
     {
         return [
             'artist' => $artist,
+        ];
+    }
+
+    #[Route('/artist/new', name: 'artist_new')]
+    #[Template('artist/new.html.twig')]
+    public function newArtist(Request $request): Response|array
+    {
+        $artist = new Artist();
+        $form = $this->createForm(ArtistFormType::class, $artist);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->entityManager->persist($artist);
+            $this->entityManager->flush();
+            return $this->redirectToRoute('artist_show', $artist->getRp());
+
+        }
+        return [
+            'artist' => $artist,
+            'form' => $form->createView(),
+        ];
+    }
+
+    #[Route('/artist/edit/{artistId}', name: 'artist_edit')]
+    #[Template('artist/new.html.twig')]
+    public function editArtist(Request $request, Artist $artist): Response|array
+    {
+        $form = $this->createForm(ArtistFormType::class, $artist);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->entityManager->flush();
+            return $this->redirectToRoute('artist_show', $artist->getRp());
+        }
+        if ($request->getMethod() == 'POST') {
+            dd($form, $form->isSubmitted(), $form->isSubmitted() && $form->isValid());
+        }
+        return [
+            'artist' => $artist,
+            'form' => $form->createView(),
+        ];
+    }
+
+    #[Route('/obj/{obraId}', name: 'obj_show')]
+    #[Template('obj/show.html.twig')]
+    public function showObj(Obra $obra): Response|array
+    {
+        return [
+            'obj' => $obra,
         ];
     }
 

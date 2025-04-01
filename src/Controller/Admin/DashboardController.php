@@ -17,7 +17,9 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 use Symfony\Bridge\Twig\Attribute\Template;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\UX\Map\Map;
 use Symfony\UX\Map\Marker;
@@ -27,13 +29,12 @@ use Symfony\UX\Map\Point;
 #[IsGranted('ROLE_USER')]
 class DashboardController extends AbstractDashboardController
 {
-
     public function __construct(
-        private ArtistRepository $artistRepository,
-        private LocationRepository $locationRepository,
-        private ObraRepository $obraRepository,
-    )
-    {
+        private ArtistRepository      $artistRepository,
+        private LocationRepository    $locationRepository,
+        private ObraRepository        $obraRepository,
+        private UrlGeneratorInterface $urlGenerator, private readonly Security $security,
+    ) {
     }
 
     public function configureCrud(): Crud
@@ -62,7 +63,6 @@ class DashboardController extends AbstractDashboardController
                     title: $location->getName(),
                 ));
             }
-
         }
         return $this->render('admin/dashboard.html.twig', [
             'artists' => $this->artistRepository->findAll(),
@@ -117,26 +117,45 @@ class DashboardController extends AbstractDashboardController
          yield MenuItem::linkToCrud('objects', 'ri:image-line', Obra::class)
              ->setBadge($this->obraRepository->count())
          ;
-         yield MenuItem::linkToRoute('home', 'tabler:home',  'app_homepage');
+//         yield MenuItem::linkToRoute('home', 'tabler:home', 'app_homepage');
 
-        yield MenuItem::section('Blog');
-        yield
-            MenuItem::subMenu('Blog', 'tabler:home')->setSubItems(
-              [
-                MenuItem::linkToCrud('Artwork', 'tabler:home', Obra::class),
-//                MenuItem::linkToCrud('Posts', 'tabler:home', Obra::class),
-              ]);
+//        yield
+//            MenuItem::subMenu('Blog', 'tabler:home')->setSubItems(
+//                [
+//                MenuItem::linkToCrud('Artwork', 'tabler:home', Obra::class),
+//                //                MenuItem::linkToCrud('Posts', 'tabler:home', Obra::class),
+//                ]
+//            );
             // ...
 
+        yield MenuItem::section('external');
         yield MenuItem::linkToUrl('Issues', 'tabler:brand-github', 'https://github.com/survos-sites/pgsc/issues')
             ->setLinkTarget(
                 '_blank'
             );
+        foreach ([
+            'https://docs.google.com/spreadsheets/d/1osvCYhAahpZ3p1p_xT923MFzDXT2-NdF2qhlz91Btjs/edit?gid=0#gid=0' => 'artists',
+            'https://docs.google.com/spreadsheets/d/1osvCYhAahpZ3p1p_xT923MFzDXT2-NdF2qhlz91Btjs/edit?gid=1012778928#gid=1012778928' => 'locations',
+                 ] as $link => $label) {
+            yield MenuItem::linkToUrl($label, 'arcticons:google-sheets', $link)
+                ->setLinkTarget(
+                    '_blank'
+                );
+
+        }
+        https://docs.google.com/spreadsheets/d/1osvCYhAahpZ3p1p_xT923MFzDXT2-NdF2qhlz91Btjs/edit?gid=0#gid=0
         ;
 
-        yield MenuItem::linkToRoute('login', 'tabler:login', 'app_login');
-        yield MenuItem::linkToUrl('login', 'tabler:login', '/login');
+//        yield MenuItem::linkToRoute('login', 'tabler:login', 'app_login');
+        yield MenuItem::section('account');
+        if ($this->security->isGranted('ROLE_USER')) {
+            yield MenuItem::linkToUrl('logout', 'tabler:logout', $this->urlGenerator->generate('app_login'));
+            yield MenuItem::linkToUrl('profile', 'tabler:user', $this->urlGenerator->generate('oauth_profile'));
+        } else {
+            yield MenuItem::linkToUrl('login', 'tabler:login', $this->urlGenerator->generate('app_login'));
+        }
 
+        yield MenuItem::section('shortcuts');
         $filters = [];
         foreach ($this->locationRepository->findAll() as $location) {
             $filters[] =
@@ -147,6 +166,15 @@ class DashboardController extends AbstractDashboardController
         }
         yield MenuItem::subMenu('By Location', 'tabler:location')->setSubItems($filters);
 
+        $filters = [];
+        foreach ($this->artistRepository->findAll() as $entity) {
+            $filters[] =
+                MenuItem::linkToCrud($entity->getName(), null, Obra::class)
+                    ->setQueryParameter('filters[artist][comparison]', '=')
+                    ->setQueryParameter('filters[artist][value]', $entity->getId())
+            ;
+        }
+        yield MenuItem::subMenu('By Artist', 'tabler:location')->setSubItems($filters);
     }
 
     public function configureAssets(): Assets

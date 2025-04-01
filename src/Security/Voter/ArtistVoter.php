@@ -17,6 +17,7 @@ final class ArtistVoter extends Voter
 
     public const EDIT = 'ARTIST_EDIT';
     public const VIEW = 'ARTIST_VIEW';
+    public const DELETE = 'ARTIST_DELETE';
 
     protected function supports(string $attribute, mixed $subject): bool
     {

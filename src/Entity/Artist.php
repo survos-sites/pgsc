@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use AlexandreFernandez\JsonTranslationBundle\Doctrine\Type\JsonTranslationType;
+use AlexandreFernandez\JsonTranslationBundle\Model\JsonTranslation;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
@@ -26,8 +28,15 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Artist implements \Stringable, RouteParametersInterface
 {
     use RouteParametersTrait;
-    const array UNIQUE_PARAMETERS=['artistId' => 'id'];
 
+    public const array UNIQUE_PARAMETERS = ['artistId' => 'id'];
+
+    // make this an ENUM?
+    public const STUDIO_VISITABLE = [
+        'studio.open',
+        'studio.appointment',
+        'studio.closed',
+    ];
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -56,9 +65,13 @@ class Artist implements \Stringable, RouteParametersInterface
     #[Groups(['artist.read'])]
     private ?string $instagram = null;
 
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
+//    #[ORM\Column(type: Types::TEXT, nullable: true)]
+//    #[Groups(['artist.read'])]
+//    private ?string $textBio = null;
+
+    #[ORM\Column(type: JsonTranslationType::TYPE, nullable: true)]
     #[Groups(['artist.read'])]
-    private ?string $bio = null;
+    private ?JsonTranslation $bio = null;
 
     /**
      * @var Collection<int, Obra>
@@ -76,13 +89,13 @@ class Artist implements \Stringable, RouteParametersInterface
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $studioAddress = null;
 
-    #[ORM\Column(length: 9, nullable: true)]
-    #[Va]
+    #[ORM\Column(length: 32, nullable: true)]
     private ?string $studioVisitable = null;
 
     public function __construct()
     {
         $this->obras = new ArrayCollection();
+        $this->bio = new JsonTranslation();
     }
 
     public function getId(): ?int
@@ -150,12 +163,12 @@ class Artist implements \Stringable, RouteParametersInterface
         return $this;
     }
 
-    public function getBio(): ?string
+    public function getBio(): ?JsonTranslation
     {
         return $this->bio;
     }
 
-    public function setBio(?string $bio): static
+    public function setBio(?JsonTranslation $bio): static
     {
         $this->bio = $bio;
 
@@ -196,7 +209,7 @@ class Artist implements \Stringable, RouteParametersInterface
 
     public function __toString(): string
     {
-        return $this->getName()??$this->getId();
+        return $this->getName() ?? $this->getId();
     }
 
     public function getObraCount(): ?int

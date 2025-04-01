@@ -31,11 +31,16 @@ final class ArtistFactory extends PersistentProxyObjectFactory
      */
     protected function defaults(): array|callable
     {
+        foreach (['facebook', 'twitter', 'instagram'] as $type) {
+            $social[] = "https://{$type}.com/" . self::faker()->slug(1);
+        }
         $name = self::faker()->name();
         return [
-            'email' => self::faker()->email(),
-            'bio' => self::faker()->paragraph(),
-            'birthYear' => self::faker()->numberBetween(1940, 2009),
+            'socialMedia' => join("\n", $social),
+            'studioVisitable' => self::faker()->randomElement(Artist::STUDIO_VISITABLE),
+//            'email' => self::faker()->email(),
+//            'bio' => self::faker()->paragraph(3),
+            'birthYear' => self::faker()->numberBetween(1950, 2009),
         ];
     }
 

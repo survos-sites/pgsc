@@ -50,10 +50,17 @@ class ObraCrudController extends AbstractCrudController
         yield AssociationField::new('artist', 'artist')
             ->setHelp('nombre del artista')
             ->setColumns(5);
+        // allow admins to edit
         yield AssociationField::new('location')
+//            ->onlyOnForms()
             ->setPermission('ROLE_ADMIN')
             ->setFormTypeOption('choice_label', 'name')
             ->setColumns(5);
+        // not editable except by admin
+        yield AssociationField::new('location')
+            ->setDisabled(true)
+            ->setFormTypeOption('choice_label', 'name')
+            ;
 //        yield CollectionField::new('obraImages')
 //            ->setEntryType(ObraImageFileType::class)
 //            ->onlyOnForms();
@@ -79,14 +86,14 @@ class ObraCrudController extends AbstractCrudController
 //        $viewInvoice = Action::new('invoice', 'View invoice', 'fa fa-file-invoice')
 //            ->linkToCrudAction('renderInvoice');
 
-        return $actions
-            // ...
-//            ->add(Crud::PAGE_EDIT, $viewInvoice)
-            // use the 'setPermission()' method to set the permission of actions
-            // (the same permission is granted to the action on all pages)
-//            ->setPermission('invoice', ObjVoter::EDIT)
+        $printAction = Action::new('print')
+            ->linkToUrl($this->generateUrl('obj_show', ['obraId' => 1]))
+            ->setTemplatePath('admin/print.html.twig')
+            ;
 
-            // you can set permissions for built-in actions in the same way
+        // @todo: add print action
+        return $actions
+//            ->add('print', $printAction)
             ->setPermission(Action::EDIT, ObjVoter::EDIT)
             ->setPermission(Action::DELETE, ObjVoter::DELETE)
             ;
