@@ -141,4 +141,14 @@ final class AppController extends AbstractController
             'location' => $location,
         ];
     }
+
+    #[Route('/admin/print-selected-obras', name: 'print_selected_obras')]
+    public function indexLocation(): Response
+    {
+        dd();
+
+        return $this->render('location/index.html.twig', [
+            'locations' => $this->locationRepository->findAll(),
+        ]);
+    }
 }

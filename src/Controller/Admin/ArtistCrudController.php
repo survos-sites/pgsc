@@ -2,21 +2,25 @@
 
 namespace App\Controller\Admin;
 
-use AlexandreFernandez\JsonTranslationBundle\Form\JsonTranslationType;
 use App\Entity\Artist;
 use App\Security\Voter\ArtistVoter;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 
 class ArtistCrudController extends AbstractCrudController
 {
+    public function __construct(protected AdminUrlGenerator $adminUrlGenerator)
+    {
+    }
+
     public static function getEntityFqcn(): string
     {
         return Artist::class;
@@ -25,7 +29,15 @@ class ArtistCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            TextField::new('name', 'name'),
+            TextField::new('name')
+                ->formatValue(function ($value, $entity) {
+                    return '<a href="' . $this->adminUrlGenerator
+                        ->setController(self::class)
+                        ->setAction('detail')
+                        ->setEntityId($entity->getId())
+                        ->generateUrl() . '">' . $value . '</a>';
+                })->onlyOnIndex(),
+            TextField::new('name')->hideOnIndex(),
             TextField::new('code', 'code'),
             /* this needs to be JsonTranslationType */
             //            Field::new('bio', 'bio')
@@ -57,6 +69,10 @@ class ArtistCrudController extends AbstractCrudController
         return $actions
             ->setPermission(Action::EDIT, ArtistVoter::EDIT)
             ->setPermission(Action::DELETE, ArtistVoter::DELETE)
+            ->remove(Crud::PAGE_INDEX, Action::DETAIL)
+            ->update(Crud::PAGE_INDEX, Action::EDIT, function (Action $action) {
+                return $action->setLabel(false)->setIcon('fa:edit');
+            })
         ;
     }
 }
