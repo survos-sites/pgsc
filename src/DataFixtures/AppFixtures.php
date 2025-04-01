@@ -72,7 +72,7 @@ class AppFixtures extends Fixture
 
         foreach (['tacman@gmail.com','yarenivillada@gmail.com'] as $email) {
             UserFactory::createOne([
-                'code' => $initials,
+                'code' => str_replace('@gmail.com','',$email),
                 'email' => $email,
                 'plainPassword' => 'batsi',
                 'roles' => ['ROLE_ADMIN'],
