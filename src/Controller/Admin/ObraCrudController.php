@@ -5,6 +5,8 @@ namespace App\Controller\Admin;
 use App\Entity\Obra;
 use App\Form\ObraImageFileType;
 use App\Security\Voter\ObjVoter;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
@@ -12,9 +14,6 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 
 class ObraCrudController extends AbstractCrudController
 {
@@ -25,18 +24,16 @@ class ObraCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
-
         foreach ([
-//            IdField::new('id'),
+            //            IdField::new('id'),
             TextField::new('code')
                      ->setPermission('ROLE_ADMIN'),
             TextField::new('title'),
             TextEditorField::new('description'),
-
         ] as $field) {
             yield $field;
         }
-        foreach (['width','height','depth'] as $fieldName) {
+        foreach (['width', 'height', 'depth'] as $fieldName) {
             yield IntegerField::new($fieldName)->setColumns(3)->onlyOnForms();
         }
         yield TextField::new('dimensions', 'Dimensions')
@@ -60,18 +57,17 @@ class ObraCrudController extends AbstractCrudController
         yield AssociationField::new('location')
             ->setDisabled(true)
             ->setFormTypeOption('choice_label', 'name')
-            ;
-//        yield CollectionField::new('obraImages')
-//            ->setEntryType(ObraImageFileType::class)
-//            ->onlyOnForms();
-//        yield CollectionField::new('obraImages')
-//            ->onlyOnDetail()
-//            ->setTemplatePath('admin/field/obra_images.html.twig');
-//        yield CollectionField::new('obraImages')
-//            ->onlyOnIndex()
-//            ->setTemplatePath('admin/field/obra_images_small.html.twig');
+        ;
+        //        yield CollectionField::new('obraImages')
+        //            ->setEntryType(ObraImageFileType::class)
+        //            ->onlyOnForms();
+        //        yield CollectionField::new('obraImages')
+        //            ->onlyOnDetail()
+        //            ->setTemplatePath('admin/field/obra_images.html.twig');
+        //        yield CollectionField::new('obraImages')
+        //            ->onlyOnIndex()
+        //            ->setTemplatePath('admin/field/obra_images_small.html.twig');
     }
-
 
     public function configureFilters(Filters $filters): Filters
     {
@@ -80,22 +76,21 @@ class ObraCrudController extends AbstractCrudController
             ->add('artist');
     }
 
-
     public function configureActions(Actions $actions): Actions
     {
-//        $viewInvoice = Action::new('invoice', 'View invoice', 'fa fa-file-invoice')
-//            ->linkToCrudAction('renderInvoice');
+        //        $viewInvoice = Action::new('invoice', 'View invoice', 'fa fa-file-invoice')
+        //            ->linkToCrudAction('renderInvoice');
 
         $printAction = Action::new('print')
             ->linkToUrl($this->generateUrl('obj_show', ['obraId' => 1]))
             ->setTemplatePath('admin/print.html.twig')
-            ;
+        ;
 
         // @todo: add print action
         return $actions
 //            ->add('print', $printAction)
             ->setPermission(Action::EDIT, ObjVoter::EDIT)
             ->setPermission(Action::DELETE, ObjVoter::DELETE)
-            ;
+        ;
     }
 }

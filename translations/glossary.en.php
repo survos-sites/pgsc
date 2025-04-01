@@ -1,7 +1,5 @@
 <?php
 
 return [
-    'artists' => "!Artists!!",
+    'artists' => '!Artists!!',
 ];
-
-

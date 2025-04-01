@@ -18,5 +18,4 @@ enum LocationType: string
             'REST' => self::REST,
         ];
     }
-
 }

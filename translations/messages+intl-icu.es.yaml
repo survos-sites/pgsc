@@ -3,11 +3,11 @@ no-location: sin ubi
 artists: 'artistas'
 artist: 'artista'
 Artist: 'Artista'
-locations: ubis
-location: ubi
-Location: Ubi
-object: obyecto
-objects: obyectos
+locations: espacios
+location: espacio
+Location: Espacio
+object: objecto
+objects: objectos
 dashboard: tablero
 price: precio
 

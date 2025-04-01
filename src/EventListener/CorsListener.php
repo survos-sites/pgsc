@@ -15,5 +15,3 @@ class CorsListener
         $response->headers->set('Access-Control-Allow-Credentials', 'true');
     }
 }
-
-?>

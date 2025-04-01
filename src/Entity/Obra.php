@@ -25,7 +25,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
 class Obra implements \Stringable, RouteParametersInterface
 {
     use RouteParametersTrait;
-    const array UNIQUE_PARAMETERS=['obraId' => 'id'];
+    public const array UNIQUE_PARAMETERS = ['obraId' => 'id'];
 
     #[ORM\Id]
     #[ORM\GeneratedValue]

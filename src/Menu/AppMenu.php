@@ -34,7 +34,7 @@ final class AppMenu implements KnpMenuHelperInterface
         private ObraRepository $obraRepo,
         private MenuService $menuService,
         private Security $security,
-        private ?AuthorizationCheckerInterface $authorizationChecker = null
+        private ?AuthorizationCheckerInterface $authorizationChecker = null,
     ) {
     }
 
@@ -54,7 +54,7 @@ final class AppMenu implements KnpMenuHelperInterface
         // for nested menus, don't add a route, just a label, then use it for the argument to addMenuItem
 
         $subMenu = $this->addSubmenu($menu, 'debug');
-        if ($this->env === 'dev') {
+        if ('dev' === $this->env) {
             $this->add($subMenu, 'survos_crawler_data');
         }
 
@@ -73,11 +73,10 @@ final class AppMenu implements KnpMenuHelperInterface
         }
 
         $nestedMenu = $this->addSubmenu($menu, 'artwork');
-        foreach (['by_location','by_artist'] as $grouping) {
-            $this->add($nestedMenu, 'app_homepage',  label: $grouping);
+        foreach (['by_location', 'by_artist'] as $grouping) {
+            $this->add($nestedMenu, 'app_homepage', label: $grouping);
         }
-        $this->add($menu, 'admin', translationDomain: false,);
+        $this->add($menu, 'admin', translationDomain: false);
         $this->appAuthMenu($event);
-
     }
 }

@@ -4,8 +4,8 @@ namespace App\Entity;
 
 use App\Repository\ObraImageRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: ObraImageRepository::class)]
 #[Vich\Uploadable]

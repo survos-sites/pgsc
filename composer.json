@@ -19,7 +19,7 @@
         "doctrine/doctrine-bundle": "^2.14.0",
         "doctrine/doctrine-migrations-bundle": "^3.4.1",
         "doctrine/orm": "^3.3.2",
-        "easycorp/easyadmin-bundle": "4.x-dev",
+        "easycorp/easyadmin-bundle": "5.x-dev",
         "endroid/qr-code-bundle": ">=6",
         "inspector-apm/inspector-symfony": "^1.8.2",
         "league/csv": "^9.23",

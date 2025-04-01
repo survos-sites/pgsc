@@ -21,37 +21,35 @@ use Symfony\UX\Map\Point;
 #[Route('/{_locale}')]
 final class AppController extends AbstractController
 {
-
     public function __construct(
         private LocationRepository $locationRepository,
         private ArtistRepository $artistRepository,
         private EntityManagerInterface $entityManager,
-    )
-    {
-
+    ) {
     }
+
     #[Route('/home', name: 'app_homepage')]
     public function home(): Response
     {
         $myMap = (new Map());
-            $myMap
-                // Explicitly set the center and zoom
+        $myMap
+            // Explicitly set the center and zoom
 //                ->center($point)
-                ->zoom(16)
-                // Or automatically fit the bounds to the markers
-                ->fitBoundsToMarkers()
+            ->zoom(16)
+            // Or automatically fit the bounds to the markers
+            ->fitBoundsToMarkers()
 
-            ;
+        ;
         foreach ($this->locationRepository->findAll() as $location) {
             if ($location->getLat()) {
                 $point = new Point($location->getLat(), $location->getLng());
                 $myMap->addMarker(new Marker(
-                position: $point,
-                title: $location->getName(),
-            ));
+                    position: $point,
+                    title: $location->getName(),
+                ));
+            }
         }
 
-        }
         return $this->render('app/index.html.twig', [
             'artists' => $this->artistRepository->findAll(),
             'locations' => $this->locationRepository->findAll(),
@@ -78,9 +76,10 @@ final class AppController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->entityManager->persist($artist);
             $this->entityManager->flush();
-            return $this->redirectToRoute('artist_show', $artist->getRp());
 
+            return $this->redirectToRoute('artist_show', $artist->getRp());
         }
+
         return [
             'artist' => $artist,
             'form' => $form->createView(),
@@ -95,11 +94,13 @@ final class AppController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $this->entityManager->flush();
+
             return $this->redirectToRoute('artist_show', $artist->getRp());
         }
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             dd($form, $form->isSubmitted(), $form->isSubmitted() && $form->isValid());
         }
+
         return [
             'artist' => $artist,
             'form' => $form->createView(),
@@ -119,7 +120,6 @@ final class AppController extends AbstractController
     #[Template('location/show.html.twig')]
     public function showLocation(Location $location): Response|array
     {
-
         if ($location->getLat()) {
             $myMap = (new Map());
             $point = new Point($location->getLat(), $location->getLng());
@@ -133,14 +133,12 @@ final class AppController extends AbstractController
                     position: $point,
                     title: $location->getName(),
                 ))
-        ;
-
+            ;
         }
 
         return [
-            'my_map' => $myMap??null,
+            'my_map' => $myMap ?? null,
             'location' => $location,
         ];
     }
-
 }

@@ -8,14 +8,11 @@ use App\Security\Voter\LocationVoter;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class LocationCrudController extends AbstractCrudController
 {
@@ -60,6 +57,6 @@ class LocationCrudController extends AbstractCrudController
             // you can set permissions for built-in actions in the same way
             ->setPermission(Action::EDIT, LocationVoter::EDIT)
             ->setPermission(Action::DELETE, LocationVoter::DELETE)
-            ;
+        ;
     }
 }

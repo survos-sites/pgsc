@@ -5,13 +5,14 @@ namespace App\Factory;
 use App\Entity\User;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
+
 // src/Factory/UserFactory.php
 
 final class UserFactory extends PersistentProxyObjectFactory
 {
     // the injected service should be nullable in order to be used in unit test, without container
     public function __construct(
-        private ?UserPasswordHasherInterface $passwordHasher = null
+        private ?UserPasswordHasherInterface $passwordHasher = null,
     ) {
         parent::__construct();
     }
@@ -33,12 +34,12 @@ final class UserFactory extends PersistentProxyObjectFactory
     protected function initialize(): static
     {
         return $this
-            ->afterInstantiate(function(User $user) {
-                if ($this->passwordHasher !== null) {
-//                    dd($user->getPassword(), $user->getPlainPassword());
+            ->afterInstantiate(function (User $user) {
+                if (null !== $this->passwordHasher) {
+                    //                    dd($user->getPassword(), $user->getPlainPassword());
                     $user->setPassword($this->passwordHasher->hashPassword($user, $user->getPlainPassword()));
                 }
             })
-            ;
+        ;
     }
 }

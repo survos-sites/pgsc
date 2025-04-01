@@ -30,9 +30,9 @@ use Symfony\UX\Map\Point;
 class DashboardController extends AbstractDashboardController
 {
     public function __construct(
-        private ArtistRepository      $artistRepository,
-        private LocationRepository    $locationRepository,
-        private ObraRepository        $obraRepository,
+        private ArtistRepository $artistRepository,
+        private LocationRepository $locationRepository,
+        private ObraRepository $obraRepository,
         private UrlGeneratorInterface $urlGenerator, private readonly Security $security,
     ) {
     }
@@ -45,7 +45,6 @@ class DashboardController extends AbstractDashboardController
 
     public function index(): Response
     {
-
         $myMap = (new Map());
         $myMap
             // Explicitly set the center and zoom
@@ -64,17 +63,18 @@ class DashboardController extends AbstractDashboardController
                 ));
             }
         }
+
         return $this->render('admin/dashboard.html.twig', [
             'artists' => $this->artistRepository->findAll(),
             'locations' => $this->locationRepository->findAll(),
             'myMap' => $myMap,
         ]);
 
-//        return $this->render('admin/dashboard.html.twig', [
-//            'locations' => $this->locationRepository->findAll(),
-//            'artists' => $this->artistRepository->findAll(),
-//            'obras' => $this->obraRepository->findAll(),
-//        ]);
+        //        return $this->render('admin/dashboard.html.twig', [
+        //            'locations' => $this->locationRepository->findAll(),
+        //            'artists' => $this->artistRepository->findAll(),
+        //            'obras' => $this->obraRepository->findAll(),
+        //        ]);
 
         // Option 1. You can make your dashboard redirect to some common page of your backend
         //
@@ -105,28 +105,27 @@ class DashboardController extends AbstractDashboardController
 
     public function configureMenuItems(): iterable
     {
-
         yield MenuItem::linkToDashboard('dashboard', 'tabler:home');
-         yield MenuItem::linkToCrud('artists', 'tabler:list', Artist::class)
-             ->setBadge($this->artistRepository->count())
-         ;
-         yield MenuItem::linkToCrud('locations', 'tabler:location', Location::class)
-             ->setBadge($this->locationRepository->count())
-         ;
+        yield MenuItem::linkToCrud('artists', 'tabler:list', Artist::class)
+            ->setBadge($this->artistRepository->count())
+        ;
+        yield MenuItem::linkToCrud('locations', 'tabler:location', Location::class)
+            ->setBadge($this->locationRepository->count())
+        ;
 
-         yield MenuItem::linkToCrud('objects', 'ri:image-line', Obra::class)
-             ->setBadge($this->obraRepository->count())
-         ;
-//         yield MenuItem::linkToRoute('home', 'tabler:home', 'app_homepage');
+        yield MenuItem::linkToCrud('objects', 'ri:image-line', Obra::class)
+            ->setBadge($this->obraRepository->count())
+        ;
+        //         yield MenuItem::linkToRoute('home', 'tabler:home', 'app_homepage');
 
-//        yield
-//            MenuItem::subMenu('Blog', 'tabler:home')->setSubItems(
-//                [
-//                MenuItem::linkToCrud('Artwork', 'tabler:home', Obra::class),
-//                //                MenuItem::linkToCrud('Posts', 'tabler:home', Obra::class),
-//                ]
-//            );
-            // ...
+        //        yield
+        //            MenuItem::subMenu('Blog', 'tabler:home')->setSubItems(
+        //                [
+        //                MenuItem::linkToCrud('Artwork', 'tabler:home', Obra::class),
+        //                //                MenuItem::linkToCrud('Posts', 'tabler:home', Obra::class),
+        //                ]
+        //            );
+        // ...
 
         yield MenuItem::section('external');
         yield MenuItem::linkToUrl('Issues', 'tabler:brand-github', 'https://github.com/survos-sites/pgsc/issues')
@@ -136,17 +135,16 @@ class DashboardController extends AbstractDashboardController
         foreach ([
             'https://docs.google.com/spreadsheets/d/1osvCYhAahpZ3p1p_xT923MFzDXT2-NdF2qhlz91Btjs/edit?gid=0#gid=0' => 'artists',
             'https://docs.google.com/spreadsheets/d/1osvCYhAahpZ3p1p_xT923MFzDXT2-NdF2qhlz91Btjs/edit?gid=1012778928#gid=1012778928' => 'locations',
-                 ] as $link => $label) {
+        ] as $link => $label) {
             yield MenuItem::linkToUrl($label, 'arcticons:google-sheets', $link)
                 ->setLinkTarget(
                     '_blank'
                 );
-
         }
-        https://docs.google.com/spreadsheets/d/1osvCYhAahpZ3p1p_xT923MFzDXT2-NdF2qhlz91Btjs/edit?gid=0#gid=0
+        https:// docs.google.com/spreadsheets/d/1osvCYhAahpZ3p1p_xT923MFzDXT2-NdF2qhlz91Btjs/edit?gid=0#gid=0
         ;
 
-//        yield MenuItem::linkToRoute('login', 'tabler:login', 'app_login');
+        //        yield MenuItem::linkToRoute('login', 'tabler:login', 'app_login');
         yield MenuItem::section('account');
         if ($this->security->isGranted('ROLE_USER')) {
             yield MenuItem::linkToUrl('logout', 'tabler:logout', $this->urlGenerator->generate('app_login'));
@@ -181,8 +179,9 @@ class DashboardController extends AbstractDashboardController
     {
         return Assets::new()
             ->useCustomIconSet()
-            ;
+        ;
     }
+
     public function configureActions(): Actions
     {
         return parent::configureActions()

@@ -26,13 +26,12 @@ use Symfony\Component\Serializer\Attribute\SerializedName;
 class Location implements \Stringable, RouteParametersInterface
 {
     use RouteParametersTrait;
-    const array UNIQUE_PARAMETERS=['locationId' => 'id'];
-
+    public const array UNIQUE_PARAMETERS = ['locationId' => 'id'];
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['obra.location.read','location.read'])]
+    #[Groups(['obra.location.read', 'location.read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
@@ -51,7 +50,7 @@ class Location implements \Stringable, RouteParametersInterface
     private Collection $obras;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['location.read','obra.location.read'])]
+    #[Groups(['location.read', 'obra.location.read'])]
     private ?string $code = null;
 
     #[ORM\Column(type: 'string', length: 24, nullable: true, enumType: LocationType::class)]
@@ -115,7 +114,7 @@ class Location implements \Stringable, RouteParametersInterface
     public function addObra(Obra $obra): static
     {
         if (!$this->obras->contains($obra)) {
-            $this->obraCount++;
+            ++$this->obraCount;
             $this->obras->add($obra);
             $obra->setLocation($this);
         }
@@ -126,7 +125,7 @@ class Location implements \Stringable, RouteParametersInterface
     public function removeObra(Obra $obra): static
     {
         if ($this->obras->removeElement($obra)) {
-            $this->obraCount--;
+            --$this->obraCount;
             // set the owning side to null (unless already changed)
             if ($obra->getLocation() === $this) {
                 $obra->setLocation(null);

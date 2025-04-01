@@ -19,7 +19,5 @@ class MainTest extends KernelTestCase
             ->assertSuccessful()
             ->saveSource('home.html')
         ;
-
-
     }
 }

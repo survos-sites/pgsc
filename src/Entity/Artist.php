@@ -65,9 +65,9 @@ class Artist implements \Stringable, RouteParametersInterface
     #[Groups(['artist.read'])]
     private ?string $instagram = null;
 
-//    #[ORM\Column(type: Types::TEXT, nullable: true)]
-//    #[Groups(['artist.read'])]
-//    private ?string $textBio = null;
+    //    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    //    #[Groups(['artist.read'])]
+    //    private ?string $textBio = null;
 
     #[ORM\Column(type: JsonTranslationType::TYPE, nullable: true)]
     #[Groups(['artist.read'])]
@@ -186,7 +186,7 @@ class Artist implements \Stringable, RouteParametersInterface
     public function addObra(Obra $obra): static
     {
         if (!$this->obras->contains($obra)) {
-            $this->obraCount++;
+            ++$this->obraCount;
             $this->obras->add($obra);
             $obra->setArtist($this);
         }
@@ -197,7 +197,7 @@ class Artist implements \Stringable, RouteParametersInterface
     public function removeObra(Obra $obra): static
     {
         if ($this->obras->removeElement($obra)) {
-            $this->obraCount--;
+            --$this->obraCount;
             // set the owning side to null (unless already changed)
             if ($obra->getArtist() === $this) {
                 $obra->setArtist(null);

@@ -32,18 +32,18 @@ final class ArtistFactory extends PersistentProxyObjectFactory
     protected function defaults(): array|callable
     {
         foreach (['facebook', 'twitter', 'instagram'] as $type) {
-            $social[] = "https://{$type}.com/" . self::faker()->slug(1);
+            $social[] = "https://{$type}.com/".self::faker()->slug(1);
         }
         $name = self::faker()->name();
+
         return [
             'socialMedia' => join("\n", $social),
             'studioVisitable' => self::faker()->randomElement(Artist::STUDIO_VISITABLE),
-//            'email' => self::faker()->email(),
-//            'bio' => self::faker()->paragraph(3),
+            //            'email' => self::faker()->email(),
+            //            'bio' => self::faker()->paragraph(3),
             'birthYear' => self::faker()->numberBetween(1950, 2009),
         ];
     }
-
 
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#initialization

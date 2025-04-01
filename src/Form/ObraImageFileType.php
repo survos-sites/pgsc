@@ -13,10 +13,10 @@ class ObraImageFileType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('imageFile', VichFileType::class, [
-                'label' => false,
-                'download_label' => true,
-                'allow_delete' => false,
-            ]
+            'label' => false,
+            'download_label' => true,
+            'allow_delete' => false,
+        ]
         );
     }
 

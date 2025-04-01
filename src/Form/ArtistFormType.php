@@ -2,13 +2,13 @@
 
 namespace App\Form;
 
+use AlexandreFernandez\JsonTranslationBundle\Form\JsonTranslationType;
 use App\Entity\Artist;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Intl\Languages;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use AlexandreFernandez\JsonTranslationBundle\Form\JsonTranslationType;
 
 // verify you're not importing the doctrine type
 
@@ -24,7 +24,7 @@ class ArtistFormType extends AbstractType
             'attr' => [
                 'rows' => 10,
             ],
-            "locales" => ["en", "es", 'tzo'] // optional, defaults to the configuration's `enabled_locales`
+            'locales' => ['en', 'es', 'tzo'], // optional, defaults to the configuration's `enabled_locales`
         ]);
 
         $builder

@@ -9,12 +9,12 @@ class PantherTest extends PantherTestCase
 {
     use HasBrowser;
 
-//    public function testSomething(): void
-//    {
-//        $client = static::createPantherClient();
-//        $crawler = $client->request('GET', '/');
-//        $this->assertSelectorTextContains('h1', 'Hello World');
-//    }
+    //    public function testSomething(): void
+    //    {
+    //        $client = static::createPantherClient();
+    //        $crawler = $client->request('GET', '/');
+    //        $this->assertSelectorTextContains('h1', 'Hello World');
+    //    }
 
     public function testBatsi(): void
     {
@@ -25,8 +25,8 @@ class PantherTest extends PantherTestCase
             ->takeScreenshot('home.png');
 
         $browser = $this->pantherBrowser()
-            ->visit('/ez/admin/artist')
-            ->assertOn('/ez/admin/artist')
+            ->visit('/en/admin/artist')
+            ->assertOn('/en/admin/artist')
             ->takeScreenshot('artist.png');
 
         return;
@@ -44,15 +44,13 @@ class PantherTest extends PantherTestCase
             ->wait(200) // @todo: wait for the tab 'obras' to be visible in the dom, or the tab to be marked as selected.
             ->takeScreenshot('artwork.png')
         ;
-
     }
 
     public function testEz(): void
     {
-
         // the home page that browses projects (not fw7)
         $browser = $this->pantherBrowser()
-            ->visit('/ez/admin')
+            ->visit('/en/admin')
             ->assertOn('/login')
             ->fillField('Email', 'admin@test.com')
             ->fillField('Password', 'admin')
@@ -65,5 +63,4 @@ class PantherTest extends PantherTestCase
         $browser->click('Artistas')
             ->takeScreenshot('artists.png');
     }
-
 }
