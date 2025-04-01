@@ -7,8 +7,11 @@ use App\Form\ObraImageFileType;
 use App\Security\Voter\ObjVoter;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
+use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Dto\BatchActionDto;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
@@ -81,16 +84,27 @@ class ObraCrudController extends AbstractCrudController
         //        $viewInvoice = Action::new('invoice', 'View invoice', 'fa fa-file-invoice')
         //            ->linkToCrudAction('renderInvoice');
 
-        $printAction = Action::new('print')
-            ->linkToUrl($this->generateUrl('obj_show', ['obraId' => 1]))
-            ->setTemplatePath('admin/print.html.twig')
-        ;
+        $rowPrintAction = Action::new('print', 'Print')
+            ->linkToUrl(function ($entity) {
+                return $this->generateUrl('obj_show', ['obraId' => $entity->getId()]);
+            });
 
-        // @todo: add print action
+        $batchPrintAction = Action::new('batchPrint', 'Print')
+            ->linkToCrudAction('handleBatchPrint')
+            ->addCssClass('btn btn-primary');
+
         return $actions
-//            ->add('print', $printAction)
+            ->add(Crud::PAGE_INDEX, $rowPrintAction)
+            ->addBatchAction($batchPrintAction)
             ->setPermission(Action::EDIT, ObjVoter::EDIT)
             ->setPermission(Action::DELETE, ObjVoter::DELETE)
         ;
+    }
+
+    public function handleBatchPrint(BatchActionDto $batchActionDto, AdminContext $context)
+    {
+        $ids = $batchActionDto->getEntityIds();
+
+        return $this->redirectToRoute('admin_obra_index');
     }
 }
