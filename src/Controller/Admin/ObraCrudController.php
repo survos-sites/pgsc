@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\Obra;
 use App\Form\ObraImageFileType;
 use App\Security\Voter\ObjVoter;
+use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminAction;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -90,8 +91,8 @@ class ObraCrudController extends AbstractCrudController
             });
 
         $batchPrintAction = Action::new('batchPrint', 'Print')
-            ->linkToCrudAction('handleBatchPrint')
-            ->addCssClass('btn btn-primary');
+            ->linkToCrudAction('batchPrint')
+            ->addCssClass('btn btn-secondary');
 
         return $actions
             ->add(Crud::PAGE_INDEX, $rowPrintAction)
@@ -101,9 +102,12 @@ class ObraCrudController extends AbstractCrudController
         ;
     }
 
-    public function handleBatchPrint(BatchActionDto $batchActionDto, AdminContext $context)
+    #[AdminAction(routePath: '{/batch-print', routeName: 'batch_print', methods: ['POST'])]
+    public function batchPrint(BatchActionDto $batchActionDto, AdminContext $context)
     {
         $ids = $batchActionDto->getEntityIds();
+
+        dd($ids);
 
         return $this->redirectToRoute('admin_obra_index');
     }
