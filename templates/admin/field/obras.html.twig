@@ -1,3 +1,5 @@
+{# this is used by EasyAdmin when the 'obras' field is rendered. #}
+
 {% for obra in entity.instance.obras %}
     {% if obra.obraImages|length %}
         <div class="mb-1">
@@ -14,8 +16,20 @@
             {{ ux_icon('tabler:edit') }}
         </a>
         {% endif %}
-        {{ obra.title }}<br/><b>por {{ obra.artist }}</b>
+        <a href="{{ path('admin_obra_detail', {entityId: obra.id}) }}">
+            {{ obra.title }}
+        </a>
+        <br/>
+        <b>por {{ obra.artist }}</b>
+        <i>@{{ obra.location }}</i>
     </div>
     <hr class="my-2">
+
+    @todo: render the label, could even be in an iframe because of css
+{#    <div class="object-label" style="background-color: #0ca678">#}
+{#        <h1>{{ obra.title }}</h1>#}
+{#    </div>#}
+
+
 {% endfor %}
 

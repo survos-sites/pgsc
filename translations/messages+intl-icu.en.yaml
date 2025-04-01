@@ -3,3 +3,7 @@ no-location: 'No location assigned'
 artists: artists
 locations: locations
 objects: objects
+
+user:
+  isArtist:
+    help: Check this box if you are an artist interested in participating in the exhibition.

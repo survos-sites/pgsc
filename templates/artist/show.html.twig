@@ -2,6 +2,8 @@
 
 {% block body %}
 
+@todo: moved
+
     {% for action in ['edit','detail'] %}
         {% if is_granted('ARTIST_EDIT', artist) %}
             {% set path = path('admin_artist_' ~ action, {entityId: artist.id}) %}
@@ -19,6 +21,8 @@
     </a>
     {% if is_granted('ROLE_ADMIN') %}
     {% endif %}
+
+    Translations: <a href="{{ path('artist_edit', artist.rp) }}">Edit Translations</a>
 
 
     {% set mobile_base = app.request.get('base', mobile_base) %}

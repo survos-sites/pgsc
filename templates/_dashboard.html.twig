@@ -28,12 +28,15 @@
             {% for artist in artists %}
                 <li>
                     {% if is_granted('ARTIST_EDIT', artist) %}
-                        <a href="{{ path('admin_artist_detail', {entityId: artist.id}) }}">
+                        <a href="{{ path('admin_artist_edit', {entityId: artist.id}) }}">
                             {{ ux_icon('tabler:edit') }}
                         </a>
                     {% endif %}
-                    <a href="{{ path('artist_show', artist.rp) }}">
+                    <a href="{{ path('admin_artist_detail', {entityId: artist.id}) }}">
                         {{ artist.name }}
+                    </a>
+
+                    <a target="_blank" href="{{ path('artist_show', artist.rp) }}">@@app
                     </a>
                 </li>
             {% endfor %}
