@@ -1,8 +1,25 @@
 {% extends 'base.html.twig' %}
 
+{% block javascripts %}
+{{ parent() }}
+<script>
+    function openAll() {
+        var elems = document.getElementsByTagName("details");
+        for (var i = 0; i < elems.length; i++){
+            elems[i].setAttribute("open", "true");
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        openAll();
+    }, false);
+</script>
+{% endblock %}
 {% block body %}
     This is mostly to test JsonTranslate
-    {{ form(form) }}
+    <div>
+        {{ form(form) }}
+    </div>
 {#    {{ form_start(form) }}#}
 {#    <button type="submit">Save</button>#}
 {#    {{ form_end(form) }}#}
