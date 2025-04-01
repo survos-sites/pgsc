@@ -31,7 +31,6 @@ return [
     Knp\Bundle\MenuBundle\KnpMenuBundle::class => ['all' => true],
     Survos\BootstrapBundle\SurvosBootstrapBundle::class => ['all' => true],
     Vich\UploaderBundle\VichUploaderBundle::class => ['all' => true],
-    Symfony\UX\Turbo\TurboBundle::class => ['all' => true],
     Endroid\QrCodeBundle\EndroidQrCodeBundle::class => ['all' => true],
     Symfony\UX\Map\UXMapBundle::class => ['all' => true],
     Survos\DocBundle\SurvosDocBundle::class => ['dev' => true, 'test' => true],
