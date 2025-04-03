@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5c9ffd3ccdfb1a35a70b9e924edcfcab",
+    "content-hash": "f25e04d65a3de1c747f33a28a38eac11",
     "packages": [
         {
             "name": "alexandre-fernandez/json-translation-bundle",
@@ -2905,16 +2905,16 @@
         },
         {
             "name": "endroid/qr-code",
-            "version": "6.0.6",
+            "version": "6.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/endroid/qr-code.git",
-                "reference": "11e6a94458dab8dd18736c11892130ec788b5028"
+                "reference": "de0e510509abf854e2218e4c77ed62321b27ea97"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/endroid/qr-code/zipball/11e6a94458dab8dd18736c11892130ec788b5028",
-                "reference": "11e6a94458dab8dd18736c11892130ec788b5028",
+                "url": "https://api.github.com/repos/endroid/qr-code/zipball/de0e510509abf854e2218e4c77ed62321b27ea97",
+                "reference": "de0e510509abf854e2218e4c77ed62321b27ea97",
                 "shasum": ""
             },
             "require": {
@@ -2965,7 +2965,7 @@
             ],
             "support": {
                 "issues": "https://github.com/endroid/qr-code/issues",
-                "source": "https://github.com/endroid/qr-code/tree/6.0.6"
+                "source": "https://github.com/endroid/qr-code/tree/6.0.7"
             },
             "funding": [
                 {
@@ -2973,7 +2973,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-03-14T23:29:08+00:00"
+            "time": "2025-04-02T07:06:35+00:00"
         },
         {
             "name": "endroid/qr-code-bundle",
@@ -13016,16 +13016,16 @@
         },
         {
             "name": "justinrainbow/json-schema",
-            "version": "6.3.1",
+            "version": "6.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jsonrainbow/json-schema.git",
-                "reference": "c9f00dec766a67bf82c277b71d71d254357db92c"
+                "reference": "16b274cb469bc8165c59b76c283724a035d27f4c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jsonrainbow/json-schema/zipball/c9f00dec766a67bf82c277b71d71d254357db92c",
-                "reference": "c9f00dec766a67bf82c277b71d71d254357db92c",
+                "url": "https://api.github.com/repos/jsonrainbow/json-schema/zipball/16b274cb469bc8165c59b76c283724a035d27f4c",
+                "reference": "16b274cb469bc8165c59b76c283724a035d27f4c",
                 "shasum": ""
             },
             "require": {
@@ -13085,9 +13085,9 @@
             ],
             "support": {
                 "issues": "https://github.com/jsonrainbow/json-schema/issues",
-                "source": "https://github.com/jsonrainbow/json-schema/tree/6.3.1"
+                "source": "https://github.com/jsonrainbow/json-schema/tree/6.4.0"
             },
-            "time": "2025-03-18T19:03:56+00:00"
+            "time": "2025-04-01T18:50:59+00:00"
         },
         {
             "name": "jzonta/faker-restaurant",
@@ -14098,16 +14098,16 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "12.1.0",
+            "version": "12.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "d331a5ced3d9a2b917baa9841b2211e72f9e780d"
+                "reference": "0ce76cf0940abbc31525420b7b8d174656c6675d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/d331a5ced3d9a2b917baa9841b2211e72f9e780d",
-                "reference": "d331a5ced3d9a2b917baa9841b2211e72f9e780d",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/0ce76cf0940abbc31525420b7b8d174656c6675d",
+                "reference": "0ce76cf0940abbc31525420b7b8d174656c6675d",
                 "shasum": ""
             },
             "require": {
@@ -14163,7 +14163,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/php-code-coverage/issues",
                 "security": "https://github.com/sebastianbergmann/php-code-coverage/security/policy",
-                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/12.1.0"
+                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/12.1.1"
             },
             "funding": [
                 {
@@ -14171,7 +14171,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-03-17T13:56:07+00:00"
+            "time": "2025-04-03T03:41:27+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
