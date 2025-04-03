@@ -20,7 +20,7 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
     App\EventSubscriber\LocaleSubscriber:
-        arguments: ['@logger', '%env(BASE_HOST)%','%kernel.default_locale%']
+        arguments: ['@logger', '%env(BASE_HOST)%']
     App\EventListener\CorsListener:
         tags:
             - { name: kernel.event_listener, event: kernel.response }
