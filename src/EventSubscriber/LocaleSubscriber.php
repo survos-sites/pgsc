@@ -20,7 +20,6 @@ class LocaleSubscriber implements EventSubscriberInterface
     public function __construct(
         protected LoggerInterface $logger,
         #[Autowire('%env(BASE_HOST)%')] private string $baseHost,
-        string $defaultLocale,
         #[Autowire('%kernel.enabled_locales%')] private array $availableLocales,
         #[Autowire('%kernel.default_locale%')] private string $currentLocale, // from browser
     ) {

@@ -13,9 +13,7 @@ class LandingController extends AbstractController
 {
     public function __construct(
         #[Autowire('%env(BASE_HOST)%')] private ?string $baseHost = null,
-        ?string $name = null,
     ) {
-        //        parent::__construct($name);
     }
 
     #[Route('/', name: 'app_landing', priority: -300)]

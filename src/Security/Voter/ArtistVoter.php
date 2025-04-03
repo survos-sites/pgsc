@@ -3,6 +3,7 @@
 namespace App\Security\Voter;
 
 use App\Entity\Artist;
+use App\Entity\User;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -32,6 +33,7 @@ final class ArtistVoter extends Voter
         $user = $token->getUser();
 
         // if the user is anonymous, do not grant access
+        /** @var User $user */
         if (!$user instanceof UserInterface) {
             return false;
         }
