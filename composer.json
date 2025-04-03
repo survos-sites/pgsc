@@ -30,6 +30,8 @@
         "survos/bootstrap-bundle": "^1.5.529",
         "survos/command-bundle": "^1.5.529",
         "survos/deployment-bundle": "^1.5.529",
+        "survos/geoapify-bundle": "^1.5",
+        "survos/workflow-helper-bundle": "^1.5",
         "symfony/asset": "^7.2",
         "symfony/asset-mapper": "^7.2.5",
         "symfony/console": "^7.2.5",

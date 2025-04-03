@@ -7,6 +7,12 @@
                 "autoimport": []
             }
         },
+        "@survos/workflow-helper-bundle": {
+            "workflow": {
+                "enabled": true,
+                "fetch": "eager"
+            }
+        },
         "@symfony/ux-leaflet-map": {
             "map": {
                 "enabled": true,

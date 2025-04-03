@@ -92,6 +92,9 @@ class Artist implements \Stringable, RouteParametersInterface
     #[ORM\Column(length: 32, nullable: true)]
     private ?string $studioVisitable = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?array $languages = null;
+
     public function __construct()
     {
         $this->obras = new ArrayCollection();
@@ -256,6 +259,18 @@ class Artist implements \Stringable, RouteParametersInterface
     public function setStudioVisitable(?string $studioVisitable): static
     {
         $this->studioVisitable = $studioVisitable;
+
+        return $this;
+    }
+
+    public function getLanguages(): ?array
+    {
+        return $this->languages;
+    }
+
+    public function setLanguages(?array $languages): static
+    {
+        $this->languages = $languages;
 
         return $this;
     }

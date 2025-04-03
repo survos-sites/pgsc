@@ -37,4 +37,6 @@ return [
     Survos\CrawlerBundle\SurvosCrawlerBundle::class => ['dev' => true, 'test' => true],
     AlexandreFernandez\KeyValueFormBundle\KeyValueFormBundle::class => ['all' => true],
     AlexandreFernandez\JsonTranslationBundle\JsonTranslationBundle::class => ['all' => true],
+    Survos\GeoapifyBundle\SurvosGeoapifyBundle::class => ['all' => true],
+    Survos\WorkflowBundle\SurvosWorkflowBundle::class => ['all' => true],
 ];

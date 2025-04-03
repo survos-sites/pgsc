@@ -76,6 +76,9 @@ class Obra implements \Stringable, RouteParametersInterface
     #[ORM\Column(nullable: true)]
     private ?int $price = null;
 
+    #[ORM\Column(length: 32, nullable: true)]
+    private ?string $type = null;
+
     public function __construct()
     {
         $this->obraImages = new ArrayCollection();
@@ -260,6 +263,18 @@ class Obra implements \Stringable, RouteParametersInterface
     public function setPrice(?int $price): static
     {
         $this->price = $price;
+
+        return $this;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(?string $type): static
+    {
+        $this->type = $type;
 
         return $this;
     }

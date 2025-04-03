@@ -7,11 +7,14 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use App\Enum\LocationType;
 use App\Repository\LocationRepository;
+use App\Workflow\ILocationWorkflow;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Survos\CoreBundle\Entity\RouteParametersInterface;
 use Survos\CoreBundle\Entity\RouteParametersTrait;
+use Survos\WorkflowBundle\Traits\MarkingInterface;
+use Survos\WorkflowBundle\Traits\MarkingTrait;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Serializer\Attribute\SerializedName;
 
@@ -23,9 +26,10 @@ use Symfony\Component\Serializer\Attribute\SerializedName;
         new GetCollection(),
     ]
 )]
-class Location implements \Stringable, RouteParametersInterface
+class Location implements \Stringable, RouteParametersInterface, MarkingInterface
 {
     use RouteParametersTrait;
+    use MarkingTrait;
     public const array UNIQUE_PARAMETERS = ['locationId' => 'id'];
 
     #[ORM\Id]
@@ -72,6 +76,7 @@ class Location implements \Stringable, RouteParametersInterface
     public function __construct()
     {
         $this->obras = new ArrayCollection();
+        $this->marking = ILocationWorkflow::PLACE_NEW;
     }
 
     public function getId(): ?int

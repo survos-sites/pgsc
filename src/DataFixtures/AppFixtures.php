@@ -44,12 +44,16 @@ class AppFixtures extends Fixture
             $artists[] = $artist;
         }
         foreach ($this->locations() as $row) {
+            if ($row['status'] === 'inactivo') {
+                continue;
+            }
             LocationFactory::createOne([
                 'name' => ($name = trim($row['nombre'])),
+                'address' => $row['direcciones'],
                 'type' => LocationType::from(trim(strtolower($row['tipo']))) ?? null,
-                'code' => $row['code'] ?: $this->initials($name),
-                'lat' => $row['lat'] ? (float) $row['lat'] : null,
-                'lng' => $row['lon'] ? (float) $row['lon'] : null,
+                'code' => $row['codigo'] ?: $this->initials($name),
+//                'lat' => $row['lat'] ? (float) $row['lat'] : null,
+//                'lng' => $row['lon'] ? (float) $row['lon'] : null,
             ]);
         }
 
@@ -135,24 +139,6 @@ class AppFixtures extends Fixture
         $csv->setHeaderOffset(0);
 
         return $csv->getRecords();
-        //
-        //        $header = $csv->getHeader(); //returns the CSV header record
-        //
-        // //returns all the records as
-        //        $records = $csv->getRecords(); // an Iterator object containing arrays
-        //
-        //        return explode("\n", <<<END
-        // Centro cultural Carlos Jurado
-        // La Enseñanza Casa de la Ciudad
-        // Galeria Arteria
-        // Cerro Brujo
-        // Museo de los Altos de Chiapas
-        // El Caminante
-        // Galeria Taxcalate
-        // Sabi
-        // MUY
-        // END
-        //        );
     }
 
     private function initials(string $name): string
