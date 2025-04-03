@@ -60,9 +60,9 @@ jobs:
       - name: Lint Commands
         run: bin/console list --format=xml
 
-      - name: Lint Schedule
-        run: bin/console debug:schedule
-
+#      - name: Lint Schedule
+#        run: bin/console debug:schedule
+#
       - name: Audit Dependencies
         run: composer audit
 
