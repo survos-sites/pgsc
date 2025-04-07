@@ -100,7 +100,10 @@ class DashboardController extends AbstractDashboardController
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-            ->setTitle('PG de SanCris');
+            ->renderSidebarMinimized(false)
+            ->setTitle('Vokol')
+            ->setLocales(['es','en'])
+            ;
     }
 
     public function configureMenuItems(): iterable

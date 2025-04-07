@@ -33,6 +33,7 @@ class ObraCrudController extends AbstractCrudController
         foreach ([
             //            IdField::new('id'),
             TextField::new('code')
+                ->onlyOnForms()
                 ->setPermission('ROLE_ADMIN'),
             TextField::new('title')
                 ->formatValue(function ($value, $entity) {
@@ -43,7 +44,8 @@ class ObraCrudController extends AbstractCrudController
                         ->generateUrl() . '">' . $value . '</a>';
                 })->onlyOnIndex(),
             TextField::new('title')->hideOnIndex(),
-            TextField::new('description'),
+            TextField::new('description')
+                     ->hideOnIndex(),
         ] as $field) {
             yield $field;
         }

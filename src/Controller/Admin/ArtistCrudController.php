@@ -14,6 +14,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
+use Survos\TranslatableFieldBundle\EasyAdmin\Field\TranslationsField;
 
 class ArtistCrudController extends AbstractCrudController
 {
@@ -28,20 +29,26 @@ class ArtistCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
-        return [
-            TextField::new('name')
-                ->formatValue(function ($value, $entity) {
-                    return '<a href="' . $this->adminUrlGenerator
+        yield TextField::new('name')
+            ->formatValue(function ($value, $entity) {
+                return '<a href="' . $this->adminUrlGenerator
                         ->setController(self::class)
                         ->setAction('detail')
                         ->setEntityId($entity->getId())
                         ->generateUrl() . '">' . $value . '</a>';
-                })->onlyOnIndex(),
-            TextField::new('name')->hideOnIndex(),
-            TextField::new('code', 'code'),
-            /* this needs to be JsonTranslationType */
+            })->onlyOnIndex();
+        yield TextField::new('name')->hideOnIndex();
+        yield TextField::new('bio')->hideOnForm();
+        yield TranslationsField::new('translations')
+            ->addTranslatableField(
+                TextField::new('bio') /// ->setRequired(true)->setColumns(6)
+            );
+        yield TextField::new('code', 'code');
+
+        /* this needs to be JsonTranslationType */
             //            Field::new('bio', 'bio')
             //                ->hideOnIndex(),
+        return [
             TextareaField::new('socialMedia')
                 ->setHelp('URLs, one per line')
                 ->hideOnIndex(),

@@ -13,13 +13,13 @@
         "ext-imagick": "*",
         "ext-intl": "*",
         "alexandre-fernandez/json-translation-bundle": "^1.0.5",
-        "api-platform/doctrine-orm": "^4.1.4",
-        "api-platform/symfony": "^4.1.4",
+        "api-platform/doctrine-orm": "^4.1.6",
+        "api-platform/symfony": "^4.1.6",
         "doctrine/dbal": "^4.2.3",
         "doctrine/doctrine-bundle": "^2.14.0",
         "doctrine/doctrine-migrations-bundle": "^3.4.1",
         "doctrine/orm": "^3.3.2",
-        "easycorp/easyadmin-bundle": "5.x-dev",
+        "easycorp/easyadmin-bundle": "^4.24",
         "endroid/qr-code-bundle": ">=6",
         "inspector-apm/inspector-symfony": "^1.8.2",
         "league/csv": "^9.23",
@@ -31,6 +31,7 @@
         "survos/command-bundle": "^1.5.529",
         "survos/deployment-bundle": "^1.5.529",
         "survos/geoapify-bundle": "^1.5.529",
+        "survos/translatable-field-bundle": "dev-main",
         "survos/workflow-helper-bundle": "^1.5.529",
         "symfony/asset": "^7.2",
         "symfony/asset-mapper": "^7.2.5",
@@ -53,17 +54,18 @@
         "symfony/runtime": "^7.2.3",
         "symfony/security-bundle": "^7.2.3",
         "symfony/serializer": "^7.2.5",
-        "symfony/stimulus-bundle": "^2.23",
+        "symfony/stimulus-bundle": "^2.24",
         "symfony/string": "^7.2",
         "symfony/translation": "^7.2.4",
         "symfony/twig-bundle": "^7.2",
-        "symfony/ux-icons": "^2.23",
-        "symfony/ux-leaflet-map": "^2.23",
-        "symfony/ux-map": "^2.23",
+        "symfony/ux-icons": "^2.24",
+        "symfony/ux-leaflet-map": "^2.24",
+        "symfony/ux-map": "^2.24",
         "symfony/validator": "^7.2.5",
         "symfony/web-link": "^7.2",
         "symfony/yaml": "^7.2.5",
         "symfonycasts/verify-email-bundle": "^1.17.3",
+        "tacman/doctrine-behaviors": "dev-sf7.0 as 2.6.3",
         "twig/extra-bundle": "^3.20",
         "twig/twig": "^3.20",
         "vich/uploader-bundle": ">=2.6.1"
@@ -130,7 +132,7 @@
         "nunomaduro/phpinsights": "dev-master",
         "pelmered/fake-car": "^2.1",
         "phpstan/phpstan": "^2.1.11",
-        "phpunit/phpunit": "^12.0.10",
+        "phpunit/phpunit": "^12.1.0",
         "survos/crawler-bundle": ">=1.5.529",
         "survos/doc-bundle": "^1.5.529",
         "survos/maker-bundle": "^1.5.529",
@@ -144,5 +146,11 @@
         "symfony/web-profiler-bundle": "^7.2.4",
         "zenstruck/browser": "^2.x-dev",
         "zenstruck/foundry": "^2.3.10"
+    },
+    "repositories": {
+        "behaviors": {
+            "type": "vcs",
+            "url": "git@github.com:tacman/DoctrineBehaviors.git"
+        }
     }
 }

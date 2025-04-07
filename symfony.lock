@@ -1,4 +1,10 @@
 {
+    "a2lix/auto-form-bundle": {
+        "version": "0.4.7"
+    },
+    "a2lix/translation-form-bundle": {
+        "version": "3.2.4"
+    },
     "alexandre-fernandez/json-translation-bundle": {
         "version": "1.0.5"
     },
@@ -220,6 +226,9 @@
     },
     "survos/maker-bundle": {
         "version": "1.5.503"
+    },
+    "survos/translatable-field-bundle": {
+        "version": "dev-main"
     },
     "survos/workflow-helper-bundle": {
         "version": "1.5.529"
@@ -548,6 +557,9 @@
     },
     "symfonycasts/verify-email-bundle": {
         "version": "v1.17.3"
+    },
+    "tacman/doctrine-behaviors": {
+        "version": "dev-sf7.0"
     },
     "twig/extra-bundle": {
         "version": "v3.20.0"
