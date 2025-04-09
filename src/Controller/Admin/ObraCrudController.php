@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use Adeliom\EasyMediaBundle\Admin\Field\EasyMediaField;
 use App\Entity\Obra;
 use App\Security\Voter\ObjVoter;
 use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminAction;
@@ -30,6 +31,7 @@ class ObraCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
+        yield EasyMediaField::new('audio');
         foreach ([
             //            IdField::new('id'),
             TextField::new('code')

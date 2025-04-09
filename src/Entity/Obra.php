@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use App\Entity\EasyMedia\Media;
 use App\Repository\ObraRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -79,6 +80,8 @@ class Obra implements \Stringable, RouteParametersInterface
     #[ORM\Column(length: 32, nullable: true)]
     private ?string $type = null;
 
+    #[ORM\Column(type: 'easy_media_type', nullable: true)]
+    private Media|string|null $audio;
     public function __construct()
     {
         $this->obraImages = new ArrayCollection();
@@ -275,6 +278,18 @@ class Obra implements \Stringable, RouteParametersInterface
     public function setType(?string $type): static
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    public function getAudio(): Media|string|null
+    {
+        return $this->audio;
+    }
+
+    public function setAudio(Media|string|null $audio): static
+    {
+        $this->audio = $audio;
 
         return $this;
     }

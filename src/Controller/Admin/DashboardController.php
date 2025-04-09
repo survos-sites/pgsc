@@ -33,7 +33,8 @@ class DashboardController extends AbstractDashboardController
         private ArtistRepository $artistRepository,
         private LocationRepository $locationRepository,
         private ObraRepository $obraRepository,
-        private UrlGeneratorInterface $urlGenerator, private readonly Security $security,
+        private UrlGeneratorInterface $urlGenerator,
+        private readonly Security $security,
     ) {
     }
 
@@ -103,6 +104,7 @@ class DashboardController extends AbstractDashboardController
             ->renderSidebarMinimized(false)
             ->setTitle('Vokol')
             ->setLocales(['es','en'])
+            ->setTitle('<img src="/chijal.png" />');
             ;
     }
 
