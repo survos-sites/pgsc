@@ -1,7 +1,10 @@
 <div class="row">
     <div class="col-md-6">
         {% if myMap|default(false) %}
+            map
             {{ ux_map(myMap, { style: 'height: 300px' }) }}
+            {% else %}
+            @missing ux_map
         {% endif %}
     </div>
     <div class="col-md-3">

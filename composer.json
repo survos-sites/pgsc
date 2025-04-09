@@ -114,7 +114,8 @@
         ],
         "post-update-cmd": [
             "@auto-scripts"
-        ]
+        ],
+        "geocode": "bin/console workflow:iterate App\\\\Entity\\\\Location --marking=new --transition=geocode\n"
     },
     "conflict": {
         "symfony/symfony": "*"

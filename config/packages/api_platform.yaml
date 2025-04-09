@@ -3,7 +3,7 @@ api_platform:
     version: 1.0.01
     defaults:
         url_generation_strategy: 0
-        stateless: true
+        stateless: false
         cache_headers:
             vary: ['Content-Type', 'Authorization', 'Origin']
-        
+

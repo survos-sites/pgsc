@@ -47,6 +47,7 @@ class Obra implements \Stringable, RouteParametersInterface
 
     #[ORM\ManyToOne(inversedBy: 'obras')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['obra.read'])]
     private ?Artist $artist = null;
 
     #[ORM\Column(length: 255)]
@@ -292,5 +293,18 @@ class Obra implements \Stringable, RouteParametersInterface
         $this->audio = $audio;
 
         return $this;
+    }
+
+    #[Groups(['obra.read'])]
+    public function getArtistCode(): ?string
+    {
+        return $this->getArtist()?->getCode();
+
+    }
+
+    #[Groups(['obra.read'])]
+    public function getLocationCode(): ?string
+    {
+        return $this->getLocation()?->getCode();
     }
 }
