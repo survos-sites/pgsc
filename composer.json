@@ -12,14 +12,15 @@
         "ext-iconv": "*",
         "ext-imagick": "*",
         "ext-intl": "*",
+        "agence-adeliom/easy-media-bundle": "3.x-dev",
         "alexandre-fernandez/json-translation-bundle": "^1.0.5",
         "api-platform/doctrine-orm": "^4.1.6",
         "api-platform/symfony": "^4.1.6",
-        "doctrine/dbal": "^4.2.3",
+        "doctrine/dbal": "^3.9.4",
         "doctrine/doctrine-bundle": "^2.14.0",
         "doctrine/doctrine-migrations-bundle": "^3.4.1",
         "doctrine/orm": "^3.3.2",
-        "easycorp/easyadmin-bundle": "^4.24",
+        "easycorp/easyadmin-bundle": "^4.24.5",
         "endroid/qr-code-bundle": ">=6",
         "inspector-apm/inspector-symfony": "^1.8.2",
         "league/csv": "^9.23",
@@ -120,11 +121,15 @@
     },
     "extra": {
         "symfony": {
-            "allow-contrib": "true",
-            "require": "^7.2"
+            "require": "^7.2",
+            "endpoint": [
+                "https://api.github.com/repos/agence-adeliom/symfony-recipes/contents/index.json?ref=flex/main",
+                "flex://defaults"
+            ],
+            "allow-contrib": true
         }
     },
-    "require-dev": {
+   "require-dev": {
         "bluemmb/faker-picsum-photos-provider": "^2.0",
         "dbrekelmans/bdi": "^1.4",
         "doctrine/doctrine-fixtures-bundle": "^4.1",
@@ -132,7 +137,7 @@
         "nunomaduro/phpinsights": "dev-master",
         "pelmered/fake-car": "^2.1",
         "phpstan/phpstan": "^2.1.11",
-        "phpunit/phpunit": "^12.1.0",
+        "phpunit/phpunit": "^12.1.2",
         "survos/crawler-bundle": ">=1.5.529",
         "survos/doc-bundle": "^1.5.529",
         "survos/maker-bundle": "^1.5.529",

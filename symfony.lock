@@ -5,6 +5,30 @@
     "a2lix/translation-form-bundle": {
         "version": "3.2.4"
     },
+    "agence-adeliom/easy-common-bundle": {
+        "version": "3.9999999",
+        "recipe": {
+            "repo": "github.com/agence-adeliom/symfony-recipes",
+            "branch": "main",
+            "version": "1.0",
+            "ref": "9769be4ed518a81b8ee9dc5610b12f0879883392"
+        }
+    },
+    "agence-adeliom/easy-media-bundle": {
+        "version": "3.9999999",
+        "recipe": {
+            "repo": "github.com/agence-adeliom/symfony-recipes",
+            "branch": "main",
+            "version": "3.0",
+            "ref": "07c984aebaa00647ffa04690cfb7be63a28dd339"
+        },
+        "files": [
+            "config/packages/easy_media.yaml",
+            "config/routes/easy_media.yaml",
+            "src/Entity/EasyMedia/Folder.php",
+            "src/Entity/EasyMedia/Media.php"
+        ]
+    },
     "alexandre-fernandez/json-translation-bundle": {
         "version": "1.0.5"
     },
@@ -130,6 +154,32 @@
             "config/packages/knpu_oauth2_client.yaml"
         ]
     },
+    "league/flysystem-bundle": {
+        "version": "3.4",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "1.0",
+            "ref": "913dc3d7a5a1af0d2b044c5ac3a16e2f851d7380"
+        },
+        "files": [
+            "config/packages/flysystem.yaml",
+            "var/storage/.gitignore"
+        ]
+    },
+    "liip/imagine-bundle": {
+        "version": "2.13",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "1.8",
+            "ref": "d1227d002b70d1a1f941d91845fcd7ac7fbfc929"
+        },
+        "files": [
+            "config/packages/liip_imagine.yaml",
+            "config/routes/liip_imagine.yaml"
+        ]
+    },
     "nelmio/cors-bundle": {
         "version": "2.5",
         "recipe": {
@@ -140,6 +190,18 @@
         },
         "files": [
             "config/packages/nelmio_cors.yaml"
+        ]
+    },
+    "nyholm/psr7": {
+        "version": "1.8",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "1.0",
+            "ref": "4a8c0345442dcca1d8a2c65633dcf0285dd5a5a2"
+        },
+        "files": [
+            "config/packages/nyholm_psr7.yaml"
         ]
     },
     "phpstan/phpstan": {
@@ -178,6 +240,18 @@
         },
         "files": [
             "phpcs.xml.dist"
+        ]
+    },
+    "stof/doctrine-extensions-bundle": {
+        "version": "1.13",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "1.2",
+            "ref": "e805aba9eff5372e2d149a9ff56566769e22819d"
+        },
+        "files": [
+            "config/packages/stof_doctrine_extensions.yaml"
         ]
     },
     "survos/auth-bundle": {
