@@ -95,10 +95,10 @@ final class AppController extends AbstractController
                 $this->entityManager->flush();
             }
         );
-        dd($data);
-        $sheetService->downloadSheetToLocal('piezas', 'data/piezas.csv');
-        // integrate with Google Sheets
-        dd();
+//        dd($data);
+//        $sheetService->downloadSheetToLocal('piezas', 'data/piezas.csv');
+//        // integrate with Google Sheets
+//        dd();
         return $this->render('app/index.html.twig', []);
     }
 
