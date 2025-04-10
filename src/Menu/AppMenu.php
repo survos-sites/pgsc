@@ -51,6 +51,7 @@ final class AppMenu implements KnpMenuHelperInterface
         $options = $event->getOptions();
 
         $this->add($menu, 'app_homepage');
+        $this->add($menu, 'app_sync');
         // for nested menus, don't add a route, just a label, then use it for the argument to addMenuItem
 
         $subMenu = $this->addSubmenu($menu, 'debug');

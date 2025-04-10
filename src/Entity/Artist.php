@@ -32,6 +32,11 @@ class Artist implements \Stringable, RouteParametersInterface, TranslatableInter
     use RouteParametersTrait;
     use TranslatableTrait;
 
+    const GENDER_MALE = 'male';
+    const GENDER_FEMALE = 'female';
+    const GENDER_OTHER = 'other';
+    const GENDERS = [self::GENDER_FEMALE, self::GENDER_MALE, self::GENDER_OTHER];
+
     public const array UNIQUE_PARAMETERS = ['artistId' => 'id'];
 
     // make this an ENUM?
@@ -72,9 +77,9 @@ class Artist implements \Stringable, RouteParametersInterface, TranslatableInter
     //    #[Groups(['artist.read'])]
     //    private ?string $textBio = null;
 
-    #[ORM\Column(type: JsonTranslationType::TYPE, nullable: true)]
-    #[Groups(['artist.read'])]
-    private ?JsonTranslation $bio = null;
+//    #[ORM\Column(type: JsonTranslationType::TYPE, nullable: true)]
+//    #[Groups(['artist.read'])]
+//    private ?JsonTranslation $bio = null;
 
     /**
      * @var Collection<int, Obra>
@@ -97,6 +102,36 @@ class Artist implements \Stringable, RouteParametersInterface, TranslatableInter
 
     #[ORM\Column(nullable: true)]
     private ?array $languages = null;
+
+    #[ORM\Column(length: 22, nullable: true)]
+    private ?string $gender = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $social = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $Timestamp = null;
+
+    #[ORM\Column(length: 16, nullable: true)]
+    private ?string $pronouns = null;
+
+    #[ORM\Column(length: 24, nullable: true)]
+    private ?string $phone = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $contactMethod = null;
+
+    #[ORM\Column(length: 8, nullable: true)]
+    private ?string $studio = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $headshot = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $types = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $slogan = null;
 
     public function __construct()
     {
@@ -169,14 +204,15 @@ class Artist implements \Stringable, RouteParametersInterface, TranslatableInter
         return $this;
     }
 
+    #[Groups(['artist.read'])]
     public function getBio(): ?string
     {
         return $this->translate()->getBio();
     }
 
-    public function setBio(?JsonTranslation $bio): static
+    public function setBio(?string $bio): static
     {
-        $this->bio = $bio;
+        $this->translate()->setBio($bio);
 
         return $this;
     }
@@ -271,9 +307,129 @@ class Artist implements \Stringable, RouteParametersInterface, TranslatableInter
         return $this->languages;
     }
 
-    public function setLanguages(?array $languages): static
+    public function setLanguages(array|string|null $languages): static
     {
-        $this->languages = $languages;
+        $this->languages = $languages ? (is_string($languages) ? explode(',', $languages) : $languages) : $languages;
+
+        return $this;
+    }
+
+    public function getGender(): ?string
+    {
+        return $this->gender;
+    }
+
+    public function setGender(?string $gender): static
+    {
+        $this->gender = $gender;
+
+        return $this;
+    }
+
+    public function getSocial(): ?string
+    {
+        return $this->social;
+    }
+
+    public function setSocial(?string $social): static
+    {
+        $this->social = $social;
+
+        return $this;
+    }
+
+    public function getTimestamp(): ?\DateTimeInterface
+    {
+        return $this->Timestamp;
+    }
+
+    public function setTimestamp(DateTimeInterface|string|null $Timestamp): static
+    {
+        $this->Timestamp = is_string($Timestamp) ? new \DateTime($Timestamp) : $Timestamp;
+
+        return $this;
+    }
+
+    public function getPronouns(): ?string
+    {
+        return $this->pronouns;
+    }
+
+    public function setPronouns(?string $pronouns): static
+    {
+        $this->pronouns = $pronouns;
+
+        return $this;
+    }
+
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
+
+    public function setPhone(?string $phone): static
+    {
+        $this->phone = $phone;
+
+        return $this;
+    }
+
+    public function getContactMethod(): ?string
+    {
+        return $this->contactMethod;
+    }
+
+    public function setContactMethod(?string $contactMethod): static
+    {
+        $this->contactMethod = $contactMethod;
+
+        return $this;
+    }
+
+    public function getStudio(): ?string
+    {
+        return $this->studio;
+    }
+
+    public function setStudio(?string $studio): static
+    {
+        $this->studio = $studio;
+
+        return $this;
+    }
+
+    public function getHeadshot(): ?string
+    {
+        return $this->headshot;
+    }
+
+    public function setHeadshot(?string $headshot): static
+    {
+        $this->headshot = $headshot;
+
+        return $this;
+    }
+
+    public function getTypes(): ?string
+    {
+        return $this->types;
+    }
+
+    public function setTypes(?string $types): static
+    {
+        $this->types = $types;
+
+        return $this;
+    }
+
+    public function getSlogan(): ?string
+    {
+        return $this->slogan;
+    }
+
+    public function setSlogan(?string $slogan): static
+    {
+        $this->slogan = $slogan;
 
         return $this;
     }

@@ -24,6 +24,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\UX\Map\Map;
 use Symfony\UX\Map\Marker;
 use Symfony\UX\Map\Point;
+use function Symfony\Component\Translation\t;
 
 #[AdminDashboard(routePath: '/admin', routeName: 'admin')]
 #[IsGranted('ROLE_USER')]
@@ -102,9 +103,9 @@ class DashboardController extends AbstractDashboardController
     {
         return Dashboard::new()
             ->renderSidebarMinimized(false)
-            ->setTitle('Vokol')
+//            ->setTitle('Chijal')
             ->setLocales(['es','en'])
-            ->setTitle('<img src="/chijal.png" />');
+            ->setTitle('<img src="/chijal-landscape.png" />');
             ;
     }
 
@@ -137,9 +138,15 @@ class DashboardController extends AbstractDashboardController
             ->setLinkTarget(
                 '_blank'
             );
+        yield MenuItem::linkToUrl('Sync', 'mdi:sync', $this->urlGenerator->generate('app_sync'));
+
         foreach ([
             'https://docs.google.com/spreadsheets/d/1osvCYhAahpZ3p1p_xT923MFzDXT2-NdF2qhlz91Btjs/edit?gid=0#gid=0' => 'artists',
             'https://docs.google.com/spreadsheets/d/1osvCYhAahpZ3p1p_xT923MFzDXT2-NdF2qhlz91Btjs/edit?gid=1012778928#gid=1012778928' => 'locations',
+            'https://docs.google.com/forms/d/1BFR_-et-H9Rmy1a-7BgxlJb7cfHHtxzvGq2ULV5yuE4/viewform?edit_requested=true' => 'ubi form',
+            'https://docs.google.com/forms/d/1luEs8p2KULaaJc6EQk_h9NA8ZrU5nm_JShrX7laEk8w/viewform?edit_requested=true' => 'artist form',
+
+
         ] as $link => $label) {
             yield MenuItem::linkToUrl($label, 'arcticons:google-sheets', $link)
                 ->setLinkTarget(
@@ -167,7 +174,7 @@ class DashboardController extends AbstractDashboardController
                 ->setQueryParameter('filters[location][value]', $location->getId())
             ;
         }
-        yield MenuItem::subMenu('By Location', 'tabler:location')->setSubItems($filters);
+        yield MenuItem::subMenu(t('by.location'), 'tabler:building')->setSubItems($filters);
 
         $filters = [];
         foreach ($this->artistRepository->findAll() as $entity) {
@@ -177,7 +184,7 @@ class DashboardController extends AbstractDashboardController
                     ->setQueryParameter('filters[artist][value]', $entity->getId())
             ;
         }
-        yield MenuItem::subMenu('By Artist', 'tabler:location')->setSubItems($filters);
+        yield MenuItem::subMenu(t('by.artist'), 'tabler:user')->setSubItems($filters);
     }
 
     public function configureAssets(): Assets

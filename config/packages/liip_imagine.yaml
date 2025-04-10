@@ -4,3 +4,6 @@ liip_imagine:
     driver: "gd"
 
     data_loader: easy_media_data_loader
+
+    twig:
+        mode: lazy

@@ -37,11 +37,20 @@ class ArtistCrudController extends AbstractCrudController
                         ->setEntityId($entity->getId())
                         ->generateUrl() . '">' . $value . '</a>';
             })->onlyOnIndex();
+        yield ChoiceField::new('gender', 'gender')->setChoices(
+            array_combine(Artist::GENDERS, Artist::GENDERS)
+        )->setFormTypeOption('expanded', true);
+        ;
+
+        yield TextareaField::new('social')->hideOnIndex()
+            ->setNumOfRows(2)
+            ->setHelp("e.g. facebook, instagram, twitter.  One URL per line");
         yield TextField::new('name')->hideOnIndex();
         yield TextField::new('bio')->hideOnForm();
+        yield IntegerField::new('birthYear');
         yield TranslationsField::new('translations')
             ->addTranslatableField(
-                TextField::new('bio') /// ->setRequired(true)->setColumns(6)
+                TextareaField::new('bio') /// ->setRequired(true)->setColumns(6)
             );
         yield TextField::new('code', 'code');
 

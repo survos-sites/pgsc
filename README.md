@@ -26,6 +26,10 @@ Admin from fixtures:
     'email' => 'admin@example.com',
     'plainPassword' => 'adminpass',
 
+# For maps
+
+bin/console workflow:iterate App\\Entity\\Location --marking=new --transition=geocode
+
 ## Database
 
 ![Database Diagram](./assets/images/db.svg)

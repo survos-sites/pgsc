@@ -17,16 +17,13 @@ class LandingController extends AbstractController
     }
 
     #[Route('/', name: 'app_landing', priority: -300)]
-    //    #[Route('/wp-content{badUrl}', name: 'bad_prefix', requirements: ['badUrl' => '.+'], methods: ['GET'], priority: 1)]
-    //    #[Route('/{badUrl}.{_format}', name: 'landing_catch_php',
-    //        requirements: ['badUrl' => '.+', '_format' => 'php|py'], methods: ['GET'], priority: 1)]
-    //    #[Route('/{_locale<%app.supported_locales%>}/', name: 'app_landing', priority: 300)]
+//    #[Route('/{_locale<%app.supported_locales%>}/', name: 'app_landing_locale', priority: 300)]
     public function index(Request $request,
         Inspector $inspector,
         ?string $_format = null,
         ?string $_locale = null,  // to override
     ): Response {
-        $redirect = $this->redirectToRoute('admin');
+        $redirect = $this->redirectToRoute('app_homepage');
 
         return $redirect;
     }

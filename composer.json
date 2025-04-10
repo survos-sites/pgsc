@@ -32,6 +32,7 @@
         "survos/command-bundle": "^1.5.529",
         "survos/deployment-bundle": "^1.5.529",
         "survos/geoapify-bundle": "^1.5.529",
+        "survos/google-sheets-bundle": "*",
         "survos/translatable-field-bundle": "dev-main",
         "survos/workflow-helper-bundle": "^1.5.529",
         "symfony/asset": "^7.2",
@@ -114,8 +115,7 @@
         ],
         "post-update-cmd": [
             "@auto-scripts"
-        ],
-        "geocode": "bin/console workflow:iterate App\\\\Entity\\\\Location --marking=new --transition=geocode\n"
+        ]
     },
     "conflict": {
         "symfony/symfony": "*"

@@ -48,4 +48,5 @@ return [
     League\FlysystemBundle\FlysystemBundle::class => ['all' => true],
     Adeliom\EasyCommonBundle\EasyCommonBundle::class => ['all' => true],
     Adeliom\EasyMediaBundle\EasyMediaBundle::class => ['all' => true],
+    Survos\GoogleSheetsBundle\SurvosGoogleSheetsBundle::class => ['all' => true],
 ];

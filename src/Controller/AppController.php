@@ -9,14 +9,21 @@ use App\Form\ArtistFormType;
 use App\Repository\ArtistRepository;
 use App\Repository\LocationRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use League\Csv\Reader;
+use Survos\GoogleSheetsBundle\Service\GoogleSheetsApiService;
+use Survos\GoogleSheetsBundle\Service\SheetService;
 use Symfony\Bridge\Twig\Attribute\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
+use Symfony\Component\PropertyAccess\PropertyAccessor;
+use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\UX\Map\Map;
 use Symfony\UX\Map\Marker;
 use Symfony\UX\Map\Point;
+use function Symfony\Component\String\u;
 
 #[Route('/{_locale}')]
 final class AppController extends AbstractController
@@ -25,7 +32,74 @@ final class AppController extends AbstractController
         private LocationRepository $locationRepository,
         private ArtistRepository $artistRepository,
         private EntityManagerInterface $entityManager,
+        private PropertyAccessorInterface $propertyAccessor,
     ) {
+    }
+
+    #[Route('/sync', name: 'app_sync')]
+    public function sync(
+        SheetService $sheetService,
+        #[MapQueryParameter] bool $refresh = false,
+    ): Response {
+//        $accessor = new PropertyAccessor();
+        $data = $sheetService->getData(
+            'piezas',
+            $refresh,
+            function ($sheet, $csv) {
+                $entityClass = match ($sheet) {
+                    'DATOS ARTISTAS' => Artist::class,
+                    'DATOS LOCALES' => Location::class,
+                    default => null,
+                };
+                if (!$entityClass) {
+                    return;
+                }
+                $key = match ($entityClass) {
+                    Artist::class => 'email',
+                    Location::class => 'email' // ??
+                };
+                $reader = Reader::createFromString($csv);
+                $reader->setHeaderOffset(0);
+                try {
+                    foreach ($reader as $row) {
+                        if (
+                            !$entity = $this->entityManager->getRepository($entityClass)->findOneBy([
+                            'email' => $row['email'],
+                            ])
+                        ) {
+                            $entity = new $entityClass();
+                            $entity->setEmail($email = $row['email']);
+                            $entity->setCode(u($email)->before('@')->lower()->toString());
+                            $this->entityManager->persist($entity);
+                        }
+                        foreach ($row as $var => $value) {
+                            if ($value) {
+                                try {
+                                    $this->propertyAccessor->setValue($entity, $var, $value);
+                                } catch (\Exception $e) {
+                                    dd($entity, $var, $value, $e->getMessage());
+                                }
+                            }
+                        }
+                        switch ($sheet) {
+                            case 'DATOS ARTISTAS':
+                                break;
+
+                            default:
+                                dd("Missing tab: " . $sheet);
+                        }
+                    }
+                } catch (\Exception $e) {
+                    dd($csv, $e);
+                }
+                $this->entityManager->flush();
+            }
+        );
+        dd($data);
+        $sheetService->downloadSheetToLocal('piezas', 'data/piezas.csv');
+        // integrate with Google Sheets
+        dd();
+        return $this->render('app/index.html.twig', []);
     }
 
     #[Route('/home', name: 'app_homepage')]

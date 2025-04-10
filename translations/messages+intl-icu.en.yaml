@@ -7,3 +7,7 @@ objects: objects
 user:
   isArtist:
     help: Check this box if you are an artist interested in participating in the exhibition.
+
+by:
+  artist: 'por artista'
+  location: 'por espacio'

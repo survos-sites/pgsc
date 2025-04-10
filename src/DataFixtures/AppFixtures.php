@@ -20,11 +20,38 @@ class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
+
+        // admins
+        UserFactory::createOne([
+            'code' => 'superadmin',
+            'email' => 'superadmin@example.com',
+            'plainPassword' => 'adminpass',
+            'roles' => ['ROLE_SUPER_ADMIN'],
+        ]);
+
+        foreach (['tacman@gmail.com', 'yarenivillada@gmail.com'] as $email) {
+            UserFactory::createOne([
+                'code' => str_replace('@gmail.com', '', $email),
+                'email' => $email,
+                'plainPassword' => 'tt',
+                'roles' => ['ROLE_ADMIN'],
+            ]);
+        }
+
+        UserFactory::createOne([
+            'code' => 'admin',
+            'email' => 'admin@test.com',
+            'plainPassword' => 'admin',
+            'roles' => ['ROLE_ADMIN'],
+        ]);
+
+
         // $product = new Product();
         // $manager->persist($product);
         //        ArtistFactory::createMany(2);00
         //        LocationFactory::createMany(2);
         $artists = [];
+        if (0)
         foreach ($this->artists() as $artistData) {
             $initials = $artistData['code'];
             $email = $initials.'@test.com';
@@ -56,6 +83,8 @@ class AppFixtures extends Fixture
 //                'lng' => $row['lon'] ? (float) $row['lon'] : null,
             ]);
         }
+        $manager->flush();
+        return;
 
         ObraFactory::createMany(
             85,
@@ -67,28 +96,6 @@ class AppFixtures extends Fixture
                  ]// each comment set to a random Post from those already in the database
         );
 
-        UserFactory::createOne([
-            'code' => 'superadmin',
-            'email' => 'superadmin@example.com',
-            'plainPassword' => 'adminpass',
-            'roles' => ['ROLE_SUPER_ADMIN'],
-        ]);
-
-        foreach (['tacman@gmail.com', 'yarenivillada@gmail.com'] as $email) {
-            UserFactory::createOne([
-                'code' => str_replace('@gmail.com', '', $email),
-                'email' => $email,
-                'plainPassword' => 'batsi',
-                'roles' => ['ROLE_ADMIN'],
-            ]);
-        }
-
-        UserFactory::createOne([
-            'code' => 'admin',
-            'email' => 'admin@test.com',
-            'plainPassword' => 'admin',
-            'roles' => ['ROLE_ADMIN'],
-        ]);
 
         //        UserFactory::new()
         //            ->withAttributes([
