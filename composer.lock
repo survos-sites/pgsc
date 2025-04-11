@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9efb18f85f07ee9d37e130538fe525ff",
+    "content-hash": "f43bd8a9807595047d278d2398d98a26",
     "packages": [
         {
             "name": "a2lix/auto-form-bundle",
@@ -4036,6 +4036,47 @@
                 }
             ],
             "time": "2025-04-04T17:19:27+00:00"
+        },
+        {
+            "name": "genkgo/favicon",
+            "version": "0.3.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/genkgo/favicon.git",
+                "reference": "360d690887260ad5be91c244ad2ef62d4f570eba"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/genkgo/favicon/zipball/360d690887260ad5be91c244ad2ef62d4f570eba",
+                "reference": "360d690887260ad5be91c244ad2ef62d4f570eba",
+                "shasum": ""
+            },
+            "require": {
+                "ext-dom": "*",
+                "ext-imagick": "*",
+                "php": "~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0"
+            },
+            "bin": [
+                "bin/favicon-generator"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Genkgo\\Favicon\\": [
+                        "src"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Generate browser favicons",
+            "support": {
+                "issues": "https://github.com/genkgo/favicon/issues",
+                "source": "https://github.com/genkgo/favicon/tree/0.3.6"
+            },
+            "time": "2025-03-28T21:11:33+00:00"
         },
         {
             "name": "google/apiclient",

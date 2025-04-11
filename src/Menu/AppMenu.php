@@ -51,6 +51,7 @@ final class AppMenu implements KnpMenuHelperInterface
         $options = $event->getOptions();
 
         $this->add($menu, 'app_homepage');
+        $this->add($menu, 'api_doc', label: 'API');
         $this->add($menu, 'app_sync');
         // for nested menus, don't add a route, just a label, then use it for the argument to addMenuItem
 
@@ -79,7 +80,7 @@ final class AppMenu implements KnpMenuHelperInterface
         foreach (['by_location', 'by_artist'] as $grouping) {
             $this->add($nestedMenu, 'app_homepage', label: $grouping);
         }
-        $this->add($menu, 'admin', translationDomain: false);
+        $this->add($menu, 'admin', translationDomain: false, label: 'EZ');
         $this->appAuthMenu($event);
     }
 }
