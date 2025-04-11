@@ -20,6 +20,7 @@ class SacroCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         yield IdField::new('id');
+        yield TextField::new('label')->hideOnForm();
         yield TextField::new('description')->hideOnForm();
         yield TextField::new('notes')->hideOnIndex()->hideOnForm();
         yield TextField::new('flickrId')->hideOnForm()

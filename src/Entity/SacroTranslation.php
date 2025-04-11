@@ -24,6 +24,9 @@ class SacroTranslation implements TranslationInterface
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $label = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -49,6 +52,18 @@ class SacroTranslation implements TranslationInterface
     public function setDescription(?string $description): static
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getLabel(): ?string
+    {
+        return $this->label;
+    }
+
+    public function setLabel(?string $label): static
+    {
+        $this->label = $label;
 
         return $this;
     }

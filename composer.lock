@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f43bd8a9807595047d278d2398d98a26",
+    "content-hash": "5a876fca22905b99404924e8cd419bcf",
     "packages": [
         {
             "name": "a2lix/auto-form-bundle",
@@ -20880,7 +20880,6 @@
     "stability-flags": {
         "agence-adeliom/easy-media-bundle": 20,
         "nunomaduro/phpinsights": 20,
-        "survos/google-sheets-bundle": 20,
         "survos/translatable-field-bundle": 20,
         "tacman/doctrine-behaviors": 20,
         "zenstruck/browser": 20

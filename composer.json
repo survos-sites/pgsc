@@ -144,7 +144,7 @@
         "phpunit/phpunit": "^12.1.2",
         "survos/crawler-bundle": ">=1.5.529",
         "survos/doc-bundle": "^1.5.529",
-        "survos/maker-bundle": "^1.5.529",
+        "survos/maker-bundle": "^1.5",
         "symfony/browser-kit": "^7.2.4",
         "symfony/css-selector": "^7.2",
         "symfony/debug-bundle": "^7.2",

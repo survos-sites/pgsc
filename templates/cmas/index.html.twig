@@ -11,15 +11,10 @@
 <div class="example-wrapper">
 
     {% for sacro in sacros %}
-        <li>
+        <h3>{{ sacro.label }}</h3>
+        <blockquote>
             {{ sacro.description }}
-        </li>
+        </blockquote>
     {% endfor %}
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>/home/tac/g/sites/pgsc/src/Controller/CmasController.php</code></li>
-        <li>Your template at <code>/home/tac/g/sites/pgsc/templates/cmas/index.html.twig</code></li>
-    </ul>
 </div>
 {% endblock %}

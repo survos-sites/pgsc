@@ -70,6 +70,12 @@ class Sacro implements \Stringable, TranslatableInterface
         return $this->translate($locale)->getNotes();
     }
     #[Groups('sacro.read')]
+    public function getLabel(?string $locale = null): ?string
+    {
+        return $this->translate($locale)->getLabel();
+    }
+
+    #[Groups('sacro.read')]
     public function getDescription(?string $locale = null): ?string
     {
         return $this->translate($locale)->getDescription();

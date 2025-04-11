@@ -58,49 +58,8 @@ final class CmasController extends AbstractController
         GoogleSheetsApiService $sheetService,
         #[Autowire('%kernel.project_dir%')] string $projectDir
     ): Response|array {
-        $path = $projectDir . '/data/cmas.csv';
-        assert(file_exists($path), $path . ' does not exist');
-        $reader = Reader::createFromPath($path, 'r');
-        $reader->setHeaderOffset(0);
-        foreach ($reader as $index => $row) {
-            foreach ($row as $column => $value) {
-                // dots mean translation
-                if (!str_contains($column, '.')) {
-                    $column = $this->asciiSlugger->slug($column)->lower()->toString();
-                    $extra[$column] = $value;
-                }
-            }
-            $code = $extra['code'];
-            if (!$sacro = $this->sacroRepository->find($code)) {
-                $sacro = new Sacro($code);
-                $this->entityManager->persist($sacro);
-                $this->entityManager->flush();
-            }
-            $driveUrl = $extra['vinculo'];
 
-            dump("@todo: get a public link to $driveUrl or download it");
-            // https://www.googleapis.com/drive/v3/files/FILE_ID?alt=media
-
-            $sacro->setExtra($extra);
-            foreach (['es', 'en'] as $locale) {
-                foreach (['description', 'notes'] as $field) {
-                    $translate = $sacro->translate($locale);
-                    $this->accessor->setValue(
-                        $translate,
-                        $field,
-                        $row[$field . '.' . $locale]
-                    );
-                }
-            }
-            $sacro->mergeNewTranslations();
-        }
-        $this->entityManager->flush();
-        return $this->redirectToRoute('cmas_index');
-
-        // for debugging
-        return [
-            'sacros' => $sacroRepository->findAll(),
-        ];
+        dd("bin/console app:cmas OR use this to test import with API?");
 
         // using the api instead of downloading.
         //        return
