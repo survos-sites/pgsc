@@ -47,7 +47,7 @@ return [
     Liip\ImagineBundle\LiipImagineBundle::class => ['all' => true],
     League\FlysystemBundle\FlysystemBundle::class => ['all' => true],
     Adeliom\EasyCommonBundle\EasyCommonBundle::class => ['all' => true],
-    Adeliom\EasyMediaBundle\EasyMediaBundle::class => ['all' => true],
+//    Adeliom\EasyMediaBundle\EasyMediaBundle::class => ['all' => true],
     Survos\GoogleSheetsBundle\SurvosGoogleSheetsBundle::class => ['all' => true],
     Survos\FlickrBundle\SurvosFlickrBundle::class => ['all' => true],
     Survos\SaisBundle\SurvosSaisBundle::class => ['all' => true],
