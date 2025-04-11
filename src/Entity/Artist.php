@@ -121,7 +121,7 @@ class Artist implements \Stringable, RouteParametersInterface, TranslatableInter
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $contactMethod = null;
 
-    #[ORM\Column(length: 8, nullable: true)]
+    #[ORM\Column(length: 28, nullable: true)]
     private ?string $studio = null;
 
     #[ORM\Column(length: 255, nullable: true)]

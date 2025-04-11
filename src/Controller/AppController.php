@@ -14,6 +14,7 @@ use Survos\GoogleSheetsBundle\Service\GoogleSheetsApiService;
 use Survos\GoogleSheetsBundle\Service\SheetService;
 use Symfony\Bridge\Twig\Attribute\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
@@ -33,6 +34,7 @@ final class AppController extends AbstractController
         private ArtistRepository $artistRepository,
         private EntityManagerInterface $entityManager,
         private PropertyAccessorInterface $propertyAccessor,
+        #[Autowire('%env(GOOGLE_SPREADSHEET_ID)%')] private ?string $googleSpreadsheetId = null,
     ) {
     }
 
@@ -41,9 +43,11 @@ final class AppController extends AbstractController
         SheetService $sheetService,
         #[MapQueryParameter] bool $refresh = false,
     ): Response {
+
+        $spreadsheet = $sheetService->getGoogleSpreadSheet($this->googleSpreadsheetId);
 //        $accessor = new PropertyAccessor();
         $data = $sheetService->getData(
-            'piezas',
+            $this->googleSpreadsheetId,
             $refresh,
             function ($sheet, $csv) {
                 $entityClass = match ($sheet) {

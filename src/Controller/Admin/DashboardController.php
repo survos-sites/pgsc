@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\Artist;
 use App\Entity\Location;
 use App\Entity\Obra;
+use App\Entity\Sacro;
 use App\Repository\ArtistRepository;
 use App\Repository\LocationRepository;
 use App\Repository\ObraRepository;
@@ -120,6 +121,9 @@ class DashboardController extends AbstractDashboardController
         ;
 
         yield MenuItem::linkToCrud('objects', 'ri:image-line', Obra::class)
+            ->setBadge($this->obraRepository->count())
+        ;
+        yield MenuItem::linkToCrud('sacro', 'ri:image-line', Sacro::class)
             ->setBadge($this->obraRepository->count())
         ;
         //         yield MenuItem::linkToRoute('home', 'tabler:home', 'app_homepage');
