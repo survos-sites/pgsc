@@ -22,6 +22,7 @@
         "doctrine/orm": "^3.3.2",
         "easycorp/easyadmin-bundle": "^4.24.5",
         "endroid/qr-code-bundle": ">=6",
+        "genkgo/favicon": "^0.3.6",
         "inspector-apm/inspector-symfony": "^1.8.2",
         "league/csv": "^9.23",
         "nelmio/cors-bundle": "^2.5",
