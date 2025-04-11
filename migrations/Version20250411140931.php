@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20250409151607 extends AbstractMigration
+final class Version20250411140931 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -21,7 +21,7 @@ final class Version20250409151607 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql(<<<'SQL'
-            CREATE TABLE artist (id SERIAL NOT NULL, name VARCHAR(255) NOT NULL, birth_year INT DEFAULT NULL, email VARCHAR(255) DEFAULT NULL, code VARCHAR(16) NOT NULL, instagram VARCHAR(255) DEFAULT NULL, bio JSON DEFAULT NULL, obra_count INT DEFAULT NULL, social_media TEXT DEFAULT NULL, studio_address TEXT DEFAULT NULL, studio_visitable VARCHAR(32) DEFAULT NULL, languages JSON DEFAULT NULL, PRIMARY KEY(id))
+            CREATE TABLE artist (id SERIAL NOT NULL, name VARCHAR(255) NOT NULL, birth_year INT DEFAULT NULL, email VARCHAR(255) DEFAULT NULL, code VARCHAR(16) NOT NULL, instagram VARCHAR(255) DEFAULT NULL, obra_count INT DEFAULT NULL, social_media TEXT DEFAULT NULL, studio_address TEXT DEFAULT NULL, studio_visitable VARCHAR(32) DEFAULT NULL, languages JSON DEFAULT NULL, gender VARCHAR(22) DEFAULT NULL, social TEXT DEFAULT NULL, timestamp TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, pronouns VARCHAR(16) DEFAULT NULL, phone VARCHAR(24) DEFAULT NULL, contact_method VARCHAR(255) DEFAULT NULL, studio VARCHAR(28) DEFAULT NULL, headshot VARCHAR(255) DEFAULT NULL, types VARCHAR(255) DEFAULT NULL, slogan VARCHAR(255) DEFAULT NULL, PRIMARY KEY(id))
         SQL);
         $this->addSql(<<<'SQL'
             CREATE UNIQUE INDEX UNIQ_159968777153098 ON artist (code)
@@ -73,6 +73,18 @@ final class Version20250409151607 extends AbstractMigration
         SQL);
         $this->addSql(<<<'SQL'
             COMMENT ON COLUMN obra_image.created_at IS '(DC2Type:datetime_immutable)'
+        SQL);
+        $this->addSql(<<<'SQL'
+            CREATE TABLE sacro (id VARCHAR(255) NOT NULL, extra JSON DEFAULT NULL, PRIMARY KEY(id))
+        SQL);
+        $this->addSql(<<<'SQL'
+            CREATE TABLE sacro_translation (id SERIAL NOT NULL, translatable_id VARCHAR(255) DEFAULT NULL, notes VARCHAR(255) DEFAULT NULL, description TEXT DEFAULT NULL, locale VARCHAR(5) NOT NULL, PRIMARY KEY(id))
+        SQL);
+        $this->addSql(<<<'SQL'
+            CREATE INDEX IDX_89281EBB2C2AC5D3 ON sacro_translation (translatable_id)
+        SQL);
+        $this->addSql(<<<'SQL'
+            CREATE UNIQUE INDEX sacro_translation_unique_translation ON sacro_translation (translatable_id, locale)
         SQL);
         $this->addSql(<<<'SQL'
             CREATE TABLE users (id SERIAL NOT NULL, email VARCHAR(180) DEFAULT NULL, roles JSON NOT NULL, password VARCHAR(255) NOT NULL, is_verified BOOLEAN NOT NULL, code VARCHAR(48) NOT NULL, name VARCHAR(255) DEFAULT NULL, cel VARCHAR(255) DEFAULT NULL, is_artist BOOLEAN DEFAULT NULL, PRIMARY KEY(id))
@@ -133,6 +145,9 @@ final class Version20250409151607 extends AbstractMigration
         $this->addSql(<<<'SQL'
             ALTER TABLE obra_image ADD CONSTRAINT FK_8C8006753C2672C8 FOREIGN KEY (obra_id) REFERENCES obra (id) NOT DEFERRABLE INITIALLY IMMEDIATE
         SQL);
+        $this->addSql(<<<'SQL'
+            ALTER TABLE sacro_translation ADD CONSTRAINT FK_89281EBB2C2AC5D3 FOREIGN KEY (translatable_id) REFERENCES sacro (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE
+        SQL);
     }
 
     public function down(Schema $schema): void
@@ -160,6 +175,9 @@ final class Version20250409151607 extends AbstractMigration
             ALTER TABLE obra_image DROP CONSTRAINT FK_8C8006753C2672C8
         SQL);
         $this->addSql(<<<'SQL'
+            ALTER TABLE sacro_translation DROP CONSTRAINT FK_89281EBB2C2AC5D3
+        SQL);
+        $this->addSql(<<<'SQL'
             DROP TABLE artist
         SQL);
         $this->addSql(<<<'SQL'
@@ -182,6 +200,12 @@ final class Version20250409151607 extends AbstractMigration
         SQL);
         $this->addSql(<<<'SQL'
             DROP TABLE obra_image
+        SQL);
+        $this->addSql(<<<'SQL'
+            DROP TABLE sacro
+        SQL);
+        $this->addSql(<<<'SQL'
+            DROP TABLE sacro_translation
         SQL);
         $this->addSql(<<<'SQL'
             DROP TABLE users
