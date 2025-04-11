@@ -16,7 +16,7 @@ class ArtistFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $isValidLanguage = Languages::exists('tzo');
+//        $isValidLanguage = Languages::exists('tzo');
 
         // The Doctrine type of the "bio" field is "json_translation", which is not supported by EasyAdmin.
         // For Doctrine's Custom Mapping Types have a look at EasyAdmin's field docs.

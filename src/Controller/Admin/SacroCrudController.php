@@ -30,8 +30,10 @@ class SacroCrudController extends AbstractCrudController
         ;
 
         yield TranslationsField::new('translations')
-            ->addTranslatableField(TextareaField::new('notes'))
+            ->setFormTypeOption('locales', ['es', 'en'])
+            ->addTranslatableField(TextareaField::new('label'))
             ->addTranslatableField(TextareaField::new('description'))
+            ->addTranslatableField(TextareaField::new('notes'))
         ;
 
     }

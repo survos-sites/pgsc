@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\TranslatableInterface;
 use Knp\DoctrineBehaviors\Model\Translatable\TranslatableTrait;
 use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Serializer\Attribute\SerializedName;
 
 #[ORM\Entity(repositoryClass: SacroRepository::class)]
 #[ApiResource(
@@ -36,6 +37,8 @@ class Sacro implements \Stringable, TranslatableInterface
     #[ORM\Column(nullable: true)]
     private ?array $extra = null;
 
+    #[Groups('sacro.read')]
+    #[SerializedName('code')]
     public function getId(): ?string
     {
         return $this->id;
@@ -61,7 +64,7 @@ class Sacro implements \Stringable, TranslatableInterface
 
     public function __toString()
     {
-        return $this->extra['label'];
+        return $this->getLabel();
     }
 
     #[Groups('sacro.read')]
