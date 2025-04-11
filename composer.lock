@@ -8442,16 +8442,16 @@
         },
         {
             "name": "survos/google-sheets-bundle",
-            "version": "1.5.529",
+            "version": "dev-main",
             "source": {
                 "type": "git",
                 "url": "https://github.com/survos/SurvosGoogleSheetsBundle.git",
-                "reference": "1df4ded9733f7f4c66e1baaa5f359b19423382da"
+                "reference": "71df57ba9e25c0de17947a71b9bdbaf8340187dc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/survos/SurvosGoogleSheetsBundle/zipball/1df4ded9733f7f4c66e1baaa5f359b19423382da",
-                "reference": "1df4ded9733f7f4c66e1baaa5f359b19423382da",
+                "url": "https://api.github.com/repos/survos/SurvosGoogleSheetsBundle/zipball/71df57ba9e25c0de17947a71b9bdbaf8340187dc",
+                "reference": "71df57ba9e25c0de17947a71b9bdbaf8340187dc",
                 "shasum": ""
             },
             "require": {
@@ -8465,8 +8465,10 @@
             "require-dev": {
                 "phpstan/phpstan": "^2.0",
                 "phpunit/phpunit": "^11.4",
-                "rector/rector": "dev-main"
+                "rector/rector": "dev-main",
+                "symfony/cache": "^7.2"
             },
+            "default-branch": true,
             "type": "symfony-bundle",
             "autoload": {
                 "psr-4": {
@@ -8498,7 +8500,7 @@
             ],
             "support": {
                 "issues": "https://github.com/survos/SurvosGoogleSheetsBundle/issues",
-                "source": "https://github.com/survos/SurvosGoogleSheetsBundle/tree/1.5.529"
+                "source": "https://github.com/survos/SurvosGoogleSheetsBundle/tree/main"
             },
             "funding": [
                 {
@@ -8506,7 +8508,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-11-24T12:53:04+00:00"
+            "time": "2025-04-11T14:16:30+00:00"
         },
         {
             "name": "survos/installer",
@@ -20878,6 +20880,7 @@
     "stability-flags": {
         "agence-adeliom/easy-media-bundle": 20,
         "nunomaduro/phpinsights": 20,
+        "survos/google-sheets-bundle": 20,
         "survos/translatable-field-bundle": 20,
         "tacman/doctrine-behaviors": 20,
         "zenstruck/browser": 20
