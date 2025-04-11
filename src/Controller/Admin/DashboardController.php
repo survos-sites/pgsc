@@ -9,6 +9,7 @@ use App\Entity\Sacro;
 use App\Repository\ArtistRepository;
 use App\Repository\LocationRepository;
 use App\Repository\ObraRepository;
+use App\Repository\SacroRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminDashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
@@ -32,11 +33,11 @@ use function Symfony\Component\Translation\t;
 class DashboardController extends AbstractDashboardController
 {
     public function __construct(
-        private ArtistRepository $artistRepository,
-        private LocationRepository $locationRepository,
-        private ObraRepository $obraRepository,
+        private ArtistRepository      $artistRepository,
+        private LocationRepository    $locationRepository,
+        private ObraRepository        $obraRepository,
         private UrlGeneratorInterface $urlGenerator,
-        private readonly Security $security,
+        private readonly Security     $security, private readonly SacroRepository $sacroRepository,
     ) {
     }
 
@@ -124,7 +125,7 @@ class DashboardController extends AbstractDashboardController
             ->setBadge($this->obraRepository->count())
         ;
         yield MenuItem::linkToCrud('sacro', 'ri:image-line', Sacro::class)
-            ->setBadge($this->obraRepository->count())
+            ->setBadge($this->sacroRepository->count())
         ;
         //         yield MenuItem::linkToRoute('home', 'tabler:home', 'app_homepage');
 

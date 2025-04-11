@@ -26,24 +26,36 @@ final class CmasController extends AbstractController
         private SheetService $sheetService,
         private SluggerInterface $asciiSlugger,
         private EntityManagerInterface $entityManager,
+        private SacroRepository $sacroRepository,
         private PropertyAccessorInterface $accessor,
     ) {
     }
 
     #[Route('/cmas', name: 'cmas_index', methods: ['GET'])]
     #[Template('cmas/index.html.twig')]
-    public function index(SacroRepository $sacroRepository): Response|array
+    public function index(): Response|array
     {
         return [
-            'sacros' => $sacroRepository->findAll(),
+            'sacros' => $this->sacroRepository->findAll(),
         ];
+    }
+
+    #[Route('/cmas-images', name: 'cmas_images', methods: ['GET'])]
+    #[Template('cmas/index.html.twig')]
+    public function images(): Response|array
+    {
+        foreach ($this->sacroRepository->findAll() as $sacro) {
+            $flickr = $sacro->getExtra()['flickr'];
+
+            dd($sacro->getExtra());
+        }
+        return $this->redirectToRoute('cmas_index');
     }
 
     #[Route('/cmas/import', name: 'cmas_import')]
     #[Template('cmas/index.html.twig')]
     public function import(
         GoogleSheetsApiService $sheetService,
-        SacroRepository $sacroRepository,
         #[Autowire('%kernel.project_dir%')] string $projectDir
     ): Response|array {
         $path = $projectDir . '/data/cmas.csv';
@@ -52,18 +64,23 @@ final class CmasController extends AbstractController
         $reader->setHeaderOffset(0);
         foreach ($reader as $index => $row) {
             foreach ($row as $column => $value) {
-                $column = $this->asciiSlugger->slug($column)->lower()->toString();
-                $extra[$column] = $value;
+                // dots mean translation
+                if (!str_contains($column, '.')) {
+                    $column = $this->asciiSlugger->slug($column)->lower()->toString();
+                    $extra[$column] = $value;
+                }
             }
             $code = $extra['code'];
-            if (!$sacro = $sacroRepository->find($code)) {
+            if (!$sacro = $this->sacroRepository->find($code)) {
                 $sacro = new Sacro($code);
                 $this->entityManager->persist($sacro);
                 $this->entityManager->flush();
             }
             $driveUrl = $extra['vinculo'];
-            dd("@todo: get a public linke to $driveUrl or download it");
+
+            dump("@todo: get a public link to $driveUrl or download it");
             // https://www.googleapis.com/drive/v3/files/FILE_ID?alt=media
+
             $sacro->setExtra($extra);
             foreach (['es', 'en'] as $locale) {
                 foreach (['description', 'notes'] as $field) {
@@ -102,4 +119,5 @@ final class CmasController extends AbstractController
         return $this->render('cmas/index.html.twig', [
         ]);
     }
+
 }

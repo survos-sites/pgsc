@@ -307,6 +307,9 @@
     "survos/doc-bundle": {
         "version": "1.5.529"
     },
+    "survos/flickr-bundle": {
+        "version": "1.5.529"
+    },
     "survos/geoapify-bundle": {
         "version": "1.5.529"
     },
@@ -315,6 +318,9 @@
     },
     "survos/maker-bundle": {
         "version": "1.5.503"
+    },
+    "survos/sais-bundle": {
+        "version": "1.5.529"
     },
     "survos/translatable-field-bundle": {
         "version": "dev-main"

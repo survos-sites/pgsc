@@ -54,6 +54,8 @@ final class AppMenu implements KnpMenuHelperInterface
         $this->add($menu, 'app_sync');
         // for nested menus, don't add a route, just a label, then use it for the argument to addMenuItem
 
+        $subMenu = $this->addSubmenu($menu, 'sacro');
+        array_map(fn($route) => $this->add($subMenu, $route), ['cmas_index','cmas_import','cmas_images']);
         $subMenu = $this->addSubmenu($menu, 'debug');
         if ('dev' === $this->env) {
             $this->add($subMenu, 'survos_crawler_data');
