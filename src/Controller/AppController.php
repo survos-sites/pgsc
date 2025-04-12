@@ -10,8 +10,6 @@ use App\Repository\ArtistRepository;
 use App\Repository\LocationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use League\Csv\Reader;
-use Survos\GoogleSheetsBundle\Service\GoogleSheetsApiService;
-use Survos\GoogleSheetsBundle\Service\SheetService;
 use Symfony\Bridge\Twig\Attribute\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -25,6 +23,8 @@ use Symfony\UX\Map\Map;
 use Symfony\UX\Map\Marker;
 use Symfony\UX\Map\Point;
 use function Symfony\Component\String\u;
+use App\Service\GoogleDriveService;
+use App\Service\SheetService;
 
 #[Route('/{_locale}')]
 final class AppController extends AbstractController
@@ -34,8 +34,22 @@ final class AppController extends AbstractController
         private ArtistRepository $artistRepository,
         private EntityManagerInterface $entityManager,
         private PropertyAccessorInterface $propertyAccessor,
+        private GoogleDriveService $driveService,
+        
         #[Autowire('%env(GOOGLE_SPREADSHEET_ID)%')] private ?string $googleSpreadsheetId = null,
     ) {
+    }
+
+    #[Route('/extract', name: 'app_download_photos')]
+    public function downloadPhotos(): Response
+    {
+        //return a simple text render
+        $this->driveService->downloadFileFromUrl(
+            'https://drive.google.com/open?id=1mbONoz4OWOl7u4_AbrQgi4prH-UXWrer',
+            'uploads/photos.jpg'
+        );
+
+        return new Response('Photos downloaded successfully');
     }
 
     #[Route('/sync', name: 'app_sync')]
