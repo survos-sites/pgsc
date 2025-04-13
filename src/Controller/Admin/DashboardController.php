@@ -105,9 +105,8 @@ class DashboardController extends AbstractDashboardController
     {
         return Dashboard::new()
             ->renderSidebarMinimized(false)
-//            ->setTitle('Chijal')
             ->setLocales(['es','en'])
-            ->setTitle('<img src="/chijal-landscape.png" />');
+            ->setTitle('<img src="/chijal-landscape.jpg"  alt="Chijal"/>')
             ;
     }
 
@@ -163,8 +162,10 @@ class DashboardController extends AbstractDashboardController
 
         //        yield MenuItem::linkToRoute('login', 'tabler:login', 'app_login');
         yield MenuItem::section('account');
+
         if ($this->security->isGranted('ROLE_USER')) {
-            yield MenuItem::linkToUrl('logout', 'tabler:logout', $this->urlGenerator->generate('app_login'));
+            yield MenuItem::linkToLogout('Logout', 'tabler:logout');
+//            MenuItem::linkToUrl('logout', 'tabler:logout', $this->urlGenerator->generate('app_login'));
             yield MenuItem::linkToUrl('profile', 'tabler:user', $this->urlGenerator->generate('oauth_profile'));
         } else {
             yield MenuItem::linkToUrl('login', 'tabler:login', $this->urlGenerator->generate('app_login'));
@@ -190,6 +191,8 @@ class DashboardController extends AbstractDashboardController
             ;
         }
         yield MenuItem::subMenu(t('by.artist'), 'tabler:user')->setSubItems($filters);
+
+
     }
 
     public function configureAssets(): Assets

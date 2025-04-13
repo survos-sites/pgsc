@@ -6,6 +6,7 @@ use App\Entity\Sacro;
 use App\Repository\SacroRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use League\Csv\Reader;
+use Survos\FlickrBundle\Services\FlickrService;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
@@ -30,6 +31,7 @@ final class AppCmasCommand extends InvokableServiceCommand
         private SacroRepository $sacroRepository,
         private SluggerInterface $asciiSlugger,
         private PropertyAccessorInterface $accessor,
+        private FlickrService $flickrService,
         ?string $name = null
     ) {
         parent::__construct($name);
@@ -83,7 +85,18 @@ final class AppCmasCommand extends InvokableServiceCommand
                 }
             }
             $sacro->mergeNewTranslations();
+            // this should be done in a transition, not during the load
+            if ($flickrId = $sacro->getFlickrId()) {
+                if (!$sacro->getFlickrInfo()) {
+                    $info = $this->flickrService->photos()->getInfo($flickrId);
+                    $sacro
+                        ->setFlickrInfo($info)
+                        ->setFlickrUrl($this->flickrService->flickrThumbnailUrl($info));
+                }
+                if (!$sacro->getFlickrInfo()) {}
+            }
         }
+
         $this->entityManager->flush();
         $io->success($this->getName() . ' success.');
 

@@ -11,3 +11,8 @@ user:
 by:
   artist: 'por artista'
   location: 'por espacio'
+
+form:
+  label: label
+  description: description
+  notes: notes

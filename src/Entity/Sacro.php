@@ -6,6 +6,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use App\Repository\SacroRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\TranslatableInterface;
 use Knp\DoctrineBehaviors\Model\Translatable\TranslatableTrait;
@@ -36,6 +37,12 @@ class Sacro implements \Stringable, TranslatableInterface
 
     #[ORM\Column(nullable: true)]
     private ?array $extra = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $flickrUrl = null;
+
+    #[ORM\Column(type: Types::JSON, nullable: true)]
+    private ?array $flickrInfo = null;
 
     #[Groups('sacro.read')]
     #[SerializedName('code')]
@@ -94,5 +101,29 @@ class Sacro implements \Stringable, TranslatableInterface
             }
         }
         return null;
+    }
+
+    public function getFlickrUrl(): ?string
+    {
+        return $this->flickrUrl;
+    }
+
+    public function setFlickrUrl(?string $flickrUrl): static
+    {
+        $this->flickrUrl = $flickrUrl;
+
+        return $this;
+    }
+
+    public function getFlickrInfo(): ?array
+    {
+        return $this->flickrInfo;
+    }
+
+    public function setFlickrInfo(?array $flickrInfo): static
+    {
+        $this->flickrInfo = $flickrInfo;
+
+        return $this;
     }
 }
