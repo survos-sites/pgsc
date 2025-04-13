@@ -69,6 +69,7 @@
         "symfony/ux-map": "^2.24",
         "symfony/validator": "^7.2.5",
         "symfony/web-link": "^7.2",
+        "symfony/workflow": "^7.2",
         "symfony/yaml": "^7.2.5",
         "symfonycasts/verify-email-bundle": "^1.17.3",
         "tacman/doctrine-behaviors": "dev-sf7.0 as 2.6.3",
