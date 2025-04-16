@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5451401925070f2c06a995d5f8e9471a",
+    "content-hash": "2ab89a8a8486726bbd4be6062add5687",
     "packages": [
         {
             "name": "a2lix/auto-form-bundle",
@@ -294,16 +294,16 @@
         },
         {
             "name": "alexandre-fernandez/json-translation-bundle",
-            "version": "1.0.5",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://gitlab.com/alexandre-fernandez/json-translation-bundle.git",
-                "reference": "68807a36c98686fffab2c4d8f3bcc6c76d657ffc"
+                "reference": "8138b8c7a80d7619a55be85decdc91dad9ffcc6a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://gitlab.com/api/v4/projects/alexandre-fernandez%2Fjson-translation-bundle/repository/archive.zip?sha=68807a36c98686fffab2c4d8f3bcc6c76d657ffc",
-                "reference": "68807a36c98686fffab2c4d8f3bcc6c76d657ffc",
+                "url": "https://gitlab.com/api/v4/projects/alexandre-fernandez%2Fjson-translation-bundle/repository/archive.zip?sha=8138b8c7a80d7619a55be85decdc91dad9ffcc6a",
+                "reference": "8138b8c7a80d7619a55be85decdc91dad9ffcc6a",
                 "shasum": ""
             },
             "require": {
@@ -341,9 +341,9 @@
             ],
             "support": {
                 "issues": "https://gitlab.com/alexandre-fernandez/json-translation-bundle/-/issues",
-                "source": "https://gitlab.com/alexandre-fernandez/json-translation-bundle/-/tree/1.0.5"
+                "source": "https://gitlab.com/alexandre-fernandez/json-translation-bundle/-/tree/1.1.0"
             },
-            "time": "2025-03-12T01:14:14+00:00"
+            "time": "2025-04-13T09:27:37+00:00"
         },
         {
             "name": "alexandre-fernandez/key-value-form-bundle",
@@ -3385,16 +3385,16 @@
         },
         {
             "name": "easycorp/easyadmin-bundle",
-            "version": "v4.24.5",
+            "version": "v4.24.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/EasyCorp/EasyAdminBundle.git",
-                "reference": "dcc64d06fc142f894667439e72837aa3742b5460"
+                "reference": "c5e4496c4c96d67385c48e285c463e0f5a8947e7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/EasyCorp/EasyAdminBundle/zipball/dcc64d06fc142f894667439e72837aa3742b5460",
-                "reference": "dcc64d06fc142f894667439e72837aa3742b5460",
+                "url": "https://api.github.com/repos/EasyCorp/EasyAdminBundle/zipball/c5e4496c4c96d67385c48e285c463e0f5a8947e7",
+                "reference": "c5e4496c4c96d67385c48e285c463e0f5a8947e7",
                 "shasum": ""
             },
             "require": {
@@ -3475,7 +3475,7 @@
             ],
             "support": {
                 "issues": "https://github.com/EasyCorp/EasyAdminBundle/issues",
-                "source": "https://github.com/EasyCorp/EasyAdminBundle/tree/v4.24.5"
+                "source": "https://github.com/EasyCorp/EasyAdminBundle/tree/v4.24.6"
             },
             "funding": [
                 {
@@ -3483,7 +3483,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-03-10T19:31:19+00:00"
+            "time": "2025-04-12T13:53:15+00:00"
         },
         {
             "name": "egulias/email-validator",
@@ -6720,16 +6720,16 @@
         },
         {
             "name": "phpdocumentor/reflection-docblock",
-            "version": "5.6.1",
+            "version": "5.6.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpDocumentor/ReflectionDocBlock.git",
-                "reference": "e5e784149a09bd69d9a5e3b01c5cbd2e2bd653d8"
+                "reference": "92dde6a5919e34835c506ac8c523ef095a95ed62"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/e5e784149a09bd69d9a5e3b01c5cbd2e2bd653d8",
-                "reference": "e5e784149a09bd69d9a5e3b01c5cbd2e2bd653d8",
+                "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/92dde6a5919e34835c506ac8c523ef095a95ed62",
+                "reference": "92dde6a5919e34835c506ac8c523ef095a95ed62",
                 "shasum": ""
             },
             "require": {
@@ -6778,9 +6778,9 @@
             "description": "With this component, a library can provide support for annotations via DocBlocks or otherwise retrieve information that is embedded in a DocBlock.",
             "support": {
                 "issues": "https://github.com/phpDocumentor/ReflectionDocBlock/issues",
-                "source": "https://github.com/phpDocumentor/ReflectionDocBlock/tree/5.6.1"
+                "source": "https://github.com/phpDocumentor/ReflectionDocBlock/tree/5.6.2"
             },
-            "time": "2024-12-07T09:39:29+00:00"
+            "time": "2025-04-13T19:20:35+00:00"
         },
         {
             "name": "phpdocumentor/type-resolver",
@@ -19467,16 +19467,16 @@
         },
         {
             "name": "squizlabs/php_codesniffer",
-            "version": "3.12.1",
+            "version": "3.12.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPCSStandards/PHP_CodeSniffer.git",
-                "reference": "ea16a1f3719783345febd3aab41beb55c8c84bfd"
+                "reference": "6d4cf6032d4b718f168c90a96e36c7d0eaacb2aa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPCSStandards/PHP_CodeSniffer/zipball/ea16a1f3719783345febd3aab41beb55c8c84bfd",
-                "reference": "ea16a1f3719783345febd3aab41beb55c8c84bfd",
+                "url": "https://api.github.com/repos/PHPCSStandards/PHP_CodeSniffer/zipball/6d4cf6032d4b718f168c90a96e36c7d0eaacb2aa",
+                "reference": "6d4cf6032d4b718f168c90a96e36c7d0eaacb2aa",
                 "shasum": ""
             },
             "require": {
@@ -19547,7 +19547,7 @@
                     "type": "thanks_dev"
                 }
             ],
-            "time": "2025-04-04T12:57:55+00:00"
+            "time": "2025-04-13T04:10:18+00:00"
         },
         {
             "name": "staabm/side-effects-detector",
@@ -20764,16 +20764,16 @@
         },
         {
             "name": "zenstruck/foundry",
-            "version": "v2.3.10",
+            "version": "v2.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zenstruck/foundry.git",
-                "reference": "76c2d4ac9d9c08fd80ca2cb216b42abef46ae3f3"
+                "reference": "324b2ac3b36164c09fa64b697da2eff2027d64b7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zenstruck/foundry/zipball/76c2d4ac9d9c08fd80ca2cb216b42abef46ae3f3",
-                "reference": "76c2d4ac9d9c08fd80ca2cb216b42abef46ae3f3",
+                "url": "https://api.github.com/repos/zenstruck/foundry/zipball/324b2ac3b36164c09fa64b697da2eff2027d64b7",
+                "reference": "324b2ac3b36164c09fa64b697da2eff2027d64b7",
                 "shasum": ""
             },
             "require": {
@@ -20783,6 +20783,7 @@
                 "symfony/deprecation-contracts": "^2.2|^3.0",
                 "symfony/framework-bundle": "^6.4|^7.0",
                 "symfony/property-access": "^6.4|^7.0",
+                "symfony/property-info": "^6.4|^7.0",
                 "symfony/var-exporter": "^6.4.9|~7.0.9|^7.1.2",
                 "zenstruck/assert": "^1.4"
             },
@@ -20797,7 +20798,7 @@
                 "doctrine/mongodb-odm": "^2.4",
                 "doctrine/mongodb-odm-bundle": "^4.6|^5.0",
                 "doctrine/orm": "^2.16|^3.0",
-                "phpunit/phpunit": "^9.5.0 || ^10.0 || ^11.0",
+                "phpunit/phpunit": "^9.5.0 || ^10.0 || ^11.0 || ^12.0",
                 "symfony/console": "^6.4|^7.0",
                 "symfony/dotenv": "^6.4|^7.0",
                 "symfony/maker-bundle": "^1.55",
@@ -20857,7 +20858,7 @@
             ],
             "support": {
                 "issues": "https://github.com/zenstruck/foundry/issues",
-                "source": "https://github.com/zenstruck/foundry/tree/v2.3.10"
+                "source": "https://github.com/zenstruck/foundry/tree/v2.4.0"
             },
             "funding": [
                 {
@@ -20865,7 +20866,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-03-31T09:53:36+00:00"
+            "time": "2025-04-14T16:43:18+00:00"
         }
     ],
     "aliases": [

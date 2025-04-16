@@ -6,10 +6,13 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use App\Repository\SacroRepository;
+use App\Workflow\ISacroWorkflow;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\TranslatableInterface;
 use Knp\DoctrineBehaviors\Model\Translatable\TranslatableTrait;
+use Survos\WorkflowBundle\Traits\MarkingInterface;
+use Survos\WorkflowBundle\Traits\MarkingTrait;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Serializer\Attribute\SerializedName;
 
@@ -22,9 +25,10 @@ use Symfony\Component\Serializer\Attribute\SerializedName;
     ]
 )]
 #[Groups('sacro.read')]
-class Sacro implements \Stringable, TranslatableInterface
+class Sacro implements \Stringable, TranslatableInterface, MarkingInterface
 {
     use TranslatableTrait;
+    use MarkingTrait;
 
     public function __construct(
         #[ORM\Id]
@@ -32,6 +36,7 @@ class Sacro implements \Stringable, TranslatableInterface
         private ?string $id = null
     ) {
         $this->id = $id;
+        $this->marking = ISacroWorkflow::PLACE_NEW;
     }
 
 
@@ -43,6 +48,15 @@ class Sacro implements \Stringable, TranslatableInterface
 
     #[ORM\Column(type: Types::JSON, nullable: true)]
     private ?array $flickrInfo = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $saisId = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?array $imageSizes = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $driveUrl = null;
 
     #[Groups('sacro.read')]
     #[SerializedName('code')]
@@ -123,6 +137,42 @@ class Sacro implements \Stringable, TranslatableInterface
     public function setFlickrInfo(?array $flickrInfo): static
     {
         $this->flickrInfo = $flickrInfo;
+
+        return $this;
+    }
+
+    public function getSaisId(): ?string
+    {
+        return $this->saisId;
+    }
+
+    public function setSaisId(?string $saisId): static
+    {
+        $this->saisId = $saisId;
+
+        return $this;
+    }
+
+    public function getImageSizes(): ?array
+    {
+        return $this->imageSizes;
+    }
+
+    public function setImageSizes(?array $imageSizes): static
+    {
+        $this->imageSizes = $imageSizes;
+
+        return $this;
+    }
+
+    public function getDriveUrl(): ?string
+    {
+        return $this->driveUrl;
+    }
+
+    public function setDriveUrl(?string $driveUrl): static
+    {
+        $this->driveUrl = $driveUrl;
 
         return $this;
     }

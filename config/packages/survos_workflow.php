@@ -2,12 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Entity\Catalog;
-use App\Entity\Spreadsheet;
-use App\Workflow\ImageWorkflow;
-use App\Workflow\MetWorkflow;
-use App\Workflow\MusdigObjectWorkflow;
-use App\Workflow\OwnerWorkflow;
+use App\Workflow\SacroWorkflow;
 use Survos\WorkflowBundle\Service\ConfigureFromAttributesService;
 use Symfony\Config\FrameworkConfig;
 
@@ -20,7 +15,8 @@ return static function (FrameworkConfig $framework) {
 
     foreach ([
         // doctrine
-        \App\Workflow\LocationWorkflow::class
+        \App\Workflow\LocationWorkflow::class,
+        SacroWorkflow::class,
              ] as $workflowClass) {
         ConfigureFromAttributesService::configureFramework($workflowClass, $framework, [$workflowClass]);
     }

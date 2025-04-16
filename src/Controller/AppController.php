@@ -23,8 +23,8 @@ use Symfony\UX\Map\Map;
 use Symfony\UX\Map\Marker;
 use Symfony\UX\Map\Point;
 use function Symfony\Component\String\u;
-use App\Service\GoogleDriveService;
 use App\Service\SheetService;
+use Survos\GoogleSheetsBundle\Service\GoogleDriveService;
 
 #[Route('/{_locale}')]
 final class AppController extends AbstractController
@@ -35,7 +35,7 @@ final class AppController extends AbstractController
         private EntityManagerInterface $entityManager,
         private PropertyAccessorInterface $propertyAccessor,
         private GoogleDriveService $driveService,
-        
+
         #[Autowire('%env(GOOGLE_SPREADSHEET_ID)%')] private ?string $googleSpreadsheetId = null,
     ) {
     }
@@ -43,9 +43,11 @@ final class AppController extends AbstractController
     #[Route('/extract', name: 'app_download_photos')]
     public function downloadPhotos(): Response
     {
+        $cmas = 'https://drive.google.com/file/d/19g88GXmI5DejvnhDQNBQ7lUSZb8Ziq32/view?usp=drivesdk';
+        $artist =  'https://drive.google.com/open?id=1BA9tNu-1TpfVD8cx4UfdETobyQ1nzHBi';
         //return a simple text render
         $this->driveService->downloadFileFromUrl(
-            'https://drive.google.com/open?id=1mbONoz4OWOl7u4_AbrQgi4prH-UXWrer',
+           $artist,
             'uploads/photos.jpg'
         );
 

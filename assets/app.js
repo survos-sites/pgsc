@@ -11,3 +11,6 @@ console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
 
 import '@tabler/core';
 import '@tabler/core/dist/css/tabler.min.css';
+
+// import 'd3';
+import 'd3-graphviz';

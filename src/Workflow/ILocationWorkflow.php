@@ -23,9 +23,9 @@ interface ILocationWorkflow
         to: self::PLACE_GEOCODED,
         guard: 'subject.getAddress()',
         metadata: [
-            'color' => 'green',
-            'arrow_color' => 'blue',
-            'description' => "geocode the address if it exists", 'hours' => '8-10PM', 'bg_color' => 'pink']
+//            'color' => 'green',
+//            'arrow_color' => 'blue',
+            'description' => "geocode the address if it exists", 'engine' => 'geoapify', 'bg_color' => 'pink']
     )]
     public const TRANSITION_GEOCODE = 'geocode';
 

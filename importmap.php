@@ -55,4 +55,112 @@ return [
         'version' => '9.2.2',
         'type' => 'css',
     ],
+    'd3-graphviz' => [
+        'version' => '5.6.0',
+    ],
+    'd3-selection' => [
+        'version' => '3.0.0',
+    ],
+    'd3-dispatch' => [
+        'version' => '3.0.1',
+    ],
+    'd3-transition' => [
+        'version' => '3.0.1',
+    ],
+    'd3-timer' => [
+        'version' => '3.0.1',
+    ],
+    'd3-interpolate' => [
+        'version' => '3.0.1',
+    ],
+    'd3-zoom' => [
+        'version' => '3.0.0',
+    ],
+    '@hpcc-js/wasm/graphviz' => [
+        'version' => '2.20.0',
+    ],
+    'd3-format' => [
+        'version' => '3.1.0',
+    ],
+    'd3-path' => [
+        'version' => '3.1.0',
+    ],
+    'd3-color' => [
+        'version' => '3.1.0',
+    ],
+    'd3-ease' => [
+        'version' => '3.0.1',
+    ],
+    'd3-drag' => [
+        'version' => '3.0.0',
+    ],
+    'd3' => [
+        'version' => '7.9.0',
+    ],
+    'd3-array' => [
+        'version' => '3.2.4',
+    ],
+    'd3-axis' => [
+        'version' => '3.0.0',
+    ],
+    'd3-brush' => [
+        'version' => '3.0.0',
+    ],
+    'd3-chord' => [
+        'version' => '3.0.1',
+    ],
+    'd3-contour' => [
+        'version' => '4.0.2',
+    ],
+    'd3-delaunay' => [
+        'version' => '6.0.4',
+    ],
+    'd3-dsv' => [
+        'version' => '3.0.1',
+    ],
+    'd3-fetch' => [
+        'version' => '3.0.1',
+    ],
+    'd3-force' => [
+        'version' => '3.0.0',
+    ],
+    'd3-geo' => [
+        'version' => '3.1.1',
+    ],
+    'd3-hierarchy' => [
+        'version' => '3.1.2',
+    ],
+    'd3-polygon' => [
+        'version' => '3.0.1',
+    ],
+    'd3-quadtree' => [
+        'version' => '3.0.1',
+    ],
+    'd3-random' => [
+        'version' => '3.0.1',
+    ],
+    'd3-scale' => [
+        'version' => '4.0.2',
+    ],
+    'd3-scale-chromatic' => [
+        'version' => '3.1.0',
+    ],
+    'd3-shape' => [
+        'version' => '3.2.0',
+    ],
+    'd3-time' => [
+        'version' => '3.1.0',
+    ],
+    'd3-time-format' => [
+        'version' => '4.1.0',
+    ],
+    'internmap' => [
+        'version' => '2.0.3',
+    ],
+    'delaunator' => [
+        'version' => '5.0.0',
+    ],
+    'robust-predicates' => [
+        'version' => '3.0.0',
+    ],
 ];

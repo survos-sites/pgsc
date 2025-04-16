@@ -65,6 +65,7 @@ final class AppCmasCommand extends InvokableServiceCommand
                 $this->entityManager->flush();
             }
             $driveUrl = $extra['vinculo'];
+            $sacro->setDriveUrl($driveUrl);
 
             dump("@todo: get a public link to $driveUrl or download it");
             // https://www.googleapis.com/drive/v3/files/FILE_ID?alt=media

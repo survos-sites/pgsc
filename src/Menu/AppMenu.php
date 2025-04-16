@@ -59,6 +59,7 @@ final class AppMenu implements KnpMenuHelperInterface
         array_map(fn($route) => $this->add($subMenu, $route), ['cmas_index','cmas_import','cmas_images']);
         $subMenu = $this->addSubmenu($menu, 'debug');
         if ('dev' === $this->env) {
+            $this->add($subMenu, 'survos_workflows');
             $this->add($subMenu, 'survos_crawler_data');
         }
 
