@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20250411140931 extends AbstractMigration
+final class Version20250418114420 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -36,16 +36,10 @@ final class Version20250411140931 extends AbstractMigration
             CREATE UNIQUE INDEX artist_translation_unique_translation ON artist_translation (translatable_id, locale)
         SQL);
         $this->addSql(<<<'SQL'
-            CREATE TABLE easy_media__folder (id SERIAL NOT NULL, parent_id INT DEFAULT NULL, name VARCHAR(255) NOT NULL, slug VARCHAR(100) NOT NULL, PRIMARY KEY(id))
+            CREATE TABLE easy_media__folder (id SERIAL NOT NULL, name VARCHAR(255) NOT NULL, slug VARCHAR(100) NOT NULL, PRIMARY KEY(id))
         SQL);
         $this->addSql(<<<'SQL'
-            CREATE INDEX IDX_1C446171727ACA70 ON easy_media__folder (parent_id)
-        SQL);
-        $this->addSql(<<<'SQL'
-            CREATE TABLE easy_media__media (id SERIAL NOT NULL, folder_id INT DEFAULT NULL, name VARCHAR(255) NOT NULL, slug VARCHAR(100) NOT NULL, mime VARCHAR(255) DEFAULT NULL, size INT DEFAULT NULL, last_modified INT DEFAULT NULL, metas JSON NOT NULL, PRIMARY KEY(id))
-        SQL);
-        $this->addSql(<<<'SQL'
-            CREATE INDEX IDX_83D7599C162CB942 ON easy_media__media (folder_id)
+            CREATE TABLE easy_media__media (id SERIAL NOT NULL, name VARCHAR(255) NOT NULL, slug VARCHAR(100) NOT NULL, mime VARCHAR(255) DEFAULT NULL, size INT DEFAULT NULL, last_modified INT DEFAULT NULL, metas JSON NOT NULL, PRIMARY KEY(id))
         SQL);
         $this->addSql(<<<'SQL'
             CREATE TABLE location (id SERIAL NOT NULL, name VARCHAR(255) NOT NULL, address VARCHAR(255) DEFAULT NULL, code VARCHAR(255) NOT NULL, type VARCHAR(24) DEFAULT NULL, obra_count INT DEFAULT NULL, lat DOUBLE PRECISION DEFAULT NULL, lng DOUBLE PRECISION DEFAULT NULL, marking VARCHAR(32) DEFAULT NULL, PRIMARY KEY(id))
@@ -75,10 +69,10 @@ final class Version20250411140931 extends AbstractMigration
             COMMENT ON COLUMN obra_image.created_at IS '(DC2Type:datetime_immutable)'
         SQL);
         $this->addSql(<<<'SQL'
-            CREATE TABLE sacro (id VARCHAR(255) NOT NULL, extra JSON DEFAULT NULL, PRIMARY KEY(id))
+            CREATE TABLE sacro (id VARCHAR(255) NOT NULL, extra JSON DEFAULT NULL, flickr_url VARCHAR(255) DEFAULT NULL, flickr_info JSON DEFAULT NULL, sais_id VARCHAR(255) DEFAULT NULL, image_sizes JSON DEFAULT NULL, drive_url VARCHAR(255) DEFAULT NULL, marking VARCHAR(32) DEFAULT NULL, PRIMARY KEY(id))
         SQL);
         $this->addSql(<<<'SQL'
-            CREATE TABLE sacro_translation (id SERIAL NOT NULL, translatable_id VARCHAR(255) DEFAULT NULL, notes VARCHAR(255) DEFAULT NULL, description TEXT DEFAULT NULL, locale VARCHAR(5) NOT NULL, PRIMARY KEY(id))
+            CREATE TABLE sacro_translation (id SERIAL NOT NULL, translatable_id VARCHAR(255) DEFAULT NULL, notes VARCHAR(255) DEFAULT NULL, description TEXT DEFAULT NULL, label VARCHAR(255) DEFAULT NULL, locale VARCHAR(5) NOT NULL, PRIMARY KEY(id))
         SQL);
         $this->addSql(<<<'SQL'
             CREATE INDEX IDX_89281EBB2C2AC5D3 ON sacro_translation (translatable_id)
@@ -131,12 +125,6 @@ final class Version20250411140931 extends AbstractMigration
             ALTER TABLE artist_translation ADD CONSTRAINT FK_9D53F3282C2AC5D3 FOREIGN KEY (translatable_id) REFERENCES artist (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE
         SQL);
         $this->addSql(<<<'SQL'
-            ALTER TABLE easy_media__folder ADD CONSTRAINT FK_1C446171727ACA70 FOREIGN KEY (parent_id) REFERENCES easy_media__folder (id) ON DELETE SET NULL NOT DEFERRABLE INITIALLY IMMEDIATE
-        SQL);
-        $this->addSql(<<<'SQL'
-            ALTER TABLE easy_media__media ADD CONSTRAINT FK_83D7599C162CB942 FOREIGN KEY (folder_id) REFERENCES easy_media__folder (id) NOT DEFERRABLE INITIALLY IMMEDIATE
-        SQL);
-        $this->addSql(<<<'SQL'
             ALTER TABLE obra ADD CONSTRAINT FK_2EEE6DBD64D218E FOREIGN KEY (location_id) REFERENCES location (id) NOT DEFERRABLE INITIALLY IMMEDIATE
         SQL);
         $this->addSql(<<<'SQL'
@@ -158,12 +146,6 @@ final class Version20250411140931 extends AbstractMigration
         SQL);
         $this->addSql(<<<'SQL'
             ALTER TABLE artist_translation DROP CONSTRAINT FK_9D53F3282C2AC5D3
-        SQL);
-        $this->addSql(<<<'SQL'
-            ALTER TABLE easy_media__folder DROP CONSTRAINT FK_1C446171727ACA70
-        SQL);
-        $this->addSql(<<<'SQL'
-            ALTER TABLE easy_media__media DROP CONSTRAINT FK_83D7599C162CB942
         SQL);
         $this->addSql(<<<'SQL'
             ALTER TABLE obra DROP CONSTRAINT FK_2EEE6DBD64D218E
