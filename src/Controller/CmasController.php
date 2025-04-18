@@ -48,12 +48,14 @@ final class CmasController extends AbstractController
     {
         foreach ($this->sacroRepository->findBy([], [], null) as $sacro) {
             $flickr = $sacro->getExtra()['flickr'];
-            $result = $saisClientService->dispatchProcess(
-                new ProcessPayload('sacro', [
-                    $sacro->getDriveUrl()
-                ])
-            );
-            $sacro->setImageSizes($result[0]['resized']??[]);
+            if ($sacro->getDriveUrl()) {
+                $result = $saisClientService->dispatchProcess(
+                    new ProcessPayload('sacro', [
+                        $sacro->getDriveUrl()
+                    ])
+                );
+                $sacro->setImageSizes($result[0]['resized']??[]);
+            }
         }
         $this->entityManager->flush();
         return $this->redirectToRoute('cmas_index');
