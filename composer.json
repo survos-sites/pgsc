@@ -13,7 +13,7 @@
         "ext-imagick": "*",
         "ext-intl": "*",
         "agence-adeliom/easy-media-bundle": "3.x-dev",
-        "alexandre-fernandez/json-translation-bundle": "^1.1.0",
+        "alexandre-fernandez/json-translation-bundle": "^1.1.2",
         "api-platform/doctrine-orm": "^4.1.7",
         "api-platform/symfony": "^4.1.7",
         "doctrine/dbal": "^3.9.4",
@@ -143,7 +143,7 @@
         "jzonta/faker-restaurant": "^2.0.1",
         "nunomaduro/phpinsights": "dev-master",
         "pelmered/fake-car": "^2.1",
-        "phpstan/phpstan": "^2.1.11",
+        "phpstan/phpstan": "^2.1.12",
         "phpunit/phpunit": "^12.1.2",
         "survos/crawler-bundle": ">=1.5.529",
         "survos/doc-bundle": "^1.5.529",
@@ -157,7 +157,7 @@
         "symfony/stopwatch": "^7.2.4",
         "symfony/web-profiler-bundle": "^7.2.4",
         "zenstruck/browser": "^2.x-dev",
-        "zenstruck/foundry": "^2.4.0"
+        "zenstruck/foundry": "^2.4.2"
     },
     "repositories": {
         "behaviors": {
