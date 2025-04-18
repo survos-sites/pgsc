@@ -24,7 +24,6 @@ use Symfony\Component\Serializer\Attribute\SerializedName;
         new GetCollection(),
     ]
 )]
-#[Groups('sacro.read')]
 class Sacro implements \Stringable, TranslatableInterface, MarkingInterface
 {
     use TranslatableTrait;
@@ -53,6 +52,7 @@ class Sacro implements \Stringable, TranslatableInterface, MarkingInterface
     private ?string $saisId = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups('sacro.read')]
     private ?array $imageSizes = null;
 
     #[ORM\Column(length: 255, nullable: true)]

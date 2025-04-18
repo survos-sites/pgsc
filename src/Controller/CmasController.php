@@ -9,6 +9,8 @@ use Google\Service\ServiceUsage\GoogleApiService;
 use League\Csv\Reader;
 use Survos\GoogleSheetsBundle\Service\GoogleSheetsApiService;
 use Survos\GoogleSheetsBundle\Service\SheetService;
+use Survos\SaisBundle\Model\ProcessPayload;
+use Survos\SaisBundle\Service\SaisClientService;
 use Symfony\Bridge\Twig\Attribute\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -42,13 +44,18 @@ final class CmasController extends AbstractController
 
     #[Route('/cmas-images', name: 'cmas_images', methods: ['GET'])]
     #[Template('cmas/index.html.twig')]
-    public function images(): Response|array
+    public function images(SaisClientService $saisClientService): Response|array
     {
-        foreach ($this->sacroRepository->findAll() as $sacro) {
+        foreach ($this->sacroRepository->findBy([], [], null) as $sacro) {
             $flickr = $sacro->getExtra()['flickr'];
-
-            dd($sacro->getExtra());
+            $result = $saisClientService->dispatchProcess(
+                new ProcessPayload('sacro', [
+                    $sacro->getDriveUrl()
+                ])
+            );
+            $sacro->setImageSizes($result[0]['resized']??[]);
         }
+        $this->entityManager->flush();
         return $this->redirectToRoute('cmas_index');
     }
 

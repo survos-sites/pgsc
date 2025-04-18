@@ -12,7 +12,11 @@
 
     {% for sacro in sacros %}
         <h3>{{ sacro.label }}</h3>
-        <blockquote>
+            <blockquote>
+                    {% set thumb = sacro.imageSizes.small|default(false) %}
+            {% if thumb %}
+                    <img src="{{ thumb }}" alt="{{ thumb }}" title="{{ thumb }}"/>
+                {% endif %}
             {{ sacro.description }}
         </blockquote>
     {% endfor %}

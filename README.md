@@ -30,6 +30,8 @@ Admin from fixtures:
 
 bin/console workflow:iterate App\\Entity\\Location --marking=new --transition=geocode
 
+
+
 ## Database
 
 ![Database Diagram](./assets/images/db.svg)
