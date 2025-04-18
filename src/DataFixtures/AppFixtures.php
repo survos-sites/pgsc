@@ -14,10 +14,18 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use League\Csv\Reader;
 
+use Survos\SaisBundle\Model\ProcessPayload;
+use Survos\SaisBundle\Service\SaisClientService;
 use function Symfony\Component\String\u;
 
 class AppFixtures extends Fixture
 {
+    public function __construct(
+        private SaisClientService $saisClientService,
+    )
+    {
+    }
+
     public function load(ObjectManager $manager): void
     {
 
@@ -51,25 +59,48 @@ class AppFixtures extends Fixture
         //        ArtistFactory::createMany(2);00
         //        LocationFactory::createMany(2);
         $artists = [];
-        if (0)
         foreach ($this->artists() as $artistData) {
-            $initials = $artistData['code'];
-            $email = $initials.'@test.com';
+//            $initials = $artistData['code'];
+//            $email = $initials.'@test.com';
+            $email = $artistData['Email Address'];
+            if (!$email) {
+                dd($artistData);
+                continue;
+            }
+            dump($artistData);
+            $code = u($email)->before('@')->toString();
             //            dd($artistData);
+
             // OR create user with role ARTIST?
-            $artist = ArtistFactory::createOne(['name' => $artistData['nombre'],
-                'code' => $initials,
+            $artist = ArtistFactory::createOne([
+                'name' => $artistData['name'],
+                'code' => $code,
+                'bio' => $artistData['bio'],
+                'slogan' => $artistData['slogan'],
+                'phone' => $artistData['phone'],
+                'driveUrl' => $artistData['foto'],
                 'email' => $email,
             ]);
+            if ($artist->getDriveUrl()) {
+                $response = $this->saisClientService->dispatchProcess(new ProcessPayload(
+                    'chijal',
+                    [
+                        $artist->getDriveUrl(),
+                    ]
+                ));
+                $artist->setImages($response[0]['resized']??null);
+
+            }
             UserFactory::createOne([
-                'code' => $initials,
+                'code' => $code,
                 'email' => $email,
-                'cel' => $artistData['whatsapp'],
+                'cel' => $artistData['phone'],
                 'plainPassword' => 'test',
                 'roles' => ['ROLE_USER', 'ROLE_ARTIST'],
             ]);
             $artists[] = $artist;
         }
+
         foreach ($this->locations() as $row) {
             if ($row['status'] === 'inactivo') {
                 continue;
@@ -134,8 +165,21 @@ class AppFixtures extends Fixture
 
     private function artists(): iterable
     {
+
+        $csv = Reader::createFromPath('data/artist-responses.csv', 'r');
+        $csv->setHeaderOffset(0);
+        return $csv->getRecords();
+        foreach ($csv->getRecords() as $record) {
+            $email = $record['Email Address'];
+            $responses[$email] = $record;
+        }
+
         $csv = Reader::createFromPath('data/artists.csv', 'r');
         $csv->setHeaderOffset(0);
+        foreach ($csv->getRecords() as $record) {
+            dd($record);
+
+        }
 
         return $csv->getRecords();
     }

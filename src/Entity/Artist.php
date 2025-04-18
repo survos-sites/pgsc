@@ -65,7 +65,7 @@ class Artist implements \Stringable, RouteParametersInterface, TranslatableInter
     #[Groups(['artist.read'])]
     private ?string $email = null;
 
-    #[ORM\Column(length: 16, unique: true)]
+    #[ORM\Column(length: 32, unique: true)]
     #[Groups(['artist.read'])]
     private ?string $code = null;
 
@@ -116,27 +116,39 @@ class Artist implements \Stringable, RouteParametersInterface, TranslatableInter
     private ?string $pronouns = null;
 
     #[ORM\Column(length: 24, nullable: true)]
+    #[Groups(['artist.read'])]
     private ?string $phone = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $contactMethod = null;
 
     #[ORM\Column(length: 28, nullable: true)]
+    #[Groups(['artist.read'])]
     private ?string $studio = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['artist.read'])]
     private ?string $headshot = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['artist.read'])]
     private ?string $types = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['artist.read'])]
     private ?string $slogan = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $driveUrl = null;
+
+    #[ORM\Column(nullable: true)]
+    #[Groups(['artist.read'])]
+    private ?array $images = null;
 
     public function __construct()
     {
         $this->obras = new ArrayCollection();
-        $this->bio = new JsonTranslation();
+//        $this->bio = new JsonTranslation();
     }
 
     public function getId(): ?int
@@ -210,12 +222,12 @@ class Artist implements \Stringable, RouteParametersInterface, TranslatableInter
         return $this->translate()->getBio();
     }
 
-    public function setBio(?string $bio): static
+    public function setBio(string $text, ?string $locale=null): static
     {
-        $this->translate()->setBio($bio);
-
+        $this->translate($locale)->setBio($text);
         return $this;
     }
+
 
     /**
      * @return Collection<int, Obra>
@@ -433,4 +445,29 @@ class Artist implements \Stringable, RouteParametersInterface, TranslatableInter
 
         return $this;
     }
+
+    public function getDriveUrl(): ?string
+    {
+        return $this->driveUrl;
+    }
+
+    public function setDriveUrl(?string $driveUrl): static
+    {
+        $this->driveUrl = $driveUrl;
+
+        return $this;
+    }
+
+    public function getImages(): ?array
+    {
+        return $this->images;
+    }
+
+    public function setImages(?array $images): static
+    {
+        $this->images = $images;
+
+        return $this;
+    }
+
 }
