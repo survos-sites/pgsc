@@ -60,6 +60,9 @@ final class AppController extends AbstractController
         #[MapQueryParameter] bool $refresh = false,
     ): Response {
 
+        //return a temp response
+        return new Response('Syncing...');
+
         $spreadsheet = $sheetService->getGoogleSpreadSheet($this->googleSpreadsheetId);
 //        $accessor = new PropertyAccessor();
         $data = $sheetService->getData(
@@ -76,7 +79,7 @@ final class AppController extends AbstractController
                 }
                 $key = match ($entityClass) {
                     Artist::class => 'email',
-                    Location::class => 'email' // ??
+                    Location::class => 'code' // ??
                 };
                 $reader = Reader::createFromString($csv);
                 $reader->setHeaderOffset(0);
@@ -110,7 +113,7 @@ final class AppController extends AbstractController
                         }
                     }
                 } catch (\Exception $e) {
-                    dd($csv, $e);
+                    //dd($csv, $e);
                 }
                 $this->entityManager->flush();
             }

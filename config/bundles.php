@@ -50,4 +50,5 @@ return [
     Survos\FlickrBundle\SurvosFlickrBundle::class => ['all' => true],
     Survos\SaisBundle\SurvosSaisBundle::class => ['all' => true],
     Survos\CodeBundle\SurvosCodeBundle::class => ['dev' => true, 'test' => true],
+    Survos\SimpleDatatables\SurvosSimpleDatatablesBundle::class => ['all' => true],
 ];

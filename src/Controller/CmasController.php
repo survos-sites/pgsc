@@ -68,7 +68,10 @@ final class CmasController extends AbstractController
         #[Autowire('%kernel.project_dir%')] string $projectDir
     ): Response|array {
 
-        dd("bin/console app:cmas OR use this to test import with API?");
+        //return temp response
+        return new Response('Importing...');
+
+        //dd("bin/console app:cmas OR use this to test import with API?");
 
         // using the api instead of downloading.
         //        return
