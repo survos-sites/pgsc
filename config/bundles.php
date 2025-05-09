@@ -51,4 +51,5 @@ return [
     Survos\SaisBundle\SurvosSaisBundle::class => ['all' => true],
     Survos\CodeBundle\SurvosCodeBundle::class => ['dev' => true, 'test' => true],
     Survos\SimpleDatatables\SurvosSimpleDatatablesBundle::class => ['all' => true],
+    Ayaou\CommandLoggerBundle\CommandLoggerBundle::class => ['all' => true],
 ];

@@ -29,7 +29,7 @@ use Symfony\UX\Map\Point;
 use function Symfony\Component\Translation\t;
 
 #[AdminDashboard(routePath: '/admin', routeName: 'admin')]
-#[IsGranted('ROLE_USER')]
+//#[IsGranted('ROLE_USER')]
 class DashboardController extends AbstractDashboardController
 {
     public function __construct(

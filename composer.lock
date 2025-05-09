@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dcf39c65a67256069cbc98fc16caf5cc",
+    "content-hash": "be26eb916b6e85cf55e4e1076d257cca",
     "packages": [
         {
             "name": "a2lix/auto-form-bundle",
@@ -1504,6 +1504,70 @@
                 "source": "https://github.com/api-platform/validator/tree/v4.1.8"
             },
             "time": "2025-04-18T08:39:51+00:00"
+        },
+        {
+            "name": "ayaou/command-logger-bundle",
+            "version": "dev-fix/allow-php73-new-command-style",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ayaou/command-logger-bundle.git",
+                "reference": "1c0f02b0e2fdcf579dc59699514ea564a41bee26"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ayaou/command-logger-bundle/zipball/1c0f02b0e2fdcf579dc59699514ea564a41bee26",
+                "reference": "1c0f02b0e2fdcf579dc59699514ea564a41bee26",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/doctrine-bundle": "^2.7",
+                "doctrine/orm": "^2|^3",
+                "php": ">=8.1",
+                "symfony/console": "^6.4|^7.0",
+                "symfony/dependency-injection": "^6.4|^7.0",
+                "symfony/event-dispatcher": "^6.4|^7.0",
+                "symfony/uid": "^6.4|^7.0",
+                "symfony/yaml": "^6.4|^7.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "*",
+                "phpstan/phpstan-symfony": "*",
+                "phpunit/phpunit": "^10",
+                "rector/rector": "*",
+                "roave/security-advisories": "dev-latest",
+                "symfony/framework-bundle": "^6.4|^7.0",
+                "symfony/phpunit-bridge": "^6.4|^7.0"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-4": {
+                    "Ayaou\\CommandLoggerBundle\\": "src/",
+                    "Ayaou\\CommandLoggerBundle\\Tests\\": "tests/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mohamed AYAOU",
+                    "email": "ayaou.mohammed@gmail.com"
+                }
+            ],
+            "description": "This bundle logs all commands executed with console, along with their execution time and errors if applied.",
+            "homepage": "https://github.com/ayaou/command-logger-bundle",
+            "keywords": [
+                "command",
+                "log",
+                "logger",
+                "symfony"
+            ],
+            "support": {
+                "issues": "https://github.com/ayaou/command-logger-bundle/issues",
+                "source": "https://github.com/ayaou/command-logger-bundle/tree/fix/allow-php73-new-command-style"
+            },
+            "time": "2025-05-09T15:12:39+00:00"
         },
         {
             "name": "bacon/bacon-qr-code",
@@ -20966,6 +21030,7 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "agence-adeliom/easy-media-bundle": 20,
+        "ayaou/command-logger-bundle": 20,
         "nunomaduro/phpinsights": 20,
         "survos/code-bundle": 20,
         "survos/google-sheets-bundle": 20,

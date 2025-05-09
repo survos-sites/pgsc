@@ -29,11 +29,6 @@ class AppFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
-        SacroFactory::createOne([
-            'id' => 1
-        ]);
-        return;
-
         // admins
         UserFactory::createOne([
             'code' => 'superadmin',
