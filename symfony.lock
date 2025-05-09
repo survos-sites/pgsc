@@ -272,6 +272,9 @@
     "survos/bootstrap-bundle": {
         "version": "1.5.529"
     },
+    "survos/code-bundle": {
+        "version": "dev-main"
+    },
     "survos/command-bundle": {
         "version": "1.5",
         "recipe": {
@@ -315,9 +318,6 @@
     },
     "survos/google-sheets-bundle": {
         "version": "1.5.529"
-    },
-    "survos/maker-bundle": {
-        "version": "1.5.503"
     },
     "survos/sais-bundle": {
         "version": "1.5.529"

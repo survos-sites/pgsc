@@ -7,40 +7,34 @@ use App\Repository\SacroRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use League\Csv\Reader;
 use Survos\FlickrBundle\Services\FlickrService;
+use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Attribute\Option;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
-use Zenstruck\Console\Attribute\Argument;
-use Zenstruck\Console\Attribute\Option;
-use Zenstruck\Console\InvokableServiceCommand;
-use Zenstruck\Console\IO;
-use Zenstruck\Console\RunsCommands;
-use Zenstruck\Console\RunsProcesses;
 
 use function Symfony\Component\String\u;
 
 #[AsCommand('app:cmas', 'Import CMAS data')]
-final class AppCmasCommand extends InvokableServiceCommand
+final class AppCmasCommand
 {
-    use RunsCommands;
-    use RunsProcesses;
 
     public function __construct(
+        #[Autowire('%kernel.project_dir%')] string $projectDir,
         private EntityManagerInterface $entityManager,
         private SacroRepository $sacroRepository,
         private SluggerInterface $asciiSlugger,
         private PropertyAccessorInterface $accessor,
         private FlickrService $flickrService,
-        ?string $name = null
     ) {
-        parent::__construct($name);
     }
 
     public function __invoke(
-        IO $io,
-        #[Autowire('%kernel.project_dir%')] string $projectDir,
-        #[Argument(description: 'path file downloaded csv')]
+        SymfonyStyle $io,
+        #[Argument('', 'path file downloaded csv')]
         string $path = 'data/cmas.csv',
         #[Option(description: 'Process Google Drive images')]
         bool $images = false,
@@ -67,9 +61,6 @@ final class AppCmasCommand extends InvokableServiceCommand
             $driveUrl = $extra['vinculo'];
             $sacro->setDriveUrl($driveUrl);
 
-            dump("@todo: get a public link to $driveUrl or download it");
-            // https://www.googleapis.com/drive/v3/files/FILE_ID?alt=media
-
             $sacro->setExtra($extra);
             foreach (['es', 'en'] as $locale) {
                 foreach (['label', 'description', 'notes'] as $field) {
@@ -94,13 +85,12 @@ final class AppCmasCommand extends InvokableServiceCommand
                         ->setFlickrInfo($info)
                         ->setFlickrUrl($this->flickrService->flickrThumbnailUrl($info));
                 }
-                if (!$sacro->getFlickrInfo()) {}
             }
         }
 
         $this->entityManager->flush();
-        $io->success($this->getName() . ' success.');
+        $io->success(self::class . ' success: ' . $this->sacroRepository->count());
 
-        return self::SUCCESS;
+        return Command::SUCCESS;
     }
 }

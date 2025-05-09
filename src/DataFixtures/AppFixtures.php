@@ -9,6 +9,7 @@ use App\Enum\LocationType;
 use App\Factory\ArtistFactory;
 use App\Factory\LocationFactory;
 use App\Factory\ObraFactory;
+use App\Factory\SacroFactory;
 use App\Factory\UserFactory;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -28,6 +29,10 @@ class AppFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
+        SacroFactory::createOne([
+            'id' => 1
+        ]);
+        return;
 
         // admins
         UserFactory::createOne([

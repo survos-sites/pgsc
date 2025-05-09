@@ -23,7 +23,7 @@ use Symfony\UX\Map\Map;
 use Symfony\UX\Map\Marker;
 use Symfony\UX\Map\Point;
 use function Symfony\Component\String\u;
-use App\Service\SheetService;
+use Survos\GoogleSheetsBundle\Service\SheetService;
 use Survos\GoogleSheetsBundle\Service\GoogleDriveService;
 
 #[Route('/{_locale}')]
