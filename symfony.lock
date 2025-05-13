@@ -325,6 +325,9 @@
     "survos/sais-bundle": {
         "version": "1.5.529"
     },
+    "survos/simple-datatables-bundle": {
+        "version": "1.5.529"
+    },
     "survos/translatable-field-bundle": {
         "version": "dev-main"
     },
