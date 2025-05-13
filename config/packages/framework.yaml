@@ -4,6 +4,8 @@ framework:
 
     # Note that the session will be started ONLY if you read or write from it.
     session: true
+    property_info:
+      with_constructor_extractor: true
 
 #    set_locale_from_accept_language: true
 #    set_content_language_from_locale: true

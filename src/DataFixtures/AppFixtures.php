@@ -58,63 +58,7 @@ class AppFixtures extends Fixture
         // $manager->persist($product);
         //        ArtistFactory::createMany(2);00
         //        LocationFactory::createMany(2);
-        $artists = [];
-        foreach ($this->artists() as $artistData) {
-//            $initials = $artistData['code'];
-//            $email = $initials.'@test.com';
-            $email = $artistData['Email Address'];
-            if (!$email) {
-                dd($artistData);
-                continue;
-            }
-            dump($artistData);
-            $code = u($email)->before('@')->toString();
-            //            dd($artistData);
 
-            // OR create user with role ARTIST?
-            $artist = ArtistFactory::createOne([
-                'name' => $artistData['name'],
-                'code' => $code,
-                'bio' => $artistData['bio'],
-                'slogan' => $artistData['slogan'],
-                'phone' => $artistData['phone'],
-                'driveUrl' => $artistData['foto'],
-                'email' => $email,
-            ]);
-            if ($artist->getDriveUrl()) {
-                $response = $this->saisClientService->dispatchProcess(new ProcessPayload(
-                    'chijal',
-                    [
-                        $artist->getDriveUrl(),
-                    ]
-                ));
-                $artist->setImages($response[0]['resized']??null);
-
-            }
-            UserFactory::createOne([
-                'code' => $code,
-                'email' => $email,
-                'cel' => $artistData['phone'],
-                'plainPassword' => 'test',
-                'roles' => ['ROLE_USER', 'ROLE_ARTIST'],
-            ]);
-            $artists[] = $artist;
-        }
-
-        foreach ($this->locations() as $row) {
-            if ($row['status'] === 'inactivo') {
-                continue;
-            }
-            LocationFactory::createOne([
-                'name' => ($name = trim($row['nombre'])),
-                'address' => $row['direcciones'],
-                'type' => LocationType::from(trim(strtolower($row['tipo']))) ?? null,
-                'code' => $row['codigo'] ?: $this->initials($name),
-//                'lat' => $row['lat'] ? (float) $row['lat'] : null,
-//                'lng' => $row['lon'] ? (float) $row['lon'] : null,
-            ]);
-        }
-        $manager->flush();
         return;
 
         ObraFactory::createMany(
@@ -154,50 +98,7 @@ class AppFixtures extends Fixture
         //            ])
         //            ->create();
 
-        foreach ($manager->getRepository(Location::class)->findAll() as $location) {
-            $location->setObraCount($location->getObras()->count());
-        }
-        foreach ($manager->getRepository(Artist::class)->findAll() as $location) {
-            $location->setObraCount($location->getObras()->count());
-        }
-        $manager->flush();
     }
 
-    private function artists(): iterable
-    {
 
-        $csv = Reader::createFromPath('data/artist-responses.csv', 'r');
-        $csv->setHeaderOffset(0);
-        return $csv->getRecords();
-        foreach ($csv->getRecords() as $record) {
-            $email = $record['Email Address'];
-            $responses[$email] = $record;
-        }
-
-        $csv = Reader::createFromPath('data/artists.csv', 'r');
-        $csv->setHeaderOffset(0);
-        foreach ($csv->getRecords() as $record) {
-            dd($record);
-
-        }
-
-        return $csv->getRecords();
-    }
-
-    private function locations(): iterable
-    {
-        $csv = Reader::createFromPath('data/locations.csv', 'r');
-        $csv->setHeaderOffset(0);
-
-        return $csv->getRecords();
-    }
-
-    private function initials(string $name): string
-    {
-        $name = u($name)->ascii()->toString();
-
-        return strtolower(implode('', array_map(function ($name) {
-            return preg_replace('/(?<=\w)./', '', $name);
-        }, explode(' ', $name))));
-    }
 }

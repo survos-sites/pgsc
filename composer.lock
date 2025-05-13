@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "615c1752c07a68d854193ae25b449883",
+    "content-hash": "4ef8eca25f740164c94e348d33bd627f",
     "packages": [
         {
             "name": "a2lix/auto-form-bundle",
@@ -3505,22 +3505,26 @@
         },
         {
             "name": "genkgo/favicon",
-            "version": "0.3.6",
+            "version": "0.3.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/genkgo/favicon.git",
-                "reference": "360d690887260ad5be91c244ad2ef62d4f570eba"
+                "reference": "7f5275c4961443c4ed1742b55f08dac77950a2c6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/genkgo/favicon/zipball/360d690887260ad5be91c244ad2ef62d4f570eba",
-                "reference": "360d690887260ad5be91c244ad2ef62d4f570eba",
+                "url": "https://api.github.com/repos/genkgo/favicon/zipball/7f5275c4961443c4ed1742b55f08dac77950a2c6",
+                "reference": "7f5275c4961443c4ed1742b55f08dac77950a2c6",
                 "shasum": ""
             },
             "require": {
                 "ext-dom": "*",
                 "ext-imagick": "*",
                 "php": "~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.0",
+                "phpstan/phpstan": "^2.0"
             },
             "bin": [
                 "bin/favicon-generator"
@@ -3540,9 +3544,9 @@
             "description": "Generate browser favicons",
             "support": {
                 "issues": "https://github.com/genkgo/favicon/issues",
-                "source": "https://github.com/genkgo/favicon/tree/0.3.6"
+                "source": "https://github.com/genkgo/favicon/tree/0.3.7"
             },
-            "time": "2025-03-28T21:11:33+00:00"
+            "time": "2025-05-13T15:17:33+00:00"
         },
         {
             "name": "google/apiclient",
@@ -6686,12 +6690,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/survos/SurvosGoogleSheetsBundle.git",
-                "reference": "3e13601938caee90f20d5122cfee8f8c4183cf06"
+                "reference": "f2aaa58094ae7db983e2a01554706edd9efc5d52"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/survos/SurvosGoogleSheetsBundle/zipball/3e13601938caee90f20d5122cfee8f8c4183cf06",
-                "reference": "3e13601938caee90f20d5122cfee8f8c4183cf06",
+                "url": "https://api.github.com/repos/survos/SurvosGoogleSheetsBundle/zipball/f2aaa58094ae7db983e2a01554706edd9efc5d52",
+                "reference": "f2aaa58094ae7db983e2a01554706edd9efc5d52",
                 "shasum": ""
             },
             "require": {
@@ -6748,7 +6752,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-04-14T22:57:07+00:00"
+            "time": "2025-05-13T12:42:44+00:00"
         },
         {
             "name": "survos/installer",
@@ -9768,6 +9772,74 @@
                 }
             ],
             "time": "2025-05-01T12:12:53+00:00"
+        },
+        {
+            "name": "symfony/object-mapper",
+            "version": "v7.3.0-BETA2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/object-mapper.git",
+                "reference": "e3f2ad289576d28ada6ba9199822ffea97ed811d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/object-mapper/zipball/e3f2ad289576d28ada6ba9199822ffea97ed811d",
+                "reference": "e3f2ad289576d28ada6ba9199822ffea97ed811d",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.2",
+                "psr/container": "^2.0"
+            },
+            "conflict": {
+                "symfony/property-access": "<7.2"
+            },
+            "require-dev": {
+                "symfony/property-access": "^7.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\ObjectMapper\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Provides a way to map an object to another object",
+            "homepage": "https://symfony.com",
+            "support": {
+                "source": "https://github.com/symfony/object-mapper/tree/v7.3.0-BETA2"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2025-05-06T06:50:18+00:00"
         },
         {
             "name": "symfony/options-resolver",
@@ -18899,6 +18971,68 @@
                 }
             ],
             "time": "2024-11-10T00:00:35+00:00"
+        },
+        {
+            "name": "zenstruck/console-test",
+            "version": "v1.7.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zenstruck/console-test.git",
+                "reference": "f7ae8b302630c808da266603ac1fa50be54a72df"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zenstruck/console-test/zipball/f7ae8b302630c808da266603ac1fa50be54a72df",
+                "reference": "f7ae8b302630c808da266603ac1fa50be54a72df",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.0",
+                "symfony/console": "^5.4|^6.0|^7.0",
+                "zenstruck/assert": "^1.0"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^1.4",
+                "phpunit/phpunit": "^9.5.0",
+                "symfony/framework-bundle": "^5.4|^6.0|^7.0",
+                "symfony/phpunit-bridge": "^6.2|^7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Zenstruck\\Console\\Test\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kevin Bond",
+                    "email": "kevinbond@gmail.com"
+                }
+            ],
+            "description": "Alternative, opinionated helper for testing Symfony console commands.",
+            "homepage": "https://github.com/zenstruck/console-test",
+            "keywords": [
+                "command",
+                "console",
+                "dev",
+                "symfony",
+                "test"
+            ],
+            "support": {
+                "issues": "https://github.com/zenstruck/console-test/issues",
+                "source": "https://github.com/zenstruck/console-test/tree/v1.7.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/kbond",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-01-08T21:49:53+00:00"
         },
         {
             "name": "zenstruck/dom",

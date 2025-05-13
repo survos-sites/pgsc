@@ -21,7 +21,7 @@
         "doctrine/orm": "^3.3.3",
         "easycorp/easyadmin-bundle": "^4.24.6",
         "endroid/qr-code-bundle": ">=6",
-        "genkgo/favicon": "^0.3.6",
+        "genkgo/favicon": "^0.3.7",
         "google/apiclient": "^2.18.3",
         "inspector-apm/inspector-symfony": "^1.8.2",
         "league/csv": "^9.23",
@@ -55,6 +55,7 @@
         "symfony/mime": "^7.2.6",
         "symfony/monolog-bundle": "^3.10",
         "symfony/notifier": "^7.2.6",
+        "symfony/object-mapper": "^7.3",
         "symfony/process": "^7.2.5",
         "symfony/property-access": "^7.2.3",
         "symfony/property-info": "^7.2.5",
@@ -155,6 +156,7 @@
         "symfony/stopwatch": "^7.2.4",
         "symfony/web-profiler-bundle": "^7.2.4",
         "zenstruck/browser": "^2",
+        "zenstruck/console-test": "^1.7",
         "zenstruck/foundry": "^2.5"
     },
     "repositories": {

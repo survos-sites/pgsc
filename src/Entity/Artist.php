@@ -145,6 +145,21 @@ class Artist implements \Stringable, RouteParametersInterface, TranslatableInter
     #[Groups(['artist.read'])]
     private ?array $images = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $preferredPronoun = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $onSocial = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $preferredContact = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $studioOpen = null;
+
+    #[ORM\Column(type: Types::ARRAY, nullable: true)]
+    private ?array $tags = null;
+
     public function __construct()
     {
         $this->obras = new ArrayCollection();
@@ -468,6 +483,76 @@ class Artist implements \Stringable, RouteParametersInterface, TranslatableInter
         $this->images = $images;
 
         return $this;
+    }
+
+    public function getPreferredPronoun(): ?string
+    {
+        return $this->preferredPronoun;
+    }
+
+    public function setPreferredPronoun(?string $preferredPronoun): static
+    {
+        $this->preferredPronoun = $preferredPronoun;
+
+        return $this;
+    }
+
+    public function getOnSocial(): ?string
+    {
+        return $this->onSocial;
+    }
+
+    public function setOnSocial(?string $onSocial): static
+    {
+        $this->onSocial = $onSocial;
+
+        return $this;
+    }
+
+    public function getPreferredContact(): ?string
+    {
+        return $this->preferredContact;
+    }
+
+    public function setPreferredContact(?string $preferredContact): static
+    {
+        $this->preferredContact = $preferredContact;
+
+        return $this;
+    }
+
+    public function getStudioOpen(): ?string
+    {
+        return $this->studioOpen;
+    }
+
+    public function setStudioOpen(?string $studioOpen): static
+    {
+        $this->studioOpen = $studioOpen;
+
+        return $this;
+    }
+
+    public function getTags(): ?array
+    {
+        return $this->tags;
+    }
+
+    public function setTags(array|null|string $tags): static
+    {
+        if (is_string($tags)) {
+            $tags = array_map('trim', explode(',', $tags));
+        }
+        $this->tags = $tags;
+
+        return $this;
+    }
+
+    public function setFoto(string $photo): static
+    {
+        $this->setDriveUrl($photo);
+        return $this;
+
     }
 
 }

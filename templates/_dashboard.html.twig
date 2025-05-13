@@ -1,3 +1,4 @@
+{{ _self }}
 <div class="row">
     <div class="col-md-6">
         {% if myMap|default(false) %}
@@ -9,7 +10,7 @@
     </div>
     <div class="col-md-3">
         <ol>
-            {% for loc in locations %}
+            {% for loc in locations|default([]) %}
                 <li>
                     {% if is_granted('LOCATION_EDIT', loc) %}
                         <a href="{{ path('admin_location_edit', {entityId: loc.id}) }}">
@@ -28,7 +29,7 @@
     </div>
     <div class="col-md-3">
         <ol>
-            {% for artist in artists %}
+            {% for artist in artists|default([]) %}
                 <li>
                     {% if is_granted('ARTIST_EDIT', artist) %}
                         <a href="{{ path('admin_artist_edit', {entityId: artist.id}) }}">

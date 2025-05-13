@@ -61,9 +61,12 @@ final class AppController extends AbstractController
     ): Response {
 
         //return a temp response
-        return new Response('Syncing...');
+//        return new Response('Syncing...');
 
         $spreadsheet = $sheetService->getGoogleSpreadSheet($this->googleSpreadsheetId);
+//        $x = $sheetService->downloadSheetToLocal('DATOS ARTISTAS', 'data/ardata.csv');
+//        dd($x);
+
 //        $accessor = new PropertyAccessor();
         $data = $sheetService->getData(
             $this->googleSpreadsheetId,
@@ -118,7 +121,7 @@ final class AppController extends AbstractController
                 $this->entityManager->flush();
             }
         );
-//        dd($data);
+        dd($data);
 //        $sheetService->downloadSheetToLocal('piezas', 'data/piezas.csv');
 //        // integrate with Google Sheets
 //        dd();
