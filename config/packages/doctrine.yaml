@@ -9,8 +9,9 @@ doctrine:
         profiling_collect_backtrace: '%kernel.debug%'
         use_savepoints: true
 
-        types:
-            easy_media_type: Adeliom\EasyMediaBundle\Types\EasyMediaType
+
+#        types:
+#            easy_media_type: Adeliom\EasyMediaBundle\Types\EasyMediaType
     orm:
         auto_generate_proxy_classes: true
         enable_lazy_ghost_objects: true

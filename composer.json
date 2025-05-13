@@ -12,11 +12,9 @@
         "ext-iconv": "*",
         "ext-imagick": "*",
         "ext-intl": "*",
-        "agence-adeliom/easy-media-bundle": "3.x-dev",
         "alexandre-fernandez/json-translation-bundle": "^1.3.2",
         "api-platform/doctrine-orm": "^4.1.8",
         "api-platform/symfony": "^4.1.8",
-        "ayaou/command-logger-bundle": "dev-fix/allow-php73-new-command-style",
         "doctrine/dbal": "^3.9.4",
         "doctrine/doctrine-bundle": "^2.14.0",
         "doctrine/doctrine-migrations-bundle": "^3.4.2",
@@ -39,16 +37,16 @@
         "survos/geoapify-bundle": "^1.5.529",
         "survos/google-sheets-bundle": "dev-main",
         "survos/sais-bundle": "^1.5.530",
-        "survos/simple-datatables-bundle": "^1.5",
+        "survos/simple-datatables-bundle": "^1.5.529",
         "survos/translatable-field-bundle": "dev-main",
-        "survos/workflow-helper-bundle": "^1.5.529",
+        "survos/workflow-helper-bundle": "^1.5.600",
         "symfony/asset": "^7.2",
         "symfony/asset-mapper": "^7.2.5",
         "symfony/console": "^7.2.6",
         "symfony/doctrine-messenger": "^7.2.5",
         "symfony/dotenv": "^7.2",
         "symfony/expression-language": "^7.2",
-        "symfony/flex": "^2.5",
+        "symfony/flex": "^2.5.1",
         "symfony/form": "^7.2.6",
         "symfony/framework-bundle": "^7.2.5",
         "symfony/http-client": "^7.2.4",
@@ -132,10 +130,7 @@
     "extra": {
         "symfony": {
             "require": "^7.3",
-            "endpoint": [
-                "https://api.github.com/repos/agence-adeliom/symfony-recipes/contents/index.json?ref=flex/main",
-                "flex://defaults"
-            ],
+            "endpoint": ["https://api.github.com/repos/agence-adeliom/symfony-recipes/contents/index.json?ref=flex/main", "flex://defaults"],
             "allow-contrib": true
         }
     },
@@ -147,7 +142,7 @@
         "nunomaduro/phpinsights": "dev-master",
         "pelmered/fake-car": "^2.1",
         "phpstan/phpstan": "^2.1.14",
-        "phpunit/phpunit": "^12.1.4",
+        "phpunit/phpunit": "^12.1.5",
         "survos/code-bundle": "dev-main",
         "survos/crawler-bundle": ">=1.5.529",
         "survos/doc-bundle": "^1.5.529",
@@ -159,8 +154,8 @@
         "symfony/phpunit-bridge": "^7.2.6",
         "symfony/stopwatch": "^7.2.4",
         "symfony/web-profiler-bundle": "^7.2.4",
-        "zenstruck/browser": "^2.x-dev",
-        "zenstruck/foundry": "^2.x-dev"
+        "zenstruck/browser": "^2",
+        "zenstruck/foundry": "^2.5"
     },
     "repositories": {
         "behaviors": {

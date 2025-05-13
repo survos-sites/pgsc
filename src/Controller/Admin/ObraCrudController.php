@@ -31,7 +31,7 @@ class ObraCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
-        yield EasyMediaField::new('audio');
+//        yield EasyMediaField::new('audio');
         foreach ([
             //            IdField::new('id'),
             TextField::new('code')
@@ -120,7 +120,7 @@ class ObraCrudController extends AbstractCrudController
         ;
     }
 
-    #[AdminAction(routePath: '{/batch-print', routeName: 'batch_print', methods: ['POST'])]
+    #[AdminAction(routePath: '/batch-print', routeName: 'batch_print', methods: ['POST'])]
     public function batchPrint(BatchActionDto $batchActionDto, AdminContext $context)
     {
         $ids = $batchActionDto->getEntityIds();

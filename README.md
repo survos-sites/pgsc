@@ -9,6 +9,15 @@ Requirements
 * postgres and PDO-SQLite PHP extension enabled;
 * and the [usual Symfony application requirements][2].
 
+## Notes
+
+This was removed during development, but maybe someday will be re-added.
+
+```bash
+composer req agence-adeliom/easy-media-bundle
+```
+
+
 Installation
 ------------
 
@@ -28,7 +37,9 @@ Admin from fixtures:
 
 # For maps
 
+```bash
 bin/console workflow:iterate App\\Entity\\Location --marking=new --transition=geocode
+```
 
 
 
