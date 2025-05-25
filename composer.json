@@ -3,10 +3,10 @@
     "name": "survos-sites/pgsc",
     "description": "Popup Galleries of San Cristobal",
     "license": "proprietary",
-    "minimum-stability": "dev",
+    "minimum-stability": "rc",
     "prefer-stable": true,
     "require": {
-        "php": "^8.3",
+        "php": "^8.4",
         "ext-ctype": "*",
         "ext-gd": "*",
         "ext-iconv": "*",
@@ -155,7 +155,7 @@
         "symfony/phpunit-bridge": "^7.2.6",
         "symfony/stopwatch": "^7.2.4",
         "symfony/web-profiler-bundle": "^7.2.4",
-        "zenstruck/browser": "^2",
+        "zenstruck/browser": "^1.9",
         "zenstruck/console-test": "^1.7",
         "zenstruck/foundry": "^2.5"
     },
