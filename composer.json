@@ -140,7 +140,6 @@
         "dbrekelmans/bdi": "^1.4",
         "doctrine/doctrine-fixtures-bundle": "^4.1",
         "jzonta/faker-restaurant": "^2.0.1",
-        "nunomaduro/phpinsights": "dev-master",
         "pelmered/fake-car": "^2.1",
         "phpstan/phpstan": "^2.1.14",
         "phpunit/phpunit": "^12.1.5",
