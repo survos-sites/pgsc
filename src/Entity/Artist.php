@@ -157,7 +157,7 @@ class Artist implements \Stringable, RouteParametersInterface, TranslatableInter
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $studioOpen = null;
 
-    #[ORM\Column(type: Types::ARRAY, nullable: true)]
+    #[ORM\Column(type: Types::JSON, nullable: true)]
     private ?array $tags = null;
 
     public function __construct()
