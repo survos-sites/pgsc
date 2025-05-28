@@ -26,6 +26,10 @@ use function Symfony\Component\String\u;
 use Survos\GoogleSheetsBundle\Service\SheetService;
 use Survos\GoogleSheetsBundle\Service\GoogleDriveService;
 
+//call symfony String
+use Symfony\Component\String\Slugger\AsciiSlugger;
+
+
 #[Route('/{_locale}')]
 final class AppController extends AbstractController
 {
@@ -62,7 +66,6 @@ final class AppController extends AbstractController
 
         //return a temp response
 //        return new Response('Syncing...');
-
         $spreadsheet = $sheetService->getGoogleSpreadSheet($this->googleSpreadsheetId);
 //        $x = $sheetService->downloadSheetToLocal('DATOS ARTISTAS', 'data/ardata.csv');
 //        dd($x);
@@ -72,6 +75,12 @@ final class AppController extends AbstractController
             $this->googleSpreadsheetId,
             $refresh,
             function ($sheet, $csv) {
+                //save to local file filename : data/{spreadsheet_id}_{sheet}.csv
+                $filePath = sprintf('%s/data/%s_%s.csv', $this->getParameter('kernel.project_dir'), $this->googleSpreadsheetId, u($sheet)->snake()->toString());if (!is_dir('data')) {
+                    mkdir('data', 0777, true);
+                }
+                file_put_contents($filePath, $csv);
+                //dd(sprintf('Saved %s to %s', $sheet, $filePath));
                 $entityClass = match ($sheet) {
                     'DATOS ARTISTAS' => Artist::class,
                     'DATOS LOCALES' => Location::class,
@@ -84,29 +93,92 @@ final class AppController extends AbstractController
                     Artist::class => 'email',
                     Location::class => 'code' // ??
                 };
+
                 $reader = Reader::createFromString($csv);
                 $reader->setHeaderOffset(0);
                 try {
                     foreach ($reader as $row) {
-                        if (
-                            !$entity = $this->entityManager->getRepository($entityClass)->findOneBy([
+                        //convert all row keys to snake case and trim them but keep the original array values as is
+                        $row = array_combine(
+                            array_map(fn($key) => u($key)->snake()->toString(), array_keys($row)),
+                            array_values($row)
+                        );
+
+                        //let s do a full mapping patch since the column names comes as :
+                        //timestamp, nombre_completo_yo_artístico, año_de_nacimiento, pronombres_preferidos, redes_sociales_de_ser_posible_pon_el_enlace_sino_nombre_y_la_red_social_a_la_que_corresponde_dicho_nombre, teléfono, método_de_contacto_preferido, short_bio, biografía_larga23_párrafos, tu_estudio_esta_abierto_al_público, si_tu_estudio_esta_abierto_al_público_por_favor_incluye_la_dirección_yo_un_enlace_ó_las_instrucciones_de_visita, te_pedimos_una_foto_de_los_hombros_para_arriba_esta_foto_sera_expuesta_junto_con_tu_biografía_en_la_app_del_proyecto, aparte_de_español_qué_otras_lenguas_hablas, incluye_todos_los_tipos_de_arte_que_realizas, un_slogan_ó_tagline_sobre_quién_eres_ej_artista_chiapaneco_arte_textil35_palabras_max, email
+
+                        $columnsMapping = [
+                            'timestamp' => 'timestamp',
+                            'nombre_completo_yo_artístico' => 'name',
+                            'año_de_nacimiento' => 'birthYear',
+                            'pronombres_preferidos' => 'preferredPronouns',
+                            'redes_sociales_de_ser_posible_pon_el_enlace_sino_nombre_y_la_red_social_a_la_que_corresponde_dicho_nombre' => 'socialMedia',
+                            'teléfono' => 'phone',
+                            'método_de_contacto_preferido' => 'preferredContactMethod',
+                            'short_bio' => 'shortBio',
+                            'biografía_larga23_párrafos' => 'longBio',
+                            'tu_estudio_esta_abierto_al_público' => 'studioOpenToPublic',
+                            'si_tu_estudio_esta_abierto_al_público_por_favor_incluye_la_dirección_yo_un_enlace_ó_las_instrucciones_de_visita' => 'studioAddressOrLink',
+                            'te_pedimos_una_foto_de_los_hombros_para_arriba_esta_foto_sera_expuesta_junto_con_tu_biografía_en_la_app_del_proyecto' => 'photoUrl',
+                            'aparte_de_español_qué_otras_lenguas_hablas' => 'otherLanguagesSpoken',
+                            'incluye_todos_los_tipos_de_arte_que_realizas' => 'artTypes',
+                            'un_slogan_ó_tagline_sobre_quién_eres_ej_artista_chiapaneco_arte_textil35_palabras_max' => 'tagline',
+                            // patch the email to be snake case
+                            // but also patch the row key "email" to use "Email Address" when not set
+                            'email' => 'email',
+                        ];
+
+                        //set $row['code']  :  AsciiSlugger()->slug($name)->toString()
+                        if (isset($row['name'])) {
+                            $row['code'] = (new AsciiSlugger())->slug($row['name'])->toString();
+                        } elseif (isset($row['nombre_completo_yo_artístico'])) {
+                            $row['code'] = (new AsciiSlugger())->slug($row['nombre_completo_yo_artístico'])->toString();
+                        } else {
+                            $row['code'] = 'unknown';
+                        }
+
+                        //hard set email as code
+                        if (isset($row['email']) && !empty($row['email'])) {
+                            $row['code'] =  time() . uniqid();//$row['email'];
+                        }
+                        //update $row following the $columnsMapping
+                        foreach ($columnsMapping as $oldKey => $newKey) {
+                            if (isset($row[$oldKey])) {
+                                $row[$newKey] = $row[$oldKey];
+                            }
+                        }
+                        
+                        //patch row key "email" and use "Email Address" when not set
+                        if (!isset($row['email']) && isset($row['Email Address'])) {
+                            $row['email'] = $row['Email Address'];
+                        }
+
+                        //if $row is an empty array, skip it
+                        if (empty($row)) {
+                            continue;
+                        }
+
+                        if (!$entity = $this->entityManager->getRepository($entityClass)->findOneBy([
                             'email' => $row['email'],
                             ])
                         ) {
                             $entity = new $entityClass();
-                            $entity->setEmail($email = $row['email']);
-                            $entity->setCode(u($email)->before('@')->lower()->toString());
+                            $entity->setEmail($row['email'] ?? null);
+                            $entity->setCode($row['code']);
                             $this->entityManager->persist($entity);
                         }
+
                         foreach ($row as $var => $value) {
                             if ($value) {
                                 try {
+
                                     $this->propertyAccessor->setValue($entity, $var, $value);
                                 } catch (\Exception $e) {
-                                    dd($entity, $var, $value, $e->getMessage());
+                                    //dd($entity, $var, $value, $e->getMessage());
                                 }
                             }
                         }
+                        
                         switch ($sheet) {
                             case 'DATOS ARTISTAS':
                                 break;
@@ -114,14 +186,26 @@ final class AppController extends AbstractController
                             default:
                                 dd("Missing tab: " . $sheet);
                         }
+
+                        //dump($row['email'] ?? $row['code'] ?? 'unknown');
                     }
                 } catch (\Exception $e) {
                     //dd($csv, $e);
+                    throw new \Exception(sprintf('Error processing sheet "%s": %s', $sheet, $e->getMessage()));
                 }
-                $this->entityManager->flush();
+                
+                try {
+                    $this->entityManager->flush();
+                } catch (\Exception $e) {
+                    // Handle or log the exception as needed
+                    throw new \Exception(
+                        'Error saving entities: ' . $e->getMessage() . 
+                        ' | Entity: ' . json_encode($entity->getCode() ?? 'new')
+                    );
+                }
             }
         );
-        dd($data);
+        //dd($data);
 //        $sheetService->downloadSheetToLocal('piezas', 'data/piezas.csv');
 //        // integrate with Google Sheets
 //        dd();
