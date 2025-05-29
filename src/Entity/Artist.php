@@ -237,7 +237,7 @@ class Artist implements \Stringable, RouteParametersInterface, TranslatableInter
         return $this->translate()->getBio();
     }
 
-    public function setBio(string $text, ?string $locale=null): static
+    public function setBio(?string $text, ?string $locale=null): static
     {
         $this->translate($locale)->setBio($text);
         return $this;

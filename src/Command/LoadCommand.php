@@ -9,6 +9,9 @@ use App\Enum\LocationType;
 use App\Factory\ArtistFactory;
 use App\Factory\LocationFactory;
 use App\Factory\UserFactory;
+use App\Repository\ArtistRepository;
+use App\Repository\LocationRepository;
+use App\Repository\ObraRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use League\Csv\Reader;
 use Survos\SaisBundle\Model\ProcessPayload;
@@ -27,6 +30,9 @@ class LoadCommand
 	public function __construct(
         private readonly EntityManagerInterface $entityManager,
         private readonly ObjectMapperInterface  $objectMapper,
+        private readonly ArtistRepository $artistRepository,
+        private readonly LocationRepository $locationRepository,
+        private readonly ObraRepository $obraRepository,
     )
 	{
 	}
@@ -45,35 +51,50 @@ class LoadCommand
 
         $artists = [];
         foreach ($this->artists() as $artistData) {
-            dd($artistData);
 //            $initials = $artistData['code'];
 //            $email = $initials.'@test.com';
-            $email = $artistData['Email Address'];
-            if (!$email) {
+            if (!$email = $artistData['email']) {
                 dd($artistData);
                 continue;
             }
-            $artistData = (object) $artistData;
-            $artistData->id = null;
+//            $artistData = (object) $artistData;
+//            $artistData->id = null;
+            if (!$artist = $this->artistRepository->findOneBy(['email' => $email])) {
+                $artist = new Artist();
+                $artist->setEmail($email);
+
+//                UserFactory::createOne([
+//                    'code' => $artist->getCode(),
+//                    'email' => $artist->getEmail(),
+////                'cel' => $artistData['phone'],
+//                    'plainPassword' => 'test',
+//                    'roles' => ['ROLE_USER', 'ROLE_ARTIST'],
+//                ]);
+
+            }
+            $artist->setName($artistData['name'])
+                ->setCode($artistData['code'])
+                ->setBio($artistData['bio'])
+                ->setBirthYear($artistData['nacimiento']);
+
+//                $this->objectMapper->map($artistData, $artist);
+//                dd($artistData, $artist);
             dump($artistData);
-            $code = u($email)->before('@')->toString();
-            $artist = new Artist();
-            $this->objectMapper->map($artistData, $artist);
-            dd($artistData, $artist);
+//            $code = u($email)->before('@')->toString();
 
 
                 //            dd($artistData);
 
             // OR create user with role ARTIST?
-            $artist = ArtistFactory::createOne([
-                'name' => $artistData['name'],
-                'code' => $code,
-                'bio' => $artistData['bio'],
-                'slogan' => $artistData['slogan'],
-                'phone' => $artistData['phone'],
-                'driveUrl' => $artistData['foto'],
-                'email' => $email,
-            ]);
+//            $artist = ArtistFactory::createOne([
+//                'name' => $artistData['name'],
+//                'code' => $code,
+//                'bio' => $artistData['bio'],
+//                'slogan' => $artistData['slogan'],
+//                'phone' => $artistData['phone'],
+//                'driveUrl' => $artistData['foto'],
+//                'email' => $email,
+//            ]);
 //            if ($artist->getDriveUrl()) {
 //                $response = $this->saisClientService->dispatchProcess(new ProcessPayload(
 //                    'chijal',
@@ -84,13 +105,6 @@ class LoadCommand
 //                $artist->setImages($response[0]['resized']??null);
 //
 //            }
-            UserFactory::createOne([
-                'code' => $code,
-                'email' => $email,
-                'cel' => $artistData['phone'],
-                'plainPassword' => 'test',
-                'roles' => ['ROLE_USER', 'ROLE_ARTIST'],
-            ]);
             $artists[] = $artist;
         }
 
@@ -98,14 +112,28 @@ class LoadCommand
             if ($row['status'] === 'inactivo') {
                 continue;
             }
-            LocationFactory::createOne([
-                'name' => ($name = trim($row['nombre'])),
-                'address' => $row['direcciones'],
-                'type' => LocationType::from(trim(strtolower($row['tipo']))) ?? null,
-                'code' => $row['codigo'] ?: $this->initials($name),
+            dump($row);
+            if (!$location = $this->locationRepository->findOneBy(['name' => $row['nombre']])) {
+                $location = new Location();
+                $this->entityManager->persist($location);
+                $location->setName($row['nombre']);
+            }
+            $location->setStatus($row['status'])
+                ->setCode($row['codigo'])
+                ->setAddress($row['direcciones'])
+                ;
+//                ->setType($row['tipo'])
+
+//                    'name' => ($name = trim($row['nombre'])),
+//                    'status' => $row['status'],
+//                    'address' => $row['direcciones'],
+//                    'type' => LocationType::from(trim(strtolower($row['tipo']))) ?? null,
+//                    'code' => $row['codigo'] ?: $this->initials($name),
 //                'lat' => $row['lat'] ? (float) $row['lat'] : null,
 //                'lng' => $row['lon'] ? (float) $row['lon'] : null,
-            ]);
+//                ]);
+
+//            }
         }
         $manager->flush();
 
@@ -126,20 +154,28 @@ class LoadCommand
     private function artists(): iterable
     {
 
-        $csv = Reader::createFromPath('data/artist-responses.csv', 'r');
+        $csv = Reader::createFromPath('data/artistas.csv', 'r');
         $csv->setHeaderOffset(0);
-        return $csv->getRecordsAsObject(ArtistDto::class);
         foreach ($csv->getRecords() as $record) {
-            $email = $record['Email Address'];
-            $responses[$email] = $record;
+            if ($email = $record['email']) {
+                $ourData[$email] = $record;
+            }
         }
 
-        $csv = Reader::createFromPath('data/artists.csv', 'r');
+        // the responses from Google Form
+//        $csv = Reader::createFromPath('data/datosartistas.csv', 'r');
         $csv->setHeaderOffset(0);
-        foreach ($csv->getRecordsAsObject() as $record) {
-            dd($record);
 
+//        return $csv->getRecordsAsObject(ArtistDto::class);
+
+        foreach ($csv->getRecords() as $record) {
+            if ($email = $record['email']) {
+                $combined = array_merge($ourData[$email], $record);
+                $responses[$email] = $combined;
+            }
         }
+        return $responses;
+
 
         return $csv->getRecords();
     }

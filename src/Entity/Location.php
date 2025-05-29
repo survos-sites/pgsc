@@ -73,6 +73,9 @@ class Location implements \Stringable, RouteParametersInterface, MarkingInterfac
     #[Groups(['location.read'])]
     private ?float $lng = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $status = null;
+
     public function __construct()
     {
         $this->obras = new ArrayCollection();
@@ -208,6 +211,18 @@ class Location implements \Stringable, RouteParametersInterface, MarkingInterfac
     public function setLng(?float $lng): static
     {
         $this->lng = $lng;
+
+        return $this;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(?string $status): static
+    {
+        $this->status = $status;
 
         return $this;
     }
