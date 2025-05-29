@@ -76,7 +76,7 @@ final class AppController extends AbstractController
             $refresh,
             function ($sheet, $csv) {
                 //save to local file filename : data/{spreadsheet_id}_{sheet}.csv
-                $filePath = sprintf('%s/data/%s_%s.csv', $this->getParameter('kernel.project_dir'), $this->googleSpreadsheetId, u($sheet)->snake()->toString());if (!is_dir('data')) {
+                $filePath = sprintf('%s/data/%s.csv', $this->getParameter('kernel.project_dir'),u($sheet)->snake()->toString());if (!is_dir('data')) {
                     mkdir('data', 0777, true);
                 }
                 file_put_contents($filePath, $csv);
