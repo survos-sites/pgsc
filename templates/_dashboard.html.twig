@@ -12,9 +12,12 @@
         <ol>
             {% for loc in locations|default([]) %}
                 <li>
-                    {% set linkToVoxitour = voxitourEndpoint ~ '?locationId=' ~ loc.code ~ '#tab-locations' %}
+                    {% set linkToVoxitour = voxitourEndpoint ~ app.request.locale ~ '/chijal?locationId=' ~ loc.code ~ '#tab-locations' %}
+
                     <a href="{{ linkToVoxitour }}" target="_blank">
-                        @Voxitour!! {{ linkToVoxitour}}
+{#                        @Voxitour!! {{ linkToVoxitour}}#}
+                        <img src="{{ qr_code_url(linkToVoxitour) }}"/>
+
                     </a>
                     {% if is_granted('LOCATION_EDIT', loc) %}
                         <a href="{{ path('admin_location_edit', {entityId: loc.id}) }}">
