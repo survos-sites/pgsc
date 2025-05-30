@@ -12,6 +12,10 @@
         <ol>
             {% for loc in locations|default([]) %}
                 <li>
+                    {% set linkToVoxitour = voxitourEndpoint ~ '/location/' ~ loc.code %}
+                    <a href="{{ linkToVoxitour }}" target="_blank">
+                        @Voxitour!! {{ linkToVoxitour}}
+                    </a>
                     {% if is_granted('LOCATION_EDIT', loc) %}
                         <a href="{{ path('admin_location_edit', {entityId: loc.id}) }}">
                             {{ ux_icon('tabler:edit') }}
@@ -28,9 +32,15 @@
         </ol>
     </div>
     <div class="col-md-3">
-        <ol>
+        <ol class="list-group">
             {% for artist in artists|default([]) %}
-                <li>
+                <li class="list-group-item">
+                    <div>
+
+                    {% if artist.images|default(false) %}
+                    <img class="float-start img-thumbnail" style="max-width: 60px" src="{{ artist.images.small }}" alt="artist image" />
+                    {% endif %}
+
                     {% if is_granted('ARTIST_EDIT', artist) %}
                         <a href="{{ path('admin_artist_edit', {entityId: artist.id}) }}">
                             {{ ux_icon('tabler:edit') }}
@@ -38,10 +48,13 @@
                     {% endif %}
                     <a href="{{ path('admin_artist_detail', {entityId: artist.id}) }}">
                         {{ artist.name }}
+                        <br />{{ artist.slogan }}
                     </a>
 
-                    <a target="_blank" href="{{ path('artist_show', artist.rp) }}">@@app
+                    <a target="_blank" href="{{ path('artist_show', artist.rp) }}">
+                        {{ ux_icon('show') }}
                     </a>
+                    </div>
                 </li>
             {% endfor %}
         </ol>

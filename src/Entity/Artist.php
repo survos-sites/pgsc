@@ -27,6 +27,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         new GetCollection(),
     ]
 )]
+#[Assert\EnableAutoMapping]
 class Artist implements \Stringable, RouteParametersInterface, TranslatableInterface
 {
     use RouteParametersTrait;
@@ -100,7 +101,7 @@ class Artist implements \Stringable, RouteParametersInterface, TranslatableInter
     #[ORM\Column(length: 32, nullable: true)]
     private ?string $studioVisitable = null;
 
-    #[ORM\Column(nullable: true)]
+    #[ORM\Column(type: Types::JSON, nullable: true)]
     private ?array $languages = null;
 
     #[ORM\Column(length: 22, nullable: true)]
@@ -138,7 +139,7 @@ class Artist implements \Stringable, RouteParametersInterface, TranslatableInter
     #[Groups(['artist.read'])]
     private ?string $slogan = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $driveUrl = null;
 
     #[ORM\Column(nullable: true)]

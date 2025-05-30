@@ -1,9 +1,14 @@
 # config/packages/ux_icons.yaml
 ux_icons:
+  aliases:
+    show: bx:show
   default_icon_attributes:
-    width: 30px
-      # Default:
-    fill:                currentColor
+#    width: 30px
+    fill: red
+    width: 16px
+    height: 16px
+
+#    fill:                currentColor
 
       # Example:
       # class:               icon

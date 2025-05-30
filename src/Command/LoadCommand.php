@@ -15,12 +15,14 @@ use App\Repository\ObraRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use League\Csv\Reader;
 use Survos\SaisBundle\Model\ProcessPayload;
+use Survos\SaisBundle\Service\SaisClientService;
 use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Attribute\Option;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 use function Symfony\Component\String\u;
 use Symfony\Component\ObjectMapper\ObjectMapperInterface;
 
@@ -32,7 +34,9 @@ class LoadCommand
         private readonly ObjectMapperInterface  $objectMapper,
         private readonly ArtistRepository $artistRepository,
         private readonly LocationRepository $locationRepository,
+        private readonly SaisClientService $saisClientService, // @todo: move to workflow
         private readonly ObraRepository $obraRepository,
+        private readonly ValidatorInterface $validator,
     )
 	{
 	}
@@ -61,6 +65,7 @@ class LoadCommand
 //            $artistData->id = null;
             if (!$artist = $this->artistRepository->findOneBy(['email' => $email])) {
                 $artist = new Artist();
+                $this->entityManager->persist($artist);
                 $artist->setEmail($email);
 
 //                UserFactory::createOne([
@@ -74,12 +79,30 @@ class LoadCommand
             }
             $artist->setName($artistData['name'])
                 ->setCode($artistData['code'])
+                ->setSlogan(substr($artistData['tagline'], 0, 80))
                 ->setBio($artistData['bio'])
+                ->setDriveUrl($artistData['driveUrl'])
+                ->setBio($artistData['long_bio'])
+//                ->setLanguages($artistData['languages'])
                 ->setBirthYear($artistData['nacimiento']);
-
+            if ($artist->getDriveUrl()) {
+                $response = $this->saisClientService->dispatchProcess(new ProcessPayload(
+                    'chijal',
+                    [
+                        $artist->getDriveUrl(),
+                    ]
+                ));
+                $artist->setImages($response[0]['resized'] ?? null);
+            }
+            $errors = $this->validator->validate($artist);
+            if (count($errors) > 0) {
+                foreach ($errors as $error) {
+                    $io->error($error->getPropertyPath()  . "/" . $error->getMessage());
+                }
+                dd();
+            }
 //                $this->objectMapper->map($artistData, $artist);
 //                dd($artistData, $artist);
-            dump($artistData);
 //            $code = u($email)->before('@')->toString();
 
 
@@ -95,14 +118,6 @@ class LoadCommand
 //                'driveUrl' => $artistData['foto'],
 //                'email' => $email,
 //            ]);
-//            if ($artist->getDriveUrl()) {
-//                $response = $this->saisClientService->dispatchProcess(new ProcessPayload(
-//                    'chijal',
-//                    [
-//                        $artist->getDriveUrl(),
-//                    ]
-//                ));
-//                $artist->setImages($response[0]['resized']??null);
 //
 //            }
             $artists[] = $artist;
@@ -112,7 +127,6 @@ class LoadCommand
             if ($row['status'] === 'inactivo') {
                 continue;
             }
-            dump($row);
             if (!$location = $this->locationRepository->findOneBy(['name' => $row['nombre']])) {
                 $location = new Location();
                 $this->entityManager->persist($location);
@@ -154,6 +168,7 @@ class LoadCommand
     private function artists(): iterable
     {
 
+
         $csv = Reader::createFromPath('data/artistas.csv', 'r');
         $csv->setHeaderOffset(0);
         foreach ($csv->getRecords() as $record) {
@@ -161,12 +176,13 @@ class LoadCommand
                 $ourData[$email] = $record;
             }
         }
-
-        // the responses from Google Form
-//        $csv = Reader::createFromPath('data/datosartistas.csv', 'r');
-        $csv->setHeaderOffset(0);
-
 //        return $csv->getRecordsAsObject(ArtistDto::class);
+
+        // the responses from Google Form, @artists
+        // https://support.google.com/docs/thread/223250855/how-do-i-shorten-google-form-headers-in-sheets-so-the-column-header-form-question-is-easy-to-read?hl=en
+
+        $csv = Reader::createFromPath('data/artists.csv', 'r');
+        $csv->setHeaderOffset(0);
 
         foreach ($csv->getRecords() as $record) {
             if ($email = $record['email']) {

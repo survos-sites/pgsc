@@ -3,6 +3,8 @@ twig:
     globals:
         mobile_base: '%env(MOBILE_BASE_URL)%'
         spreadsheetId: '%env(GOOGLE_SPREADSHEET_ID)%'
+        voxitourEndpoint: '%env(VOXiTOUR_ENDPOINT)%'
+
     form_themes:
         - 'bootstrap_5_horizontal_layout.html.twig'
 

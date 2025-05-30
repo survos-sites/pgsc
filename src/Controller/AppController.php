@@ -67,7 +67,7 @@ final class AppController extends AbstractController
         //return a temp response
 //        return new Response('Syncing...');
         $spreadsheet = $sheetService->getGoogleSpreadSheet($this->googleSpreadsheetId);
-//        $x = $sheetService->downloadSheetToLocal('DATOS ARTISTAS', 'data/ardata.csv');
+//        $x = $sheetService->downloadSheetToLocal('@artists', 'data/ardata.csv');
 //        dd($x);
 
 //        $accessor = new PropertyAccessor();
@@ -80,6 +80,7 @@ final class AppController extends AbstractController
                     mkdir('data', 0777, true);
                 }
                 file_put_contents($filePath, $csv);
+                return;
                 //dd(sprintf('Saved %s to %s', $sheet, $filePath));
                 $entityClass = match ($sheet) {
                     'DATOS ARTISTAS' => Artist::class,
@@ -147,7 +148,7 @@ final class AppController extends AbstractController
                                 $row[$newKey] = $row[$oldKey];
                             }
                         }
-                        
+
                         //patch row key "email" and use "Email Address" when not set
                         if (!isset($row['email']) && isset($row['Email Address'])) {
                             $row['email'] = $row['Email Address'];
@@ -178,7 +179,7 @@ final class AppController extends AbstractController
                                 }
                             }
                         }
-                        
+
                         switch ($sheet) {
                             case 'DATOS ARTISTAS':
                                 break;
@@ -193,13 +194,13 @@ final class AppController extends AbstractController
                     //dd($csv, $e);
                     throw new \Exception(sprintf('Error processing sheet "%s": %s', $sheet, $e->getMessage()));
                 }
-                
+
                 try {
                     $this->entityManager->flush();
                 } catch (\Exception $e) {
                     // Handle or log the exception as needed
                     throw new \Exception(
-                        'Error saving entities: ' . $e->getMessage() . 
+                        'Error saving entities: ' . $e->getMessage() .
                         ' | Entity: ' . json_encode($entity->getCode() ?? 'new')
                     );
                 }
