@@ -23,6 +23,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use function Symfony\Component\String\u;
 use Symfony\Component\ObjectMapper\ObjectMapperInterface;
 
@@ -32,11 +33,11 @@ class LoadCommand
 	public function __construct(
         private readonly EntityManagerInterface $entityManager,
         private readonly ObjectMapperInterface  $objectMapper,
-        private readonly ArtistRepository $artistRepository,
-        private readonly LocationRepository $locationRepository,
-        private readonly SaisClientService $saisClientService, // @todo: move to workflow
-        private readonly ObraRepository $obraRepository,
-        private readonly ValidatorInterface $validator,
+        private readonly ArtistRepository       $artistRepository,
+        private readonly LocationRepository     $locationRepository,
+        private readonly SaisClientService      $saisClientService, // @todo: move to workflow
+        private readonly ObraRepository         $obraRepository,
+        private readonly ValidatorInterface     $validator, private readonly TranslatorInterface $translator,
     )
 	{
 	}
@@ -80,9 +81,8 @@ class LoadCommand
             $artist->setName($artistData['name'])
                 ->setCode($artistData['code'])
                 ->setSlogan(substr($artistData['tagline'], 0, 80))
-                ->setBio($artistData['bio'])
                 ->setDriveUrl($artistData['driveUrl'])
-                ->setBio($artistData['long_bio'])
+                ->setBio($artistData['long_bio'], 'es')
 //                ->setLanguages($artistData['languages'])
                 ->setBirthYear($artistData['nacimiento']);
             if ($artist->getDriveUrl()) {
@@ -94,6 +94,7 @@ class LoadCommand
                 ));
                 $artist->setImages($response[0]['resized'] ?? null);
             }
+            $artist->mergeNewTranslations();
             $errors = $this->validator->validate($artist);
             if (count($errors) > 0) {
                 foreach ($errors as $error) {

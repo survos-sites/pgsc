@@ -24,7 +24,9 @@ use Symfony\Component\Validator\Constraints as Assert;
     normalizationContext: ['groups' => ['artist.read', 'artist.obra.read']],
     operations: [
         new Get(),
-        new GetCollection(),
+        new GetCollection(
+            normalizationContext: ['groups' => ['artist.read', 'artist.obra.read']],
+        ),
     ]
 )]
 #[Assert\EnableAutoMapping]

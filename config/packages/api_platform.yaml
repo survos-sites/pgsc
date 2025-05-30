@@ -1,6 +1,6 @@
 api_platform:
-    title: Batsi API
-    version: 1.0.01
+    title: Chijal API
+    version: 1.0.2
     defaults:
         url_generation_strategy: 0
         stateless: false

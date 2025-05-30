@@ -7,6 +7,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\TranslationInterface;
 use Knp\DoctrineBehaviors\Model\Translatable\TranslationTrait;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: ArtistTranslationRepository::class)]
 class ArtistTranslation implements TranslationInterface
@@ -19,9 +20,11 @@ class ArtistTranslation implements TranslationInterface
     private ?int $id = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['artist.read'])]
     private ?string $bio = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['artist.read'])]
     private ?string $slogan = null;
 
     public function getId(): ?int
@@ -29,6 +32,7 @@ class ArtistTranslation implements TranslationInterface
         return $this->id;
     }
 
+    #[Groups(['artist.read'])]
     public function getBio(): ?string
     {
         return $this->bio;
