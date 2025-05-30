@@ -83,6 +83,12 @@ class Obra implements \Stringable, RouteParametersInterface
 
 //    #[ORM\Column(type: 'easy_media_type', nullable: true)]
     private Media|string|null $audio;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $driveUrl = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?array $images = null;
     public function __construct()
     {
         $this->obraImages = new ArrayCollection();
@@ -306,5 +312,29 @@ class Obra implements \Stringable, RouteParametersInterface
     public function getLocationCode(): ?string
     {
         return $this->getLocation()?->getCode();
+    }
+
+    public function getDriveUrl(): ?string
+    {
+        return $this->driveUrl;
+    }
+
+    public function setDriveUrl(?string $driveUrl): static
+    {
+        $this->driveUrl = $driveUrl;
+
+        return $this;
+    }
+
+    public function getImages(): ?array
+    {
+        return $this->images;
+    }
+
+    public function setImages(?array $images): static
+    {
+        $this->images = $images;
+
+        return $this;
     }
 }

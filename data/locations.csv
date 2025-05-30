@@ -1,4 +1,4 @@
-codigo,status,nombre,direcciones,tipo,contacto,cel
+code,status,nombre,direcciones,tipo,contacto,cel
 ccj,activo,"Centro cultural Carlos Jurado","16 de Septiembre 1, Zona Centro, 29200 San Cristóbal de las Casas, Chis.",cc,"Zoraida Vleeschower",9671026234
 laez,activo,"La Enseñanza Casa de la Ciudad ","Belisario Domínguez 13, Zona Centro, 29200 San Cristóbal de las Casas, Chis.",cc,"Lidia Gopar",9671664133
 gart,activo,"Galeria Materia (Arteria)","29230, Real de Guadalupe 118, Barrio de Guadalupe, 29230 San Cristóbal de las Casas, Chis.","Galeria ","Adrian ",9671643812
@@ -15,4 +15,5 @@ bioes,activo,"Biocafeteria Espiral","Diagonal Hermanos Paniagua 38, San Ramon, 2
 snds,activo,Sendas,"C. María Adelina Flores 50, Barrio de Guadalupe, 29230 San Cristóbal de las Casas, Chis.",cc,Paco,9671036013
 nauf,inactivo,"El naufragio ","Flavio A. Paniagua 76 bis, Barrio de Guadalupe, 29230 San Cristóbal de las Casas, Chis.",Bar,Erick,9671062692
 clal,activo,CELALI,"Calle Escuadrón 201, Pzla. de Mexicanos 6, 29220 San Cristóbal de las Casas, Chis.","Instituto ","Nicolas Juarez ",9671330567
-,waiting,"VENAS DE JOVEL",,cc,Camilo,"967 130 6611"
+jovel,waiting,"VENAS DE JOVEL",,cc,Camilo,"967 130 6611"
+chijal,activo,"Oficina de Chijal",,cc

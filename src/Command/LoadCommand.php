@@ -5,6 +5,7 @@ namespace App\Command;
 use App\Dto\ArtistDto;
 use App\Entity\Artist;
 use App\Entity\Location;
+use App\Entity\Obra;
 use App\Enum\LocationType;
 use App\Factory\ArtistFactory;
 use App\Factory\LocationFactory;
@@ -37,7 +38,8 @@ class LoadCommand
         private readonly LocationRepository     $locationRepository,
         private readonly SaisClientService      $saisClientService, // @todo: move to workflow
         private readonly ObraRepository         $obraRepository,
-        private readonly ValidatorInterface     $validator, private readonly TranslatorInterface $translator,
+        private readonly ValidatorInterface     $validator,
+        private readonly TranslatorInterface $translator,
     )
 	{
 	}
@@ -47,6 +49,7 @@ class LoadCommand
 		SymfonyStyle $io,
 		#[Option('refresh the cached data from google sheets')]
 		?bool $refresh = null,
+        #[Option('dispatch SAIS requests')] ?bool $resize=null
 	): int
 	{
         $manager = $this->entityManager;
@@ -85,7 +88,8 @@ class LoadCommand
                 ->setBio($artistData['long_bio'], 'es')
 //                ->setLanguages($artistData['languages'])
                 ->setBirthYear($artistData['nacimiento']);
-            if ($artist->getDriveUrl()) {
+            $artists[$artist->getCode()] = $artist;
+            if ($resize && $artist->getDriveUrl()) {
                 $response = $this->saisClientService->dispatchProcess(new ProcessPayload(
                     'chijal',
                     [
@@ -134,9 +138,10 @@ class LoadCommand
                 $location->setName($row['nombre']);
             }
             $location->setStatus($row['status'])
-                ->setCode($row['codigo'])
+                ->setCode($row['code'])
                 ->setAddress($row['direcciones'])
                 ;
+            $locations[$location->getCode()] = $location;
 //                ->setType($row['tipo'])
 
 //                    'name' => ($name = trim($row['nombre'])),
@@ -151,6 +156,46 @@ class LoadCommand
 //            }
         }
         $manager->flush();
+
+        $csv = Reader::createFromPath('data/piezas.csv', 'r');
+        $csv->setHeaderOffset(0);
+        foreach ($csv->getRecords() as $row) {
+            if (!$obra = $this->obraRepository->findOneBy(['code' => ($code = $row['code'])])) {
+                $obra = new Obra()
+                    ->setCode($code);
+                $this->entityManager->persist($obra);
+            }
+            $obra
+                ->setDriveUrl($row['driveUrl'])
+                ->setTitle($row['title']);
+            if ($locCode = $row['loc_code']) {
+                $locations[$locCode]->addObra($obra);
+            }
+            if ($artistCode = $row['artist_code']) {
+                $artists[$artistCode]->addObra($obra);
+            }
+            if ($driveUrl = $obra->getDriveUrl()) {
+                $response = $this->saisClientService->dispatchProcess(new ProcessPayload(
+                    'chijal',
+                    [
+                        $driveUrl,
+                    ]
+                ));
+                $obra->setImages($response[0]['resized'] ?? null);
+                dump($response);
+            }
+
+
+
+//            if ($resize)
+            $response = $this->saisClientService->dispatchProcess(new ProcessPayload(
+                'chijal',
+                [
+                    $artist->getDriveUrl(),
+                ]
+            ));
+            $artist->setImages($response[0]['resized'] ?? null);
+        }
 
         foreach ($manager->getRepository(Location::class)->findAll() as $location) {
             $location->setObraCount($location->getObras()->count());

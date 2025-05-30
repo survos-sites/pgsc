@@ -26,6 +26,7 @@
                     {% endif %}
                     <a href="{{ path('admin_location_detail', {entityId: loc.id}) }}">
                         {{ loc.name }}
+                        <sup>{{ loc.obras|length }}</sup>
                         <sup>
                             {{ loc.typeString }}
                         </sup>
@@ -53,6 +54,7 @@
                         {{ artist.name }}
                         <br />{{ artist.slogan }}
                     </a>
+                        <sup>{{ artist.obras|length }}</sup>
 
                     <a target="_blank" href="{{ path('artist_show', artist.rp) }}">
                         {{ ux_icon('show') }}
