@@ -12,7 +12,7 @@
         <ol>
             {% for loc in locations|default([]) %}
                 <li>
-                    {% set linkToVoxitour = voxitourEndpoint ~ '/location/' ~ loc.code %}
+                    {% set linkToVoxitour = voxitourEndpoint ~ '?locationId=' ~ loc.code ~ '#tab-locations' %}
                     <a href="{{ linkToVoxitour }}" target="_blank">
                         @Voxitour!! {{ linkToVoxitour}}
                     </a>
