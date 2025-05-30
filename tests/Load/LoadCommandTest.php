@@ -6,16 +6,16 @@ use PHPUnit\Framework\Attributes\Test;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Zenstruck\Console\Test\InteractsWithConsole;
 
-class AppLoadDataCommandTest extends KernelTestCase
+class LoadCommandTest extends KernelTestCase
 {
     use InteractsWithConsole;
 
     #[Test]
-    public function load(): void
+    public function loadCmas(): void
     {
         $this->executeConsoleCommand('app:cmas')
             ->assertSuccessful() // command exit code is 0
-            ->assertOutputContains('3 products loaded')
+            ->assertOutputContains('success: 3')
             ->assertOutputNotContains('failed')
         ;
 
@@ -39,5 +39,14 @@ class AppLoadDataCommandTest extends KernelTestCase
             ->dd() // dd() the status code/outputs
         ;
 
+    }
+
+    #[Test]
+    public function loadDarta(): void
+    {
+        $this->executeConsoleCommand('app:cmas')
+            ->assertSuccessful() // command exit code is 0
+            ->assertOutputContains('success: 3')
+            ->assertOutputNotContains('failed');
     }
 }

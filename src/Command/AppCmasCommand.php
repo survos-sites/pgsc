@@ -24,6 +24,7 @@ final class AppCmasCommand
 
     public function __construct(
         #[Autowire('%kernel.project_dir%')] string $projectDir,
+        #[Autowire('%kernel.environment%')] protected string $env,
         private EntityManagerInterface $entityManager,
         private SacroRepository $sacroRepository,
         private SluggerInterface $asciiSlugger,
@@ -38,7 +39,10 @@ final class AppCmasCommand
         string $path = 'data/cmas.csv',
         #[Option(description: 'Process Google Drive images')]
         bool $images = false,
+        #[Option(description: 'Process Google Drive images')]
+        ?int $limit = null,
     ): int {
+        $limit ??= $this->env === 'test' ? 3 : 100;
 
 //        $path = $projectDir . '/data/cmas.csv';
         assert(file_exists($path), $path . ' does not exist');
@@ -86,10 +90,14 @@ final class AppCmasCommand
                         ->setFlickrUrl($this->flickrService->flickrThumbnailUrl($info));
                 }
             }
+
+            if ($index >= $limit) {
+                break;
+            }
         }
 
         $this->entityManager->flush();
-        $io->success(self::class . ' success: ' . $this->sacroRepository->count());
+        $io->success(self::class . ' success: ' . $index. ' total is now ' . $this->sacroRepository->count());
 
         return Command::SUCCESS;
     }
