@@ -15,6 +15,7 @@ use App\Repository\LocationRepository;
 use App\Repository\ObraRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use League\Csv\Reader;
+use Survos\SaisBundle\Model\AccountSetup;
 use Survos\SaisBundle\Model\ProcessPayload;
 use Survos\SaisBundle\Service\SaisClientService;
 use Symfony\Component\Console\Attribute\Argument;
@@ -31,6 +32,7 @@ use Symfony\Component\ObjectMapper\ObjectMapperInterface;
 #[AsCommand('app:load', 'Load the chijal data')]
 class LoadCommand
 {
+    const SAIS_ROOT = 'chijal';
 	public function __construct(
         private readonly EntityManagerInterface $entityManager,
         private readonly ObjectMapperInterface  $objectMapper,
@@ -56,6 +58,7 @@ class LoadCommand
 		if ($refresh) {
 		    $io->writeln("Option refresh: $refresh");
 		}
+        $this->saisClientService->accountSetup(new AccountSetup(self::SAIS_ROOT, 100));
 
         $artists = [];
         foreach ($this->artists() as $artistData) {
@@ -91,7 +94,7 @@ class LoadCommand
             $artists[$artist->getCode()] = $artist;
             if ($resize && $artist->getDriveUrl()) {
                 $response = $this->saisClientService->dispatchProcess(new ProcessPayload(
-                    'chijal',
+                    self::SAIS_ROOT,
                     [
                         $artist->getDriveUrl(),
                     ]
@@ -176,13 +179,12 @@ class LoadCommand
             }
             if ($driveUrl = $obra->getDriveUrl()) {
                 $response = $this->saisClientService->dispatchProcess(new ProcessPayload(
-                    'chijal',
+                    self::SAIS_ROOT,
                     [
                         $driveUrl,
                     ]
                 ));
                 $obra->setImages($response[0]['resized'] ?? null);
-                dump($response);
             }
 
 

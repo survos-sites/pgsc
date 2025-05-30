@@ -25,7 +25,6 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new Get(),
         new GetCollection(
-            normalizationContext: ['groups' => ['artist.read', 'artist.obra.read']],
         ),
     ]
 )]

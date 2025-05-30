@@ -88,6 +88,7 @@ class Obra implements \Stringable, RouteParametersInterface
     private ?string $driveUrl = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['obra.read'])]
     private ?array $images = null;
     public function __construct()
     {
