@@ -2,6 +2,9 @@
 
 This is the admin side of the popup galleries project.
 
+<a href="https://asciinema.org/a/bJMOlPe5F4mFLY0Rl6fiJSOp3" target="_blank"><img src="https://asciinema.org/a/bJMOlPe5F4mFLY0Rl6fiJSOp3.svg" /></a>
+
+
 Requirements
 ------------
 
