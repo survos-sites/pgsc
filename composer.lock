@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b3e98029cb1d6cd55e6f03169d8e9a6d",
+    "content-hash": "0b81ac377185817c443c7ce022ef7a22",
     "packages": [
         {
             "name": "a2lix/auto-form-bundle",
@@ -6319,16 +6319,16 @@
         },
         {
             "name": "survos/core-bundle",
-            "version": "1.5.529",
+            "version": "dev-main",
             "source": {
                 "type": "git",
                 "url": "https://github.com/survos/SurvosCoreBundle.git",
-                "reference": "468332bcb862b8943f9bb6d5f215939cdf5c5bbf"
+                "reference": "dd6a7aa7d1c40cb233a57d1e198dc991560408ea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/survos/SurvosCoreBundle/zipball/468332bcb862b8943f9bb6d5f215939cdf5c5bbf",
-                "reference": "468332bcb862b8943f9bb6d5f215939cdf5c5bbf",
+                "url": "https://api.github.com/repos/survos/SurvosCoreBundle/zipball/dd6a7aa7d1c40cb233a57d1e198dc991560408ea",
+                "reference": "dd6a7aa7d1c40cb233a57d1e198dc991560408ea",
                 "shasum": ""
             },
             "require": {
@@ -6370,11 +6370,13 @@
                 "phpstan/phpstan": "^2.0",
                 "symfony/asset-mapper": "^6.4 || ^7.1",
                 "symfony/browser-kit": "^6.4 || ^7.1",
+                "symfony/console": "^7.2",
                 "symfony/framework-bundle": "^6.4 || ^7.1",
                 "symfony/phpunit-bridge": "^6.4 || ^7.1",
                 "symfony/twig-bundle": "^6.4 || ^7.1",
                 "symfony/var-dumper": "^6.4 || ^7.1"
             },
+            "default-branch": true,
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
@@ -6396,7 +6398,7 @@
             ],
             "support": {
                 "issues": "https://github.com/survos/SurvosCoreBundle/issues",
-                "source": "https://github.com/survos/SurvosCoreBundle/tree/1.5.529"
+                "source": "https://github.com/survos/SurvosCoreBundle/tree/main"
             },
             "funding": [
                 {
@@ -6404,7 +6406,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-02-20T13:35:55+00:00"
+            "time": "2025-05-31T15:32:45+00:00"
         },
         {
             "name": "survos/deployment-bundle",
@@ -17463,6 +17465,7 @@
     "minimum-stability": "RC",
     "stability-flags": {
         "survos/code-bundle": 20,
+        "survos/core-bundle": 20,
         "survos/google-sheets-bundle": 20,
         "survos/translatable-field-bundle": 20,
         "tacman/doctrine-behaviors": 20
