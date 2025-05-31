@@ -1,35 +1,41 @@
 {# this is used by EasyAdmin when the 'obras' field is rendered. #}
+<table>
+    <tbody>
+
 
 {% for obra in entity.instance.obras %}
-    {% if obra.obraImages|length %}
-        <div class="mb-1">
-            {% for obraImage in obra.obraImages %}
-                <img src="{{ asset('images/obra/' ~ obraImage.imageName) }}" alt="Obra Image" width="65"/>
-            {% endfor %}
-        </div>
-    {% endif %}
+    <tr valign="top">
+        <td>
+            {% if obra.images.small|default(false) %}
+                <img src="{{ obra.images.small }}" alt="{{ obra.title|e }}" style="max-width: 200px; display: block; margin-bottom: 1em;max-height: 200px;">
+            {% endif %}
 
-    <div class="text-primary">
-        {% if is_granted('OBJ_EDIT', obra) %}
-        <a href="{{ path('admin_obra_edit', {entityId: obra.id}) }}">
-{#        <a href="{{ path('admin_obra_edit', obra.erp) }}">#}
-            {{ ux_icon('tabler:edit') }}
-        </a>
-        {% endif %}
-        <a href="{{ path('admin_obra_detail', {entityId: obra.id}) }}">
-            {{ obra.title }}
-        </a>
-        <br/>
-        <b>por {{ obra.artist }}</b>
-        <i>@{{ obra.location }}</i>
-    </div>
-    <hr class="my-2">
+            {% set linkToVoxitour = voxitourEndpoint ~ app.request.locale ~ '/chijal?obraId=' ~ obra.code ~ '#tab-obras' %}
+            <a href="{{ linkToVoxitour }}" target="_blank">
+                {#                        @Voxitour!! {{ linkToVoxitour}}#}
+                <img src="{{ qr_code_url(linkToVoxitour) }}" style="max-width: 200px" />
+            </a>
 
-    @todo: render the label, could even be in an iframe because of css
-{#    <div class="object-label" style="background-color: #0ca678">#}
-{#        <h1>{{ obra.title }}</h1>#}
-{#    </div>#}
+            {% if is_granted('OBJ_EDIT', obra) %}
+                <a href="{{ path('admin_obra_edit', {entityId: obra.id}) }}">
+                    {#        <a href="{{ path('admin_obra_edit', obra.erp) }}">#}
+                    {{ ux_icon('tabler:edit') }}
+                </a>
+            {% endif %}
+        </td>
+        <td>
+            <a href="{{ path('admin_obra_detail', {entityId: obra.id}) }}">
+                <h3>
+                    {{ obra.title }}
+                </h3>
+            </a>
 
+            <b>por {{ obra.artist }}</b>
+            <i>@{{ obra.location }}</i>
 
+        </td>
+    </tr>
 {% endfor %}
+    </tbody>
+</table>
 
