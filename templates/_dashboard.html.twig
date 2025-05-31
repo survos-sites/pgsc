@@ -1,6 +1,6 @@
 {{ _self }}
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-3">
         {% if myMap|default(false) %}
             map
             {{ ux_map(myMap, { style: 'height: 300px' }) }}
@@ -9,11 +9,30 @@
         {% endif %}
     </div>
     <div class="col-md-3">
+        <h3>Obras</h3>
+        <ol>
+            {% for obra in obras|default([]) %}
+            <li>
+                {% set linkToVoxitour = voxitourEndpoint ~ app.request.locale ~ '/chijal?obraId=' ~ obra.code ~ '#tab-obras' %}
+                <a href="{{ linkToVoxitour }}" target="_blank">
+                    {#                        @Voxitour!! {{ linkToVoxitour}}#}
+                    <img src="{{ qr_code_url(linkToVoxitour) }}"/>
+
+                </a>
+                <a herf="{{ path('admin_obra_detail', obra.erp) }}">
+                    {{ obra.title }}
+                </a>
+
+            </li>
+            {% endfor %}
+        </ol>
+    </div>
+
+        <div class="col-md-3">
         <ol>
             {% for loc in locations|default([]) %}
                 <li>
                     {% set linkToVoxitour = voxitourEndpoint ~ app.request.locale ~ '/chijal?locationId=' ~ loc.code ~ '#tab-locations' %}
-
                     <a href="{{ linkToVoxitour }}" target="_blank">
 {#                        @Voxitour!! {{ linkToVoxitour}}#}
                         <img src="{{ qr_code_url(linkToVoxitour) }}"/>

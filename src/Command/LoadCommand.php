@@ -169,6 +169,8 @@ class LoadCommand
                 $this->entityManager->persist($obra);
             }
             $obra
+                ->setMaterials($row['material'])
+                ->setYoutubeUrl($row['youtubeUrl'])
                 ->setDriveUrl($row['driveUrl'])
                 ->setTitle($row['title']);
             if ($locCode = $row['loc_code']) {

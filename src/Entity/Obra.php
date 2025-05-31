@@ -55,18 +55,23 @@ class Obra implements \Stringable, RouteParametersInterface
     private ?string $code = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['obra.read'])]
     private ?int $year = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['obra.read'])]
     private ?int $width = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['obra.read'])]
     private ?int $height = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['obra.read'])]
     private ?int $depth = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['obra.read'])]
     private ?string $materials = null;
 
     /**
@@ -76,9 +81,11 @@ class Obra implements \Stringable, RouteParametersInterface
     private Collection $obraImages;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['obra.read'])]
     private ?int $price = null;
 
     #[ORM\Column(length: 32, nullable: true)]
+    #[Groups(['obra.read'])]
     private ?string $type = null;
 
 //    #[ORM\Column(type: 'easy_media_type', nullable: true)]
@@ -90,6 +97,11 @@ class Obra implements \Stringable, RouteParametersInterface
     #[ORM\Column(nullable: true)]
     #[Groups(['obra.read'])]
     private ?array $images = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['obra.read'])]
+    private ?string $youtubeUrl = null;
+
     public function __construct()
     {
         $this->obraImages = new ArrayCollection();
@@ -335,6 +347,18 @@ class Obra implements \Stringable, RouteParametersInterface
     public function setImages(?array $images): static
     {
         $this->images = $images;
+
+        return $this;
+    }
+
+    public function getYoutubeUrl(): ?string
+    {
+        return $this->youtubeUrl;
+    }
+
+    public function setYoutubeUrl(?string $youtubeUrl): static
+    {
+        $this->youtubeUrl = $youtubeUrl;
 
         return $this;
     }

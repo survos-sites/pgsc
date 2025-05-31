@@ -8,6 +8,7 @@ use App\Entity\Obra;
 use App\Form\ArtistFormType;
 use App\Repository\ArtistRepository;
 use App\Repository\LocationRepository;
+use App\Repository\ObraRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use League\Csv\Reader;
 use Symfony\Bridge\Twig\Attribute\Template;
@@ -36,6 +37,7 @@ final class AppController extends AbstractController
     public function __construct(
         private LocationRepository $locationRepository,
         private ArtistRepository $artistRepository,
+        private ObraRepository $obraRepository,
         private EntityManagerInterface $entityManager,
         private PropertyAccessorInterface $propertyAccessor,
         private GoogleDriveService $driveService,
@@ -236,6 +238,7 @@ final class AppController extends AbstractController
         }
 
         return $this->render('app/index.html.twig', [
+            'obras' => $this->obraRepository->findAll(),
             'artists' => $this->artistRepository->findAll(),
             'locations' => $this->locationRepository->findAll(),
             'myMap' => $myMap,
