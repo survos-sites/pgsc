@@ -1,19 +1,31 @@
 code,status,nombre,direcciones,tipo,contacto,cel
 ccj,activo,"Centro cultural Carlos Jurado","16 de Septiembre 1, Zona Centro, 29200 San Cristóbal de las Casas, Chis.",cc,"Zoraida Vleeschower",9671026234
 laez,activo,"La Enseñanza Casa de la Ciudad ","Belisario Domínguez 13, Zona Centro, 29200 San Cristóbal de las Casas, Chis.",cc,"Lidia Gopar",9671664133
-gart,activo,"Galeria Materia (Arteria)","29230, Real de Guadalupe 118, Barrio de Guadalupe, 29230 San Cristóbal de las Casas, Chis.","Galeria ","Adrian ",9671643812
+gart,activo,"Galeria Materia (Arteria)","29230, Real de Guadalupe 118, Barrio de Guadalupe, 29230 San Cristóbal de las Casas, Chis.","Galeria ","Adrian,  Mac ",9671643812
 brujo,activo,"Cerro Brujo ","Real de Guadalupe, Barrio de Guadalupe, 29200 San Cristóbal de las Casas, Chis.","Galeria ","Karla Lorenzana",7226495669
 mualtos,activo,"Museo de los Altos de Chiapas ","Av 20 de Noviembre s/n, Barrio del Cerrillo, 29200 San Cristóbal de las Casas, Chis.",Museo,"Raul Durón",9671380867
 camt,inactivo,"El Caminante","El Pedregal 3, Corral de Piedra, San Cristóbal de las Casas, Chis. 29299",Restaurant
 gtax,activo,"Galeria Taxcalate ","Av Diego Dugelay 36A, El Cerrillo, 29220 San Cristóbal de las Casas, Chis.","Galeria ","Jesús Mob",9671370637
 sabi,activo,"Sabi ","C. María Adelina Flores 57, Barrio de Guadalupe, 29230 San Cristóbal de las Casas, Chis.",Restaurant,"Misa Fujita",(+)818024298154
-muy,activo,MUY,"Nicolás Ruiz, Barrio de Guadalupe, 29230 San Cristóbal de las Casas, Chis.","Galeria ",Jhon,(+)525554530098
+muy,activo,"Galería MUY","Nicolás Ruiz, Barrio de Guadalupe, 29230 San Cristóbal de las Casas, Chis.","Galeria ","John Burnstein (Co-director)
+Martha Alejandra (Co-directora)","(+)525554530098
++52 967 127 0581"
 cazf,activo,"Caza Fuego","Av Diego Dugelay 19, Barrio de Guadalupe, 29230 San Cristóbal de las Casas, Chis.",cc,Alejandra,5554740582
 rues,activo,"Ruido Espontaneo","Flavio A. Paniagua 20, Zona Centro, 29200 San Cristóbal de las Casas, Chis.",cc,"Itzel ",9671192604
 wstyle,activo,"War style","Hermanos Domínguez 14 B, San Antonio, 29250 San Cristóbal de las Casas, Chis.",Tienda,"Zota de Poet",9672301378
 bioes,activo,"Biocafeteria Espiral","Diagonal Hermanos Paniagua 38, San Ramon, 29240 San Cristóbal de las Casas, Chis.",Cafeteria,Sergio,9671146317
-snds,activo,Sendas,"C. María Adelina Flores 50, Barrio de Guadalupe, 29230 San Cristóbal de las Casas, Chis.",cc,Paco,9671036013
+snds,activo,"Sendas - Libre Café","C. María Adelina Flores 50, Barrio de Guadalupe, 29230 San Cristóbal de las Casas, Chis.",cc,Paco,9671036013
 nauf,inactivo,"El naufragio ","Flavio A. Paniagua 76 bis, Barrio de Guadalupe, 29230 San Cristóbal de las Casas, Chis.",Bar,Erick,9671062692
 clal,activo,CELALI,"Calle Escuadrón 201, Pzla. de Mexicanos 6, 29220 San Cristóbal de las Casas, Chis.","Instituto ","Nicolas Juarez ",9671330567
 jovel,waiting,"VENAS DE JOVEL",,cc,Camilo,"967 130 6611"
 chijal,activo,"Oficina de Chijal",,cc
+,,"Museo de Medicina Maya / Organización de Médicos Indígenas del Estado de Chiapas (OMIECH)","Cda. Salomón González Blanco 10, Tlaxcala, 29215 San Cristóbal de las Casas, Chis.",Museo
+,,"Artex Centro Cultural Independiente Chamula ","CHAMULA, cabecera?"
+,,"La Antigua - Agencia Cultural de Chiapas","San Cristobal de Las Casas?"
+,,"Plaza Mucho Corazon ","Ave. Bernal Diaz del Castillo No.5, Barrio de Guadalupe, San Cristobal de Las Casas "
+,,"Fundación Fortaleza de la Mujer Maya (FOMMA)","Avenida Argentina No.14, Barrio de Mexicanos, S.C.L.C.",,"Francisca Oseguera Cruz ","967 114 6865"
+,,"Kakaw Museo","Calle Tapachula entre Dugelay y   Barrio de Cerrillo, S.C.L.C."
+,,"Museo Sergio Castro","29240, C. Guadalupe Victoria 38, Barrio de la Merced, San Cristóbal de las Casas, Chis."
+,,TaniPerla
+,,"Espacio de Terapias y Tiendita Nakupenda ",,,"Valentina Arana",5530601063
+,,"Museo Tatik Samuel ","Carretera Chamula km. 1 San Martin "
