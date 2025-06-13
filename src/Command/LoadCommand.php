@@ -168,6 +168,9 @@ class LoadCommand
                     ->setCode($code);
                 $this->entityManager->persist($obra);
             }
+            if ($audioUrl = $row['audioDriveUrl']) {
+                dd($audioUrl);
+            }
             $obra
                 ->setMaterials($row['material'])
                 ->setYoutubeUrl($row['youtubeUrl'])
