@@ -41,6 +41,7 @@ final class AppController extends AbstractController
         private EntityManagerInterface $entityManager,
         private PropertyAccessorInterface $propertyAccessor,
         private GoogleDriveService $driveService,
+        private \Psr\Log\LoggerInterface $logger,
 
         #[Autowire('%env(GOOGLE_SPREADSHEET_ID)%')] private ?string $googleSpreadsheetId = null,
     ) {
@@ -338,5 +339,49 @@ final class AppController extends AbstractController
         return $this->render('location/index.html.twig', [
             'locations' => $this->locationRepository->findAll(),
         ]);
+    }
+
+    //temp route sais_audio_callback
+    #[Route('/sais_audio_callback', name: 'sais_audio_callback')]
+    public function saisAudioCallback(): Response
+    {
+        // Handle the callback from SAIS for audio processing
+        // You can access the request data and process it as needed
+        // For example, you might want to log the data or update a database record
+
+        /* request data sample 
+        {"request":{"code":"8332ce209f443eb0"}}
+        */
+
+        //send temp log
+        $this->logger->info('AMINE sais audio callback received', [
+            'request' => $_REQUEST, // or $request->request->all() if using Symfony Request object
+        ]);
+
+        //log post data via logger
+        $this->logger->info('AMINE SAIS audio callback POST data', [
+            'post' => $_POST,
+        ]);
+
+        /* payload sample 
+
+        {"json":{"mimeType":"video/mp4","size":3253320,"resized":[],"blur":null,"statusCode":200,"originalHeight":null,"originalWidth":null,"context":[],"root":"chijal","code":"8332ce209f443eb0","path":"chijal/0/8332ce209f443eb0.mp4","originalUrl":"https://drive.google.com/file/d/1pwvaIrBNc6XM_yaDUiNnkDnhiUptpZwZ/view?usp=sharing","marking":"downloaded"}}
+
+        */
+
+        //log the json payload if available
+        $jsonPayload = file_get_contents('php://input');
+        if ($jsonPayload) {
+            $this->logger->info('AMINE SAIS audio callback JSON payload', [
+                'json' => json_decode($jsonPayload, true),
+            ]);
+        } else {
+            $this->logger->info('AMINE SAIS audio callback no JSON payload');
+        }
+
+
+
+        // For now, just return a simple response
+        return new Response('SAIS audio callback received successfully');
     }
 }
