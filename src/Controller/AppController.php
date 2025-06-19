@@ -384,4 +384,44 @@ final class AppController extends AbstractController
         // For now, just return a simple response
         return new Response('SAIS audio callback received successfully');
     }
+
+    //A Temp route to test  JsonRPC\Client;
+    #[Route('/jsonrpc/test', name: 'jsonrpc_test')]
+    public function jsonRpcTest(): Response
+    {
+
+        //prepare the http client from the jsonrpc pack
+        $httpClient = new \JsonRPC\HttpClient(
+            'https://sais.wip/tools',
+        );
+
+        //add curl proxy option 
+        $httpClient->addOption(
+            CURLOPT_PROXY,
+            'http://127.0.0.1:7080'
+        );
+
+        // This is a temporary route to test JsonRPC\Client
+        // You can use this to test the JsonRPC\Client functionality
+        $client = new \JsonRPC\Client('https://sais.wip/tools', false, $httpClient);
+
+        // $result = $client->execute('tools/call', [
+        //     'name' => 'create_account',
+        //     'arguments' => [
+        //         'root' => 'testalpha',
+        //         'estimated' => 100,
+        //     ],
+        // ]);
+
+        //call for tools list
+        $result = $client->execute('tools/list', [
+            'root' => 'chijal',
+            'limit' => 10,
+            'offset' => 0,
+        ]);
+
+        dd($result);
+
+        return new Response('JsonRPC Client created successfully: ' . get_class($client));
+    }
 }
