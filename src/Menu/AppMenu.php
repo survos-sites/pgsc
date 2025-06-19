@@ -53,6 +53,7 @@ final class AppMenu implements KnpMenuHelperInterface
         $this->add($menu, 'app_homepage');
         $this->add($menu, 'api_doc', label: 'API');
         $this->add($menu, 'app_sync');
+        $this->add($menu, 'jsonrpc_test');
         // for nested menus, don't add a route, just a label, then use it for the argument to addMenuItem
 
         $subMenu = $this->addSubmenu($menu, 'sacro');

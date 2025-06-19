@@ -405,13 +405,14 @@ final class AppController extends AbstractController
         // You can use this to test the JsonRPC\Client functionality
         $client = new \JsonRPC\Client('https://sais.wip/tools', false, $httpClient);
 
-        // $result = $client->execute('tools/call', [
-        //     'name' => 'create_account',
-        //     'arguments' => [
-        //         'root' => 'testalpha',
-        //         'estimated' => 100,
-        //     ],
-        // ]);
+         $result = $client->execute('tools/call', [
+             'name' => 'create_account',
+             'arguments' => [
+                 'root' => 'testalpha',
+                 'estimated' => 100,
+             ],
+         ]);
+        dump($result);
 
         //call for tools list
         $result = $client->execute('tools/list', [
