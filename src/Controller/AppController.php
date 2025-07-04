@@ -31,7 +31,7 @@ use Survos\GoogleSheetsBundle\Service\GoogleDriveService;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 
 use Survos\SaisBundle\Mcp\Schema\CreateUserSchema;
-
+use Survos\SaisBundle\Model\AccountSetup;
 
 #[Route('/{_locale}')]
 final class AppController extends AbstractController
@@ -407,19 +407,25 @@ final class AppController extends AbstractController
         // You can use this to test the JsonRPC\Client functionality
         $client = new \JsonRPC\Client('https://sais.wip/tools', false, $httpClient);
 
-        $arguments = new CreateUserSchema("root",1400);
+        //$arguments = new CreateUserSchema("rootdd",1400);
+        $arguments = new AccountSetup('rootdd', 1400);
 
-        $result = $client->execute('tools/call', [
-            'name' => 'create_account',
-            'arguments' => (array) $arguments,
-        ]);
+        // $result = $client->execute('tools/call', [
+        //     'name' => 'create_account',
+        //     //'arguments' => (array) $arguments,
+        //     'arguments' => [
+        //         'root' => 'alphino',
+        //         'estimated' => 1400,
+        //         'approx' => 1400            
+        //     ]
+        // ]);
 
         //call for tools list
-        // $result = $client->execute('tools/list', [
-        //     'root' => 'chijal',
-        //     'limit' => 10,
-        //     'offset' => 0,
-        // ]);
+        $result = $client->execute('tools/list', [
+            'root' => 'chijal',
+            'limit' => 10,
+            'offset' => 0,
+        ]);
 
         dd($result);
 
