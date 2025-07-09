@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1c0b7695bb19395bad865d0b4a4d8b12",
+    "content-hash": "275873e4c64a10efa2d6bfb5b6d7c21a",
     "packages": [
         {
             "name": "a2lix/auto-form-bundle",
@@ -3356,6 +3356,51 @@
                 }
             ],
             "time": "2024-10-21T23:18:20+00:00"
+        },
+        {
+            "name": "fguillot/json-rpc",
+            "version": "v1.3.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/matasarei/json-rpc.git",
+                "reference": "c251e12f6560b40f23b9e141bd287412c554c57a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/matasarei/json-rpc/zipball/c251e12f6560b40f23b9e141bd287412c554c57a",
+                "reference": "c251e12f6560b40f23b9e141bd287412c554c57a",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "php": ">=7.4"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.6",
+                "squizlabs/php_codesniffer": "^3.9"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "JsonRPC": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Frédéric Guillot"
+                }
+            ],
+            "description": "Simple JSON-RPC client/server library that just works",
+            "homepage": "https://github.com/matasarei/json-rpc",
+            "support": {
+                "issues": "https://github.com/matasarei/json-rpc/issues",
+                "source": "https://github.com/matasarei/json-rpc/tree/v1.3.1"
+            },
+            "time": "2024-11-30T10:30:04+00:00"
         },
         {
             "name": "firebase/php-jwt",

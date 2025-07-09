@@ -28,12 +28,13 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use function Symfony\Component\String\u;
 use Symfony\Component\ObjectMapper\ObjectMapperInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 #[AsCommand('app:load', 'Load the chijal data')]
 class LoadCommand
 {
     const SAIS_ROOT = 'chijal';
-	public function __construct(
+    public function __construct(
         private readonly EntityManagerInterface $entityManager,
         private readonly ObjectMapperInterface  $objectMapper,
         private readonly ArtistRepository       $artistRepository,
@@ -42,9 +43,10 @@ class LoadCommand
         private readonly ObraRepository         $obraRepository,
         private readonly ValidatorInterface     $validator,
         private readonly TranslatorInterface $translator,
+        private readonly UrlGeneratorInterface $urlGenerator,
     )
-	{
-	}
+    {
+    }
 
 
 	public function __invoke(
@@ -169,7 +171,19 @@ class LoadCommand
                 $this->entityManager->persist($obra);
             }
             if ($audioUrl = $row['audioDriveUrl']) {
-                dd($audioUrl);
+                //dd($audioUrl);
+                $code = SaisClientService::calculateCode($audioUrl,self::SAIS_ROOT);
+                //dd($code);
+
+                $response = $this->saisClientService->dispatchProcess(new ProcessPayload(
+                    self::SAIS_ROOT,
+                    [
+                        $audioUrl
+                    ],
+                    mediaCallbackUrl: $this->urlGenerator->generate('sais_audio_callback', ['code' => $code, '_locale' => 'es'], UrlGeneratorInterface::ABSOLUTE_URL)
+                ));
+                //dd($audioUrl);
+                //dd($response);
             }
             $obra
                 ->setMaterials($row['material'])
