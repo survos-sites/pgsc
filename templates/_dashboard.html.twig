@@ -1,87 +1,167 @@
-{{ _self }}
-<div class="row">
-    <div class="col-md-3">
-        {% if myMap|default(false) %}
-            map
-            {{ ux_map(myMap, { style: 'height: 300px' }) }}
-            {% else %}
-            @missing ux_map
-        {% endif %}
+{# templates/_dashboard_panels.html.twig #}
+
+{% set limitedArtists = artists|default([])|slice(0, 10) %}
+{% set limitedLocations = locations|default([])|slice(0, 10) %}
+
+<div class="row g-3">
+
+    {# MAIN: OBRAS (big column) #}
+    <div class="col-12 col-lg-8 col-xl-9">
+        <div class="card h-100">
+            <div class="card-header d-flex align-items-center gap-2">
+                {{ ux_icon('tabler:photo', {class: 'icon'}) }}
+                <span class="fw-semibold">Obras</span>
+                <span class="ms-auto badge bg-primary">{{ obras|default([])|length }}</span>
+            </div>
+
+            <div class="card-body p-0">
+                <ol class="list-group list-group-flush">
+                    {% for obra in obras|default([]) %}
+                        {% set linkToVoxitour = voxitourEndpoint ~ app.request.locale ~ '/chijal?obraId=' ~ obra.code ~ '#tab-obras' %}
+                        <li class="list-group-item">
+                            <div class="d-flex align-items-start gap-3">
+
+                                <a href="{{ linkToVoxitour }}" target="_blank" class="text-decoration-none" title="Abrir en Voxitour">
+                                    <img src="{{ qr_code_url(linkToVoxitour) }}" alt="QR Voxitour"
+                                         class="img-thumbnail" style="width:64px;height:64px;object-fit:contain;">
+                                </a>
+
+                                <div class="flex-grow-1">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <a href="{{ path('admin_obra_detail', obra.erp) }}" class="fw-semibold text-reset">
+                                            {{ obra.title }}
+                                        </a>
+                                    </div>
+                                    <div class="text-secondary small">
+                                        {{ obra.artist.name }} · {{ obra.location.name }}
+                                    </div>
+                                </div>
+
+                            </div>
+                        </li>
+                    {% else %}
+                        <li class="list-group-item text-secondary small">No hay obras.</li>
+                    {% endfor %}
+                </ol>
+            </div>
+        </div>
     </div>
-    <div class="col-md-3">
-        <h3>Obras</h3>
-        <ol>
-            {% for obra in obras|default([]) %}
-            <li>
-                {% set linkToVoxitour = voxitourEndpoint ~ app.request.locale ~ '/chijal?obraId=' ~ obra.code ~ '#tab-obras' %}
-                <a href="{{ linkToVoxitour }}" target="_blank">
-                    {#                        @Voxitour!! {{ linkToVoxitour}}#}
-                    <img src="{{ qr_code_url(linkToVoxitour) }}"/>
-                </a>
 
-                <a href="{{ path('admin_obra_detail', obra.erp) }}">
-                    {{ obra.title }}
-                </a>
-
-            </li>
-            {% endfor %}
-        </ol>
-    </div>
-
-        <div class="col-md-3">
-        <ol>
-            {% for loc in locations|default([]) %}
-                <li>
-                    {% set linkToVoxitour = voxitourEndpoint ~ app.request.locale ~ '/chijal?locationId=' ~ loc.code ~ '#tab-locations' %}
-                    <a href="{{ linkToVoxitour }}" target="_blank">
-{#                        @Voxitour!! {{ linkToVoxitour}}#}
-                        <img src="{{ qr_code_url(linkToVoxitour) }}"/>
-
-                    </a>
-                    {% if is_granted('LOCATION_EDIT', loc) %}
-                        <a href="{{ path('admin_location_edit', {entityId: loc.id}) }}">
-                            {{ ux_icon('tabler:edit') }}
-                        </a>
-                    {% endif %}
-                    <a href="{{ path('admin_location_detail', {entityId: loc.id}) }}">
-                        {{ loc.name }}
-                        <sup>{{ loc.obras|length }}</sup>
-                        <sup>
-                            {{ loc.typeString }}
-                        </sup>
-                    </a>
-                </li>
-            {% endfor %}
-        </ol>
-    </div>
-    <div class="col-md-3">
-        <ol class="list-group">
-            {% for artist in artists|default([]) %}
-                <li class="list-group-item">
-                    <div>
-
-                    {% if artist.images|default(false) %}
-                    <img class="float-start img-thumbnail" style="max-width: 60px" src="{{ artist.images.small }}" alt="artist image" />
-                    {% endif %}
-
-                    {% if is_granted('ARTIST_EDIT', artist) %}
-                        <a href="{{ path('admin_artist_edit', {entityId: artist.id}) }}">
-                            {{ ux_icon('tabler:edit') }}
-                        </a>
-                    {% endif %}
-                    <a href="{{ path('admin_artist_detail', {entityId: artist.id}) }}">
-                        {{ artist.name }}
-                        <br />{{ artist.slogan }}
-                    </a>
-                        <sup>{{ artist.obras|length }}</sup>
-
-                    <a target="_blank" href="{{ path('artist_show', artist.rp) }}">
-                        {{ ux_icon('show') }}
-                    </a>
+    {# SIDEBAR: ARTISTS (max 10) #}
+    <div class="col-12 col-lg-4 col-xl-3">
+        <div class="row g-3">
+            <div class="col-12">
+                <div class="card h-100">
+                    <div class="card-header d-flex align-items-center gap-2">
+                        {{ ux_icon('tabler:users', {class: 'icon'}) }}
+                        <span class="fw-semibold">Artistas</span>
+                        <span class="ms-auto badge bg-primary">{{ artists|default([])|length }}</span>
                     </div>
-                </li>
-            {% endfor %}
-        </ol>
-    </div>
-</div>
 
+                    <ol class="list-group list-group-flush">
+                        {% for artist in limitedArtists %}
+                            <li class="list-group-item">
+                                <div class="d-flex align-items-start gap-3">
+                                    {% if artist.images|default(false) %}
+                                        <img class="img-thumbnail" style="width:48px;height:48px;object-fit:cover;"
+                                             src="{{ artist.images.small }}" alt="artist image" />
+                                    {% endif %}
+
+                                    <div class="flex-grow-1">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <a href="{{ path('admin_artist_detail', {entityId: artist.id}) }}" class="fw-semibold text-reset">
+                                                {{ artist.name }}
+                                            </a>
+                                            <span class="badge bg-secondary">{{ artist.obras|length }}</span>
+
+                                            {% if is_granted('ARTIST_EDIT', artist) %}
+                                                <a href="{{ path('admin_artist_edit', {entityId: artist.id}) }}" class="text-muted" title="Editar">
+                                                    {{ ux_icon('tabler:edit', {class: 'icon'}) }}
+                                                </a>
+                                            {% endif %}
+
+                                            <a target="_blank" href="{{ path('artist_show', artist.rp) }}" class="text-muted" title="Ver público">
+                                                {{ ux_icon('tabler:external-link', {class: 'icon'}) }}
+                                            </a>
+                                        </div>
+                                        {% if artist.slogan %}
+                                            <div class="text-secondary small">{{ artist.slogan }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </li>
+                        {% else %}
+                            <li class="list-group-item text-secondary small">No hay artistas.</li>
+                        {% endfor %}
+                    </ol>
+                </div>
+            </div>
+
+            {# SIDEBAR: LOCATIONS (max 10) #}
+            <div class="col-12">
+                <div class="card h-100">
+                    <div class="card-header d-flex align-items-center gap-2">
+                        {{ ux_icon('tabler:map-pin', {class: 'icon'}) }}
+                        <span class="fw-semibold">Lugares</span>
+                        <span class="ms-auto badge bg-primary">{{ locations|default([])|length }}</span>
+                    </div>
+
+                    <ol class="list-group list-group-flush">
+                        {% for loc in limitedLocations %}
+                            {% set linkToVoxitour = voxitourEndpoint ~ app.request.locale ~ '/chijal?locationId=' ~ loc.code ~ '#tab-locations' %}
+                            <li class="list-group-item">
+                                <div class="d-flex align-items-start gap-3">
+                                    <a href="{{ linkToVoxitour }}" target="_blank" class="text-decoration-none" title="Abrir en Voxitour">
+                                        <img src="{{ qr_code_url(linkToVoxitour) }}" alt="QR Voxitour"
+                                             class="img-thumbnail" style="width:48px;height:48px;object-fit:contain;">
+                                    </a>
+
+                                    <div class="flex-grow-1">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <a href="{{ path('admin_location_detail', {entityId: loc.id}) }}" class="fw-semibold text-reset">
+                                                {{ loc.name }}
+                                            </a>
+                                            <span class="badge bg-secondary">{{ loc.obras|length }}</span>
+                                            <span class="badge bg-light text-muted">{{ loc.typeString }}</span>
+
+                                            {% if is_granted('LOCATION_EDIT', loc) %}
+                                                <a href="{{ path('admin_location_edit', {entityId: loc.id}) }}" class="text-muted" title="Editar">
+                                                    {{ ux_icon('tabler:edit', {class: 'icon'}) }}
+                                                </a>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        {% else %}
+                            <li class="list-group-item text-secondary small">No hay lugares.</li>
+                        {% endfor %}
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# FULL-WIDTH MAP AT BOTTOM #}
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex align-items-center gap-2">
+                {{ ux_icon('tabler:map', {class: 'icon'}) }}
+                <span class="fw-semibold">Mapa</span>
+            </div>
+            <div class="card-body">
+                {% if myMap|default(null) %}
+                    <div class="ratio ratio-21x9 rounded border">
+                        {{ ux_map(myMap, { style: 'height: 100%; width: 100%' }) }}
+                    </div>
+                {% else %}
+                    <div class="alert alert-warning mb-0">
+                        {{ ux_icon('tabler:alert-circle', {class: 'icon'}) }}
+                        Falta el componente <code>ux_map</code>.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+</div>

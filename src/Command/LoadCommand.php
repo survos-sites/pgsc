@@ -2,14 +2,9 @@
 
 namespace App\Command;
 
-use App\Dto\ArtistDto;
 use App\Entity\Artist;
 use App\Entity\Location;
 use App\Entity\Obra;
-use App\Enum\LocationType;
-use App\Factory\ArtistFactory;
-use App\Factory\LocationFactory;
-use App\Factory\UserFactory;
 use App\Repository\ArtistRepository;
 use App\Repository\LocationRepository;
 use App\Repository\ObraRepository;
@@ -20,280 +15,366 @@ use Survos\CoreBundle\Service\SurvosUtils;
 use Survos\SaisBundle\Model\AccountSetup;
 use Survos\SaisBundle\Model\ProcessPayload;
 use Survos\SaisBundle\Service\SaisClientService;
-use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Attribute\Option;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\ObjectMapper\ObjectMapperInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use function Symfony\Component\String\u;
-use Symfony\Component\ObjectMapper\ObjectMapperInterface;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 #[AsCommand('app:load', 'Load the chijal data')]
-class LoadCommand
+class LoadCommand extends Command
 {
-    const SAIS_ROOT = 'chijal';
+    private const SAIS_ROOT = 'chijal';
+
     public function __construct(
-        private readonly EntityManagerInterface $entityManager,
+        private readonly EntityManagerInterface $em,
         private readonly ObjectMapperInterface  $objectMapper,
-        private readonly ArtistRepository       $artistRepository,
-        private readonly LocationRepository     $locationRepository,
-        private readonly SaisClientService      $saisClientService, // @todo: move to workflow
-        private readonly ObraRepository         $obraRepository,
+        private readonly ArtistRepository       $artistRepo,
+        private readonly LocationRepository     $locationRepo,
+        private readonly SaisClientService      $sais,
+        private readonly ObraRepository         $obraRepo,
         private readonly ValidatorInterface     $validator,
         private readonly TranslatorInterface    $translator,
-        private readonly UrlGeneratorInterface  $urlGenerator, private readonly LoggerInterface $logger,
-    )
-    {
-    }
+        private readonly UrlGeneratorInterface  $urls,
+        private readonly LoggerInterface        $logger,
+    ) { parent::__construct(); }
 
+    public function __invoke(
+        SymfonyStyle $io,
+        #[Option('refresh', 'Refresh the cached data from Google Sheets')] ?bool $refresh = null,
+        #[Option('resize', 'Dispatch SAIS requests')] ?bool $resize = null
+    ): int {
+        if ($refresh) {
+            $io->writeln('Option refresh: true');
+        }
 
-	public function __invoke(
-		SymfonyStyle $io,
-		#[Option('refresh the cached data from google sheets')]
-		?bool $refresh = null,
-        #[Option('dispatch SAIS requests')] ?bool $resize=null
-	): int
-	{
-        $manager = $this->entityManager;
-		if ($refresh) {
-		    $io->writeln("Option refresh: $refresh");
-		}
-//        $this->saisClientService->accountSetup(new AccountSetup(self::SAIS_ROOT, 100));
+        // $this->sais->accountSetup(new AccountSetup(self::SAIS_ROOT, 100));
 
-        $artists = [];
-        foreach ($this->artists() as $artistData) {
-            if ($artistData['status']<>'active') {
+        $artists   = []; // code => Artist
+        $locations = []; // code => Location
+
+        // ---------- Artists ----------
+        foreach ($this->iterArtists() as $row) {
+            // normalize once
+            $row = $this->normalizeRow($row);
+
+            if (!$this->isActive($row['status'] ?? null)) {
                 continue;
             }
 
-//            $initials = $artistData['code'];
-//            $email = $initials.'@test.com';
-            if (!$email = $artistData['email']) {
-                dd($artistData);
+            $email = $row['email'] ?? null;
+            if (!$email) {
+                $this->logger->warning('Skipping artist without email', ['row' => $row]);
                 continue;
             }
-//            $artistData = (object) $artistData;
-//            $artistData->id = null;
-            if (!$artist = $this->artistRepository->findOneBy(['email' => $email])) {
-                $artist = new Artist();
-                $this->entityManager->persist($artist);
-                $artist->setEmail($email);
 
-//                UserFactory::createOne([
-//                    'code' => $artist->getCode(),
-//                    'email' => $artist->getEmail(),
-////                'cel' => $artistData['phone'],
-//                    'plainPassword' => 'test',
-//                    'roles' => ['ROLE_USER', 'ROLE_ARTIST'],
-//                ]);
+            // code may be missing in artistas.csv; derive if needed
+            $code = $this->normCode($row['code'] ?? null, $email, $row['name'] ?? null);
 
+            $artist = $this->artistRepo->findOneBy(['email' => $email]) ?? new Artist();
+            if (null === $artist->getId()) {
+                $this->em->persist($artist);
             }
-            $artist->setName($artistData['name'])
-                ->setCode($artistData['code'])
-                ->setSlogan(substr($artistData['tagline'], 0, 80))
-                ->setDriveUrl($artistData['driveUrl'])
-                ->setBio($artistData['long_bio'], 'es')
-//                ->setLanguages($artistData['languages'])
-                ->setBirthYear($artistData['nacimiento']);
-            $artists[$artist->getCode()] = $artist;
+
+            $artist
+                ->setEmail($email)
+                ->setCode($code)
+                ->setName($row['name'] ?? $email)
+                ->setSlogan($this->truncate($row['tagline'] ?? '', 80))
+                ->setDriveUrl($row['driveurl'] ?? null)
+                ->setBio($row['long_bio'] ?? ($row['bio'] ?? ''), 'es')
+                ->setBirthYear($this->parseBirthYear($row['nacimiento'] ?? ($row['birthyear'] ?? null)));
+
+            // Optionally process images via SAIS
             if ($resize && $artist->getDriveUrl()) {
-                $response = $this->saisClientService->dispatchProcess(new ProcessPayload(
-                    self::SAIS_ROOT,
-                    [
-                        $artist->getDriveUrl(),
-                    ]
-                ));
-                $artist->setImages($response[0]['resized'] ?? null);
-            }
-            $artist->mergeNewTranslations();
-            $errors = $this->validator->validate($artist);
-            if (count($errors) > 0) {
-                foreach ($errors as $error) {
-                    $io->error($error->getPropertyPath()  . "/" . $error->getMessage());
+                try {
+                    $resp = $this->sais->dispatchProcess(new ProcessPayload(
+                        self::SAIS_ROOT,
+                        [$artist->getDriveUrl()],
+                    ));
+                    $artist->setImages($resp[0]['resized'] ?? null);
+                } catch (\Throwable $e) {
+                    $this->logger->error('SAIS artist process failed', ['email' => $email, 'e' => $e->getMessage()]);
                 }
-                dd();
             }
-//                $this->objectMapper->map($artistData, $artist);
-//                dd($artistData, $artist);
-//            $code = u($email)->before('@')->toString();
 
+            $artist->mergeNewTranslations();
+            $this->validateOrFail($artist, $io);
 
-                //            dd($artistData);
-
-            // OR create user with role ARTIST?
-//            $artist = ArtistFactory::createOne([
-//                'name' => $artistData['name'],
-//                'code' => $code,
-//                'bio' => $artistData['bio'],
-//                'slogan' => $artistData['slogan'],
-//                'phone' => $artistData['phone'],
-//                'driveUrl' => $artistData['foto'],
-//                'email' => $email,
-//            ]);
-//
-//            }
-            $artists[] = $artist;
+            $artists[$artist->getCode()] = $artist;
         }
 
-        foreach ($this->locations() as $row) {
-            if ($row['status'] !== 'activo') {
+        // ---------- Locations ----------
+        foreach ($this->iterLocations() as $rowRaw) {
+            $row = $this->normalizeRow($rowRaw);
+
+            if (!$this->isActive($row['status'] ?? null, activeWords: ['activo', 'active', 'sí', 'si'])) {
                 continue;
             }
-            if (!$location = $this->locationRepository->findOneBy(['name' => $row['nombre']])) {
-                $location = new Location();
-                $this->entityManager->persist($location);
-                $location->setName($row['nombre']);
+
+            $code = $this->normCode($row['code'] ?? null);
+            if (!$code) {
+                $this->logger->warning('Skipping location with empty code', ['row' => $row]);
+                continue;
             }
-            $location->setStatus($row['status'])
-                ->setCode($row['code'])
-                ->setAddress($row['direcciones'])
-                ;
+
+            $location = $this->locationRepo->findOneBy(['code' => $code]) // prefer code, not name
+                ?? $this->locationRepo->findOneBy(['name' => $row['nombre'] ?? null])
+                ?? new Location();
+
+            if (null === $location->getId()) {
+                $this->em->persist($location);
+            }
+
+            $location
+                ->setCode($code)
+                ->setName($row['nombre'] ?? $code)
+                ->setStatus($row['status'] ?? 'activo')
+                ->setAddress($row['direcciones'] ?? null);
+
             $locations[$location->getCode()] = $location;
-//                ->setType($row['tipo'])
-
-//                    'name' => ($name = trim($row['nombre'])),
-//                    'status' => $row['status'],
-//                    'address' => $row['direcciones'],
-//                    'type' => LocationType::from(trim(strtolower($row['tipo']))) ?? null,
-//                    'code' => $row['codigo'] ?: $this->initials($name),
-//                'lat' => $row['lat'] ? (float) $row['lat'] : null,
-//                'lng' => $row['lon'] ? (float) $row['lon'] : null,
-//                ]);
-
-//            }
         }
-        $manager->flush();
 
-        $csv = Reader::createFromPath('data/piezas.csv', 'r');
-        $csv->setHeaderOffset(0);
-        foreach ($csv->getRecords() as $row) {
-            if (!$obra = $this->obraRepository->findOneBy(['code' => ($code = $row['code'])])) {
-                $obra = new Obra()
-                    ->setCode($code);
-                $this->entityManager->persist($obra);
+        $this->em->flush();
+
+        // ---------- Obras (pieces) ----------
+        $piezas = $this->csv('data/piezas.csv');
+        $piezas->setHeaderOffset(0);
+
+        foreach ($piezas->getRecords() as $row) {
+            $row = $this->normalizeRow($row);
+
+            $code = $this->normCode($row['code'] ?? null);
+            if (!$code) {
+                continue;
             }
-            SurvosUtils::assertKeyExists('audioDriveUrl', $row, 'data/piezas.csv');
 
-            if ($audioUrl = $row['audioDriveUrl']) {
-                //dd($audioUrl);
-                $code = SaisClientService::calculateCode($audioUrl,self::SAIS_ROOT);
-                //dd($code);
+            $obra = $this->obraRepo->findOneBy(['code' => $code]) ?? (new Obra())->setCode($code);
+            if (null === $obra->getId()) {
+                $this->em->persist($obra);
+            }
 
-                if ($resize) {
-                    $response = $this->saisClientService->dispatchProcess(new ProcessPayload(
-                        self::SAIS_ROOT,
-                        [
-                            $audioUrl
-                        ],
-                        mediaCallbackUrl: $this->urlGenerator->generate('sais_audio_callback', ['code' => $code, '_locale' => 'es'], UrlGeneratorInterface::ABSOLUTE_URL)
-                    ));
+            // Optional audio process
+            if (!empty($row['audiodriveurl'])) {
+                $audioUrl = $row['audiodriveurl'];
+                try {
+                    $saisCode = SaisClientService::calculateCode($audioUrl, self::SAIS_ROOT);
+                    if ($resize) {
+                        $this->sais->dispatchProcess(new ProcessPayload(
+                            self::SAIS_ROOT,
+                            [$audioUrl],
+                            mediaCallbackUrl: $this->urls->generate(
+                                'sais_audio_callback',
+                                ['code' => $saisCode, '_locale' => 'es'],
+                                UrlGeneratorInterface::ABSOLUTE_URL
+                            )
+                        ));
+                    }
+                } catch (\Throwable $e) {
+                    $this->logger->error('SAIS audio process failed', ['code' => $code, 'e' => $e->getMessage()]);
                 }
-                //dd($audioUrl);
-                //dd($response);
             }
-            foreach ($row as $field => $value) {
-                $row[$field] = trim($value);
-            }
+
+            // Basic fields
             $obra
-                ->setMaterials($row['material'])
-                ->setYoutubeUrl($row['youtubeUrl'])
-                ->setDriveUrl($row['photoDriveUrl'])
-                ->setTitle($row['title']);
-            if ($locCode = $row['loc_code']) {
-                $locations[$locCode]->addObra($obra);
-            }
-            if ($artistCode = $row['artist_code']) {
-                SurvosUtils::assertKeyExists($artistCode, $artists);
-                $artists[$artistCode]->addObra($obra);
-            }
-            if ($driveUrl = $obra->getDriveUrl()) {
-                $response = $this->saisClientService->dispatchProcess(new ProcessPayload(
-                    self::SAIS_ROOT,
-                    [
-                        $driveUrl,
-                    ]
-                ));
-                $obra->setImages($response[0]['resized'] ?? null);
-            }
+                ->setMaterials($row['material'] ?? null)
+                ->setYoutubeUrl($row['youtubeurl'] ?? null)
+                ->setDriveUrl($row['photodriveurl'] ?? null)
+                ->setTitle($row['title'] ?? null);
 
-
-
-//            if ($resize)
-            $response = $this->saisClientService->dispatchProcess(new ProcessPayload(
-                'chijal',
-                [
-                    $artist->getDriveUrl(),
-                ]
-            ));
-            $artist->setImages($response[0]['resized'] ?? null);
-        }
-
-        foreach ($manager->getRepository(Location::class)->findAll() as $location) {
-            $location->setObraCount($location->getObras()->count());
-        }
-        foreach ($manager->getRepository(Artist::class)->findAll() as $location) {
-            $location->setObraCount($location->getObras()->count());
-        }
-        $manager->flush();
-
-        $io->success(self::class . " success.");
-		return Command::SUCCESS;
-	}
-
-
-
-    private function artists(): iterable
-    {
-        $csv = Reader::createFromPath('data/artistas.csv', 'r');
-        $csv->setHeaderOffset(0);
-        foreach ($csv->getRecords() as $record) {
-            if ($email = $record['email']) {
-                $ourData[$email] = $record;
-            }
-        }
-//        return $csv->getRecordsAsObject(ArtistDto::class);
-
-        // the responses from Google Form, @artists
-        // https://support.google.com/docs/thread/223250855/how-do-i-shorten-google-form-headers-in-sheets-so-the-column-header-form-question-is-easy-to-read?hl=en
-
-        $csv = Reader::createFromPath('data/artists.csv', 'r');
-        $csv->setHeaderOffset(0);
-        $responses = [];
-        foreach ($csv->getRecords() as $record) {
-            SurvosUtils::assertKeyExists('email', $record, "artists.csv");
-            if ($email = $record['email']) {
-                if (!array_key_exists($email, $ourData)) {
-                    $this->logger->warning("Missing $email in data/artists.csv");
+            // Location link
+            if (!empty($row['loc_code'])) {
+                $locCode = $this->normCode($row['loc_code']);
+                if (isset($locations[$locCode])) {
+                    $locations[$locCode]->addObra($obra);
                 } else {
-                    $combined = array_merge($ourData[$email], $record);
-                    $responses[$email] = $combined;
+                    $this->logger->warning('Unknown location code on pieza', ['pieza' => $code, 'loc_code' => $locCode]);
+                }
+            }
+
+            // Artist link
+            if (!empty($row['artist_code'])) {
+                $artistCode = $this->normCode($row['artist_code']);
+                if (isset($artists[$artistCode])) {
+                    $artists[$artistCode]->addObra($obra);
+                } else {
+                    $this->logger->warning('Unknown artist code on pieza', ['pieza' => $code, 'artist_code' => $artistCode]);
+                }
+            }
+
+            // Optional image process for obra
+            if ($resize && $obra->getDriveUrl()) {
+                try {
+                    $resp = $this->sais->dispatchProcess(new ProcessPayload(
+                        self::SAIS_ROOT,
+                        [$obra->getDriveUrl()],
+                    ));
+                    $obra->setImages($resp[0]['resized'] ?? null);
+                } catch (\Throwable $e) {
+                    $this->logger->error('SAIS obra process failed', ['code' => $code, 'e' => $e->getMessage()]);
                 }
             }
         }
-        return $responses;
 
+        // ---------- counts ----------
+        foreach ($this->locationRepo->findAll() as $loc) {
+            $loc->setObraCount($loc->getObras()->count());
+        }
+        foreach ($this->artistRepo->findAll() as $art) {
+            $art->setObraCount($art->getObras()->count());
+        }
 
-        return $csv->getRecords();
+        $this->em->flush();
+        $io->success(self::class . ' success.');
+
+        return Command::SUCCESS;
     }
 
-    private function locations(): iterable
-    {
-        $csv = Reader::createFromPath('data/locations.csv', 'r');
-        $csv->setHeaderOffset(0);
+    // ================== Helpers ==================
 
-        return $csv->getRecords();
+    private function iterArtists(): iterable
+    {
+        // Internal list (codes + status) keyed by email
+        $our = [];
+        foreach ($this->csv('data/artistas.csv', header: 0)->getRecords() as $r) {
+            $r = $this->normalizeRow($r);
+            if (!empty($r['email'])) {
+                $our[$r['email']] = $r;
+            }
+        }
+
+        // Google Form responses (details) keyed by email
+        $responses = [];
+        foreach ($this->csv('data/artists.csv', header: 0)->getRecords() as $r) {
+            $r = $this->normalizeRow($r);
+            if (empty($r['email'])) {
+                continue;
+            }
+            if (!isset($our[$r['email']])) {
+                // Warn but still include, with minimal defaults
+                $this->logger->warning('Email present in artists.csv but missing in artistas.csv', ['email' => $r['email']]);
+                $merged = $r;
+            } else {
+                $merged = array_merge($our[$r['email']], $r);
+            }
+            $responses[$r['email']] = $merged;
+        }
+
+        // Also include any internal-only rows that didn’t fill the form (if desired)
+        foreach ($our as $email => $r) {
+            if (!isset($responses[$email])) {
+                $responses[$email] = $r;
+            }
+        }
+
+        return array_values($responses);
+    }
+
+    private function iterLocations(): iterable
+    {
+        return $this->csv('data/locations.csv', header: 0)->getRecords();
+    }
+
+    private function csv(string $path, int $header = 0): Reader
+    {
+        $csv = Reader::createFromPath($path, 'r');
+        $csv->setHeaderOffset($header);
+        return $csv;
+    }
+
+    private function normalizeRow(array $row): array
+    {
+        $normalized = [];
+        foreach ($row as $k => $v) {
+            if ($v === null) { $normalized[$this->normKey($k)] = null; continue; }
+            $v = is_string($v) ? trim($v) : $v;
+            // Collapse weird multiple spaces and stray quotes
+            if (is_string($v)) {
+                $v = preg_replace('/\s+/', ' ', $v);
+                $v = trim($v, "\"' \t\n\r\0\x0B");
+            }
+            $normalized[$this->normKey($k)] = $v === '' ? null : $v;
+        }
+        return $normalized;
+    }
+
+    private function normKey(?string $key): ?string
+    {
+        if ($key === null) { return null; }
+        $key = strtolower(trim($key));
+        $key = str_replace(
+            [' ', '-', '/', 'á','é','í','ó','ú','ñ'],
+            ['_', '_', '_','a','e','i','o','u','n'],
+            $key
+        );
+        return $key;
+    }
+
+    private function isActive(?string $status, array $activeWords = ['active', 'activo', 'yes', 'sí', 'si']): bool
+    {
+        if (!$status) { return false; }
+        $s = strtolower(trim($status));
+        // common typos & variants
+        $s = str_replace(['no active', 'not active', 'inactivo', 'inactive'], 'inactive', $s);
+        if ($s === 'acive') { $s = 'active'; }
+
+        foreach ($activeWords as $word) {
+            if ($s === $word) { return true; }
+        }
+        return $s === 'active';
+    }
+
+    private function normCode(?string $code, ?string $email = null, ?string $name = null): ?string
+    {
+        $code = $code ? strtolower(trim($code)) : null;
+        if ($code) {
+            $code = preg_replace('/\s+/', '', $code);
+        }
+        if (!$code && $email) {
+            $code = strtolower(u($email)->before('@')->toString());
+        }
+        if (!$code && $name) {
+            $code = $this->initials($name);
+        }
+        return $code ?: null;
     }
 
     private function initials(string $name): string
     {
         $name = u($name)->ascii()->toString();
+        $parts = array_values(array_filter(explode(' ', strtolower($name))));
+        $letters = array_map(fn($n) => preg_replace('/(?<=\w).*/', '', $n), $parts);
+        return implode('', $letters);
+    }
 
-        return strtolower(implode('', array_map(function ($name) {
-            return preg_replace('/(?<=\w)./', '', $name);
-        }, explode(' ', $name))));
+    private function truncate(?string $s, int $len): ?string
+    {
+        if (!$s) { return $s; }
+        return mb_strlen($s) > $len ? mb_substr($s, 0, $len) : $s;
+    }
+
+    private function parseBirthYear(?string $raw): ?int
+    {
+        if (!$raw) { return null; }
+        // Grab the first 4-digit year between 1900 and 2100
+        if (preg_match('/(19|20)\d{2}/', $raw, $m)) {
+            return (int)$m[0];
+        }
+        return null;
+    }
+
+    private function validateOrFail(object $entity, SymfonyStyle $io): void
+    {
+        $errors = $this->validator->validate($entity);
+        if (\count($errors) > 0) {
+            foreach ($errors as $e) {
+                $io->error($e->getPropertyPath() . ' / ' . $e->getMessage());
+            }
+            throw new \RuntimeException('Validation failed.');
+        }
     }
 }
