@@ -66,7 +66,10 @@ class LoadCommand
 
         $artists = [];
         foreach ($this->artists() as $artistData) {
-            dump($artistData);
+            if ($artistData['status']<>'active') {
+                continue;
+            }
+
 //            $initials = $artistData['code'];
 //            $email = $initials.'@test.com';
             if (!$email = $artistData['email']) {
@@ -137,7 +140,7 @@ class LoadCommand
         }
 
         foreach ($this->locations() as $row) {
-            if ($row['status'] === 'inactivo') {
+            if ($row['status'] !== 'activo') {
                 continue;
             }
             if (!$location = $this->locationRepository->findOneBy(['name' => $row['nombre']])) {
@@ -173,6 +176,8 @@ class LoadCommand
                     ->setCode($code);
                 $this->entityManager->persist($obra);
             }
+            SurvosUtils::assertKeyExists('audioDriveUrl', $row, 'data/piezas.csv');
+
             if ($audioUrl = $row['audioDriveUrl']) {
                 //dd($audioUrl);
                 $code = SaisClientService::calculateCode($audioUrl,self::SAIS_ROOT);
@@ -190,10 +195,13 @@ class LoadCommand
                 //dd($audioUrl);
                 //dd($response);
             }
+            foreach ($row as $field => $value) {
+                $row[$field] = trim($value);
+            }
             $obra
                 ->setMaterials($row['material'])
                 ->setYoutubeUrl($row['youtubeUrl'])
-                ->setDriveUrl($row['driveUrl'])
+                ->setDriveUrl($row['photoDriveUrl'])
                 ->setTitle($row['title']);
             if ($locCode = $row['loc_code']) {
                 $locations[$locCode]->addObra($obra);

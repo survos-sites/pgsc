@@ -1,6 +1,20 @@
-artist_code,loc_code,code,driveUrl,audio,audioDriveUrl,youtubeDriveUrl,youtubeUrl,title,material,name,size,description,precio
-ce,chijal,ce-oceano,https://drive.google.com/file/d/1axnQvFZevcUbctHzQzKtYToUTjOkOTe_/view?usp=drive_link,output.mp3,,sold,,"“Un profundo oceano oscuro invade mi alma”","grafito sobre papel ",2024,100x150,,5000
-ce,chijal,ce-trep,https://drive.google.com/file/d/1GIGFkGMvB3-lFVTPsFQjPNFAcL_Rf62S/view?usp=sharing,,,,,"""Trepanación""","oleo s/tela",2024,20x20,,3000
-ce,chijal,ce-hombre,https://drive.google.com/file/d/1jJWZHEtSJy89QOi0UyEHCkguoP_oU1JX/view?usp=drive_link,,,sold,,"“Salvando al hombre que se ahoga”","oleo s/ tela",2024,20x25,,4000
-ce,chijal,ce-cabeza,https://drive.google.com/file/d/1Td0UVL-Gqid4ceglZDPakg9mzTeEHsWn/view?usp=sharing,,,sold,,"“Haces que mi cabeza explote”","oleo s/ tela",2024,,,3000
-ce,chijal,ce-desaparecer,https://drive.google.com/file/d/1DhjK_GPzIv8se1qLle9E5D4t4trUn6BG/view?usp=drive_link,,https://drive.google.com/file/d/1pwvaIrBNc6XM_yaDUiNnkDnhiUptpZwZ/view?usp=sharing,https://drive.google.com/file/d/1pwvaIrBNc6XM_yaDUiNnkDnhiUptpZwZ/view?usp=sharing,https://www.youtube.com/embed/Sv8IibuIB_M,"""Desaparecer por completo""","oleo s/tela",2024,20x20,,3000
+artist_code,loc_code,code,photoDriveUrl,TzolzilDriveUrl,audioDriveUrl,youtubeUrl,title,material,size,año,description,precio
+lh,"kiki  ",,ElAncianoPhoto,,ElAnciadoAudio,ElAncianoVideo,"Anciano en el campo",,"147 X 175 cm"
+lh,"kiki  ",,ImaginaciónPhoto,,,,Imaginación,,"90 X 100 cm"
+lh,"kiki  "
+ce,cora,,,,,,"Fantadía de los infelices","óleo sobre placa de acrílico y esmalte sobre cristal/ marco de cedro","45X51 cm",2025,,"12,500"
+ce,cora,,,,,,"Yo soy tú y tú eres yo","óleo sobre placa de acrílico y esmalte sobre cristal/ marco de cedro","45X51 cm",2025,,"12,500"
+ep,jvel,,,,ElmalverdeZinacantanAudio,ElmalverdeZinacantanVideo,"El malverde de Zinacantan"
+ep,jvel
+ac,kuxu,,LaAzoteaPhoto,,,,"La Azotea","óleo sobre lienzo","74 X 84 cm",2024,,7500
+ac,kuxu,,ElJardínPhoto,,,,"El jardín ","collage mixto sobre papel rosa","25 X35 cm",2024,,1000
+fe,laez,,Baichil/ElsueñoPhoto,,,,"Baichil/el sueño","Acrílico sobre lienzo","140 X 140",2024,,"25,000"
+fe,laez,,Xiximton/piedraderioPhoto,,,,"Xiximb ton/piedra de río ","Acrílico sobre lienzo","50 X 50",2025,,6500
+av,mualtos,,ChoyPhoto,,ChoyAUDIO,ChoyVideo,Choy,"Acrílico sobre tela","70 X100 cm",2025,,"16,000"
+av,mualtos,,"Ka’kal tzí (perro de fuego)Photo",,,,"Ka'kal tzi (perro de fuego)","Acrílico sobre tela","86 X 70 cm",2025,,"16,000"
+av,mualtos,,niñafelizPhoto,,,,"Niña feliz","Acrílico sobre tela","70 X70 cm",2025,,7000
+om,ccj
+om,ccj
+az,bioes
+az,snds
+,vejvel
