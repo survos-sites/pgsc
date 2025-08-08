@@ -1,6 +1,6 @@
-code,driveUrl,audio,audioDriveUrl,youtubeDriveUrl,youtubeUrl,artist_code,loc_code,title,material,name,size,description,precio
-ce-oceano,https://drive.google.com/file/d/1axnQvFZevcUbctHzQzKtYToUTjOkOTe_/view?usp=drive_link,output.mp3,,sold,,ce,chijal,"“Un profundo oceano oscuro invade mi alma”","grafito sobre papel ",2024,100x150,,5000
-ce-hombre,https://drive.google.com/file/d/1jJWZHEtSJy89QOi0UyEHCkguoP_oU1JX/view?usp=drive_link,,,sold,,ce,chijal,"“Salvando al hombre que se ahoga”","oleo s/ tela",2024,20x25,,4000
-ce-cabeza,https://drive.google.com/file/d/1Td0UVL-Gqid4ceglZDPakg9mzTeEHsWn/view?usp=sharing,,,sold,,ce,chijal,"“Haces que mi cabeza explote”","oleo s/ tela",2024,,,3000
-ce-desaparecer,https://drive.google.com/file/d/1DhjK_GPzIv8se1qLle9E5D4t4trUn6BG/view?usp=drive_link,,https://drive.google.com/file/d/1pwvaIrBNc6XM_yaDUiNnkDnhiUptpZwZ/view?usp=sharing,https://drive.google.com/file/d/1pwvaIrBNc6XM_yaDUiNnkDnhiUptpZwZ/view?usp=sharing,https://www.youtube.com/embed/Sv8IibuIB_M,ce,chijal,"""Desaparecer por completo""","oleo s/tela",2024,20x20,,3000
-ce-trep,https://drive.google.com/file/d/1GIGFkGMvB3-lFVTPsFQjPNFAcL_Rf62S/view?usp=sharing,,,,,ce,chijal,"""Trepanación""","oleo s/tela",2024,20x20,,3000
+artist_code,loc_code,code,driveUrl,audio,audioDriveUrl,youtubeDriveUrl,youtubeUrl,title,material,name,size,description,precio
+ce,chijal,ce-oceano,https://drive.google.com/file/d/1axnQvFZevcUbctHzQzKtYToUTjOkOTe_/view?usp=drive_link,output.mp3,,sold,,"“Un profundo oceano oscuro invade mi alma”","grafito sobre papel ",2024,100x150,,5000
+ce,chijal,ce-trep,https://drive.google.com/file/d/1GIGFkGMvB3-lFVTPsFQjPNFAcL_Rf62S/view?usp=sharing,,,,,"""Trepanación""","oleo s/tela",2024,20x20,,3000
+ce,chijal,ce-hombre,https://drive.google.com/file/d/1jJWZHEtSJy89QOi0UyEHCkguoP_oU1JX/view?usp=drive_link,,,sold,,"“Salvando al hombre que se ahoga”","oleo s/ tela",2024,20x25,,4000
+ce,chijal,ce-cabeza,https://drive.google.com/file/d/1Td0UVL-Gqid4ceglZDPakg9mzTeEHsWn/view?usp=sharing,,,sold,,"“Haces que mi cabeza explote”","oleo s/ tela",2024,,,3000
+ce,chijal,ce-desaparecer,https://drive.google.com/file/d/1DhjK_GPzIv8se1qLle9E5D4t4trUn6BG/view?usp=drive_link,,https://drive.google.com/file/d/1pwvaIrBNc6XM_yaDUiNnkDnhiUptpZwZ/view?usp=sharing,https://drive.google.com/file/d/1pwvaIrBNc6XM_yaDUiNnkDnhiUptpZwZ/view?usp=sharing,https://www.youtube.com/embed/Sv8IibuIB_M,"""Desaparecer por completo""","oleo s/tela",2024,20x20,,3000

@@ -15,6 +15,8 @@ use App\Repository\LocationRepository;
 use App\Repository\ObraRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use League\Csv\Reader;
+use Psr\Log\LoggerInterface;
+use Survos\CoreBundle\Service\SurvosUtils;
 use Survos\SaisBundle\Model\AccountSetup;
 use Survos\SaisBundle\Model\ProcessPayload;
 use Survos\SaisBundle\Service\SaisClientService;
@@ -42,8 +44,8 @@ class LoadCommand
         private readonly SaisClientService      $saisClientService, // @todo: move to workflow
         private readonly ObraRepository         $obraRepository,
         private readonly ValidatorInterface     $validator,
-        private readonly TranslatorInterface $translator,
-        private readonly UrlGeneratorInterface $urlGenerator,
+        private readonly TranslatorInterface    $translator,
+        private readonly UrlGeneratorInterface  $urlGenerator, private readonly LoggerInterface $logger,
     )
     {
     }
@@ -60,10 +62,11 @@ class LoadCommand
 		if ($refresh) {
 		    $io->writeln("Option refresh: $refresh");
 		}
-        $this->saisClientService->accountSetup(new AccountSetup(self::SAIS_ROOT, 100));
+//        $this->saisClientService->accountSetup(new AccountSetup(self::SAIS_ROOT, 100));
 
         $artists = [];
         foreach ($this->artists() as $artistData) {
+            dump($artistData);
 //            $initials = $artistData['code'];
 //            $email = $initials.'@test.com';
             if (!$email = $artistData['email']) {
@@ -175,13 +178,15 @@ class LoadCommand
                 $code = SaisClientService::calculateCode($audioUrl,self::SAIS_ROOT);
                 //dd($code);
 
-                $response = $this->saisClientService->dispatchProcess(new ProcessPayload(
-                    self::SAIS_ROOT,
-                    [
-                        $audioUrl
-                    ],
-                    mediaCallbackUrl: $this->urlGenerator->generate('sais_audio_callback', ['code' => $code, '_locale' => 'es'], UrlGeneratorInterface::ABSOLUTE_URL)
-                ));
+                if ($resize) {
+                    $response = $this->saisClientService->dispatchProcess(new ProcessPayload(
+                        self::SAIS_ROOT,
+                        [
+                            $audioUrl
+                        ],
+                        mediaCallbackUrl: $this->urlGenerator->generate('sais_audio_callback', ['code' => $code, '_locale' => 'es'], UrlGeneratorInterface::ABSOLUTE_URL)
+                    ));
+                }
                 //dd($audioUrl);
                 //dd($response);
             }
@@ -194,6 +199,7 @@ class LoadCommand
                 $locations[$locCode]->addObra($obra);
             }
             if ($artistCode = $row['artist_code']) {
+                SurvosUtils::assertKeyExists($artistCode, $artists);
                 $artists[$artistCode]->addObra($obra);
             }
             if ($driveUrl = $obra->getDriveUrl()) {
@@ -234,8 +240,6 @@ class LoadCommand
 
     private function artists(): iterable
     {
-
-
         $csv = Reader::createFromPath('data/artistas.csv', 'r');
         $csv->setHeaderOffset(0);
         foreach ($csv->getRecords() as $record) {
@@ -250,11 +254,16 @@ class LoadCommand
 
         $csv = Reader::createFromPath('data/artists.csv', 'r');
         $csv->setHeaderOffset(0);
-
+        $responses = [];
         foreach ($csv->getRecords() as $record) {
+            SurvosUtils::assertKeyExists('email', $record, "artists.csv");
             if ($email = $record['email']) {
-                $combined = array_merge($ourData[$email], $record);
-                $responses[$email] = $combined;
+                if (!array_key_exists($email, $ourData)) {
+                    $this->logger->warning("Missing $email in data/artists.csv");
+                } else {
+                    $combined = array_merge($ourData[$email], $record);
+                    $responses[$email] = $combined;
+                }
             }
         }
         return $responses;
