@@ -45,8 +45,8 @@ class LoadCommand extends Command
 
     public function __invoke(
         SymfonyStyle $io,
-        #[Option('refresh', 'Refresh the cached data from Google Sheets')] ?bool $refresh = null,
-        #[Option('resize', 'Dispatch SAIS requests')] ?bool $resize = null
+        #[Option('Refresh the cached data from Google Sheets')] ?bool $refresh = null,
+        #[Option('Dispatch SAIS requests')] ?bool $resize = null
     ): int {
         if ($refresh) {
             $io->writeln('Option refresh: true');
