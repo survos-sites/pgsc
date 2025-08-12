@@ -52,8 +52,10 @@ class LoadCommand extends Command
             $io->writeln('Option refresh: true');
         }
 
-        // $this->sais->accountSetup(new AccountSetup(self::SAIS_ROOT, 100));
-
+        if ($resize) {
+            $response = $this->sais->accountSetup(new AccountSetup(self::SAIS_ROOT, 100));
+        }
+        
         $artists   = []; // code => Artist
         $locations = []; // code => Location
 
@@ -108,6 +110,7 @@ class LoadCommand extends Command
             $artists[$artist->getCode()] = $artist;
         }
 
+        
         // ---------- Locations ----------
         foreach ($this->iterLocations() as $rowRaw) {
             $row = $this->normalizeRow($rowRaw);
