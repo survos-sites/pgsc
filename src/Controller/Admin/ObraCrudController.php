@@ -14,6 +14,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\BatchActionDto;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AvatarField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
@@ -51,6 +52,7 @@ class ObraCrudController extends AbstractCrudController
         ] as $field) {
             yield $field;
         }
+        yield AvatarField::new('thumbnail');
         foreach (['width', 'height', 'depth'] as $fieldName) {
             yield IntegerField::new($fieldName)->setColumns(3)->onlyOnForms();
         }

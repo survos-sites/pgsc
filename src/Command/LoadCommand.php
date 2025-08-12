@@ -219,7 +219,8 @@ class LoadCommand extends Command
                     if ($resp[0]['resized'] ?? null) {
                         $obra->setImages($resp[0]['resized']);
                     }
-                    $this->logger->warning($obra->getDriveUrl() . " / " . json_encode($resp[0]['resized'], JSON_PRETTY_PRINT));
+                    $this->logger->warning($obra->getDriveUrl() . " / " .
+                    json_encode($resp[0]['resized'], JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES));
                 } catch (\Throwable $e) {
                     $this->logger->error('SAIS obra process failed', ['code' => $code, 'e' => $e->getMessage()]);
                 }

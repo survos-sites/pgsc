@@ -96,7 +96,12 @@ class Obra implements \Stringable, RouteParametersInterface
 
     #[ORM\Column(nullable: true)]
     #[Groups(['obra.read'])]
-    private ?array $images = null;
+    public ?array $images = null;
+
+    #[Groups(['obra.read'])]
+    public ?string $thumbnail {
+        get => $this->images['small']??null;
+    }
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['obra.read'])]
