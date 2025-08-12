@@ -55,7 +55,7 @@ class LoadCommand extends Command
         if ($resize) {
             $response = $this->sais->accountSetup(new AccountSetup(self::SAIS_ROOT, 100));
         }
-        
+
         $artists   = []; // code => Artist
         $locations = []; // code => Location
 
@@ -110,7 +110,7 @@ class LoadCommand extends Command
             $artists[$artist->getCode()] = $artist;
         }
 
-        
+
         // ---------- Locations ----------
         foreach ($this->iterLocations() as $rowRaw) {
             $row = $this->normalizeRow($rowRaw);
@@ -216,7 +216,10 @@ class LoadCommand extends Command
                         self::SAIS_ROOT,
                         [$obra->getDriveUrl()],
                     ));
-                    $obra->setImages($resp[0]['resized'] ?? null);
+                    if ($resp[0]['resized'] ?? null) {
+                        $obra->setImages($resp[0]['resized']);
+                    }
+                    $this->logger->warning($obra->getDriveUrl() . " / " . json_encode($resp[0]['resized'], JSON_PRETTY_PRINT));
                 } catch (\Throwable $e) {
                     $this->logger->error('SAIS obra process failed', ['code' => $code, 'e' => $e->getMessage()]);
                 }

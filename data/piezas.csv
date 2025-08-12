@@ -1,18 +1,18 @@
-artist_code,loc_code,code,photoDriveUrl,TzolzilDriveUrl,audioDriveUrl,youtubeUrl,title,material,size,año,description,precio
-lh,"kiki  ",lh1,ElAncianoPhoto,,ElAnciadoAudio,ElAncianoVideo,"Anciano en el campo",,"147 X 175 cm"
-lh,"kiki  ",lh2,ImaginaciónPhoto,,,,Imaginación,,"90 X 100 cm"
+artist_code,loc_code,code,photoDriveUrl,photoDriveUrl2,TzolzilDriveUrl,audioDriveUrl,youtubeUrl,title,material,size,año,description,precio
+lh,"kiki  ",lh1,https://drive.google.com/file/d/1SOikAvBnkuYdbR2jh_0cgIEnwMZC-BaG/view?usp=sharing,ElAncianoPhoto,,ElAnciadoAudio,ElAncianoVideo,"Anciano en el campo",,"147 X 175 cm"
+lh,"kiki  ",lh2,https://drive.google.com/file/d/1vfpmEPggb_IfC4SnRf1XcooCgntaJOF4/view?usp=sharing,ImaginaciónPhoto,,,,Imaginación,,"90 X 100 cm"
 lh,"kiki  ",lh3
-ce,cora,ce1,,,,,"Fantadía de los infelices","óleo sobre placa de acrílico y esmalte sobre cristal/ marco de cedro","45X51 cm",2025,,"12,500"
-ce,cora,ce2,,,,,"Yo soy tú y tú eres yo","óleo sobre placa de acrílico y esmalte sobre cristal/ marco de cedro","45X51 cm",2025,,"12,500"
-ep,jvel,ep1,,,ElmalverdeZinacantanAudio,ElmalverdeZinacantanVideo,"El malverde de Zinacantan"
+ce,cora,ce1,,,,yosoytúytúeresyoAudio,,"Fantasía de los infelices","óleo sobre placa de acrílico y esmalte sobre cristal/ marco de cedro","45X51 cm",2025,,"12,500"
+ce,cora,ce2,,,,,,"Yo soy tú y tú eres yo","óleo sobre placa de acrílico y esmalte sobre cristal/ marco de cedro","45X51 cm",2025,,"12,500"
+ep,jvel,ep1,,,,ElmalverdeZinacantanAudio,ElmalverdeZinacantanVideo,"El malverde de Zinacantan"
 ep,jvel,ep2
-ac,kuxu,ac1,LaAzoteaPhoto,,,,"La Azotea","óleo sobre lienzo","74 X 84 cm",2024,,7500
-ac,kuxu,ac2,ElJardínPhoto,,,,"El jardín ","collage mixto sobre papel rosa","25 X35 cm",2024,,1000
-fe,laez,fe1,Baichil/ElsueñoPhoto,,,,"Baichil/el sueño","Acrílico sobre lienzo","140 X 140",2024,,"25,000"
-fe,laez,fe2,Xiximton/piedraderioPhoto,,,,"Xiximb ton/piedra de río ","Acrílico sobre lienzo","50 X 50",2025,,6500
-av,mualtos,av1,ChoyPhoto,,ChoyAUDIO,ChoyVideo,Choy,"Acrílico sobre tela","70 X100 cm",2025,,"16,000"
-av,mualtos,av2,"Ka’kal tzí (perro de fuego)Photo",,,,"Ka'kal tzi (perro de fuego)","Acrílico sobre tela","86 X 70 cm",2025,,"16,000"
-av,mualtos,av3,niñafelizPhoto,,,,"Niña feliz","Acrílico sobre tela","70 X70 cm",2025,,7000
+ac,kuxu,ac1,https://drive.google.com/file/d/1gUOM3P16KkhB8uiKyfpF0RT_v9NfTZDd/view?usp=sharing,LaAzoteaPhoto,,,,"La Azotea","óleo sobre lienzo","74 X 84 cm",2024,,7500
+ac,kuxu,ac2,https://drive.google.com/file/d/1w1LlKwHhRU1ZEJ5mfK5GsF9qkb7vIhkT/view?usp=sharing,ElJardínPhoto,,,,"El jardín ","collage mixto sobre papel rosa","25 X35 cm",2024,,1000
+fe,laez,fe1,https://drive.google.com/file/d/148QsVHOzWqW9dbONYv3Qp8e1DkNtvEC-/view?usp=sharing,Baichil/ElsueñoPhoto,,,,"Baichil/el sueño","Acrílico sobre lienzo","140 X 140",2024,,"25,000"
+fe,laez,fe2,https://drive.google.com/file/d/1gk2cA_KbyaosoqI61LBmlyI1NUWsUXjc/view?usp=sharing,Xiximton/piedraderioPhoto,,,,"Xiximb ton/piedra de río ","Acrílico sobre lienzo","50 X 50",2025,,6500
+av,mualtos,av1,https://drive.google.com/file/d/1pm0gsyA5Wm7tKul2slDiwXxBy6-YE6YS/view?usp=sharing,ChoyPhoto,,ChoyAUDIO,ChoyVideo,Choy,"Acrílico sobre tela","70 X100 cm",2025,,"16,000"
+av,mualtos,av2,https://drive.google.com/file/d/1RGUH_8Z0ZaHGX4YWA6CPYCaxDdI6iXZM/view?usp=sharing,"Ka’kal tzí (perro de fuego)Photo",,,,"Ka'kal tzi (perro de fuego)","Acrílico sobre tela","86 X 70 cm",2025,,"16,000"
+av,mualtos,av3,https://drive.google.com/file/d/1cOuZnQwo115VBjA5deueL29ilhQxlEbc/view?usp=sharing,niñafelizPhoto,,,,"Niña feliz","Acrílico sobre tela","70 X70 cm",2025,,7000
 om,ccj,om1
 om,ccj,om1
 az,bioes,az1
