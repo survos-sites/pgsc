@@ -77,11 +77,12 @@ class DashboardController extends AbstractDashboardController
         
         foreach ($artists as $artist) {
             if ($artist->getImageCodes() && count($artist->getImageCodes()) > 0) {
-                $imageCode = $artist->getImageCodes()[0]; // Get first image code
-                $image = $this->imageRepository->findOneBy(['code' => $imageCode]);
-                if ($image && $image->getResized()) {
-                    $artistImages[$artist->getId()] = $image->getResized();
-                }
+                if ($imageCode = $artist->getImageCodes()[0]??null) {
+                    $image = $this->imageRepository->findOneBy(['code' => $imageCode]);
+                    if ($image && $image->getResized()) {
+                        $artistImages[$artist->getId()] = $image->getResized();
+                    }
+                } // Get first image code
             }
         }
 
