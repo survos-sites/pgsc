@@ -1,20 +1,21 @@
-artist_code,loc_code,code,photoDriveUrl,photoDriveUrl2,TzolzilDriveUrl,audioDriveUrl,youtubeUrl,title,material,size,año,description,precio
-lh,"kiki  ",lh1,https://drive.google.com/file/d/1SOikAvBnkuYdbR2jh_0cgIEnwMZC-BaG/view?usp=sharing,ElAncianoPhoto,,ElAnciadoAudio,ElAncianoVideo,"Anciano en el campo",,"147 X 175 cm"
-lh,"kiki  ",lh2,https://drive.google.com/file/d/1vfpmEPggb_IfC4SnRf1XcooCgntaJOF4/view?usp=sharing,ImaginaciónPhoto,,,,Imaginación,,"90 X 100 cm"
+artist_code,loc_code,code,photoDriveUrl,photoDriveUrl2,TzolzilDriveUrl,audioDriveUrl,videoyoutubeUrl,BIOvideoUrl,title,material,size,año,description,precio
+lh,"kiki  ",lh1,https://drive.google.com/file/d/1SOikAvBnkuYdbR2jh_0cgIEnwMZC-BaG/view?usp=sharing,https://drive.google.com/file/d/1SOikAvBnkuYdbR2jh_0cgIEnwMZC-BaG/view?usp=sharing,,https://drive.google.com/file/d/1P3qBYJ8m1IZNfaWw1yXsTilJmU0Hp97c/view?usp=sharing,https://youtu.be/fW0mRRYkfqo,,"Anciano en el campo",,"147 X 175 cm"
+lh,"kiki  ",lh2,https://drive.google.com/file/d/1vfpmEPggb_IfC4SnRf1XcooCgntaJOF4/view?usp=sharing,https://drive.google.com/file/d/1vfpmEPggb_IfC4SnRf1XcooCgntaJOF4/view?usp=sharing,,https://drive.google.com/file/d/1WFEvm-OiBdvddf6_UHKgdIWq0ZbO8AGg/view?usp=sharing,https://youtu.be/UE3RUJHZ04Y,,Imaginación,,"90 X 100 cm"
 lh,"kiki  ",lh3
-ce,cora,ce1,,,,yosoytúytúeresyoAudio,,"Fantasía de los infelices","óleo sobre placa de acrílico y esmalte sobre cristal/ marco de cedro","45X51 cm",2025,,"12,500"
-ce,cora,ce2,,,,,,"Yo soy tú y tú eres yo","óleo sobre placa de acrílico y esmalte sobre cristal/ marco de cedro","45X51 cm",2025,,"12,500"
-ep,jvel,ep1,,,,ElmalverdeZinacantanAudio,ElmalverdeZinacantanVideo,"El malverde de Zinacantan"
-ep,jvel,ep2
-ac,kuxu,ac1,https://drive.google.com/file/d/1gUOM3P16KkhB8uiKyfpF0RT_v9NfTZDd/view?usp=sharing,LaAzoteaPhoto,,,,"La Azotea","óleo sobre lienzo","74 X 84 cm",2024,,7500
-ac,kuxu,ac2,https://drive.google.com/file/d/1w1LlKwHhRU1ZEJ5mfK5GsF9qkb7vIhkT/view?usp=sharing,ElJardínPhoto,,,,"El jardín ","collage mixto sobre papel rosa","25 X35 cm",2024,,1000
-fe,laez,fe1,https://drive.google.com/file/d/148QsVHOzWqW9dbONYv3Qp8e1DkNtvEC-/view?usp=sharing,Baichil/ElsueñoPhoto,,,,"Baichil/el sueño","Acrílico sobre lienzo","140 X 140",2024,,"25,000"
-fe,laez,fe2,https://drive.google.com/file/d/1gk2cA_KbyaosoqI61LBmlyI1NUWsUXjc/view?usp=sharing,Xiximton/piedraderioPhoto,,,,"Xiximb ton/piedra de río ","Acrílico sobre lienzo","50 X 50",2025,,6500
-av,mualtos,av1,https://drive.google.com/file/d/1pm0gsyA5Wm7tKul2slDiwXxBy6-YE6YS/view?usp=sharing,ChoyPhoto,,ChoyAUDIO,ChoyVideo,Choy,"Acrílico sobre tela","70 X100 cm",2025,,"16,000"
-av,mualtos,av2,https://drive.google.com/file/d/1RGUH_8Z0ZaHGX4YWA6CPYCaxDdI6iXZM/view?usp=sharing,"Ka’kal tzí (perro de fuego)Photo",,,,"Ka'kal tzi (perro de fuego)","Acrílico sobre tela","86 X 70 cm",2025,,"16,000"
-av,mualtos,av3,https://drive.google.com/file/d/1cOuZnQwo115VBjA5deueL29ilhQxlEbc/view?usp=sharing,niñafelizPhoto,,,,"Niña feliz","Acrílico sobre tela","70 X70 cm",2025,,7000
-om,ccj,om1
-om,ccj,om1
-az,bioes,az1
-az,snds,az2
+ce,cora,ce1,,,,https://drive.google.com/file/d/1fqS7k-6WMmletXzbeAuGdcuUcfG5xYn-/view?usp=sharing,https://youtu.be/htxTQNsYUhs,,"Fantasía de los infelices","óleo sobre placa de acrílico y esmalte sobre cristal/ marco de cedro","45X51 cm",2025,,"12,500"
+ce,cora,ce2,,,,https://drive.google.com/file/d/1pvI-4PLvZcptdodEIGYCI2Wh9HPNkZey/view?usp=sharing,https://youtu.be/z25HuoxwtYY,,"Yo soy tú y tú eres yo","óleo sobre placa de acrílico y esmalte sobre cristal/ marco de cedro","45X51 cm",2025,,"12,500"
+ep,jvel,ep1,,,,https://drive.google.com/file/d/1uaEs1ZFV4S65ZVr6rQ8iDMlPK74-yWlF/view?usp=sharing,https://youtu.be/9i01WeAoYYk,,"El malverde de Zinacantan"
+ep,jvel,ep2,,,,https://drive.google.com/file/d/170v6azAIXWbUT99tgLBuE9UPo8QqGCEC/view?usp=sharing,https://youtu.be/0UZNdZPLWLs,,"Etno-Porno Chamula Power"
+ac,kuxu,ac1,https://drive.google.com/file/d/1gUOM3P16KkhB8uiKyfpF0RT_v9NfTZDd/view?usp=sharing,https://drive.google.com/file/d/1gUOM3P16KkhB8uiKyfpF0RT_v9NfTZDd/view?usp=sharing,,https://drive.google.com/file/d/1lRzdIN7_12NQozhE4y1G_tMT3a_mDIw-/view?usp=sharing,https://youtu.be/O2Ny3MDWFfc,,"La Azotea","óleo sobre lienzo","74 X 84 cm",2024,,7500
+ac,kuxu,ac2,https://drive.google.com/file/d/1w1LlKwHhRU1ZEJ5mfK5GsF9qkb7vIhkT/view?usp=sharing,https://drive.google.com/file/d/1w1LlKwHhRU1ZEJ5mfK5GsF9qkb7vIhkT/view?usp=sharing,,https://drive.google.com/file/d/1v_1a897wOzn8zt5j3NMAgl46YjF8X33F/view?usp=sharing,https://youtu.be/JNX3g4LJbXo,,"El jardín ","collage mixto sobre papel rosa","25 X35 cm",2024,,1000
+fe,laez,fe1,https://drive.google.com/file/d/148QsVHOzWqW9dbONYv3Qp8e1DkNtvEC-/view?usp=sharing,https://drive.google.com/file/d/148QsVHOzWqW9dbONYv3Qp8e1DkNtvEC-/view?usp=sharing,,https://drive.google.com/file/d/1q9ptbsRptqxZu3zTnyLCQWtWWwu_90L1/view?usp=sharing,https://youtu.be/mV2vWRa3Wks,,"Baichil/el sueño","Acrílico sobre lienzo","140 X 140",2024,,"25,000"
+fe,laez,fe2,https://drive.google.com/file/d/1gk2cA_KbyaosoqI61LBmlyI1NUWsUXjc/view?usp=sharing,https://drive.google.com/file/d/1gk2cA_KbyaosoqI61LBmlyI1NUWsUXjc/view?usp=sharing,,https://drive.google.com/file/d/1-K2tzhbGzmVVV7Lj3sSCdNYMh-EkRF6k/view?usp=drive_link,https://youtu.be/5l8GDgZx38A,,"Xiximb ton/piedra de río ","Acrílico sobre lienzo","50 X 50",2025,,6500
+av,mualtos,av1,https://drive.google.com/file/d/1pm0gsyA5Wm7tKul2slDiwXxBy6-YE6YS/view?usp=sharing,https://drive.google.com/file/d/1pm0gsyA5Wm7tKul2slDiwXxBy6-YE6YS/view?usp=sharing,,https://drive.google.com/file/d/1y90gReUJlpIOcUOy4Tl888WFF9CJnTuo/view?usp=sharing,https://youtu.be/7wfAhHEKdPk,,Choy,"Acrílico sobre tela","70 X100 cm",2025,,"16,000"
+av,mualtos,av2,https://drive.google.com/file/d/1RGUH_8Z0ZaHGX4YWA6CPYCaxDdI6iXZM/view?usp=sharing,https://drive.google.com/file/d/1RGUH_8Z0ZaHGX4YWA6CPYCaxDdI6iXZM/view?usp=sharing,,,,,"Ka'kal tzi (perro de fuego)","Acrílico sobre tela","86 X 70 cm",2025,,"16,000"
+av,mualtos,av3,https://drive.google.com/file/d/1cOuZnQwo115VBjA5deueL29ilhQxlEbc/view?usp=sharing,https://drive.google.com/file/d/1cOuZnQwo115VBjA5deueL29ilhQxlEbc/view?usp=sharing,,,,,"Niña feliz","Acrílico sobre tela","70 X70 cm",2025,,7000
+om,ccj,om1,https://drive.google.com/file/d/1wzQcqXnTmbfjFvrcto6UKgwp2WN31dje/view?usp=sharing,,,,,,"Pato rupestre","Humo y encaustica sobre papel amate","55 x 34 cm",2024,,3500
+om,ccj,om2,https://drive.google.com/file/d/1-K2tzhbGzmVVV7Lj3sSCdNYMh-EkRF6k/view?usp=drive_link,,,,,,Coco,"Encaustica y pigmentos sobre triplay","90 x 70 cm",2020,,8000
+om,ccj,om3,https://drive.google.com/file/d/1OiX0Q4O0ETwnAqAg9ZsxC7jVeVRoEt79/view?usp=sharing,,,,,,"Me verás en tus ojos (ilustración poema)","Encaustica y humo sobre tela","120 x 80 cm",2024,,5000
+az,bioes,az1,,,,,,,Instinto,"Acrílico sobre tela de algodón","120 x 60 cm",2025,,3300
+az,snds,az2,,,,,,,"Esplandor en lo roto","Acrilico sobre tela de algodón","100 x 140",2024,,3800
 ,vejvel

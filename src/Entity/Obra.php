@@ -89,7 +89,7 @@ class Obra implements \Stringable, RouteParametersInterface
     private ?string $type = null;
 
 //    #[ORM\Column(type: 'easy_media_type', nullable: true)]
-    private Media|string|null $audio;
+//    private string|null $audio;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $driveUrl = null;

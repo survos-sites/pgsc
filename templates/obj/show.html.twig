@@ -1,3 +1,129 @@
-<h1>
-    {{ obj.title }}
-</h1>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <title>Tombstone 6x4</title>
+    <style>
+        @page { size: 6in 4in; margin: 0; }
+        html, body { height: 100%; }
+        html, body, * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+            font-feature-settings: "liga" 1, "kern" 1;
+            font-kerning: normal;
+        }
+        :root {
+            --serif: Georgia, "Times New Roman", Times, serif;
+            --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            --muted: #555;
+            --ink: #111;
+        }
+        .card-64 {
+            width: 6in;
+            height: 4in;
+            padding: 0.25in;
+            color: var(--ink);
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            gap: 8pt;
+            overflow: hidden;
+            page-break-after: always;
+            border: 1pt solid #000; /* cut guide */
+        }
+        .title {
+            font-family: var(--serif);
+            font-weight: 600;
+            font-size: 18pt;
+            line-height: 1.2;
+            hyphens: auto;
+            margin: 0;
+        }
+        .subtitle {
+            margin-top: 2pt;
+            font-family: var(--sans);
+            font-size: 11pt;
+            line-height: 1.25;
+        }
+        .italic { font-style: italic; }
+        .muted { color: var(--muted); }
+        .meta {
+            margin-top: 6pt;
+            font-family: var(--sans);
+            font-size: 10pt;
+            line-height: 1.3;
+        }
+        .meta .row { display: block; break-inside: avoid; }
+        .meta .label { display: inline-block; min-width: 82pt; color: var(--muted); }
+        .foot {
+            margin-top: 6pt;
+            padding-top: 6pt;
+            border-top: 0.5pt solid #bbb;
+            font-family: var(--sans);
+            font-size: 9pt;
+            display: flex;
+            gap: 8pt;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .code { letter-spacing: 0.2pt; font-variant-numeric: tabular-nums; }
+        @media print { body { margin: 0; } }
+    </style>
+</head>
+<body>
+<main class="card-64">
+    <section>
+        {% if obj.title %}
+            <h1 class="title italic">{{ obj.title }}</h1>
+        {% endif %}
+        <div class="subtitle">
+            {% if obj.artist and obj.artist.name %}
+                <strong>{{ obj.artist.name }}</strong>
+            {% else %}
+                <strong>Artista desconocido</strong>
+            {% endif %}
+            {% if obj.year %} · {{ obj.year }}{% endif %}
+        </div>
+        <div class="meta">
+            {% if obj.materials %}
+                <span class="row"><span class="label">Materiales</span> {{ obj.materials }}</span>
+            {% endif %}
+            {% set dims = [] %}
+            {% if obj.height %}{% set dims = dims|merge([obj.height ~ ' h']) %}{% endif %}
+            {% if obj.width %}{% set dims = dims|merge([obj.width ~ ' w']) %}{% endif %}
+            {% if obj.depth %}{% set dims = dims|merge([obj.depth ~ ' d']) %}{% endif %}
+            {% if dims|length %}
+                <span class="row"><span class="label">Dimensiones</span> {{ dims|join(' × ') }}</span>
+            {% endif %}
+            {% if obj.location and obj.location.name %}
+                <span class="row"><span class="label">Ubicación</span> {{ obj.location.name }}</span>
+            {% endif %}
+        </div>
+    </section>
+    <div></div>
+    <footer class="foot">
+        <div>
+            {% if obj.code %}
+                <div class="code">Cat. {{ obj.code }}</div>
+            {% endif %}
+            <div class="muted">Chijal, San Crisobal de las Casas, 2025</div>
+        </div>
+        <div style="display:flex; align-items:center; gap:10pt;">
+            <img src="https://pgsc.survos.com/chijal-landscape.jpg" alt="Chijal" style="height:18pt; width:auto;" />
+            <div style="width:54pt;height:54pt;border:1pt solid #000;display:grid;place-items:center;font-size:7pt;color:#555">
+                <!-- Faux QR with play + note -->
+                <svg width="40" height="40" viewBox="0 0 108 108" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="108" height="108" fill="white"/>
+                    <rect x="8" y="8" width="24" height="24" fill="#111"/>
+                    <rect x="76" y="8" width="24" height="24" fill="#111"/>
+                    <rect x="8" y="76" width="24" height="24" fill="#111"/>
+                    <polygon points="52,36 76,54 52,72" fill="#111"/>
+                    <path d="M36 40 v26 a8 8 0 1 0 6 -8 v-18 h10 v-6 h-16 z" fill="#111"/>
+                </svg>
+            </div>
+        </div>
+    </footer>
+</main>
+</body>
+</html>
