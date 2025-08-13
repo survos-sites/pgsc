@@ -387,6 +387,163 @@ final class AppController extends AbstractController
         return new Response('SAIS audio callback received successfully');
     }
 
+    #[Route('/webhook/media', name: 'app_media_webhook')]
+    public function mediaWebhook(Request $request): Response
+    {
+        $data = json_decode($request->getContent(), true);
+        
+        $this->logger->info('PGSC Media webhook callback received', [
+            'data' => $data,
+            'query' => $request->query->all(),
+        ]);
+        
+        // Extract the SAIS code from the data
+        $saisCode = $data['code'] ?? null;
+        
+        if (!$saisCode) {
+            $this->logger->error('Media webhook: No SAIS code found in request', [
+                'data' => $data,
+                'query' => $request->query->all()
+            ]);
+            return new Response('No SAIS code found in request', Response::HTTP_BAD_REQUEST);
+        }
+        
+        // Create or update Image entity with SAIS data
+        $imageRepo = $this->entityManager->getRepository(\App\Entity\Image::class);
+        $image = $imageRepo->find($saisCode);
+        
+        if (!$image) {
+            $image = new \App\Entity\Image($saisCode);
+            $this->logger->info('Media webhook: Created new Image entity', ['code' => $saisCode]);
+        }
+        
+        // Update image with SAIS data
+        if (isset($data['originalUrl'])) {
+            $image->setOriginalUrl($data['originalUrl']);
+        }
+        if (isset($data['mimeType'])) {
+            $image->setMimeType($data['mimeType']);
+        }
+        if (isset($data['size'])) {
+            $image->setSize($data['size']);
+        }
+        if (isset($data['originalWidth'])) {
+            $image->setOriginalWidth($data['originalWidth']);
+        }
+        if (isset($data['originalHeight'])) {
+            $image->setOriginalHeight($data['originalHeight']);
+        }
+        if (isset($data['statusCode'])) {
+            $image->setStatusCode($data['statusCode']);
+        }
+        if (isset($data['blur'])) {
+            $image->setBlur($data['blur']);
+        }
+        if (isset($data['context'])) {
+            $image->setContext($data['context']);
+        }
+        if (isset($data['resized']) && is_array($data['resized'])) {
+            $image->setResized($data['resized']);
+        }
+        
+        $this->entityManager->persist($image);
+        $this->entityManager->flush();
+        
+        $this->logger->info('Media webhook: Updated Image entity', [
+            'saisCode' => $saisCode,
+            'hasResized' => !empty($data['resized']),
+            'statusCode' => $data['statusCode'] ?? null
+        ]);
+        
+        return new Response(
+            json_encode([
+                'success' => true,
+                'message' => 'Media webhook processed successfully',
+                'saisCode' => $saisCode,
+                'imageProcessed' => !empty($data['resized'])
+            ]),
+            Response::HTTP_OK,
+            ['Content-Type' => 'application/json']
+        );
+    }
+    
+    #[Route('/webhook/thumb', name: 'app_thumb_webhook')]
+    public function thumbWebhook(Request $request): Response
+    {
+        $data = json_decode($request->getContent(), true);
+        
+        $this->logger->info('PGSC Thumb webhook callback received', [
+            'data' => $data,
+            'query' => $request->query->all(),
+        ]);
+        
+        // Extract the SAIS image code from URL parameters or data
+        $saisCode = $request->query->get('code') ?? $data['code'] ?? null;
+        
+        if (!$saisCode) {
+            $this->logger->error('Thumb webhook: No SAIS code found in request', [
+                'data' => $data,
+                'query' => $request->query->all()
+            ]);
+            return new Response('No SAIS code found in request', Response::HTTP_BAD_REQUEST);
+        }
+        
+        // Find the Image entity by SAIS code
+        $imageRepo = $this->entityManager->getRepository(\App\Entity\Image::class);
+        $image = $imageRepo->find($saisCode);
+        
+        if (!$image) {
+            $this->logger->error('Thumb webhook: Image entity not found', [
+                'saisCode' => $saisCode,
+                'data' => $data,
+                'query' => $request->query->all()
+            ]);
+            return new Response('Image entity not found for SAIS code: ' . $saisCode, Response::HTTP_NOT_FOUND);
+        }
+        
+        // Process thumbnail data and update the resized array
+        if (isset($data['liipCode']) && isset($data['url'])) {
+            $resized = $image->getResized();
+            $liipCode = $data['liipCode']; // 'small', 'medium', 'large'
+            $url = $data['url'];
+            
+            // Update the resized array with the new thumbnail URL
+            $resized[$liipCode] = $url;
+            $image->setResized($resized);
+            
+            $this->logger->info('Thumb webhook: Updated Image resized data', [
+                'saisCode' => $saisCode,
+                'liipCode' => $liipCode,
+                'url' => $url,
+                'resizedCount' => count($resized)
+            ]);
+        }
+        
+        // Update any other thumbnail-related data if present
+        if (isset($data['size'])) {
+            // This might be the thumbnail file size, we could store it in context
+            $context = $image->getContext() ?? [];
+            $context['thumbnailSizes'] = $context['thumbnailSizes'] ?? [];
+            $context['thumbnailSizes'][$data['liipCode'] ?? 'unknown'] = $data['size'];
+            $image->setContext($context);
+        }
+        
+        $this->entityManager->persist($image);
+        $this->entityManager->flush();
+        
+        return new Response(
+            json_encode([
+                'success' => true,
+                'message' => 'Thumb webhook processed successfully',
+                'saisCode' => $saisCode,
+                'liipCode' => $data['liipCode'] ?? null,
+                'resizedCount' => count($image->getResized())
+            ]),
+            Response::HTTP_OK,
+            ['Content-Type' => 'application/json']
+        );
+    }
+
     //A Temp route to test  JsonRPC\Client;
     #[Route('/jsonrpc/test', name: 'jsonrpc_test')]
     public function jsonRpcTest(): Response

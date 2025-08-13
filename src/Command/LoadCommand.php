@@ -94,11 +94,43 @@ class LoadCommand extends Command
             // Optionally process images via SAIS
             if ($resize && $artist->getDriveUrl()) {
                 try {
+                    // Calculate SAIS code for the image
+                    $saisImageCode = SaisClientService::calculateCode($artist->getDriveUrl(), self::SAIS_ROOT);
+                    
                     $resp = $this->sais->dispatchProcess(new ProcessPayload(
                         self::SAIS_ROOT,
                         [$artist->getDriveUrl()],
+                        mediaCallbackUrl: $this->urls->generate(
+                            'app_media_webhook',
+                            ['code' => $saisImageCode, '_locale' => 'en'],
+                            UrlGeneratorInterface::ABSOLUTE_URL
+                        ),
+                        thumbCallbackUrl: $this->urls->generate(
+                            'app_thumb_webhook', 
+                            ['code' => $saisImageCode, '_locale' => 'en'],
+                            UrlGeneratorInterface::ABSOLUTE_URL
+                        )
                     ));
-                    $artist->setImages($resp[0]['resized'] ?? null);
+                    
+                    // Store the SAIS image code for this artist
+                    $artist->addImageCode($saisImageCode);
+                    
+                    // Also store immediate response URLs if available
+                    if ($resp[0]['resized'] ?? null) {
+                        // Handle array of resized URLs or single URL
+                        $resized = $resp[0]['resized'];
+                        if (is_array($resized)) {
+                            // Add each resized URL as an image code
+                            foreach ($resized as $url) {
+                                if ($url) {
+                                    $artist->addImageCode($url);
+                                }
+                            }
+                        } else {
+                            // Single URL
+                            $artist->addImageCode($resized);
+                        }
+                    }
                 } catch (\Throwable $e) {
                     $this->logger->error('SAIS artist process failed', ['email' => $email, 'e' => $e->getMessage()]);
                 }
@@ -187,7 +219,8 @@ class LoadCommand extends Command
                 ->setMaterials($row['material'] ?? null)
                 ->setYoutubeUrl($row['youtubeurl'] ?? null)
                 ->setDriveUrl($row['photodriveurl'] ?? null)
-                ->setTitle($row['title'] ?? null);
+                ->setTitle($row['title'] ?? null)
+                ->setSize($row['size'] ?? null);
 
             // Location link
             if (!empty($row['loc_code'])) {
@@ -212,15 +245,48 @@ class LoadCommand extends Command
             // Optional image process for obra
             if ($resize && $obra->getDriveUrl()) {
                 try {
+                    // Calculate SAIS code for the image
+                    $saisImageCode = SaisClientService::calculateCode($obra->getDriveUrl(), self::SAIS_ROOT);
+                    
                     $resp = $this->sais->dispatchProcess(new ProcessPayload(
                         self::SAIS_ROOT,
                         [$obra->getDriveUrl()],
+                        mediaCallbackUrl: $this->urls->generate(
+                            'app_media_webhook',
+                            ['code' => $saisImageCode, '_locale' => 'en'],
+                            UrlGeneratorInterface::ABSOLUTE_URL
+                        ),
+                        thumbCallbackUrl: $this->urls->generate(
+                            'app_thumb_webhook',
+                            ['code' => $saisImageCode, '_locale' => 'en'], 
+                            UrlGeneratorInterface::ABSOLUTE_URL
+                        )
                     ));
+                    
+                    // Store the SAIS image code for this obra
+                    $obra->addImageCode($saisImageCode);
+                    
+                    // Also store immediate response URLs if available
                     if ($resp[0]['resized'] ?? null) {
-                        $obra->setImages($resp[0]['resized']);
+                        // Handle array of resized URLs or single URL
+                        $resized = $resp[0]['resized'];
+                        if (is_array($resized)) {
+                            // Add each resized URL as an image code
+                            foreach ($resized as $url) {
+                                if ($url) {
+                                    $obra->addImageCode($url);
+                                }
+                            }
+                        } else {
+                            // Single URL
+                            $obra->addImageCode($resized);
+                        }
                     }
-                    $this->logger->warning($obra->getDriveUrl() . " / " .
-                    json_encode($resp[0]['resized'], JSON_PRETTY_PRINT + JSON_UNESCAPED_SLASHES));
+                    $this->logger->info('SAIS obra process dispatched with callbacks', [
+                        'code' => $code,
+                        'driveUrl' => $obra->getDriveUrl(),
+                        'resized' => $resp[0]['resized'] ?? null
+                    ]);
                 } catch (\Throwable $e) {
                     $this->logger->error('SAIS obra process failed', ['code' => $code, 'e' => $e->getMessage()]);
                 }

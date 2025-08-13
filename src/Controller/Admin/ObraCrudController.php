@@ -18,11 +18,14 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\AvatarField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
+use App\Repository\ImageRepository;
 
 class ObraCrudController extends AbstractCrudController
 {
-    public function __construct(protected AdminUrlGenerator $adminUrlGenerator)
-    {
+    public function __construct(
+        protected AdminUrlGenerator $adminUrlGenerator,
+        protected ImageRepository $imageRepository
+    ) {
     }
 
     public static function getEntityFqcn(): string
@@ -52,12 +55,37 @@ class ObraCrudController extends AbstractCrudController
         ] as $field) {
             yield $field;
         }
-        yield AvatarField::new('thumbnail');
+        // Avatar field - show obra thumbnails with nice styling
+        yield AvatarField::new('thumbnailUrl', 'Image')
+            ->formatValue(function ($value, Obra $entity) {
+                $imageCodes = $entity->getImageCodes();
+                if (empty($imageCodes) || !is_array($imageCodes)) {
+                    return null; // AvatarField will show a default avatar
+                }
+                
+                try {
+                    // Get the first image entity (primary image for obra)
+                    $primaryImageCode = $imageCodes[0];
+                    $image = $this->imageRepository->findByCode($primaryImageCode);
+                    
+                    if (!$image) {
+                        return null; // AvatarField will show default avatar
+                    }
+                    
+                    $thumbnailUrl = $image->getThumbnail(); // Gets the 'small' size URL
+                    return $thumbnailUrl; // Return URL or null for default avatar
+                    
+                } catch (\Exception $e) {
+                    return null; // AvatarField will show default avatar
+                }
+            })
+            ->setHeight(40) // Set avatar size
+            ->onlyOnIndex();
         foreach (['width', 'height', 'depth'] as $fieldName) {
             yield IntegerField::new($fieldName)->setColumns(3)->onlyOnForms();
         }
-        yield TextField::new('dimensions', 'Dimensions')
-            ->setHelp('width x height x depth')
+        yield TextField::new('size', 'Dimensions')
+            ->setHelp('Size from CSV (e.g. "147 X 175 cm")')
             ->setLabel('Dimensions (in cm)')
             ->hideOnForm();
 

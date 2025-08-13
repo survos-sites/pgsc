@@ -94,18 +94,17 @@ class Obra implements \Stringable, RouteParametersInterface
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $driveUrl = null;
 
-    #[ORM\Column(nullable: true)]
+    #[ORM\Column(type: Types::JSON, nullable: true)]
     #[Groups(['obra.read'])]
-    public ?array $images = null;
-
-    #[Groups(['obra.read'])]
-    public ?string $thumbnail {
-        get => $this->images['small']??null;
-    }
+    private ?array $imageCodes = null; // Array of Image entity codes (SAIS codes)
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['obra.read'])]
     private ?string $youtubeUrl = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['obra.read'])]
+    private ?string $size = null;
 
     public function __construct()
     {
@@ -344,16 +343,70 @@ class Obra implements \Stringable, RouteParametersInterface
         return $this;
     }
 
-    public function getImages(): ?array
+    public function getImageCodes(): ?array
     {
-        return $this->images;
+        return $this->imageCodes ?? [];
     }
 
-    public function setImages(?array $images): static
+    public function setImageCodes(?array $imageCodes): static
     {
-        $this->images = $images;
-
+        $this->imageCodes = $imageCodes;
         return $this;
+    }
+
+    public function addImageCode(string $imageCode): static
+    {
+        $codes = $this->getImageCodes();
+        if (!in_array($imageCode, $codes)) {
+            $codes[] = $imageCode;
+            $this->setImageCodes($codes);
+        }
+        return $this;
+    }
+
+    public function removeImageCode(string $imageCode): static
+    {
+        $codes = $this->getImageCodes();
+        $key = array_search($imageCode, $codes);
+        if ($key !== false) {
+            unset($codes[$key]);
+            $this->setImageCodes(array_values($codes));
+        }
+        return $this;
+    }
+
+    /**
+     * Get the primary image code (first in array)
+     * Used for main obra image display
+     */
+    #[Groups(['obra.read'])]
+    public function getPrimaryImageCode(): ?string
+    {
+        $codes = $this->getImageCodes();
+        return $codes[0] ?? null;
+    }
+
+    /**
+     * Get thumbnail URL from the primary image
+     * For backward compatibility with existing templates
+     */
+    #[Groups(['obra.read'])]
+    public function getThumbnail(): ?string
+    {
+        // This will need to be populated by a service that fetches
+        // the actual Image entity and returns the thumbnail URL
+        return null; // Will be implemented in a service
+    }
+
+    /**
+     * Get thumbnail URL for the primary image (used with AvatarField)
+     * This returns null if no thumbnail is available, which AvatarField handles gracefully
+     */
+    public function getThumbnailUrl(): ?string
+    {
+        // This method will be overridden by formatValue in the CRUD controller
+        // or handled by a custom field formatter
+        return null;
     }
 
     public function getYoutubeUrl(): ?string
@@ -364,6 +417,18 @@ class Obra implements \Stringable, RouteParametersInterface
     public function setYoutubeUrl(?string $youtubeUrl): static
     {
         $this->youtubeUrl = $youtubeUrl;
+
+        return $this;
+    }
+
+    public function getSize(): ?string
+    {
+        return $this->size;
+    }
+
+    public function setSize(?string $size): static
+    {
+        $this->size = $size;
 
         return $this;
     }
