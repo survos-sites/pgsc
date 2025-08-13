@@ -62,9 +62,9 @@
                         {% for artist in limitedArtists %}
                             <li class="list-group-item">
                                 <div class="d-flex align-items-start gap-3">
-                                    {% if artist.images|default(false) %}
+                                    {% if artistImages[artist.id] is defined and artistImages[artist.id].small is defined %}
                                         <img class="img-thumbnail" style="width:48px;height:48px;object-fit:cover;"
-                                             src="{{ artist.images.small }}" alt="artist image" />
+                                             src="{{ artistImages[artist.id].small }}" alt="artist image" />
                                     {% endif %}
 
                                     <div class="flex-grow-1">

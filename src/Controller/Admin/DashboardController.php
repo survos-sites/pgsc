@@ -10,6 +10,7 @@ use App\Repository\ArtistRepository;
 use App\Repository\LocationRepository;
 use App\Repository\ObraRepository;
 use App\Repository\SacroRepository;
+use App\Repository\ImageRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminDashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
@@ -37,7 +38,9 @@ class DashboardController extends AbstractDashboardController
         private LocationRepository    $locationRepository,
         private ObraRepository        $obraRepository,
         private UrlGeneratorInterface $urlGenerator,
-        private readonly Security     $security, private readonly SacroRepository $sacroRepository,
+        private readonly Security     $security, 
+        private readonly SacroRepository $sacroRepository,
+        private readonly ImageRepository $imageRepository,
     ) {
     }
 
@@ -68,8 +71,23 @@ class DashboardController extends AbstractDashboardController
             }
         }
 
+        // Process artists and build separate images array
+        $artists = $this->artistRepository->findAll();
+        $artistImages = [];
+        
+        foreach ($artists as $artist) {
+            if ($artist->getImageCodes() && count($artist->getImageCodes()) > 0) {
+                $imageCode = $artist->getImageCodes()[0]; // Get first image code
+                $image = $this->imageRepository->findOneBy(['code' => $imageCode]);
+                if ($image && $image->getResized()) {
+                    $artistImages[$artist->getId()] = $image->getResized();
+                }
+            }
+        }
+
         return $this->render('admin/dashboard.html.twig', [
-            'artists' => $this->artistRepository->findAll(),
+            'artists' => $artists,
+            'artistImages' => $artistImages,
             'locations' => $this->locationRepository->findAll(),
             'myMap' => $myMap,
         ]);
