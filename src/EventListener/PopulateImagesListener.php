@@ -25,6 +25,8 @@ final class PopulateImagesListener
             return;
         }
 
+        return;
+
         $codes = $entity->getImageCodes();
         if (!$codes) {
             $images = new ArrayCollection();
@@ -33,6 +35,7 @@ final class PopulateImagesListener
         }
 
         // One query to fetch all images by their codes
+        assert(!is_array($images), join(", ", $codes));
         $entity->images = $images;
 
         // Re-key by image code
