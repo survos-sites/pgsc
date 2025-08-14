@@ -20,7 +20,7 @@ class Media implements \Stringable, MarkingInterface
     private(set) ?string $code = null; // SAIS media code as primary key
 
     #[ORM\Column(type: Types::JSON, nullable: true)]
-    #[Groups(['media.read'])]
+    #[Groups(['media.read','obra.read','artist.read'])]
     public ?array $resized = null; // Array of resized images: {small: "url", medium: "url", large: "url"}
 
     // candidate for Enum!

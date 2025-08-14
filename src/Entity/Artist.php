@@ -164,6 +164,7 @@ class Artist implements \Stringable, RouteParametersInterface, TranslatableInter
     public function __construct()
     {
         $this->obras = new ArrayCollection();
+        $this->images = new ArrayCollection();
 //        $this->bio = new JsonTranslation();
     }
 
