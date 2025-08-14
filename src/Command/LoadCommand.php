@@ -3,9 +3,11 @@
 namespace App\Command;
 
 use App\Entity\Artist;
+use App\Entity\Image;
 use App\Entity\Location;
 use App\Entity\Obra;
 use App\Repository\ArtistRepository;
+use App\Repository\ImageRepository;
 use App\Repository\LocationRepository;
 use App\Repository\ObraRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -37,6 +39,7 @@ class LoadCommand extends Command
         private readonly LocationRepository     $locationRepo,
         private readonly SaisClientService      $sais,
         private readonly ObraRepository         $obraRepo,
+        private readonly ImageRepository        $imageRepo,
         private readonly ValidatorInterface     $validator,
         private readonly TranslatorInterface    $translator,
         private readonly UrlGeneratorInterface  $urls,
@@ -91,12 +94,31 @@ class LoadCommand extends Command
                 ->setBio($row['long_bio'] ?? ($row['bio'] ?? ''), 'es')
                 ->setBirthYear($this->parseBirthYear($row['nacimiento'] ?? ($row['birthyear'] ?? null)));
 
-            // Optionally process images via SAIS
+            // Create Image entity directly in database (commenting out SAIS dispatch for now)
             if ($resize && $artist->getDriveUrl()) {
                 try {
                     // Calculate SAIS code for the image
                     $saisImageCode = SaisClientService::calculateCode($artist->getDriveUrl(), self::SAIS_ROOT);
                     
+                    // Create or update Image entity directly in database
+                    $image = $this->imageRepo->findByCode($saisImageCode);
+                    if (!$image) {
+                        $image = new Image($saisImageCode);
+                        $this->em->persist($image);
+                    }
+                    $image->setOriginalUrl($artist->getDriveUrl());
+                    
+                    // Store the SAIS image code for this artist
+                    $artist->addImageCode($saisImageCode);
+                    
+                    $this->logger->info('Image entity created for artist', [
+                        'email' => $email,
+                        'saisImageCode' => $saisImageCode,
+                        'driveUrl' => $artist->getDriveUrl()
+                    ]);
+                    
+                    // COMMENTED OUT: SAIS dispatch process
+                    /*
                     $resp = $this->sais->dispatchProcess(new ProcessPayload(
                         self::SAIS_ROOT,
                         [$artist->getDriveUrl()],
@@ -111,9 +133,6 @@ class LoadCommand extends Command
                             UrlGeneratorInterface::ABSOLUTE_URL
                         )
                     ));
-                    
-                    // Store the SAIS image code for this artist
-                    $artist->addImageCode($saisImageCode);
                     
                     // Also store immediate response URLs if available
                     if ($resp[0]['resized'] ?? null) {
@@ -131,8 +150,9 @@ class LoadCommand extends Command
                             $artist->addImageCode($resized);
                         }
                     }
+                    */
                 } catch (\Throwable $e) {
-                    $this->logger->error('SAIS artist process failed', ['email' => $email, 'e' => $e->getMessage()]);
+                    $this->logger->error('Image entity creation failed for artist', ['email' => $email, 'e' => $e->getMessage()]);
                 }
             }
 
@@ -242,12 +262,31 @@ class LoadCommand extends Command
                 }
             }
 
-            // Optional image process for obra
+            // Create Image entity directly in database (commenting out SAIS dispatch for now)
             if ($resize && $obra->getDriveUrl()) {
                 try {
                     // Calculate SAIS code for the image
                     $saisImageCode = SaisClientService::calculateCode($obra->getDriveUrl(), self::SAIS_ROOT);
                     
+                    // Create or update Image entity directly in database
+                    $image = $this->imageRepo->findByCode($saisImageCode);
+                    if (!$image) {
+                        $image = new Image($saisImageCode);
+                        $this->em->persist($image);
+                    }
+                    $image->setOriginalUrl($obra->getDriveUrl());
+                    
+                    // Store the SAIS image code for this obra
+                    $obra->addImageCode($saisImageCode);
+                    
+                    $this->logger->info('Image entity created for obra', [
+                        'code' => $code,
+                        'saisImageCode' => $saisImageCode,
+                        'driveUrl' => $obra->getDriveUrl()
+                    ]);
+                    
+                    // COMMENTED OUT: SAIS dispatch process
+                    /*
                     $resp = $this->sais->dispatchProcess(new ProcessPayload(
                         self::SAIS_ROOT,
                         [$obra->getDriveUrl()],
@@ -262,9 +301,6 @@ class LoadCommand extends Command
                             UrlGeneratorInterface::ABSOLUTE_URL
                         )
                     ));
-                    
-                    // Store the SAIS image code for this obra
-                    $obra->addImageCode($saisImageCode);
                     
                     // Also store immediate response URLs if available
                     if ($resp[0]['resized'] ?? null) {
@@ -282,13 +318,9 @@ class LoadCommand extends Command
                             $obra->addImageCode($resized);
                         }
                     }
-                    $this->logger->info('SAIS obra process dispatched with callbacks', [
-                        'code' => $code,
-                        'driveUrl' => $obra->getDriveUrl(),
-                        'resized' => $resp[0]['resized'] ?? null
-                    ]);
+                    */
                 } catch (\Throwable $e) {
-                    $this->logger->error('SAIS obra process failed', ['code' => $code, 'e' => $e->getMessage()]);
+                    $this->logger->error('Image entity creation failed for obra', ['code' => $code, 'e' => $e->getMessage()]);
                 }
             }
         }

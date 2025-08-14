@@ -96,6 +96,17 @@ class ArtistCrudController extends AbstractCrudController
                 ->setHeight(40) // Set avatar size
                 ->onlyOnIndex(),
                 
+            // Image codes field - show comma-delimited image codes
+            ArrayField::new('imageCodes', 'Image Codes')
+                ->formatValue(function ($value, Artist $entity) {
+                    if (empty($value) || !is_array($value)) {
+                        return '-';
+                    }
+                    return implode(', ', $value);
+                })
+                ->onlyOnIndex()
+                ->setHelp('SAIS image codes'),
+                
             // Drive URL field
             TextField::new('driveUrl', 'Drive URL')
                 ->hideOnIndex()
