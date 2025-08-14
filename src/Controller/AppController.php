@@ -257,6 +257,16 @@ final class AppController extends AbstractController
         ];
     }
 
+    #[Route('/landing', name: 'artist_show')]
+    #[Template('landing.html.twig')]
+    public function landing(): Response|array
+    {
+        return [
+            'url' => 'https://vt.survos.com/es/chijal'
+        ];
+    }
+
+
     #[Route('/artist/new', name: 'artist_new')]
     #[Template('artist/new.html.twig')]
     public function newArtist(Request $request): Response|array
