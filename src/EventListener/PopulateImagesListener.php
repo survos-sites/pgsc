@@ -6,6 +6,7 @@ use App\Entity\Obra;
 use App\Entity\Artist;
 use App\Repository\ImageRepository;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Event\PostLoadEventArgs;
 use Doctrine\ORM\Events;
 
@@ -26,12 +27,13 @@ final class PopulateImagesListener
 
         $codes = $entity->getImageCodes();
         if (!$codes) {
-            $entity->setImages([]);
-            return;
+            $images = new ArrayCollection();
+        } else {
+            $images = $this->imageRepository->findBy(['code' => $codes]);
         }
 
         // One query to fetch all images by their codes
-        $images = $this->imageRepository->findBy(['code' => $codes]);
+        $entity->images = $images;
 
         // Re-key by image code
         $imagesByCode = [];
@@ -40,6 +42,5 @@ final class PopulateImagesListener
         }
 
         // Populate entity
-        $entity->setImages($imagesByCode);
     }
 }

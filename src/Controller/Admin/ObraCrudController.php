@@ -65,9 +65,10 @@ class ObraCrudController extends AbstractCrudController
                 
                 try {
                     // Get the first image entity (primary image for obra)
-                    $primaryImageCode = $imageCodes[0];
-                    $image = $this->imageRepository->findByCode($primaryImageCode);
-                    
+                    if ($primaryImageCode = $imageCodes[0]) {
+                        $image = $this->imageRepository->findByCode($primaryImageCode);
+                    }
+
                     if (!$image) {
                         return null; // AvatarField will show default avatar
                     }

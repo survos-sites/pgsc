@@ -2,6 +2,7 @@
 
 namespace App\Entity\Traits;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
@@ -14,6 +15,10 @@ trait ImageCodesTrait
     #[ORM\Column(type: Types::JSON, nullable: true)]
     #[Groups(['artist.read', 'obra.read'])]
     private ?array $imageCodes = null; // Array of Image entity codes (SAIS codes)
+
+    #[Groups(['artist.read', 'obra.read'])]
+    public Collection $images;
+
 
     public function getImageCodes(): array
     {

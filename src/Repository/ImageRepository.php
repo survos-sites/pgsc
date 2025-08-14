@@ -19,9 +19,9 @@ class ImageRepository extends ServiceEntityRepository
     /**
      * Find an image by its SAIS code
      */
-    public function findByCode(string $code): ?Image
+    public function findByCode(?string $code): ?Image
     {
-        return $this->find($code);
+        return $code ? $this->find($code) : null;
     }
 
     /**
