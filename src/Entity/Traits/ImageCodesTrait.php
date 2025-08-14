@@ -8,15 +8,18 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
 
 /**
- * Trait for entities that can have associated Image entities via SAIS codes
+ * Trait for entities that can have associated Media entities via SAIS codes
  */
 trait ImageCodesTrait
 {
     #[ORM\Column(type: Types::JSON, nullable: true)]
-    #[Groups(['artist.read', 'obra.read'])]
-    private ?array $imageCodes = null; // Array of Image entity codes (SAIS codes)
+    #[Groups(['media.read'])]
+    public ?array $imageCodes = null; // Array of Media entity codes (SAIS codes) of images
 
-    #[Groups(['artist.read', 'obra.read'])]
+    #[Groups(['media.read'])]
+    public ?array $audioCodes = null; // points to media
+
+    #[Groups(['media.read','obra.read','artist.read'])]
     public Collection $images;
 
 
@@ -66,11 +69,11 @@ trait ImageCodesTrait
     /**
      * Check if entity has any image codes
      */
-    #[Groups(['artist.read', 'obra.read'])]
-    public function hasImages(): bool
-    {
-        return !empty($this->getImageCodes());
-    }
+//    #[Groups(['artist.read', 'obra.read'])]
+//    public function hasImages(): bool
+//    {
+//        return count($this->imageCodes) > 0;
+//    }
 
     /**
      * Get count of associated images
@@ -78,7 +81,7 @@ trait ImageCodesTrait
     #[Groups(['artist.read', 'obra.read'])]
     public function getImageCount(): int
     {
-        return count($this->getImageCodes());
+        return count($this->imageCodes??[]);
     }
 
     /**
@@ -99,4 +102,11 @@ trait ImageCodesTrait
         $this->setImageCodes([$imageCode]);
         return $this;
     }
+
+    #[Groups(['media.read'])]
+    public function getThumbnailUrl(): ?string {
+        return $this->images->first() ? $this->images->first()->getThumbnailUrl() : null;
+    }
+
+
 }

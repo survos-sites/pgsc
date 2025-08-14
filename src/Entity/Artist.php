@@ -22,7 +22,7 @@ use App\Entity\Traits\ImageCodesTrait;
 
 #[ORM\Entity(repositoryClass: ArtistRepository::class)]
 #[ApiResource(
-    normalizationContext: ['groups' => ['artist.read', 'artist.obra.read']],
+    normalizationContext: ['groups' => ['artist.read', 'artist.obra.read', 'media.read']],
     operations: [
         new Get(),
         new GetCollection(
@@ -543,59 +543,6 @@ class Artist implements \Stringable, RouteParametersInterface, TranslatableInter
         $this->setDriveUrl($photo);
         return $this;
 
-    }
-
-    /**
-     * Get the first (primary) Image entity if available
-     * This method should be used with a repository call
-     */
-    public function getPrimaryImage(): ?\App\Entity\Image
-    {
-        // This will be handled by the CRUD controller with repository injection
-        return null;
-    }
-
-    /**
-     * Get images data for display (used by CRUD controller)
-     * This returns the image codes for processing
-     */
-    public function getImages(): array
-    {
-        return $this->getImageCodes();
-    }
-
-    /**
-     * Set images (for backwards compatibility with CRUD forms)
-     */
-    public function setImages(?array $images): static
-    {
-        // This can be used to set image codes if needed
-        $this->setImageCodes($images);
-        return $this;
-    }
-
-    /**
-     * Get thumbnail for display in admin (requires Image repository injection)
-     * This is just a placeholder - actual logic handled in CRUD controller
-     */
-    public function getThumbnailDisplay(): string
-    {
-        $codes = $this->getImageCodes();
-        if (empty($codes)) {
-            return 'No image';
-        }
-        return 'Image: ' . $codes[0];
-    }
-
-    /**
-     * Get thumbnail URL for the primary image (used with AvatarField)
-     * This returns null if no thumbnail is available, which AvatarField handles gracefully
-     */
-    public function getThumbnailUrl(): ?string
-    {
-        // This method will be overridden by formatValue in the CRUD controller
-        // or handled by a custom field formatter
-        return null;
     }
 
 }

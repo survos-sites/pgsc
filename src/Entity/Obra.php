@@ -6,6 +6,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use App\Entity\EasyMedia\Media;
+use App\Entity\Traits\ImageCodesTrait;
 use App\Repository\ObraRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -21,11 +22,12 @@ use Symfony\Component\Serializer\Attribute\Groups;
         new Get(),
         new GetCollection(),
     ],
-    normalizationContext: ['groups' => ['obra.read', 'obra.location.read']]
+    normalizationContext: ['groups' => ['obra.read', 'obra.location.read', 'media.read']]
 )]
 class Obra implements \Stringable, RouteParametersInterface
 {
     use RouteParametersTrait;
+    use ImageCodesTrait;
     public const array UNIQUE_PARAMETERS = ['obraId' => 'id'];
 
     #[ORM\Id]
@@ -74,11 +76,6 @@ class Obra implements \Stringable, RouteParametersInterface
     #[Groups(['obra.read'])]
     private ?string $materials = null;
 
-    /**
-     * @var Collection<int, ObraImage>
-     */
-    #[ORM\OneToMany(targetEntity: ObraImage::class, mappedBy: 'obra', cascade: ['persist'], orphanRemoval: true)]
-    private Collection $obraImages;
 
     #[ORM\Column(nullable: true)]
     #[Groups(['obra.read'])]
@@ -93,10 +90,6 @@ class Obra implements \Stringable, RouteParametersInterface
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $driveUrl = null;
-
-    #[ORM\Column(type: Types::JSON, nullable: true)]
-    #[Groups(['obra.read'])]
-    private ?array $imageCodes = null; // Array of Image entity codes (SAIS codes)
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['obra.read'])]
@@ -386,28 +379,6 @@ class Obra implements \Stringable, RouteParametersInterface
         return $codes[0] ?? null;
     }
 
-    /**
-     * Get thumbnail URL from the primary image
-     * For backward compatibility with existing templates
-     */
-    #[Groups(['obra.read'])]
-    public function getThumbnail(): ?string
-    {
-        // This will need to be populated by a service that fetches
-        // the actual Image entity and returns the thumbnail URL
-        return null; // Will be implemented in a service
-    }
-
-    /**
-     * Get thumbnail URL for the primary image (used with AvatarField)
-     * This returns null if no thumbnail is available, which AvatarField handles gracefully
-     */
-    public function getThumbnailUrl(): ?string
-    {
-        // This method will be overridden by formatValue in the CRUD controller
-        // or handled by a custom field formatter
-        return null;
-    }
 
     public function getYoutubeUrl(): ?string
     {

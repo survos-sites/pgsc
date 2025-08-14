@@ -15,6 +15,7 @@ return static function (FrameworkConfig $framework) {
 
     foreach ([
         // doctrine
+        \App\Workflow\MediaWorkflow::class,
         \App\Workflow\LocationWorkflow::class,
         SacroWorkflow::class,
              ] as $workflowClass) {

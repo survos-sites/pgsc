@@ -2,24 +2,24 @@
 
 namespace App\Repository;
 
-use App\Entity\Image;
+use App\Entity\Media;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Image>
+ * @extends ServiceEntityRepository<Media>
  */
-class ImageRepository extends ServiceEntityRepository
+class MediaRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Image::class);
+        parent::__construct($registry, Media::class);
     }
 
     /**
      * Find an image by its SAIS code
      */
-    public function findByCode(?string $code): ?Image
+    public function findByCode(?string $code): ?Media
     {
         return $code ? $this->find($code) : null;
     }
@@ -27,7 +27,7 @@ class ImageRepository extends ServiceEntityRepository
     /**
      * Find images by Google Drive file ID
      */
-    public function findByDriveId(string $driveId): ?Image
+    public function findByDriveId(string $driveId): ?Media
     {
         return $this->createQueryBuilder('i')
             ->andWhere('i.originalUrl LIKE :driveId')
@@ -94,7 +94,7 @@ class ImageRepository extends ServiceEntityRepository
     public function getStatistics(): array
     {
         $qb = $this->createQueryBuilder('i');
-        
+
         $total = $qb->select('COUNT(i.code)')
             ->getQuery()
             ->getSingleScalarResult();
@@ -114,7 +114,7 @@ class ImageRepository extends ServiceEntityRepository
         ];
     }
 
-    public function save(Image $entity, bool $flush = false): void
+    public function save(Media $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 
@@ -123,7 +123,7 @@ class ImageRepository extends ServiceEntityRepository
         }
     }
 
-    public function remove(Image $entity, bool $flush = false): void
+    public function remove(Media $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
 

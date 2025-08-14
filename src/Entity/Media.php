@@ -2,82 +2,87 @@
 
 namespace App\Entity;
 
-use App\Repository\ImageRepository;
+use App\Repository\MediaRepository;
+use App\Workflow\IMediaWorkflow;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Survos\WorkflowBundle\Traits\MarkingInterface;
+use Survos\WorkflowBundle\Traits\MarkingTrait;
 use Symfony\Component\Serializer\Attribute\Groups;
 
-#[ORM\Entity(repositoryClass: ImageRepository::class)]
-class Image implements \Stringable
+#[ORM\Entity(repositoryClass: MediaRepository::class)]
+class Media implements \Stringable, MarkingInterface
 {
+    use MarkingTrait;
     #[ORM\Id]
     #[ORM\Column(length: 255)]
-    #[Groups(['image.read'])]
-    private ?string $code = null; // SAIS media code as primary key
+    #[Groups(['media.read'])]
+    private(set) ?string $code = null; // SAIS media code as primary key
 
     #[ORM\Column(type: Types::JSON, nullable: true)]
-    #[Groups(['image.read'])]
-    private ?array $resized = null; // Array of resized images: {small: "url", medium: "url", large: "url"}
+    #[Groups(['media.read'])]
+    public ?array $resized = null; // Array of resized images: {small: "url", medium: "url", large: "url"}
+
+    // candidate for Enum!
+    #[ORM\Column(type: Types::STRING, nullable: false)]
+    public string $type='image'; // or 'audio'
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['image.read'])]
-    private ?string $originalUrl = null; // Original Google Drive URL
+    #[Groups(['media.read'])]
+    public ?string $originalUrl = null; // Original Google Drive URL
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['image.read'])]
+    #[Groups(['media.read'])]
     private ?string $mimeType = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['image.read'])]
+    #[Groups(['media.read'])]
     private ?int $size = null; // Original file size in bytes
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['image.read'])]
+    #[Groups(['media.read'])]
     private ?int $originalWidth = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['image.read'])]
+    #[Groups(['media.read'])]
     private ?int $originalHeight = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['image.read'])]
+    #[Groups(['media.read'])]
     private ?int $statusCode = null; // HTTP status from SAIS processing
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['image.read'])]
+    #[Groups(['media.read'])]
     private ?string $blur = null; // Blur hash for placeholder
 
     #[ORM\Column(type: Types::JSON, nullable: true)]
-    #[Groups(['image.read'])]
+    #[Groups(['media.read'])]
     private ?array $context = null; // Additional metadata from SAIS
 
     #[ORM\Column(type: Types::JSON, nullable: true)]
-    #[Groups(['image.read'])]
+    #[Groups(['media.read'])]
     private ?array $exif = null; // EXIF data
 
     #[ORM\Column]
-    #[Groups(['image.read'])]
+    #[Groups(['media.read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['image.read'])]
+    #[Groups(['media.read'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
-    public function __construct(?string $code = null)
+    public function __construct(
+        ?string $code = null
+    )
     {
         $this->code = $code;
         $this->createdAt = new \DateTimeImmutable();
+        $this->marking = IMediaWorkflow::PLACE_NEW;
     }
 
     public function getCode(): ?string
     {
         return $this->code;
-    }
-
-    public function setCode(string $code): static
-    {
-        $this->code = $code;
-        return $this;
     }
 
     public function getResized(): ?array
@@ -216,8 +221,8 @@ class Image implements \Stringable
     /**
      * Get the thumbnail URL (small size)
      */
-    #[Groups(['image.read'])]
-    public function getThumbnail(): ?string
+    #[Groups(['media.read'])]
+    public function getThumbnailUrl(): ?string
     {
         return $this->resized['small'] ?? null;
     }
@@ -225,7 +230,7 @@ class Image implements \Stringable
     /**
      * Get medium sized image URL
      */
-    #[Groups(['image.read'])]
+    #[Groups(['media.read'])]
     public function getMediumUrl(): ?string
     {
         return $this->resized['medium'] ?? null;
@@ -234,7 +239,7 @@ class Image implements \Stringable
     /**
      * Get large sized image URL
      */
-    #[Groups(['image.read'])]
+    #[Groups(['media.read'])]
     public function getLargeUrl(): ?string
     {
         return $this->resized['large'] ?? null;
@@ -243,7 +248,7 @@ class Image implements \Stringable
     /**
      * Check if image has been processed by SAIS
      */
-    #[Groups(['image.read'])]
+    #[Groups(['media.read'])]
     public function isProcessed(): bool
     {
         return !empty($this->resized) && $this->statusCode === 200;
@@ -262,7 +267,7 @@ class Image implements \Stringable
         if (preg_match('/\/d\/([a-zA-Z0-9-_]+)/', $this->originalUrl, $matches)) {
             return $matches[1];
         }
-        
+
         if (preg_match('/id=([a-zA-Z0-9-_]+)/', $this->originalUrl, $matches)) {
             return $matches[1];
         }
@@ -272,6 +277,6 @@ class Image implements \Stringable
 
     public function __toString(): string
     {
-        return $this->code ?? 'Image';
+        return $this->code ?? 'Media';
     }
 }

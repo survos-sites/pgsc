@@ -3,11 +3,11 @@
 namespace App\Command;
 
 use App\Entity\Artist;
-use App\Entity\Image;
+use App\Entity\Media;
 use App\Entity\Location;
 use App\Entity\Obra;
 use App\Repository\ArtistRepository;
-use App\Repository\ImageRepository;
+use App\Repository\MediaRepository;
 use App\Repository\LocationRepository;
 use App\Repository\ObraRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -30,7 +30,7 @@ use function Symfony\Component\String\u;
 #[AsCommand('app:load', 'Load the chijal data')]
 class LoadCommand extends Command
 {
-    private const SAIS_ROOT = 'chijal';
+    public const SAIS_ROOT = 'chijal';
 
     public function __construct(
         private readonly EntityManagerInterface $em,
@@ -39,11 +39,12 @@ class LoadCommand extends Command
         private readonly LocationRepository     $locationRepo,
         private readonly SaisClientService      $sais,
         private readonly ObraRepository         $obraRepo,
-        private readonly ImageRepository        $imageRepo,
+        private readonly MediaRepository        $imageRepo,
         private readonly ValidatorInterface     $validator,
         private readonly TranslatorInterface    $translator,
         private readonly UrlGeneratorInterface  $urls,
         private readonly LoggerInterface        $logger,
+        private readonly MediaRepository $mediaRepository,
     ) { parent::__construct(); }
 
     public function __invoke(
@@ -94,69 +95,32 @@ class LoadCommand extends Command
                 ->setBio($row['long_bio'] ?? ($row['bio'] ?? ''), 'es')
                 ->setBirthYear($this->parseBirthYear($row['nacimiento'] ?? ($row['birthyear'] ?? null)));
 
-            // Create Image entity directly in database (commenting out SAIS dispatch for now)
-            if ($resize && $artist->getDriveUrl()) {
-                try {
+            $artist->imageCodes=[];
+            // Create Media entity directly in database (commenting out SAIS dispatch for now)
+            if ($driveUrl = $artist->getDriveUrl()) {
                     // Calculate SAIS code for the image
-                    $saisImageCode = SaisClientService::calculateCode($artist->getDriveUrl(), self::SAIS_ROOT);
-                    
-                    // Create or update Image entity directly in database
-                    $image = $this->imageRepo->findByCode($saisImageCode);
-                    if (!$image) {
-                        $image = new Image($saisImageCode);
+                    $saisImageCode = SaisClientService::calculateCode($driveUrl, self::SAIS_ROOT);
+                    $artist->imageCodes[] = $saisImageCode;
+
+                    // Create or update Media entity directly in database
+
+                    if (!$image = $this->imageRepo->findByCode($saisImageCode)) {
+                        $image = new Media($saisImageCode);
                         $this->em->persist($image);
                     }
-                    $image->setOriginalUrl($artist->getDriveUrl());
-                    
+                    $image->setOriginalUrl($driveUrl);
+
                     // Store the SAIS image code for this artist
-                    $artist->addImageCode($saisImageCode);
-                    
-                    $this->logger->info('Image entity created for artist', [
+
+                    $this->logger->info('Media entity created for artist', [
                         'email' => $email,
                         'saisImageCode' => $saisImageCode,
                         'driveUrl' => $artist->getDriveUrl()
                     ]);
-                    
-                    // COMMENTED OUT: SAIS dispatch process
-                    /*
-                    $resp = $this->sais->dispatchProcess(new ProcessPayload(
-                        self::SAIS_ROOT,
-                        [$artist->getDriveUrl()],
-                        mediaCallbackUrl: $this->urls->generate(
-                            'app_media_webhook',
-                            ['code' => $saisImageCode, '_locale' => 'en'],
-                            UrlGeneratorInterface::ABSOLUTE_URL
-                        ),
-                        thumbCallbackUrl: $this->urls->generate(
-                            'app_thumb_webhook', 
-                            ['code' => $saisImageCode, '_locale' => 'en'],
-                            UrlGeneratorInterface::ABSOLUTE_URL
-                        )
-                    ));
-                    
-                    // Also store immediate response URLs if available
-                    if ($resp[0]['resized'] ?? null) {
-                        // Handle array of resized URLs or single URL
-                        $resized = $resp[0]['resized'];
-                        if (is_array($resized)) {
-                            // Add each resized URL as an image code
-                            foreach ($resized as $url) {
-                                if ($url) {
-                                    $artist->addImageCode($url);
-                                }
-                            }
-                        } else {
-                            // Single URL
-                            $artist->addImageCode($resized);
-                        }
-                    }
-                    */
-                } catch (\Throwable $e) {
-                    $this->logger->error('Image entity creation failed for artist', ['email' => $email, 'e' => $e->getMessage()]);
-                }
             }
 
             $artist->mergeNewTranslations();
+            dump($artist->images);
             $this->validateOrFail($artist, $io);
 
             $artists[$artist->getCode()] = $artist;
@@ -214,12 +178,15 @@ class LoadCommand extends Command
             }
 
             // Optional audio process
-            if (!empty($row['audiodriveurl'])) {
-                $audioUrl = $row['audiodriveurl'];
-                try {
+            if ($audioUrl = $row['audiodriveurl']) {
                     $saisCode = SaisClientService::calculateCode($audioUrl, self::SAIS_ROOT);
+                    if (!$media = $this->mediaRepository->findOneBy(['code' => $saisCode])) {
+                        $media = new Media($saisCode);
+                    }
+                    $media->type = 'audio';
+                    $media->originalUrl = $audioUrl;
                     if ($resize) {
-                        $this->sais->dispatchProcess(new ProcessPayload(
+                        $response = $this->sais->dispatchProcess(new ProcessPayload(
                             self::SAIS_ROOT,
                             [$audioUrl],
                             mediaCallbackUrl: $this->urls->generate(
@@ -229,9 +196,6 @@ class LoadCommand extends Command
                             )
                         ));
                     }
-                } catch (\Throwable $e) {
-                    $this->logger->error('SAIS audio process failed', ['code' => $code, 'e' => $e->getMessage()]);
-                }
             }
 
             // Basic fields
@@ -262,66 +226,28 @@ class LoadCommand extends Command
                 }
             }
 
-            // Create Image entity directly in database (commenting out SAIS dispatch for now)
-            if ($resize && $obra->getDriveUrl()) {
-                try {
+            // Create Media entity directly in database (commenting out SAIS dispatch for now)
+            if ($obra->getDriveUrl()) {
                     // Calculate SAIS code for the image
                     $saisImageCode = SaisClientService::calculateCode($obra->getDriveUrl(), self::SAIS_ROOT);
-                    
-                    // Create or update Image entity directly in database
+
+                    // Create or update Media entity directly in database
                     $image = $this->imageRepo->findByCode($saisImageCode);
                     if (!$image) {
-                        $image = new Image($saisImageCode);
+                        $image = new Media($saisImageCode);
                         $this->em->persist($image);
                     }
+                    $image->type = 'image';
                     $image->setOriginalUrl($obra->getDriveUrl());
-                    
+
                     // Store the SAIS image code for this obra
                     $obra->addImageCode($saisImageCode);
-                    
-                    $this->logger->info('Image entity created for obra', [
+
+                    $this->logger->info('Media entity created for obra', [
                         'code' => $code,
                         'saisImageCode' => $saisImageCode,
                         'driveUrl' => $obra->getDriveUrl()
                     ]);
-                    
-                    // COMMENTED OUT: SAIS dispatch process
-                    /*
-                    $resp = $this->sais->dispatchProcess(new ProcessPayload(
-                        self::SAIS_ROOT,
-                        [$obra->getDriveUrl()],
-                        mediaCallbackUrl: $this->urls->generate(
-                            'app_media_webhook',
-                            ['code' => $saisImageCode, '_locale' => 'en'],
-                            UrlGeneratorInterface::ABSOLUTE_URL
-                        ),
-                        thumbCallbackUrl: $this->urls->generate(
-                            'app_thumb_webhook',
-                            ['code' => $saisImageCode, '_locale' => 'en'], 
-                            UrlGeneratorInterface::ABSOLUTE_URL
-                        )
-                    ));
-                    
-                    // Also store immediate response URLs if available
-                    if ($resp[0]['resized'] ?? null) {
-                        // Handle array of resized URLs or single URL
-                        $resized = $resp[0]['resized'];
-                        if (is_array($resized)) {
-                            // Add each resized URL as an image code
-                            foreach ($resized as $url) {
-                                if ($url) {
-                                    $obra->addImageCode($url);
-                                }
-                            }
-                        } else {
-                            // Single URL
-                            $obra->addImageCode($resized);
-                        }
-                    }
-                    */
-                } catch (\Throwable $e) {
-                    $this->logger->error('Image entity creation failed for obra', ['code' => $code, 'e' => $e->getMessage()]);
-                }
             }
         }
 
@@ -476,6 +402,7 @@ class LoadCommand extends Command
     {
         $errors = $this->validator->validate($entity);
         if (\count($errors) > 0) {
+            dump($entity);
             foreach ($errors as $e) {
                 $io->error($e->getPropertyPath() . ' / ' . $e->getMessage());
             }

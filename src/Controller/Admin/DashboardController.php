@@ -3,7 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Artist;
-use App\Entity\Image;
+use App\Entity\Media;
 use App\Entity\Location;
 use App\Entity\Obra;
 use App\Entity\Sacro;
@@ -11,7 +11,7 @@ use App\Repository\ArtistRepository;
 use App\Repository\LocationRepository;
 use App\Repository\ObraRepository;
 use App\Repository\SacroRepository;
-use App\Repository\ImageRepository;
+use App\Repository\MediaRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminDashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
@@ -35,13 +35,13 @@ use function Symfony\Component\Translation\t;
 class DashboardController extends AbstractDashboardController
 {
     public function __construct(
-        private ArtistRepository      $artistRepository,
-        private LocationRepository    $locationRepository,
-        private ObraRepository        $obraRepository,
-        private UrlGeneratorInterface $urlGenerator,
-        private readonly Security     $security, 
+        private ArtistRepository         $artistRepository,
+        private LocationRepository       $locationRepository,
+        private ObraRepository           $obraRepository,
+        private UrlGeneratorInterface    $urlGenerator,
+        private readonly Security        $security,
         private readonly SacroRepository $sacroRepository,
-        private readonly ImageRepository $imageRepository,
+        private readonly MediaRepository $imageRepository,
     ) {
     }
 
@@ -75,9 +75,9 @@ class DashboardController extends AbstractDashboardController
         // Process artists and build separate images array
         $artists = $this->artistRepository->findAll();
         $artistImages = [];
-        
+
         foreach ($artists as $artist) {
-            if ($artist->getImageCodes() && count($artist->getImageCodes()) > 0) {
+            if ($artist->imageCodes) {
                 if ($imageCode = $artist->getImageCodes()[0]??null) {
                     $image = $this->imageRepository->findOneBy(['code' => $imageCode]);
                     if ($image && $image->getResized()) {
@@ -143,7 +143,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('objects', 'ri:image-line', Obra::class)
             ->setBadge($this->obraRepository->count())
         ;
-        yield MenuItem::linkToCrud('images', 'ri:image-line', Image::class)
+        yield MenuItem::linkToCrud('media', 'ri:image-line', Media::class)
             ->setBadge($this->imageRepository->count())
         ;
         yield MenuItem::linkToCrud('sacro', 'ri:image-line', Sacro::class)

@@ -86,6 +86,6 @@ class ObraImage
 
     public function __toString(): string
     {
-        return $this->getImageName() ?? 'Obra Image';
+        return $this->getImageName() ?? 'Obra Media';
     }
 }
