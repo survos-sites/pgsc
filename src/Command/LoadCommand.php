@@ -120,7 +120,6 @@ class LoadCommand extends Command
             }
 
             $artist->mergeNewTranslations();
-            dump($artist->images);
             $this->validateOrFail($artist, $io);
 
             $artists[$artist->getCode()] = $artist;
@@ -186,15 +185,6 @@ class LoadCommand extends Command
                     $media->type = 'audio';
                     $media->originalUrl = $audioUrl;
                     if ($resize) {
-                        $response = $this->sais->dispatchProcess(new ProcessPayload(
-                            self::SAIS_ROOT,
-                            [$audioUrl],
-                            mediaCallbackUrl: $this->urls->generate(
-                                'sais_audio_callback',
-                                ['code' => $saisCode, '_locale' => 'es'],
-                                UrlGeneratorInterface::ABSOLUTE_URL
-                            )
-                        ));
                     }
             }
 

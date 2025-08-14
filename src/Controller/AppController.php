@@ -3,11 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\Artist;
+use App\Entity\Media;
 use App\Entity\Location;
 use App\Entity\Obra;
 use App\Form\ArtistFormType;
 use App\Repository\ArtistRepository;
 use App\Repository\LocationRepository;
+use App\Repository\MediaRepository;
 use App\Repository\ObraRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use League\Csv\Reader;
@@ -40,6 +42,7 @@ final class AppController extends AbstractController
         private LocationRepository $locationRepository,
         private ArtistRepository $artistRepository,
         private ObraRepository $obraRepository,
+        private MediaRepository $mediaRepository,
         private EntityManagerInterface $entityManager,
         private PropertyAccessorInterface $propertyAccessor,
         private GoogleDriveService $driveService,
@@ -419,45 +422,13 @@ final class AppController extends AbstractController
         }
 
         // Create or update Media entity with SAIS data
-        $imageRepo = $this->entityManager->getRepository(\App\Entity\Media::class);
-        $image = $imageRepo->find($saisCode);
-
-        if (!$image) {
-            $image = new \App\Entity\Media($saisCode);
-            $this->logger->info('Media webhook: Created new Media entity', ['code' => $saisCode]);
+        /** @var Media $image */
+        if (!$image = $this->mediaRepository->find($saisCode)) {
+            return $this->json([
+                'error' => 'Media webhook: No SAIS code found in request',
+            ]);
         }
-
-        // Update image with SAIS data
-        if (isset($data['originalUrl'])) {
-            $image->setOriginalUrl($data['originalUrl']);
-        }
-        if (isset($data['mimeType'])) {
-            $image->setMimeType($data['mimeType']);
-        }
-        if (isset($data['size'])) {
-            $image->setSize($data['size']);
-        }
-        if (isset($data['originalWidth'])) {
-            $image->setOriginalWidth($data['originalWidth']);
-        }
-        if (isset($data['originalHeight'])) {
-            $image->setOriginalHeight($data['originalHeight']);
-        }
-        if (isset($data['statusCode'])) {
-            $image->setStatusCode($data['statusCode']);
-        }
-        if (isset($data['blur'])) {
-            $image->setBlur($data['blur']);
-        }
-        if (isset($data['context'])) {
-            $image->setContext($data['context']);
-        }
-        if (isset($data['resized']) && is_array($data['resized'])) {
-            $image->setResized($data['resized']);
-        }
-
-        $this->entityManager->persist($image);
-        $this->entityManager->flush();
+        $image->resized = $data['resized'] ?? null;
 
         $this->logger->info('Media webhook: Updated Media entity', [
             'saisCode' => $saisCode,
@@ -499,10 +470,7 @@ final class AppController extends AbstractController
         }
 
         // Find the Media entity by SAIS code
-        $imageRepo = $this->entityManager->getRepository(\App\Entity\Media::class);
-        $image = $imageRepo->find($saisCode);
-
-        if (!$image) {
+        if (!$image = $this->mediaRepository->find($saisCode)) {
             $this->logger->error('Thumb webhook: Media entity not found', [
                 'saisCode' => $saisCode,
                 'data' => $data,
@@ -511,34 +479,9 @@ final class AppController extends AbstractController
             return new Response('Media entity not found for SAIS code: ' . $saisCode, Response::HTTP_NOT_FOUND);
         }
 
-        // Process thumbnail data and update the resized array
-        if (isset($data['liipCode']) && isset($data['url'])) {
-            $resized = $image->getResized();
-            $liipCode = $data['liipCode']; // 'small', 'medium', 'large'
-            $url = $data['url'];
-
-            // Update the resized array with the new thumbnail URL
-            $resized[$liipCode] = $url;
-            $image->setResized($resized);
-
-            $this->logger->info('Thumb webhook: Updated Media resized data', [
-                'saisCode' => $saisCode,
-                'liipCode' => $liipCode,
-                'url' => $url,
-                'resizedCount' => count($resized)
-            ]);
-        }
-
-        // Update any other thumbnail-related data if present
-        if (isset($data['size'])) {
-            // This might be the thumbnail file size, we could store it in context
-            $context = $image->getContext() ?? [];
-            $context['thumbnailSizes'] = $context['thumbnailSizes'] ?? [];
-            $context['thumbnailSizes'][$data['liipCode'] ?? 'unknown'] = $data['size'];
-            $image->setContext($context);
-        }
-
-        $this->entityManager->persist($image);
+        $liipCode = $data['liipCode']; // 'small', 'medium', 'large'
+        $url = $data['url'];
+        $image->resized[$liipCode] = $url;
         $this->entityManager->flush();
 
         return new Response(
@@ -547,7 +490,7 @@ final class AppController extends AbstractController
                 'message' => 'Thumb webhook processed successfully',
                 'saisCode' => $saisCode,
                 'liipCode' => $data['liipCode'] ?? null,
-                'resizedCount' => count($image->getResized())
+                'resizedCount' => count($image->resized??[])
             ]),
             Response::HTTP_OK,
             ['Content-Type' => 'application/json']

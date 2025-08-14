@@ -79,7 +79,8 @@
         "tacman/doctrine-behaviors": "dev-sf7.0 as 2.6.3",
         "twig/extra-bundle": "^3.21",
         "twig/twig": "^3.21.1",
-        "vich/uploader-bundle": ">=2.7.0"
+        "vich/uploader-bundle": ">=2.7.0",
+      "ext-curl": "*"
     },
     "config": {
         "allow-plugins": {

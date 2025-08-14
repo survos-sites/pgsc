@@ -44,21 +44,35 @@ class MediaWorkflow implements IMediaWorkflow
 	{
 		$media = $this->getMedia($event);
         $code = $media->code;
-        $resp = $this->sais->dispatchProcess(new ProcessPayload(
-            LoadCommand::SAIS_ROOT,
-            [$media->getOriginalUrl()],
 
-            mediaCallbackUrl: $this->urlGenerator->generate(
-                'app_media_webhook',
-                ['code' => $code, '_locale' => 'en'],
-                UrlGeneratorInterface::ABSOLUTE_URL
-            ),
-            thumbCallbackUrl: $this->urlGenerator->generate(
-                'app_thumb_webhook',
-                ['code' => $code, '_locale' => 'en'],
-                UrlGeneratorInterface::ABSOLUTE_URL
-            )
-        ));
+        if ($media->type === 'audio') {
+            $resp = $this->sais->dispatchProcess(new ProcessPayload(
+                LoadCommand::SAIS_ROOT,
+                [$media->getOriginalUrl()],
+                mediaCallbackUrl: $this->urlGenerator->generate(
+                    'sais_audio_callback',
+                    ['code' => $code, '_locale' => 'es'],
+                    UrlGeneratorInterface::ABSOLUTE_URL
+                )
+            ));
+            dd($resp);
+        } else {
+            $resp = $this->sais->dispatchProcess(new ProcessPayload(
+                LoadCommand::SAIS_ROOT,
+                [$media->getOriginalUrl()],
+
+                mediaCallbackUrl: $this->urlGenerator->generate(
+                    'app_media_webhook',
+                    ['code' => $code, '_locale' => 'en'],
+                    UrlGeneratorInterface::ABSOLUTE_URL
+                ),
+                thumbCallbackUrl: $this->urlGenerator->generate(
+                    'app_thumb_webhook',
+                    ['code' => $code, '_locale' => 'en'],
+                    UrlGeneratorInterface::ABSOLUTE_URL
+                )
+            ));
+        }
 
         // Also store immediate response URLs if available
         if ($resized = $resp[0]['resized'] ?? null) {
