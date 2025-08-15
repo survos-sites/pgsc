@@ -32,12 +32,6 @@ class Location implements \Stringable, RouteParametersInterface, MarkingInterfac
     use MarkingTrait;
     public const array UNIQUE_PARAMETERS = ['locationId' => 'id'];
 
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    #[Groups(['obra.location.read', 'location.read'])]
-    private ?int $id = null;
-
     #[ORM\Column(length: 255)]
     #[Groups(['location.read'])]
     #[SerializedName('label')]
@@ -76,13 +70,18 @@ class Location implements \Stringable, RouteParametersInterface, MarkingInterfac
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $status = null;
 
-    public function __construct()
+    public function __construct(
+        #[ORM\Id]
+        #[ORM\Column]
+        #[Groups(['obra.location.read', 'location.read'])]
+        private(set) ?string $id = null
+    )
     {
         $this->obras = new ArrayCollection();
         $this->marking = ILocationWorkflow::PLACE_NEW;
     }
 
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->id;
     }

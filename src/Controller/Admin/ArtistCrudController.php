@@ -42,7 +42,7 @@ class ArtistCrudController extends AbstractCrudController
                     return '<a href="' . $this->adminUrlGenerator
                             ->setController(self::class)
                             ->setAction('detail')
-                            ->setEntityId($entity->getId())
+                            ->setEntityId($entity->id)
                             ->generateUrl() . '">' . $value . '</a>';
                 })->onlyOnIndex(),
 
@@ -142,7 +142,7 @@ class ArtistCrudController extends AbstractCrudController
     {
         $rowPrintAction = Action::new('print', false, 'fa:print')
             ->linkToUrl(function ($entity) {
-                return $this->generateUrl('artist_print', ['artistId' => $entity->getId()]);
+                return $this->generateUrl('artist_print', ['artistId' => $entity->id]);
             });
 
         return $actions

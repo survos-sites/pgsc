@@ -143,7 +143,7 @@
         </div>
         <div style="display:flex; align-items:center; gap:10pt;">
             <img src="https://pgsc.survos.com/chijal-landscape.jpg" alt="Chijal" style="height:18pt; width:auto;" />
-            {% set qrUrl = voxitourEndpoint ~ app.request.locale ~ '/chijal?obraId=' ~ obj.code ~ '#tab-obras' %}
+            {% set qrUrl = voxitourEndpoint ~ '/?obraId=' ~ obj.code ~ '#tab-obras' %}
             <img src="{{ qr_code_url(qrUrl) }}" alt="QR Code" style="width:54pt;height:54pt;border:1pt solid #000;background:white;" />
             </div>
         </div>
