@@ -101,7 +101,7 @@ class Obra implements \Stringable, RouteParametersInterface
 
     public function __construct()
     {
-        $this->obraImages = new ArrayCollection();
+        $this->images = new ArrayCollection();
     }
 
     public function getId(): ?int
