@@ -221,7 +221,7 @@ final class AppController extends AbstractController
         return $this->render('app/index.html.twig', []);
     }
 
-    #[Route('/home', name: 'app_homepage')]
+    #[Route('/home', name: 'app_homepage_with_map')]
     public function home(): Response
     {
         $myMap = (new Map());
@@ -260,7 +260,7 @@ final class AppController extends AbstractController
         ];
     }
 
-    #[Route('/landing', name: 'artist_show')]
+    #[Route('/landing', name: 'app_homepage')]
     #[Template('landing.html.twig')]
     public function landing(): Response|array
     {
