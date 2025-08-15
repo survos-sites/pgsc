@@ -199,17 +199,8 @@
         </div>
         <div style="display:flex; align-items:center; gap:10pt;">
             <img src="https://pgsc.survos.com/chijal-landscape.jpg" alt="Chijal" style="height:18pt; width:auto;" />
-            <div style="width:54pt;height:54pt;border:1pt solid #000;display:grid;place-items:center;font-size:7pt;color:#555">
-                <!-- Faux QR with artist icon -->
-                <svg width="40" height="40" viewBox="0 0 108 108" xmlns="http://www.w3.org/2000/svg">
-                    <rect width="108" height="108" fill="white"/>
-                    <rect x="8" y="8" width="24" height="24" fill="#111"/>
-                    <rect x="76" y="8" width="24" height="24" fill="#111"/>
-                    <rect x="8" y="76" width="24" height="24" fill="#111"/>
-                    <!-- Artist/person icon -->
-                    <circle cx="54" cy="40" r="8" fill="#111"/>
-                    <path d="M40 68 C40 60 46 54 54 54 C62 54 68 60 68 68 Z" fill="#111"/>
-                </svg>
+            {% set qrUrl = voxitourEndpoint ~ app.request.locale ~ '/chijal?artistId=' ~ artist.id ~ '#tab-artists' %}
+            <img src="{{ qr_code_url(qrUrl) }}" alt="QR Code" style="width:54pt;height:54pt;border:1pt solid #000;background:white;" />
             </div>
         </div>
     </footer>

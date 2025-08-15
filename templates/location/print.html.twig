@@ -173,16 +173,8 @@
         </div>
         <div style="display:flex; align-items:center; gap:10pt;">
             <img src="https://pgsc.survos.com/chijal-landscape.jpg" alt="Chijal" style="height:18pt; width:auto;" />
-            <div style="width:54pt;height:54pt;border:1pt solid #000;display:grid;place-items:center;font-size:7pt;color:#555">
-                <!-- Faux QR with location icon -->
-                <svg width="40" height="40" viewBox="0 0 108 108" xmlns="http://www.w3.org/2000/svg">
-                    <rect width="108" height="108" fill="white"/>
-                    <rect x="8" y="8" width="24" height="24" fill="#111"/>
-                    <rect x="76" y="8" width="24" height="24" fill="#111"/>
-                    <rect x="8" y="76" width="24" height="24" fill="#111"/>
-                    <!-- Location pin icon -->
-                    <path d="M54 32 C60 32 64 36 64 42 C64 50 54 64 54 64 S44 50 44 42 C44 36 48 32 54 32 Z M54 38 C51 38 50 39 50 42 C50 43 51 44 54 44 C57 44 58 43 58 42 C58 39 57 38 54 38 Z" fill="#111"/>
-                </svg>
+            {% set qrUrl = voxitourEndpoint ~ app.request.locale ~ '/chijal?locationId=' ~ location.code ~ '#tab-locations' %}
+            <img src="{{ qr_code_url(qrUrl) }}" alt="QR Code" style="width:54pt;height:54pt;border:1pt solid #000;background:white;" />
             </div>
         </div>
     </footer>
