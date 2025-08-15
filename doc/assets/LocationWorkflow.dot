@@ -1,0 +1,15 @@
+digraph workflow {
+  ratio="compress" rankdir="TB" label=<<B>LocationWorkflow</B>>
+  node [fontsize="8" fontname="Arial" color="lightBlue" style="filled" fixedsize="false" width="2" height="1"];
+  edge [fontsize="7" fontname="Arial" color="#333333" arrowhead="normal" arrowsize="0.5"];
+
+  place_new [label=<<B>new</B>>, shape=oval fillcolor="lightgreen" style="filled" xlabel="Place new: starting point, after persisted"];
+  place_geocoded [label=<<B>geocoded</B>>, shape=oval fillcolor="lightgreen" style="filled" xlabel="Place geocoded: "];
+  place_approved [label=<<B>approved</B>>, shape=oval fillcolor="lightgreen" style="filled" xlabel="Place approved: this place is now visible on the map and app"];
+  transition_geocode [label=<<B>geocode</B><BR/>engine: geoapify<BR/><U>getAddress</U>>, shape="box" regular="" style="filled" fillcolor="pink" xlabel="Transition geocode: geocode the address if it exists"];
+  transition_approve [label=<<B>approve</B><BR/><U>ROLE_ADMIN</U>>, shape="box" regular="" xlabel="Transition approve: "];
+  place_new -> transition_geocode [style="solid", comment="new"];
+  transition_geocode -> place_geocoded [style="solid"];
+  place_geocoded -> transition_approve [style="solid", comment="geocoded"];
+  transition_approve -> place_approved [style="solid"];
+}

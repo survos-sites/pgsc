@@ -1,0 +1,15 @@
+digraph workflow {
+  ratio="compress" rankdir="TB" label=<<B>MediaWorkflow</B>>
+  node [fontsize="8" fontname="Arial" color="lightBlue" style="filled" fixedsize="false" width="2" height="1"];
+  edge [fontsize="7" fontname="Arial" color="#333333" arrowhead="normal" arrowsize="0.5"];
+
+  place_new [label=<<B>new</B>>, shape=oval fillcolor="lightgreen" style="filled" xlabel="Place new: "];
+  place_dispatched [label=<<B>dispatched</B>>, shape=oval fillcolor="lightgreen" style="filled" xlabel="Place dispatched: "];
+  place_resized [label=<<B>resized</B>>, shape=oval fillcolor="lightgreen" style="filled" xlabel="Place resized: "];
+  transition_dispatch [label=<<B>dispatch</B>>, shape="box" regular="" xlabel="Transition dispatch: "];
+  transition_resize [label=<<B>resize</B><BR/><U>resized != []</U>>, shape="box" regular="" xlabel="Transition resize: "];
+  place_new -> transition_dispatch [style="solid", comment="new"];
+  transition_dispatch -> place_dispatched [style="solid"];
+  place_dispatched -> transition_resize [style="solid", comment="dispatched"];
+  transition_resize -> place_resized [style="solid"];
+}
