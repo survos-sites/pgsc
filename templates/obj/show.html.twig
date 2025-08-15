@@ -32,6 +32,22 @@
             page-break-after: always;
             border: 1pt solid #000; /* cut guide */
         }
+        .header-section {
+            margin-bottom: 8pt;
+        }
+        .image-section {
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .obra-image {
+            width: 120pt;
+            height: 90pt;
+            object-fit: cover;
+            border-radius: 4pt;
+            background: #f5f5f5;
+        }
         .title {
             font-family: var(--serif);
             font-weight: 600;
@@ -73,7 +89,7 @@
 </head>
 <body>
 <main class="card-64">
-    <section>
+    <section class="header-section">
         {% if obj.title %}
             <h1 class="title italic">{{ obj.title }}</h1>
         {% endif %}
@@ -101,7 +117,23 @@
             {% endif %}
         </div>
     </section>
-    <div></div>
+    <section class="image-section">
+        {% set primaryImage = null %}
+        {% if obj.imageCodes and obj.imageCodes|length > 0 %}
+            {% set primaryImageCode = obj.imageCodes[0] %}
+            {% if imagesByCode[primaryImageCode] is defined %}
+                {% set primaryImage = imagesByCode[primaryImageCode] %}
+            {% endif %}
+        {% endif %}
+        
+        {% if primaryImage %}
+            <img src="{{ primaryImage.resized.medium ?? primaryImage.originalUrl }}" alt="{{ obj.title }}" class="obra-image" />
+        {% else %}
+            <div class="obra-image" style="background: #f0f0f0; display: flex; align-items: center; justify-content: center; color: #999; font-size: 8pt;">
+                Sin imagen
+            </div>
+        {% endif %}
+    </section>
     <footer class="foot">
         <div>
             {% if obj.code %}
