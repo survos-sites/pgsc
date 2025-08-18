@@ -17,7 +17,7 @@ class ObraImage
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'obraImages')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(name: 'obra_code', referencedColumnName: 'code', nullable: false)]
     private ?Obra $obra = null;
 
     #[ORM\Column(length: 255)]

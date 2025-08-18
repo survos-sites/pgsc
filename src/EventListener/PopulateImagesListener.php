@@ -25,6 +25,7 @@ final class PopulateImagesListener
             return;
         }
 
+        // Load images
         $codes = $entity->getImageCodes();
         if (!$codes) {
             $images = new ArrayCollection();
@@ -40,6 +41,12 @@ final class PopulateImagesListener
         $imagesByCode = [];
         foreach ($images as $image) {
             $imagesByCode[$image->getCode()] = $image;
+        }
+
+        // Load audio for Obra entities
+        if ($entity instanceof Obra && $audioCode = $entity->getAudioCode()) {
+            $audioMedia = $this->imageRepository->findByCode($audioCode);
+            $entity->audio = $audioMedia;
         }
 
         // Populate entity
