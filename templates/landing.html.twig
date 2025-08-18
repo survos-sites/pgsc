@@ -1,54 +1,91 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Mobile App Preview</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% extends "base.html.twig" %}
+{% block stylesheets %}
+{{ parent() }}
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            display: flex;
-            align-items: flex-start;
-            padding: 1rem;
-        }
-        .content {
-            flex: 1;
-            padding-right: 1rem;
-        }
-        .phone-frame {
-            width: 375px; /* iPhone-ish width */
-            height: 667px; /* iPhone-ish height */
-            border: 16px solid #333;
-            border-radius: 36px;
+        /* Only affect the landing section */
+        #landing .lead { font-size: 1.125rem; }
+
+        /* Phone mockup */
+        #landing .phone-mock {
+            width: 360px;
+            aspect-ratio: 9 / 19;           /* phone-ish */
+            border: 14px solid #2f2f2f;
+            border-radius: 34px;
             overflow: hidden;
-            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+            box-shadow: 0 12px 30px rgba(0,0,0,.25);
             background: #000;
-            flex-shrink: 0;
         }
-        .phone-frame iframe {
+        #landing .phone-mock iframe {
             width: 100%;
             height: 100%;
-            border: none;
+            border: 0;
+        }
+        /* Keep the phone visible while scrolling on large screens */
+        @media (min-width: 992px) {
+            #landing .phone-sticky { position: sticky; top: 2rem; }
         }
     </style>
-</head>
-<body>
 
-<div class="container">
-    <div class="content">
-        <h1>Welcome to the Chijal Mobile App</h1>
-        <p>Date: August 13, 2025</p>
-        <p>This is a preview of our mobile web app, shown as it would appear on a phone.</p>
-        <p>Additional info, links, and download instructions can go here.</p>
-    </div>
-    <div class="phone-frame">
-        <iframe src="https://vt.survos.com/es/chijal"></iframe>
-    </div>
-</div>
+{% endblock %}
+{% block body %}
+    <section id="landing" class="container-xl py-5">
+        <div class="row justify-content-between align-items-start g-5">
+            <!-- Copy / intro -->
+            <div class="col-lg-6 order-2 order-lg-1">
+                <h1 class="mb-3">CHIJAL — Ruta Cultural</h1>
+                <p class="lead text-secondary">
+                    Una experiencia que conecta <strong>artistas</strong>, <strong>lugares</strong> y <strong>visitantes</strong> en San Cristóbal de las Casas a través del arte contemporáneo y la iconografía textil.
+                </p>
 
-</body>
-</html>
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <h2 class="h3 mb-3">¿Qué es?</h2>
+                        <p class="mb-3">
+                            CHIJAL es una red de galerías, restaurantes, hoteles y espacios públicos que exhiben obras de artistas contemporáneos.
+                            La app tiene tres pestañas: <strong>Artistas</strong>, <strong>Lugares</strong> y <strong>Obras</strong>.
+                        </p>
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2">• Escanea el <strong>código QR</strong> de una obra en el lugar.</li>
+                            <li class="mb-2">• Accede a <strong>detalles</strong> y <strong>audio</strong> con la voz del artista.</li>
+                            <li>• Descubre el <strong>recorrido</strong> y planifica visitas.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="row g-3 mt-3">
+                    <div class="col-md-6">
+                        <div class="card card-link">
+                            <div class="card-body">
+                                <h3 class="h4">Objetivo</h3>
+                                <p class="text-secondary mb-0">
+                                    Difundir el arte contemporáneo en espacios accesibles, fortalecer la identidad textil y activar el turismo cultural.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card card-link">
+                            <div class="card-body">
+                                <h3 class="h4">Propuesta de valor</h3>
+                                <p class="text-secondary mb-0">
+                                    Recorridos por espacios seleccionados, impacto económico local y una estética unificada inspirada en los textiles.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Phone preview -->
+            <div class="col-lg-5 order-1 order-lg-2 phone-sticky">
+                <div class="phone-mock mx-auto">
+                    <iframe src="https://vt.survos.com/es/chijal" loading="lazy" title="CHIJAL App"></iframe>
+                </div>
+                <p class="text-center text-secondary small mt-2">
+                    Explora artistas, lugares y obras sin salir de esta página.
+                </p>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

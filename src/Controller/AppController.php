@@ -221,7 +221,7 @@ final class AppController extends AbstractController
         return $this->render('app/index.html.twig', []);
     }
 
-    #[Route('/home', name: 'app_homepage')]
+    #[Route('/home', name: 'app_homepage_with_map')]
     public function home(): Response
     {
         $myMap = (new Map());
@@ -260,7 +260,7 @@ final class AppController extends AbstractController
         ];
     }
 
-    #[Route('/landing', name: 'artist_show')]
+    #[Route('/landing', name: 'app_homepage')]
     #[Template('landing.html.twig')]
     public function landing(): Response|array
     {
@@ -315,8 +315,29 @@ final class AppController extends AbstractController
     #[Template('obj/show.html.twig')]
     public function showObj(Obra $obra): Response|array
     {
+        // Collect image codes from the obra for loading Media entities
+        $allImageCodes = [];
+        $imageCodes = $obra->getImageCodes();
+        if (!empty($imageCodes)) {
+            $allImageCodes = array_merge($allImageCodes, $imageCodes);
+        }
+        
+        $imagesByCode = [];
+        if (!empty($allImageCodes)) {
+            $images = $this->mediaRepository->createQueryBuilder('m')
+                ->where('m.code IN (:codes)')
+                ->setParameter('codes', array_unique($allImageCodes))
+                ->getQuery()
+                ->getResult();
+            
+            foreach ($images as $image) {
+                $imagesByCode[$image->getCode()] = $image;
+            }
+        }
+        
         return [
             'obj' => $obra,
+            'imagesByCode' => $imagesByCode,
         ];
     }
 
@@ -343,6 +364,86 @@ final class AppController extends AbstractController
         return [
             'my_map' => $myMap ?? null,
             'location' => $location,
+        ];
+    }
+
+    #[Route('/location/print/{locationId}', name: 'location_print')]
+    #[Template('location/print.html.twig')]
+    public function printLocation(Location $location): Response|array
+    {
+        // Use the existing location->obras relationship
+        $obras = $location->getObras();
+        
+        // Collect all image codes from the obras and load corresponding Media entities
+        $allImageCodes = [];
+        foreach ($obras as $obra) {
+            $imageCodes = $obra->getImageCodes();
+            if (!empty($imageCodes)) {
+                $allImageCodes = array_merge($allImageCodes, $imageCodes);
+            }
+        }
+        
+        $imagesByCode = [];
+        if (!empty($allImageCodes)) {
+            $images = $this->mediaRepository->createQueryBuilder('m')
+                ->where('m.code IN (:codes)')
+                ->setParameter('codes', array_unique($allImageCodes))
+                ->getQuery()
+                ->getResult();
+            
+            foreach ($images as $image) {
+                $imagesByCode[$image->getCode()] = $image;
+            }
+        }
+
+        return [
+            'location' => $location,
+            'obras' => $obras,
+            'imagesByCode' => $imagesByCode,
+        ];
+    }
+
+    #[Route('/artist/print/{artistId}', name: 'artist_print')]
+    #[Template('artist/print.html.twig')]
+    public function printArtist(Artist $artist): Response|array
+    {
+        // Use the existing artist->obras relationship
+        $obras = $artist->getObras();
+        
+        // Collect all image codes from the obras and artist for batch loading
+        $allImageCodes = [];
+        
+        // Add artist's image codes
+        $artistImageCodes = $artist->getImageCodes();
+        if (!empty($artistImageCodes)) {
+            $allImageCodes = array_merge($allImageCodes, $artistImageCodes);
+        }
+        
+        // Add obra image codes
+        foreach ($obras as $obra) {
+            $imageCodes = $obra->getImageCodes();
+            if (!empty($imageCodes)) {
+                $allImageCodes = array_merge($allImageCodes, $imageCodes);
+            }
+        }
+        
+        $imagesByCode = [];
+        if (!empty($allImageCodes)) {
+            $images = $this->mediaRepository->createQueryBuilder('m')
+                ->where('m.code IN (:codes)')
+                ->setParameter('codes', array_unique($allImageCodes))
+                ->getQuery()
+                ->getResult();
+            
+            foreach ($images as $image) {
+                $imagesByCode[$image->getCode()] = $image;
+            }
+        }
+
+        return [
+            'artist' => $artist,
+            'obras' => $obras,
+            'imagesByCode' => $imagesByCode,
         ];
     }
 

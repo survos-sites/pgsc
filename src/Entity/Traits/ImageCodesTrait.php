@@ -2,6 +2,7 @@
 
 namespace App\Entity\Traits;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -27,6 +28,11 @@ trait ImageCodesTrait
     {
         return $this->imageCodes ?? [];
     }
+    public function getImages(): Collection
+    {
+        return $this->images ?? new ArrayCollection();
+    }
+
 
     public function setImageCodes(?array $imageCodes): static
     {
@@ -105,7 +111,7 @@ trait ImageCodesTrait
 
     #[Groups(['media.read'])]
     public function getThumbnailUrl(): ?string {
-        return $this->images->first() ? $this->images->first()->getThumbnailUrl() : null;
+        return ($first = $this->getImages()->first()) ? $first->getThumbnailUrl() : null;
     }
 
 

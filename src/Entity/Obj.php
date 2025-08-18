@@ -8,12 +8,13 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: ObjRepository::class)]
 class Obj
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
-
-    public function getId(): ?int
+    public function __construct(
+        #[ORM\Id]
+        #[ORM\Column]
+        private(set) ?string $id = null
+    ) {
+    }
+    public function getId(): ?string
     {
         return $this->id;
     }

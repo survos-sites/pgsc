@@ -42,7 +42,7 @@ class ArtistCrudController extends AbstractCrudController
                     return '<a href="' . $this->adminUrlGenerator
                             ->setController(self::class)
                             ->setAction('detail')
-                            ->setEntityId($entity->getId())
+                            ->setEntityId($entity->id)
                             ->generateUrl() . '">' . $value . '</a>';
                 })->onlyOnIndex(),
 
@@ -86,7 +86,7 @@ class ArtistCrudController extends AbstractCrudController
                             return null; // AvatarField will show default avatar
                         }
 
-                        $thumbnailUrl = $image->getThumbnail(); // Gets the 'small' size URL
+                        $thumbnailUrl = $image->getThumbnailUrl(); // Gets the 'small' size URL
                         return $thumbnailUrl; // Return URL or null for default avatar
 
                     } catch (\Exception $e) {
@@ -140,10 +140,13 @@ class ArtistCrudController extends AbstractCrudController
 
     public function configureActions(Actions $actions): Actions
     {
-        //        $viewInvoice = Action::new('invoice', 'View invoice', 'fa fa-file-invoice')
-        //            ->linkToCrudAction('renderInvoice');
+        $rowPrintAction = Action::new('print', false, 'fa:print')
+            ->linkToUrl(function ($entity) {
+                return $this->generateUrl('artist_print', ['artistId' => $entity->id]);
+            });
 
         return $actions
+            ->add(Crud::PAGE_INDEX, $rowPrintAction)
             ->setPermission(Action::EDIT, ArtistVoter::EDIT)
             ->setPermission(Action::DELETE, ArtistVoter::DELETE)
             ->remove(Crud::PAGE_INDEX, Action::DETAIL)

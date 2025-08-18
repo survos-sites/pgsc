@@ -32,6 +32,8 @@ use App\Entity\Traits\ImageCodesTrait;
 #[Assert\EnableAutoMapping]
 class Artist implements \Stringable, RouteParametersInterface, TranslatableInterface
 {
+
+    
     use RouteParametersTrait;
     use TranslatableTrait;
     use ImageCodesTrait;
@@ -50,11 +52,11 @@ class Artist implements \Stringable, RouteParametersInterface, TranslatableInter
         'studio.closed',
     ];
 
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    #[Groups(['artist.read'])]
-    private ?int $id = null;
+    // #[ORM\Id]
+    // #[ORM\GeneratedValue]
+    // #[ORM\Column]
+    // #[Groups(['artist.read'])]
+    // private ?int $id = null;
 
     #[ORM\Column(length: 255)]
     #[Groups(['artist.read'])]
@@ -161,14 +163,18 @@ class Artist implements \Stringable, RouteParametersInterface, TranslatableInter
     #[ORM\Column(type: Types::JSON, nullable: true)]
     private ?array $tags = null;
 
-    public function __construct()
+    public function __construct(
+    #[ORM\Id]
+    #[ORM\Column]
+    #[Groups(['artist.read'])]
+    private(set) ?string $id = null)
     {
         $this->obras = new ArrayCollection();
         $this->images = new ArrayCollection();
 //        $this->bio = new JsonTranslation();
     }
 
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->id;
     }
@@ -280,7 +286,7 @@ class Artist implements \Stringable, RouteParametersInterface, TranslatableInter
 
     public function __toString(): string
     {
-        return $this->getName() ?? $this->getId();
+        return $this->getName() ?? $this->id; //$this->getId();
     }
 
     public function getObraCount(): ?int

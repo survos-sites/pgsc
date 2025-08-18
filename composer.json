@@ -38,7 +38,7 @@
         "survos/flickr-bundle": ">=1.6.44",
         "survos/geoapify-bundle": "^1.6.44",
         "survos/google-sheets-bundle": "^1.6.44",
-        "survos/sais-bundle": "*",
+        "survos/sais-bundle": ">=1.6.44",
         "survos/simple-datatables-bundle": "^1.6.44",
         "survos/translatable-field-bundle": "dev-main",
         "survos/workflow-helper-bundle": "^1.6.44",

@@ -30,11 +30,6 @@ class Obra implements \Stringable, RouteParametersInterface
     use ImageCodesTrait;
     public const array UNIQUE_PARAMETERS = ['obraId' => 'id'];
 
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
-
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['obra.read'])]
     private ?string $title = null;
@@ -52,7 +47,7 @@ class Obra implements \Stringable, RouteParametersInterface
     #[Groups(['obra.read'])]
     private ?Artist $artist = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['artist.obra.read', 'obra.read'])]
     private ?string $code = null;
 
@@ -99,13 +94,16 @@ class Obra implements \Stringable, RouteParametersInterface
     #[Groups(['obra.read'])]
     private ?string $size = null;
 
-    public function __construct()
+    public function __construct(
+        #[ORM\Id]
+        #[ORM\Column]
+        private(set) ?string $id = null
+    )
     {
         $this->images = new ArrayCollection();
-
     }
 
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->id;
     }

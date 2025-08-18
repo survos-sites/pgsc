@@ -58,16 +58,13 @@ class LocationCrudController extends AbstractCrudController
 
     public function configureActions(Actions $actions): Actions
     {
-        $label = Action::new('label', 'print.label', 'tabler:printer')
-            ->linkToCrudAction('renderInvoice');
+        $rowPrintAction = Action::new('print', false, 'fa:print')
+            ->linkToUrl(function ($entity) {
+                return $this->generateUrl('location_print', ['locationId' => $entity->getId()]);
+            });
 
         return $actions
-            // ...
-//            ->add('label', $label)
-            // use the 'setPermission()' method to set the permission of actions
-            // (the same permission is granted to the action on all pages)
-//            ->setPermission('invoice', LocationVoter::EDIT)
-
+            ->add(Crud::PAGE_INDEX, $rowPrintAction)
             // you can set permissions for built-in actions in the same way
             ->setPermission(Action::EDIT, LocationVoter::EDIT)
             ->setPermission(Action::DELETE, LocationVoter::DELETE)

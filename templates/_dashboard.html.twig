@@ -26,6 +26,14 @@
                                          class="img-thumbnail" style="width:64px;height:64px;object-fit:contain;">
                                 </a>
 
+                                {% if obra.thumbnailUrl %}
+                                <a href="{{ linkToVoxitour }}" target="_blank" class="text-decoration-none" title="Abrir en Voxitour">
+                                    <img src="{{ obra.thumbnailUrl }}"
+                                         class="img-thumbnail" style="width:64px;height:64px;object-fit:contain;">
+                                </a>
+                                {% endif %}
+
+
                                 <div class="flex-grow-1">
                                     <div class="d-flex align-items-center gap-2">
                                         <a href="{{ path('admin_obra_detail', obra.erp) }}" class="fw-semibold text-reset">
@@ -62,12 +70,13 @@
                         {% for artist in limitedArtists %}
                             <li class="list-group-item">
                                 <div class="d-flex align-items-start gap-3">
-                                    {% if artistImages[artist.id] is defined and artistImages[artist.id].small is defined %}
+                                    {% if artist.thumbnailUrl %}
                                         <img class="img-thumbnail" style="width:48px;height:48px;object-fit:cover;"
-                                             src="{{ artistImages[artist.id].small }}" alt="artist image" />
+                                             src="{{ artist.thumbnailUrl }}" alt="artist image" />
                                     {% endif %}
 
                                     <div class="flex-grow-1">
+                                        {{ dump(artist.images) }}
                                         <div class="d-flex align-items-center gap-2">
                                             <a href="{{ path('admin_artist_detail', {entityId: artist.id}) }}" class="fw-semibold text-reset">
                                                 {{ artist.name }}

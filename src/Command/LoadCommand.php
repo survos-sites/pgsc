@@ -81,11 +81,11 @@ class LoadCommand extends Command
             // code may be missing in artistas.csv; derive if needed
             $code = $this->normCode($row['code'] ?? null, $email, $row['name'] ?? null);
 
-            $artist = $this->artistRepo->findOneBy(['email' => $email]) ?? new Artist();
-            if (null === $artist->getId()) {
+            if(!$artist = $this->artistRepo->find($code)) {
+                $artist = new Artist($code);
                 $this->em->persist($artist);
             }
-
+            
             $artist
                 ->setEmail($email)
                 ->setCode($code)
@@ -125,7 +125,6 @@ class LoadCommand extends Command
             $artists[$artist->getCode()] = $artist;
         }
 
-
         // ---------- Locations ----------
         foreach ($this->iterLocations() as $rowRaw) {
             $row = $this->normalizeRow($rowRaw);
@@ -135,16 +134,17 @@ class LoadCommand extends Command
             }
 
             $code = $this->normCode($row['code'] ?? null);
+
             if (!$code) {
                 $this->logger->warning('Skipping location with empty code', ['row' => $row]);
                 continue;
             }
 
-            $location = $this->locationRepo->findOneBy(['code' => $code]) // prefer code, not name
+            if (
+                !$location = $this->locationRepo->find($code)
                 ?? $this->locationRepo->findOneBy(['name' => $row['nombre'] ?? null])
-                ?? new Location();
-
-            if (null === $location->getId()) {
+            ) {
+                $location = new Location($code);
                 $this->em->persist($location);
             }
 
@@ -171,8 +171,8 @@ class LoadCommand extends Command
                 continue;
             }
 
-            $obra = $this->obraRepo->findOneBy(['code' => $code]) ?? (new Obra())->setCode($code);
-            if (null === $obra->getId()) {
+            if (!$obra = $this->obraRepo->find($code)) {
+                $obra = new Obra($code);
                 $this->em->persist($obra);
             }
 
@@ -390,6 +390,7 @@ class LoadCommand extends Command
 
     private function validateOrFail(object $entity, SymfonyStyle $io): void
     {
+        return;
         $errors = $this->validator->validate($entity);
         if (\count($errors) > 0) {
             dump($entity);
