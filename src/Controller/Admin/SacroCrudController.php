@@ -27,21 +27,15 @@ class SacroCrudController extends AbstractCrudController
         yield FlickrField::new('flickrInfo')->hideOnForm()
             ->setTemplatePath('ez/field/flickr.html.twig')
         ;
-        yield TextField::new('label')->hideOnForm();
-        yield TextField::new('description')->hideOnForm();
-        yield TextField::new('notes')->hideOnIndex()->hideOnForm();
-
 //        yield TextField::new('flickrUrl')->hideOnForm();
 //            ->formatValue(static function ($value, Sacro $entity) {
 //                return $entity->getFlickrId();
 //            })
 
-        yield TranslationsField::new('translations')
-            ->setFormTypeOption('locales', ['es', 'en'])
-            ->addTranslatableField(TextField::new('label', t('form.label')))
-            ->addTranslatableField(TextareaField::new('description', t('form.description')))
-            ->addTranslatableField(TextareaField::new('notes', t('form.notes')))
-        ;
+        // Replace TranslationsField with regular fields for now
+        yield TextField::new('label');
+        yield TextareaField::new('description');
+        yield TextareaField::new('notes');
 
     }
 }

@@ -8,8 +8,8 @@
             "username": null,
             "route": "admin_artist_index",
             "rp": null,
-            "statusCode": null,
-            "foundOn": null,
+            "statusCode": 200,
+            "foundOn": "@smoke",
             "memory": null
         },
         "/es/admin/artist/new": {
@@ -20,8 +20,8 @@
             "username": null,
             "route": "admin_artist_new",
             "rp": null,
-            "statusCode": null,
-            "foundOn": null,
+            "statusCode": 200,
+            "foundOn": "@smoke",
             "memory": null
         },
         "/es/admin/artist/render-filters": {
@@ -32,8 +32,8 @@
             "username": null,
             "route": "admin_artist_render_filters",
             "rp": null,
-            "statusCode": null,
-            "foundOn": null,
+            "statusCode": 200,
+            "foundOn": "@smoke",
             "memory": null
         },
         "/es/admin/location": {
@@ -44,8 +44,8 @@
             "username": null,
             "route": "admin_location_index",
             "rp": null,
-            "statusCode": null,
-            "foundOn": null,
+            "statusCode": 200,
+            "foundOn": "@smoke",
             "memory": null
         },
         "/es/admin/location/new": {
@@ -56,8 +56,8 @@
             "username": null,
             "route": "admin_location_new",
             "rp": null,
-            "statusCode": null,
-            "foundOn": null,
+            "statusCode": 200,
+            "foundOn": "@smoke",
             "memory": null
         },
         "/es/admin/location/render-filters": {
@@ -68,8 +68,44 @@
             "username": null,
             "route": "admin_location_render_filters",
             "rp": null,
-            "statusCode": null,
-            "foundOn": null,
+            "statusCode": 200,
+            "foundOn": "@smoke",
+            "memory": null
+        },
+        "/es/admin/media": {
+            "path": "/es/admin/media",
+            "seen": true,
+            "depth": 0,
+            "linkStatus": null,
+            "username": null,
+            "route": "admin_media_index",
+            "rp": null,
+            "statusCode": 200,
+            "foundOn": "@smoke",
+            "memory": null
+        },
+        "/es/admin/media/new": {
+            "path": "/es/admin/media/new",
+            "seen": true,
+            "depth": 0,
+            "linkStatus": null,
+            "username": null,
+            "route": "admin_media_new",
+            "rp": null,
+            "statusCode": 200,
+            "foundOn": "@smoke",
+            "memory": null
+        },
+        "/es/admin/media/render-filters": {
+            "path": "/es/admin/media/render-filters",
+            "seen": true,
+            "depth": 0,
+            "linkStatus": null,
+            "username": null,
+            "route": "admin_media_render_filters",
+            "rp": null,
+            "statusCode": 200,
+            "foundOn": "@smoke",
             "memory": null
         },
         "/es/admin/obra": {
@@ -80,8 +116,8 @@
             "username": null,
             "route": "admin_obra_index",
             "rp": null,
-            "statusCode": null,
-            "foundOn": null,
+            "statusCode": 200,
+            "foundOn": "@smoke",
             "memory": null
         },
         "/es/admin/obra/new": {
@@ -92,8 +128,8 @@
             "username": null,
             "route": "admin_obra_new",
             "rp": null,
-            "statusCode": null,
-            "foundOn": null,
+            "statusCode": 200,
+            "foundOn": "@smoke",
             "memory": null
         },
         "/es/admin/obra/render-filters": {
@@ -104,8 +140,8 @@
             "username": null,
             "route": "admin_obra_render_filters",
             "rp": null,
-            "statusCode": null,
-            "foundOn": null,
+            "statusCode": 200,
+            "foundOn": "@smoke",
             "memory": null
         },
         "/es/admin/sacro": {
@@ -116,8 +152,8 @@
             "username": null,
             "route": "admin_sacro_index",
             "rp": null,
-            "statusCode": null,
-            "foundOn": null,
+            "statusCode": 200,
+            "foundOn": "@smoke",
             "memory": null
         },
         "/es/admin/sacro/new": {
@@ -128,8 +164,8 @@
             "username": null,
             "route": "admin_sacro_new",
             "rp": null,
-            "statusCode": null,
-            "foundOn": null,
+            "statusCode": 200,
+            "foundOn": "@smoke",
             "memory": null
         },
         "/es/admin/sacro/render-filters": {
@@ -140,8 +176,8 @@
             "username": null,
             "route": "admin_sacro_render_filters",
             "rp": null,
-            "statusCode": null,
-            "foundOn": null,
+            "statusCode": 200,
+            "foundOn": "@smoke",
             "memory": null
         },
         "/auth/profile": {
@@ -152,8 +188,8 @@
             "username": null,
             "route": "oauth_profile",
             "rp": null,
-            "statusCode": null,
-            "foundOn": null,
+            "statusCode": 200,
+            "foundOn": "@smoke",
             "memory": null
         },
         "/auth/providers": {
@@ -164,8 +200,8 @@
             "username": null,
             "route": "oauth_providers",
             "rp": null,
-            "statusCode": null,
-            "foundOn": null,
+            "statusCode": 200,
+            "foundOn": "@smoke",
             "memory": null
         },
         "/admin/commands/": {
@@ -176,8 +212,8 @@
             "username": null,
             "route": "survos_commands",
             "rp": null,
-            "statusCode": null,
-            "foundOn": null,
+            "statusCode": 200,
+            "foundOn": "@smoke",
             "memory": null
         },
         "/crawler/crawlerdata": {
@@ -188,8 +224,8 @@
             "username": null,
             "route": "survos_crawler_data",
             "rp": null,
-            "statusCode": null,
-            "foundOn": null,
+            "statusCode": 200,
+            "foundOn": "@smoke",
             "memory": null
         },
         "/workflow/": {
@@ -200,8 +236,20 @@
             "username": null,
             "route": "survos_workflows",
             "rp": null,
-            "statusCode": null,
-            "foundOn": null,
+            "statusCode": 200,
+            "foundOn": "@smoke",
+            "memory": null
+        },
+        "/workflow/entities": {
+            "path": "/workflow/entities",
+            "seen": true,
+            "depth": 0,
+            "linkStatus": null,
+            "username": null,
+            "route": "survos_workflow_entities",
+            "rp": null,
+            "statusCode": 200,
+            "foundOn": "@smoke",
             "memory": null
         },
         "/register": {
@@ -212,8 +260,8 @@
             "username": null,
             "route": "app_register",
             "rp": null,
-            "statusCode": null,
-            "foundOn": null,
+            "statusCode": 200,
+            "foundOn": "@smoke",
             "memory": null
         },
         "/verify/email": {
@@ -224,8 +272,8 @@
             "username": null,
             "route": "app_verify_email",
             "rp": null,
-            "statusCode": null,
-            "foundOn": null,
+            "statusCode": 200,
+            "foundOn": "@smoke",
             "memory": null
         },
         "/login": {
@@ -236,8 +284,8 @@
             "username": null,
             "route": "app_login",
             "rp": null,
-            "statusCode": null,
-            "foundOn": null,
+            "statusCode": 200,
+            "foundOn": "@smoke",
             "memory": null
         },
         "/": {
@@ -248,262 +296,248 @@
             "username": null,
             "route": "app_landing",
             "rp": null,
-            "statusCode": null,
-            "foundOn": null,
-            "memory": null
-        }
-    },
-    "admin@test.com|https://pgsc.wip/": {
-        "/es/admin/artist": {
-            "path": "/es/admin/artist",
-            "seen": true,
-            "depth": 0,
-            "linkStatus": null,
-            "username": "admin@test.com",
-            "route": "admin_artist_index",
-            "rp": null,
-            "statusCode": null,
-            "foundOn": null,
+            "statusCode": 200,
+            "foundOn": "@smoke",
             "memory": null
         },
-        "/es/admin/artist/new": {
-            "path": "/es/admin/artist/new",
+        "/es/admin": {
+            "path": "/es/admin",
             "seen": true,
-            "depth": 0,
+            "depth": 1,
             "linkStatus": null,
-            "username": "admin@test.com",
-            "route": "admin_artist_new",
+            "username": null,
+            "route": "admin",
             "rp": null,
-            "statusCode": null,
-            "foundOn": null,
+            "statusCode": 200,
+            "foundOn": "/es/admin/artist",
             "memory": null
         },
-        "/es/admin/artist/render-filters": {
-            "path": "/es/admin/artist/render-filters",
+        "/es/sync": {
+            "path": "/es/sync",
             "seen": true,
-            "depth": 0,
+            "depth": 1,
             "linkStatus": null,
-            "username": "admin@test.com",
-            "route": "admin_artist_render_filters",
+            "username": null,
+            "route": "app_sync",
             "rp": null,
-            "statusCode": null,
-            "foundOn": null,
+            "statusCode": 200,
+            "foundOn": "/es/admin/artist",
             "memory": null
         },
-        "/es/admin/location": {
-            "path": "/es/admin/location",
+        "/es/landing": {
+            "path": "/es/landing",
             "seen": true,
-            "depth": 0,
+            "depth": 1,
             "linkStatus": null,
-            "username": "admin@test.com",
-            "route": "admin_location_index",
+            "username": null,
+            "route": "app_homepage",
             "rp": null,
-            "statusCode": null,
-            "foundOn": null,
+            "statusCode": 200,
+            "foundOn": "/auth/profile",
             "memory": null
         },
-        "/es/admin/location/new": {
-            "path": "/es/admin/location/new",
+        "/es/api/docs": {
+            "path": "/es/api/docs",
             "seen": true,
-            "depth": 0,
+            "depth": 1,
             "linkStatus": null,
-            "username": "admin@test.com",
-            "route": "admin_location_new",
+            "username": null,
+            "route": "api_doc",
             "rp": null,
-            "statusCode": null,
-            "foundOn": null,
+            "statusCode": 200,
+            "foundOn": "/auth/profile",
             "memory": null
         },
-        "/es/admin/location/render-filters": {
-            "path": "/es/admin/location/render-filters",
+        "/es/jsonrpc/test": {
+            "path": "/es/jsonrpc/test",
             "seen": true,
-            "depth": 0,
+            "depth": 1,
             "linkStatus": null,
-            "username": "admin@test.com",
-            "route": "admin_location_render_filters",
+            "username": null,
+            "route": "jsonrpc_test",
             "rp": null,
-            "statusCode": null,
-            "foundOn": null,
+            "statusCode": 200,
+            "foundOn": "/auth/profile",
             "memory": null
         },
-        "/es/admin/obra": {
-            "path": "/es/admin/obra",
+        "/es/cmas": {
+            "path": "/es/cmas",
             "seen": true,
-            "depth": 0,
+            "depth": 1,
             "linkStatus": null,
-            "username": "admin@test.com",
-            "route": "admin_obra_index",
+            "username": null,
+            "route": "cmas_index",
             "rp": null,
-            "statusCode": null,
-            "foundOn": null,
+            "statusCode": 200,
+            "foundOn": "/auth/profile",
             "memory": null
         },
-        "/es/admin/obra/new": {
-            "path": "/es/admin/obra/new",
+        "/es/cmas/import": {
+            "path": "/es/cmas/import",
             "seen": true,
-            "depth": 0,
+            "depth": 1,
             "linkStatus": null,
-            "username": "admin@test.com",
-            "route": "admin_obra_new",
+            "username": null,
+            "route": "cmas_import",
             "rp": null,
-            "statusCode": null,
-            "foundOn": null,
+            "statusCode": 200,
+            "foundOn": "/auth/profile",
             "memory": null
         },
-        "/es/admin/obra/render-filters": {
-            "path": "/es/admin/obra/render-filters",
+        "/es/cmas-images": {
+            "path": "/es/cmas-images",
             "seen": true,
-            "depth": 0,
+            "depth": 1,
             "linkStatus": null,
-            "username": "admin@test.com",
-            "route": "admin_obra_render_filters",
+            "username": null,
+            "route": "cmas_images",
             "rp": null,
-            "statusCode": null,
-            "foundOn": null,
+            "statusCode": 200,
+            "foundOn": "/auth/profile",
             "memory": null
         },
-        "/es/admin/sacro": {
-            "path": "/es/admin/sacro",
+        "/auth/provider/amazon": {
+            "path": "/auth/provider/amazon",
             "seen": true,
-            "depth": 0,
+            "depth": 1,
             "linkStatus": null,
-            "username": "admin@test.com",
-            "route": "admin_sacro_index",
+            "username": null,
+            "route": "oauth_provider",
             "rp": null,
-            "statusCode": null,
-            "foundOn": null,
+            "statusCode": 200,
+            "foundOn": "/auth/providers",
             "memory": null
         },
-        "/es/admin/sacro/new": {
-            "path": "/es/admin/sacro/new",
+        "/auth/provider/auth0": {
+            "path": "/auth/provider/auth0",
             "seen": true,
-            "depth": 0,
+            "depth": 1,
             "linkStatus": null,
-            "username": "admin@test.com",
-            "route": "admin_sacro_new",
+            "username": null,
+            "route": "oauth_provider",
             "rp": null,
-            "statusCode": null,
-            "foundOn": null,
+            "statusCode": 200,
+            "foundOn": "/auth/providers",
             "memory": null
         },
-        "/es/admin/sacro/render-filters": {
-            "path": "/es/admin/sacro/render-filters",
+        "/auth/provider/azure": {
+            "path": "/auth/provider/azure",
             "seen": true,
-            "depth": 0,
+            "depth": 1,
             "linkStatus": null,
-            "username": "admin@test.com",
-            "route": "admin_sacro_render_filters",
+            "username": null,
+            "route": "oauth_provider",
             "rp": null,
-            "statusCode": null,
-            "foundOn": null,
+            "statusCode": 200,
+            "foundOn": "/auth/providers",
             "memory": null
         },
-        "/auth/profile": {
-            "path": "/auth/profile",
+        "/auth/provider/bitbucket": {
+            "path": "/auth/provider/bitbucket",
             "seen": true,
-            "depth": 0,
+            "depth": 1,
             "linkStatus": null,
-            "username": "admin@test.com",
-            "route": "oauth_profile",
+            "username": null,
+            "route": "oauth_provider",
             "rp": null,
-            "statusCode": null,
-            "foundOn": null,
+            "statusCode": 200,
+            "foundOn": "/auth/providers",
             "memory": null
         },
-        "/auth/providers": {
-            "path": "/auth/providers",
+        "/admin/commands/run/app:load": {
+            "path": "/admin/commands/run/app:load",
             "seen": true,
-            "depth": 0,
+            "depth": 1,
             "linkStatus": null,
-            "username": "admin@test.com",
-            "route": "oauth_providers",
+            "username": null,
+            "route": "survos_command",
             "rp": null,
-            "statusCode": null,
-            "foundOn": null,
+            "statusCode": 200,
+            "foundOn": "/admin/commands/",
             "memory": null
         },
-        "/admin/commands/": {
-            "path": "/admin/commands/",
+        "/admin/commands/run/survos:workflow:viz": {
+            "path": "/admin/commands/run/survos:workflow:viz",
             "seen": true,
-            "depth": 0,
+            "depth": 1,
             "linkStatus": null,
-            "username": "admin@test.com",
-            "route": "survos_commands",
+            "username": null,
+            "route": "survos_command",
             "rp": null,
-            "statusCode": null,
-            "foundOn": null,
+            "statusCode": 200,
+            "foundOn": "/admin/commands/",
             "memory": null
         },
-        "/crawler/crawlerdata": {
-            "path": "/crawler/crawlerdata",
+        "/admin/commands/run/survos:workflow:dump": {
+            "path": "/admin/commands/run/survos:workflow:dump",
             "seen": true,
-            "depth": 0,
+            "depth": 1,
             "linkStatus": null,
-            "username": "admin@test.com",
-            "route": "survos_crawler_data",
+            "username": null,
+            "route": "survos_command",
             "rp": null,
-            "statusCode": null,
-            "foundOn": null,
+            "statusCode": 200,
+            "foundOn": "/admin/commands/",
             "memory": null
         },
-        "/workflow/": {
-            "path": "/workflow/",
+        "/admin/commands/run/survos:workflow:generate": {
+            "path": "/admin/commands/run/survos:workflow:generate",
             "seen": true,
-            "depth": 0,
+            "depth": 1,
             "linkStatus": null,
-            "username": "admin@test.com",
-            "route": "survos_workflows",
+            "username": null,
+            "route": "survos_command",
             "rp": null,
-            "statusCode": null,
-            "foundOn": null,
+            "statusCode": 200,
+            "foundOn": "/admin/commands/",
             "memory": null
         },
-        "/register": {
-            "path": "/register",
+        "/workflow/workflow/MediaWorkflow": {
+            "path": "/workflow/workflow/MediaWorkflow",
             "seen": true,
-            "depth": 0,
+            "depth": 1,
             "linkStatus": null,
-            "username": "admin@test.com",
-            "route": "app_register",
+            "username": null,
+            "route": "survos_workflow",
             "rp": null,
-            "statusCode": null,
-            "foundOn": null,
+            "statusCode": 200,
+            "foundOn": "/workflow/",
             "memory": null
         },
-        "/verify/email": {
-            "path": "/verify/email",
+        "/workflow/workflow/LocationWorkflow": {
+            "path": "/workflow/workflow/LocationWorkflow",
             "seen": true,
-            "depth": 0,
+            "depth": 1,
             "linkStatus": null,
-            "username": "admin@test.com",
-            "route": "app_verify_email",
+            "username": null,
+            "route": "survos_workflow",
             "rp": null,
-            "statusCode": null,
-            "foundOn": null,
+            "statusCode": 200,
+            "foundOn": "/workflow/",
             "memory": null
         },
-        "/login": {
-            "path": "/login",
+        "/workflow/workflow/SacroWorkflow": {
+            "path": "/workflow/workflow/SacroWorkflow",
             "seen": true,
-            "depth": 0,
+            "depth": 1,
             "linkStatus": null,
-            "username": "admin@test.com",
-            "route": "app_login",
+            "username": null,
+            "route": "survos_workflow",
             "rp": null,
-            "statusCode": null,
-            "foundOn": null,
+            "statusCode": 200,
+            "foundOn": "/workflow/",
             "memory": null
         },
-        "/": {
-            "path": "/",
+        "/workflow/workflow/MediaWorkflow?states=%22new%22": {
+            "path": "/workflow/workflow/MediaWorkflow?states=%22new%22",
             "seen": true,
-            "depth": 0,
+            "depth": 2,
             "linkStatus": null,
-            "username": "admin@test.com",
-            "route": "app_landing",
+            "username": null,
+            "route": "survos_workflow",
             "rp": null,
-            "statusCode": null,
-            "foundOn": null,
+            "statusCode": 200,
+            "foundOn": "/workflow/workflow/MediaWorkflow",
             "memory": null
         }
     }

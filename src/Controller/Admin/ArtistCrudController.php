@@ -19,8 +19,10 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\AvatarField;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Survos\TranslatableFieldBundle\EasyAdmin\Field\TranslationsField;
 use App\Repository\MediaRepository;
+//base crud controller
+use Survos\CoreBundle\Controller\BaseCrudController;
 
-class ArtistCrudController extends AbstractCrudController
+class ArtistCrudController extends BaseCrudController
 {
     public function __construct(
         protected AdminUrlGenerator $adminUrlGenerator,
@@ -60,14 +62,10 @@ class ArtistCrudController extends AbstractCrudController
                 array_combine(Artist::GENDERS, Artist::GENDERS)
             )->setFormTypeOption('expanded', true),
 
-            // Bio (read-only on form, comes from translations)
-            TextField::new('bio')->hideOnForm(),
-
-            // Translations field for bio
-            TranslationsField::new('translations')
-                ->addTranslatableField(
-                    TextareaField::new('bio')
-                ),
+            // Bio field - using regular textarea instead of translations
+            TextareaField::new('bio')
+                ->setNumOfRows(4)
+                ->setHelp('Artist biography'),
 
             // Avatar field - show artist thumbnails with nice styling
             AvatarField::new('thumbnailUrl', 'Media')

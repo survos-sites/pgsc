@@ -45,7 +45,10 @@ final class AppCmasCommand
         $limit ??= $this->env === 'test' ? 3 : 100;
 
 //        $path = $projectDir . '/data/cmas.csv';
-        assert(file_exists($path), $path . ' does not exist');
+        if (!file_exists($path)) {
+            $io->error(sprintf('File "%s" does not exist', $path));
+            return Command::FAILURE;
+        }
         $reader = Reader::createFromPath($path, 'r');
         $reader->setHeaderOffset(0);
         foreach ($reader as $index => $row) {

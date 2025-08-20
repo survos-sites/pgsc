@@ -315,6 +315,9 @@ class LoadCommand extends Command
 
     private function csv(string $path, int $header = 0): Reader
     {
+        if (!file_exists($path)) {
+            throw new \RuntimeException(sprintf('CSV file "%s" does not exist', $path));
+        }
         $csv = Reader::createFromPath($path, 'r');
         $csv->setHeaderOffset($header);
         return $csv;

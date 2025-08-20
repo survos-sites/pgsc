@@ -72,9 +72,17 @@ final class AppController extends AbstractController
         #[MapQueryParameter] bool $refresh = false,
     ): Response {
 
-        //return a temp response
-//        return new Response('Syncing...');
-        $spreadsheet = $sheetService->getGoogleSpreadSheet($this->googleSpreadsheetId);
+        // Check if Google Spreadsheet ID is configured
+        if (empty($this->googleSpreadsheetId)) {
+            $this->logger->warning('Google Spreadsheet ID not configured, skipping sync');
+            return $this->render('app/index.html.twig', [
+                'message' => 'Google Spreadsheet ID not configured in this environment. Sync functionality disabled.'
+            ]);
+        }
+        
+        try {
+            $this->logger->info('Starting sync process', ['spreadsheetId' => $this->googleSpreadsheetId]);
+            $spreadsheet = $sheetService->getGoogleSpreadSheet($this->googleSpreadsheetId);
 //        $x = $sheetService->downloadSheetToLocal('@artists', 'data/ardata.csv');
 //        dd($x);
 
@@ -84,8 +92,13 @@ final class AppController extends AbstractController
             $refresh,
             function ($sheet, $csv) {
                 //save to local file filename : data/{spreadsheet_id}_{sheet}.csv
-                $filePath = sprintf('%s/data/%s.csv', $this->getParameter('kernel.project_dir'),u($sheet)->snake()->toString());if (!is_dir('data')) {
-                    mkdir('data', 0777, true);
+                if (empty($sheet)) {
+                    $this->logger->warning('Empty sheet name encountered, skipping');
+                    return;
+                }
+                $filePath = sprintf('%s/data/%s.csv', $this->getParameter('kernel.project_dir'), u($sheet)->snake()->toString());
+                if (!is_dir(dirname($filePath))) {
+                    mkdir(dirname($filePath), 0777, true);
                 }
                 file_put_contents($filePath, $csv);
                 return;
@@ -214,11 +227,22 @@ final class AppController extends AbstractController
                 }
             }
         );
-        //dd($data);
+            //dd($data);
 //        $sheetService->downloadSheetToLocal('piezas', 'data/piezas.csv');
 //        // integrate with Google Sheets
 //        dd();
-        return $this->render('app/index.html.twig', []);
+            return $this->render('app/index.html.twig', []);
+            
+        } catch (\Exception $e) {
+            $this->logger->error('Error during sync process', [
+                'message' => $e->getMessage(),
+                'spreadsheetId' => $this->googleSpreadsheetId
+            ]);
+            
+            return $this->render('app/index.html.twig', [
+                'error' => 'Sync process failed: ' . $e->getMessage()
+            ]);
+        }
     }
 
     #[Route('/home', name: 'app_homepage_with_map')]
@@ -674,7 +698,7 @@ final class AppController extends AbstractController
         //     'offset' => 0,
         // ]);
 
-        dd($result);
+        //dd($result);
 
         return new Response('JsonRPC Client created successfully: ' . get_class($client));
     }
