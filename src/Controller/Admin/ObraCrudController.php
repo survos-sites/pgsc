@@ -110,15 +110,6 @@ class ObraCrudController extends AbstractCrudController
             ->setDisabled(true)
             ->setFormTypeOption('choice_label', 'name')
         ;
-        //        yield CollectionField::new('obraImages')
-        //            ->setEntryType(ObraImageFileType::class)
-        //            ->onlyOnForms();
-        //        yield CollectionField::new('obraImages')
-        //            ->onlyOnDetail()
-        //            ->setTemplatePath('admin/field/obra_images.html.twig');
-        //        yield CollectionField::new('obraImages')
-        //            ->onlyOnIndex()
-        //            ->setTemplatePath('admin/field/obra_images_small.html.twig');
     }
 
     public function configureFilters(Filters $filters): Filters
