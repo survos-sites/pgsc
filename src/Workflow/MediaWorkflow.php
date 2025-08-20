@@ -55,7 +55,7 @@ class MediaWorkflow implements IMediaWorkflow
                     UrlGeneratorInterface::ABSOLUTE_URL
                 )
             ));
-            dd($resp);
+            //dd($resp);
         } else {
             $resp = $this->sais->dispatchProcess(new ProcessPayload(
                 LoadCommand::SAIS_ROOT,

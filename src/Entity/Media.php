@@ -25,6 +25,7 @@ class Media implements \Stringable, MarkingInterface
 
     // candidate for Enum!
     #[ORM\Column(type: Types::STRING, nullable: false)]
+    #[Groups(['media.read'])]
     public string $type='image'; // or 'audio'
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]

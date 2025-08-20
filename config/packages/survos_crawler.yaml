@@ -3,12 +3,13 @@ when@dev: &dev
         # if you've run symfony proxy:domain:attach my-project, then the error messages will be displayed with this prefix.  That way, you can simply click on a link to open the page.
         base_url: 'https://pgsc.wip/'
         user_class: App\Entity\User
-        users:
-            - admin@test.com
+        # users:
+        #     - admin@test.com
         max_depth : 3
         paths_to_ignore:
             - 'batch'
             - 'autocomplete'
+            - 'admin/commands/run/app:cmas'
         routes_to_ignore :
             - 'app_logout'
 when@test: *dev

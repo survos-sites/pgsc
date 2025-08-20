@@ -5,7 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
-use App\Entity\EasyMedia\Media;
+use App\Entity\Media;
 use App\Entity\Traits\ImageCodesTrait;
 use App\Repository\ObraRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -22,13 +22,13 @@ use Symfony\Component\Serializer\Attribute\Groups;
         new Get(),
         new GetCollection(),
     ],
-    normalizationContext: ['groups' => ['obra.read', 'obra.location.read', 'media.read']]
+    normalizationContext: ['groups' => ['obra.read', 'obra.location.read', 'obra.artist.read', 'media.read']]
 )]
 class Obra implements \Stringable, RouteParametersInterface
 {
     use RouteParametersTrait;
     use ImageCodesTrait;
-    public const array UNIQUE_PARAMETERS = ['obraId' => 'id'];
+    public const array UNIQUE_PARAMETERS = ['obraId' => 'code'];
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['obra.read'])]
@@ -46,10 +46,6 @@ class Obra implements \Stringable, RouteParametersInterface
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['obra.read'])]
     private ?Artist $artist = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['artist.obra.read', 'obra.read'])]
-    private ?string $code = null;
 
     #[ORM\Column(nullable: true)]
     #[Groups(['obra.read'])]
@@ -80,8 +76,9 @@ class Obra implements \Stringable, RouteParametersInterface
     #[Groups(['obra.read'])]
     private ?string $type = null;
 
-//    #[ORM\Column(type: 'easy_media_type', nullable: true)]
-//    private string|null $audio;
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['obra.read'])]
+    private ?string $audioCode = null; // SAIS code for audio Media entity
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $driveUrl = null;
@@ -97,7 +94,8 @@ class Obra implements \Stringable, RouteParametersInterface
     public function __construct(
         #[ORM\Id]
         #[ORM\Column]
-        private(set) ?string $id = null
+        #[Groups(['obra.read'])]
+        private(set) ?string $code = null
     )
     {
         $this->images = new ArrayCollection();
@@ -105,7 +103,7 @@ class Obra implements \Stringable, RouteParametersInterface
 
     public function getId(): ?string
     {
-        return $this->id;
+        return $this->code;
     }
 
     public function getTitle(): ?string
@@ -233,35 +231,6 @@ class Obra implements \Stringable, RouteParametersInterface
         return $this;
     }
 
-    /**
-     * @return Collection<int, ObraImage>
-     */
-    public function getObraImages(): Collection
-    {
-        return $this->obraImages;
-    }
-
-    public function addObraImage(ObraImage $obraImage): static
-    {
-        if (!$this->obraImages->contains($obraImage)) {
-            $this->obraImages->add($obraImage);
-            $obraImage->setObra($this);
-        }
-
-        return $this;
-    }
-
-    public function removeObraImage(ObraImage $obraImage): static
-    {
-        if ($this->obraImages->removeElement($obraImage)) {
-            // set the owning side to null (unless already changed)
-            if ($obraImage->getObra() === $this) {
-                $obraImage->setObra(null);
-            }
-        }
-
-        return $this;
-    }
 
     public function getDimensions(): string
     {
@@ -298,16 +267,32 @@ class Obra implements \Stringable, RouteParametersInterface
         return $this;
     }
 
-    public function getAudio(): Media|string|null
+    public function getAudioCode(): ?string
     {
-        return $this->audio;
+        return $this->audioCode;
     }
 
-    public function setAudio(Media|string|null $audio): static
+    public function setAudioCode(?string $audioCode): static
     {
-        $this->audio = $audio;
+        $this->audioCode = $audioCode;
 
         return $this;
+    }
+
+    /**
+     * Virtual property to hold the loaded audio Media entity
+     * Populated by PopulateImagesListener
+     */
+    #[Groups(['obra.read'])]
+    public ?Media $audio = null;
+
+    /**
+     * Get the loaded audio Media entity
+     */
+    #[Groups(['obra.read'])]
+    public function getAudio(): ?Media
+    {
+        return $this->audio;
     }
 
     #[Groups(['obra.read'])]
@@ -321,6 +306,30 @@ class Obra implements \Stringable, RouteParametersInterface
     public function getLocationCode(): ?string
     {
         return $this->getLocation()?->getCode();
+    }
+
+    /**
+     * Get the artist name - used for template compatibility
+     */
+    #[Groups(['obra.read'])]
+    public function getArtistName(): ?string
+    {
+        return $this->getArtist()?->getName();
+    }
+
+    /**
+     * Get content array for multilingual descriptions - used for template compatibility
+     */
+    #[Groups(['obra.read'])]
+    public function getContent(): array
+    {
+        // For now, return description in multiple locales
+        // This could be enhanced to support actual multilingual content
+        return [
+            'en' => $this->description,
+            'es' => $this->description,
+            'tzo' => $this->description,
+        ];
     }
 
     public function getDriveUrl(): ?string

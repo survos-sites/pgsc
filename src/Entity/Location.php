@@ -33,7 +33,7 @@ class Location implements \Stringable, RouteParametersInterface, MarkingInterfac
     public const array UNIQUE_PARAMETERS = ['locationId' => 'id'];
 
     #[ORM\Column(length: 255)]
-    #[Groups(['location.read'])]
+    #[Groups(['location.read', 'obra.location.read'])]
     #[SerializedName('label')]
     private ?string $name = null;
 

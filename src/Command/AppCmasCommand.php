@@ -23,7 +23,6 @@ final class AppCmasCommand
 {
 
     public function __construct(
-        #[Autowire('%kernel.project_dir%')] string $projectDir,
         #[Autowire('%kernel.environment%')] protected string $env,
         private EntityManagerInterface $entityManager,
         private SacroRepository $sacroRepository,
@@ -45,10 +44,15 @@ final class AppCmasCommand
         $limit ??= $this->env === 'test' ? 3 : 100;
 
 //        $path = $projectDir . '/data/cmas.csv';
-        assert(file_exists($path), $path . ' does not exist');
+        if (!file_exists($path)) {
+            $io->error(sprintf('File "%s" does not exist', $path));
+            return Command::FAILURE;
+        }
         $reader = Reader::createFromPath($path, 'r');
         $reader->setHeaderOffset(0);
+        $index = 0;
         foreach ($reader as $index => $row) {
+            $extra = [];
             foreach ($row as $column => $value) {
                 // dots mean translation
                 if (!str_contains($column, '.')) {

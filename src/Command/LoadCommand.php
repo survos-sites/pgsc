@@ -178,18 +178,31 @@ class LoadCommand extends Command
 
             // Optional audio process
             if ($audioUrl = $row['audiodriveurl']) {
-                    $saisCode = SaisClientService::calculateCode($audioUrl, self::SAIS_ROOT);
-                    if (!$media = $this->mediaRepository->findOneBy(['code' => $saisCode])) {
-                        $media = new Media($saisCode);
+                    $saisAudioCode = SaisClientService::calculateCode($audioUrl, self::SAIS_ROOT);
+                    if (!$audioMedia = $this->mediaRepository->findOneBy(['code' => $saisAudioCode])) {
+                        $audioMedia = new Media($saisAudioCode);
+                        $this->em->persist($audioMedia);
                     }
-                    $media->type = 'audio';
-                    $media->originalUrl = $audioUrl;
+                    $audioMedia->type = 'audio';
+                    $audioMedia->originalUrl = $audioUrl;
+                    
+                    // Connect the audio media to the obra
+                    $obra->setAudioCode($saisAudioCode);
+                    
+                    $this->logger->info('Audio media entity created for obra', [
+                        'code' => $code,
+                        'saisAudioCode' => $saisAudioCode,
+                        'audioUrl' => $audioUrl
+                    ]);
+                    
                     if ($resize) {
+                        // TODO: Dispatch SAIS processing for audio if needed
                     }
             }
 
             // Basic fields
             $obra
+                ->setCode($code)
                 ->setMaterials($row['material'] ?? null)
                 ->setYoutubeUrl($row['youtubeurl'] ?? null)
                 ->setDriveUrl($row['photodriveurl'] ?? null)
@@ -302,6 +315,9 @@ class LoadCommand extends Command
 
     private function csv(string $path, int $header = 0): Reader
     {
+        if (!file_exists($path)) {
+            throw new \RuntimeException(sprintf('CSV file "%s" does not exist', $path));
+        }
         $csv = Reader::createFromPath($path, 'r');
         $csv->setHeaderOffset($header);
         return $csv;
@@ -390,7 +406,6 @@ class LoadCommand extends Command
 
     private function validateOrFail(object $entity, SymfonyStyle $io): void
     {
-        return;
         $errors = $this->validator->validate($entity);
         if (\count($errors) > 0) {
             dump($entity);
