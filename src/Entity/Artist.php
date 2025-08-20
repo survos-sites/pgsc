@@ -33,7 +33,7 @@ use App\Entity\Traits\ImageCodesTrait;
 class Artist implements \Stringable, RouteParametersInterface, TranslatableInterface
 {
 
-    
+
     use RouteParametersTrait;
     use TranslatableTrait;
     use ImageCodesTrait;
@@ -59,7 +59,7 @@ class Artist implements \Stringable, RouteParametersInterface, TranslatableInter
     // private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['artist.read'])]
+    #[Groups(['artist.read','obra.artist.read'])]
     private ?string $name = null;
 
     #[ORM\Column(nullable: true)]

@@ -38,7 +38,7 @@ class Location implements \Stringable, RouteParametersInterface, MarkingInterfac
     private ?string $name = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['location.read'])]
+    #[Groups(['location.read', 'obra.location.read'])]
     private ?string $address = null;
 
     /**

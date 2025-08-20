@@ -22,6 +22,7 @@ use Symfony\Component\Console\Attribute\Option;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\ObjectMapper\ObjectMapperInterface;
+use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -45,6 +46,7 @@ class LoadCommand extends Command
         private readonly UrlGeneratorInterface  $urls,
         private readonly LoggerInterface        $logger,
         private readonly MediaRepository $mediaRepository,
+        private readonly PropertyAccessorInterface $propertyAccessor,
     ) { parent::__construct(); }
 
     public function __invoke(
@@ -85,7 +87,7 @@ class LoadCommand extends Command
                 $artist = new Artist($code);
                 $this->em->persist($artist);
             }
-            
+
             $artist
                 ->setEmail($email)
                 ->setCode($code)
@@ -185,16 +187,16 @@ class LoadCommand extends Command
                     }
                     $audioMedia->type = 'audio';
                     $audioMedia->originalUrl = $audioUrl;
-                    
+
                     // Connect the audio media to the obra
                     $obra->setAudioCode($saisAudioCode);
-                    
+
                     $this->logger->info('Audio media entity created for obra', [
                         'code' => $code,
                         'saisAudioCode' => $saisAudioCode,
                         'audioUrl' => $audioUrl
                     ]);
-                    
+
                     if ($resize) {
                         // TODO: Dispatch SAIS processing for audio if needed
                     }
@@ -408,8 +410,8 @@ class LoadCommand extends Command
     {
         $errors = $this->validator->validate($entity);
         if (\count($errors) > 0) {
-            dump($entity);
             foreach ($errors as $e) {
+                dump($entity::class, $e->getPropertyPath(), $this->propertyAccessor->getValue($entity, $e->getPropertyPath()));
                 $io->error($e->getPropertyPath() . ' / ' . $e->getMessage());
             }
             throw new \RuntimeException('Validation failed.');
