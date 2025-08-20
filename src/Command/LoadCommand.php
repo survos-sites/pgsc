@@ -406,7 +406,6 @@ class LoadCommand extends Command
 
     private function validateOrFail(object $entity, SymfonyStyle $io): void
     {
-        return;
         $errors = $this->validator->validate($entity);
         if (\count($errors) > 0) {
             dump($entity);

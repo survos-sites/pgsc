@@ -23,7 +23,6 @@ final class AppCmasCommand
 {
 
     public function __construct(
-        #[Autowire('%kernel.project_dir%')] string $projectDir,
         #[Autowire('%kernel.environment%')] protected string $env,
         private EntityManagerInterface $entityManager,
         private SacroRepository $sacroRepository,
@@ -51,7 +50,9 @@ final class AppCmasCommand
         }
         $reader = Reader::createFromPath($path, 'r');
         $reader->setHeaderOffset(0);
+        $index = 0;
         foreach ($reader as $index => $row) {
+            $extra = [];
             foreach ($row as $column => $value) {
                 // dots mean translation
                 if (!str_contains($column, '.')) {
