@@ -79,10 +79,18 @@
             <!-- Phone preview -->
             <div class="col-lg-5 order-1 order-lg-2 phone-sticky">
                 <div class="phone-mock mx-auto">
-                    <iframe src="https://vt.survos.com/es/chijal" loading="lazy" title="CHIJAL App"></iframe>
+                    {% set mobileUrl = 'https://vt.survos.com/es/chijal' %}
+                    <iframe src="{{ mobileUrl }}" loading="lazy" title="CHIJAL App"></iframe>
+
                 </div>
                 <p class="text-center text-secondary small mt-2">
-                    Explora artistas, lugares y obras sin salir de esta página.
+                                        <figure class="figure">
+                                            <a target="_blank" href="{{ url }}">
+                                                <img class="figure-img img-fluid" src="{{ qr_code_url(url) }}" style="max-width: 150px" />
+                                            </a>
+                                        </figure>
+
+                    Explora artistas, lugares y obras en tu celular!
                 </p>
             </div>
         </div>
