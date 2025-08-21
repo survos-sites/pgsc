@@ -46,6 +46,7 @@ class MediaWorkflow implements IMediaWorkflow
         $code = $media->code;
 
         if ($media->type === 'audio') {
+            // Handle audio files the same way as images - check for existing processed files
             $resp = $this->sais->dispatchProcess(new ProcessPayload(
                 LoadCommand::SAIS_ROOT,
                 [$media->getOriginalUrl()],
@@ -53,9 +54,14 @@ class MediaWorkflow implements IMediaWorkflow
                     'sais_audio_callback',
                     ['code' => $code, '_locale' => 'es'],
                     UrlGeneratorInterface::ABSOLUTE_URL
+                ),
+                // Include thumbCallback for audio to enable resize key functionality
+                thumbCallbackUrl: $this->urlGenerator->generate(
+                    'sais_audio_callback', // Same callback for audio simplicity
+                    ['code' => $code, '_locale' => 'es'],
+                    UrlGeneratorInterface::ABSOLUTE_URL
                 )
             ));
-            //dd($resp);
         } else {
             $resp = $this->sais->dispatchProcess(new ProcessPayload(
                 LoadCommand::SAIS_ROOT,

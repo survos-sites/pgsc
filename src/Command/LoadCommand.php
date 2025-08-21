@@ -58,9 +58,8 @@ class LoadCommand extends Command
             $io->writeln('Option refresh: true');
         }
 
-        if ($resize) {
-            $response = $this->sais->accountSetup(new AccountSetup(self::SAIS_ROOT, 100));
-        }
+        //resize arg no longer needed , run the account setup anyway
+        $this->sais->accountSetup(new AccountSetup(self::SAIS_ROOT, 100));
 
         $artists   = []; // code => Artist
         $locations = []; // code => Location
