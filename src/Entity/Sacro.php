@@ -9,6 +9,7 @@ use App\Repository\SacroRepository;
 use App\Workflow\ISacroWorkflow;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Survos\BabelBundle\Attribute\BabelStorage;
 use Survos\BabelBundle\Attribute\Translatable;
 use Survos\BabelBundle\Contract\TranslatableResolvedInterface;
 use Survos\BabelBundle\Entity\Traits\TranslatableHooksTrait;
@@ -26,6 +27,7 @@ use Symfony\Component\Serializer\Attribute\SerializedName;
         new GetCollection(),
     ]
 )]
+#[BabelStorage]
 class Sacro implements \Stringable, TranslatableResolvedInterface, MarkingInterface
 {
     use TranslatableHooksTrait;

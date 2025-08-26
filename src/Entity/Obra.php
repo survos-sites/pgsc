@@ -24,7 +24,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
         new Get(),
         new GetCollection(),
     ],
-    normalizationContext: ['groups' => ['obra.read', 'obra.location.read', 'obra.artist.read', 'media.read']]
+    normalizationContext: ['groups' => ['obra.read', 'translatable', 'obra.location.read', 'obra.artist.read', 'media.read']]
 )]
 #[BabelStorage()]
 class Obra implements \Stringable, RouteParametersInterface
@@ -32,13 +32,10 @@ class Obra implements \Stringable, RouteParametersInterface
     use RouteParametersTrait;
     use ImageCodesTrait;
     use MediaFieldsTrait;
+    use TranslatableFieldsTrait; // description
     public const array UNIQUE_PARAMETERS = ['obraId' => 'code'];
 
 
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['obra.read'])]
-    #[Translatable()]
-    public ?string $description = null;
 
     #[ORM\ManyToOne(inversedBy: 'obras')]
     #[Groups(['obra.read', 'obra.location.read'])]

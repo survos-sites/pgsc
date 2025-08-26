@@ -70,6 +70,7 @@ final class AppCmasCommand
             $sacro->setDriveUrl($driveUrl);
 
             $sacro->setExtra($extra);
+            assert(false, "set the rows");
             foreach (['es', 'en'] as $locale) {
                 foreach (['label', 'description', 'notes'] as $field) {
                     $translate = $sacro->translate($locale);
@@ -84,7 +85,6 @@ final class AppCmasCommand
                     );
                 }
             }
-            $sacro->mergeNewTranslations();
             // this should be done in a transition, not during the load
             if ($flickrId = $sacro->getFlickrId()) {
                 if (!$sacro->getFlickrInfo()) {

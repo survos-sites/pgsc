@@ -88,26 +88,27 @@ class LoadCommand extends Command
             // code may be missing in artistas.csv; derive if needed
             $code = $this->normCode($row['code'] ?? null, $email, $row['name'] ?? null);
 
-            if ($artists[$code] ?? null) {
-                continue;
-            }
-            if(!$artist = $this->artistRepo->find($code)) {
+            if (!$artist = $artists[$code] ?? null) {
                 $artist = new Artist($code);
-//                $this->em->persist($artist);
+                $this->em->persist($artist);
+                $artists[$code] = $artist;
             }
+//            if(!$artist = $this->artistRepo->find($code)) {
+////                $this->em->persist($artist);
+//            }
 
+            $artist->bio = $row['long_bio'] ?? $row['bio'] ?? null;
+            $artist->slogan = $this->truncate($row['tagline'] ?? '', 80);
+            $artist->driveUrl = $row['driveurl'] ?? null;
             $artist
                 ->setEmail($email)
                 ->setCode($code)
                 ->setName($row['name'] ?? $email)
-                ->setSlogan($this->truncate($row['tagline'] ?? '', 80))
-                ->setDriveUrl($row['driveurl'] ?? null)
-                ->setBio($row['long_bio'] ?? ($row['bio'] ?? ''), 'es')
                 ->setBirthYear($this->parseBirthYear($row['nacimiento'] ?? ($row['birthyear'] ?? null)));
 
             $artist->imageCodes=[];
             // Create Media entity directly in database (commenting out SAIS dispatch for now)
-            if ($driveUrl = $artist->getDriveUrl()) {
+            if ($driveUrl = $artist->driveUrl) {
                     // Calculate SAIS code for the image
                     $saisImageCode = SaisClientService::calculateCode($driveUrl, self::SAIS_ROOT);
                     $artist->imageCodes[] = $saisImageCode;
@@ -129,9 +130,8 @@ class LoadCommand extends Command
                     ]);
             }
 
-            $artist->mergeNewTranslations();
             if (!$this->validateOrFail($artist, $io)) {
-                $this->em->remove($artist);
+//                $this->em->remove($artist);
             } else {
                 $artists[$artist->getCode()] = $artist;
             }

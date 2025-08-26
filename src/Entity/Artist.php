@@ -80,25 +80,33 @@ class Artist implements \Stringable, RouteParametersInterface, TranslatableResol
     private ?string $instagram = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['artist.read'])]
-    #[Translatable()]
-    public ?string $bio = null;
+    #[Groups(['translation.orig'])]
+    public ?string $bioBacking = null; // original? source?
 
-    #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['artist.read'])]
-    #[Translatable()]
-    public ?string $slogan = null;
+    #[Translatable]
+    #[Groups(['translatable'])]
+    public ?string $bio {
+        get => $this->resolveTranslatable('bio', $this->bioBacking, 'bio');
+        set => $this->bioBacking = $value;
+    }
 
-//    #[ORM\Column(type: JsonTranslationType::TYPE, nullable: true)]
-//    #[Groups(['artist.read'])]
-//    private ?JsonTranslation $bio = null;
+    
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    public ?string $sloganBacking = null;
+
+    #[Translatable]
+    #[Groups(['translatable'])]
+    public ?string $slogan {
+        get => $this->resolveTranslatable('slogan', $this->sloganBacking, 'slogan');
+        set => $this->sloganBacking = $value;
+    }
 
     /**
      * @var Collection<int, Obra>
      */
     #[ORM\OneToMany(targetEntity: Obra::class, mappedBy: 'artist', orphanRemoval: true)]
     #[Groups(['artist.obra.read'])]
-    private Collection $obras;
+    public Collection $obras;
 
     #[ORM\Column(nullable: true)]
     private int $obraCount = 0;
@@ -169,7 +177,6 @@ class Artist implements \Stringable, RouteParametersInterface, TranslatableResol
     {
         $this->obras = new ArrayCollection();
         $this->images = new ArrayCollection();
-//        $this->bio = new JsonTranslation();
     }
 
     public function getId(): ?string
@@ -236,19 +243,6 @@ class Artist implements \Stringable, RouteParametersInterface, TranslatableResol
 
         return $this;
     }
-
-    #[Groups(['artist.read'])]
-    public function getBio(): ?string
-    {
-        return $this->translate()->getBio();
-    }
-
-    public function setBio(?string $text, ?string $locale=null): static
-    {
-        $this->translate($locale)->setBio($text);
-        return $this;
-    }
-
 
     /**
      * @return Collection<int, Obra>
@@ -451,18 +445,6 @@ class Artist implements \Stringable, RouteParametersInterface, TranslatableResol
     public function setTypes(?string $types): static
     {
         $this->types = $types;
-
-        return $this;
-    }
-
-    public function getSlogan(): ?string
-    {
-        return $this->slogan;
-    }
-
-    public function setSlogan(?string $slogan): static
-    {
-        $this->slogan = $slogan;
 
         return $this;
     }
