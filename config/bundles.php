@@ -48,4 +48,5 @@ return [
     Survos\SimpleDatatables\SurvosSimpleDatatablesBundle::class => ['all' => true],
     Jawira\DoctrineDiagramBundle\DoctrineDiagramBundle::class => ['dev' => true, 'test' => true],
     Jwage\PhpAmqpLibMessengerBundle\PhpAmqpLibMessengerBundle::class => ['all' => true],
+    Survos\BabelBundle\SurvosBabelBundle::class => ['all' => true],
 ];

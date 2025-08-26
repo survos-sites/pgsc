@@ -2,8 +2,6 @@
 
 namespace App\Entity;
 
-use AlexandreFernandez\JsonTranslationBundle\Doctrine\Type\JsonTranslationType;
-use AlexandreFernandez\JsonTranslationBundle\Model\JsonTranslation;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;

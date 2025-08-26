@@ -12,6 +12,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Survos\BabelBundle\Attribute\BabelStorage;
+use Survos\BabelBundle\Attribute\Translatable;
 use Survos\CoreBundle\Entity\RouteParametersInterface;
 use Survos\CoreBundle\Entity\RouteParametersTrait;
 use Symfony\Component\Serializer\Attribute\Groups;
@@ -24,6 +26,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
     ],
     normalizationContext: ['groups' => ['obra.read', 'obra.location.read', 'obra.artist.read', 'media.read']]
 )]
+#[BabelStorage()]
 class Obra implements \Stringable, RouteParametersInterface
 {
     use RouteParametersTrait;
@@ -33,60 +36,61 @@ class Obra implements \Stringable, RouteParametersInterface
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Groups(['obra.read'])]
-    private ?string $description = null;
+    #[Translatable()]
+    public ?string $description = null;
 
     #[ORM\ManyToOne(inversedBy: 'obras')]
     #[Groups(['obra.read', 'obra.location.read'])]
-    private ?Location $location = null;
+    public ?Location $location = null;
 
     #[ORM\ManyToOne(inversedBy: 'obras')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['obra.read','obra.artist.read'])]
-    private ?Artist $artist = null;
+    public ?Artist $artist = null;
 
     #[ORM\Column(nullable: true)]
     #[Groups(['obra.read'])]
-    private ?int $year = null;
+    public ?int $year = null;
 
     #[ORM\Column(nullable: true)]
     #[Groups(['obra.read'])]
-    private ?int $width = null;
+    public ?int $width = null;
 
     #[ORM\Column(nullable: true)]
     #[Groups(['obra.read'])]
-    private ?int $height = null;
+    public ?int $height = null;
 
     #[ORM\Column(nullable: true)]
     #[Groups(['obra.read'])]
-    private ?int $depth = null;
+    public ?int $depth = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['obra.read'])]
-    private ?string $materials = null;
+    public ?string $materials = null;
 
 
     #[ORM\Column(nullable: true)]
     #[Groups(['obra.read'])]
-    private ?int $price = null;
+    public ?int $price = null;
 
     #[ORM\Column(length: 32, nullable: true)]
     #[Groups(['obra.read'])]
-    private ?string $type = null;
+    public ?string $type = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['obra.read'])]
-    private ?string $audioCode = null; // SAIS code for audio Media entity
+    public ?string $audioCode = null; // SAIS code for audio Media entity
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $driveUrl = null;
+    public ?string $driveUrl = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['obra.read'])]
-    private ?string $youtubeUrl = null;
+    public ?string $youtubeUrl = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['obra.read'])]
-    private ?string $size = null;
+    public ?string $size = null;
 
     public function __construct(
         #[ORM\Id]
@@ -169,7 +173,7 @@ class Obra implements \Stringable, RouteParametersInterface
 
     public function __toString(): string
     {
-        return $this->getTitle();
+        return $this->title;
     }
 
     public function getYear(): ?int
@@ -216,18 +220,6 @@ class Obra implements \Stringable, RouteParametersInterface
     public function setDepth(?int $depth): static
     {
         $this->depth = $depth;
-
-        return $this;
-    }
-
-    public function getMaterials(): ?string
-    {
-        return $this->materials;
-    }
-
-    public function setMaterials(?string $materials): static
-    {
-        $this->materials = $materials;
 
         return $this;
     }

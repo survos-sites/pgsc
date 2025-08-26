@@ -32,6 +32,7 @@
         "phpdocumentor/reflection-docblock": "^5.6.3",
         "phpstan/phpdoc-parser": "^2.2",
         "survos/auth-bundle": "^1.6.44",
+        "survos/babel-bundle": "dev-main",
         "survos/bootstrap-bundle": "^1.6.44",
         "survos/command-bundle": "^1.6.44",
         "survos/core-bundle": "dev-main",

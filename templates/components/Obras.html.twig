@@ -34,8 +34,9 @@
                 </a>
             </td>
             <td>
-                {% for image in obra.obraImages %}
-                    @todo: image {{ image.imageName }}
+                {% for image in obra.images %}
+                    {{ image.originalUrl }}
+{#                    @todo: image {{ image.name }}#}
 {#                    {{ dump(image) }}#}
 {#                    <img src="{{ image }}"/>#}
 

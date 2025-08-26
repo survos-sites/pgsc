@@ -59,10 +59,16 @@ class LoadCommand extends Command
         }
 
         //resize arg no longer needed , run the account setup anyway
-        $this->sais->accountSetup(new AccountSetup(self::SAIS_ROOT, 100));
+        if ($resize) {
+            $this->sais->accountSetup(new AccountSetup(self::SAIS_ROOT, 100));
+        }
 
         $artists   = []; // code => Artist
         $locations = []; // code => Location
+
+        foreach ($this->artistRepo->findAll() as $artist) {
+            $artists[$artist->getCode()] = $artist;
+        }
 
         // ---------- Artists ----------
         foreach ($this->iterArtists() as $row) {
@@ -82,9 +88,12 @@ class LoadCommand extends Command
             // code may be missing in artistas.csv; derive if needed
             $code = $this->normCode($row['code'] ?? null, $email, $row['name'] ?? null);
 
+            if ($artists[$code] ?? null) {
+                continue;
+            }
             if(!$artist = $this->artistRepo->find($code)) {
                 $artist = new Artist($code);
-                $this->em->persist($artist);
+//                $this->em->persist($artist);
             }
 
             $artist
@@ -109,7 +118,7 @@ class LoadCommand extends Command
                         $image = new Media($saisImageCode);
                         $this->em->persist($image);
                     }
-                    $image->setOriginalUrl($driveUrl);
+                    $image->originalUrl = $driveUrl;
 
                     // Store the SAIS image code for this artist
 
@@ -121,9 +130,12 @@ class LoadCommand extends Command
             }
 
             $artist->mergeNewTranslations();
-            $this->validateOrFail($artist, $io);
+            if (!$this->validateOrFail($artist, $io)) {
+                $this->em->remove($artist);
+            } else {
+                $artists[$artist->getCode()] = $artist;
+            }
 
-            $artists[$artist->getCode()] = $artist;
         }
 
         // ---------- Locations ----------
@@ -202,13 +214,12 @@ class LoadCommand extends Command
             }
 
             // Basic fields
-            $obra
-                ->setCode($code)
-                ->setMaterials($row['material'] ?? null)
-                ->setYoutubeUrl($row['youtubeurl'] ?? null)
-                ->setDriveUrl($row['photodriveurl'] ?? null)
-                ->setTitle($row['title'] ?? null)
-                ->setSize($row['size'] ?? null);
+            $obra->materials = $row['materials']??null;
+            $obra->youtubeUrl = $row['youtubeurl']??null;
+            $obra->photodriveurl = $row['photodriveurl']??null;
+            $obra->size = $row['size'];
+            $obra->title = $row['title'];
+            $obra->description = $row['description'];
 
             // Location link
             if (!empty($row['loc_code'])) {
@@ -231,7 +242,7 @@ class LoadCommand extends Command
             }
 
             // Create Media entity directly in database (commenting out SAIS dispatch for now)
-            if ($obra->getDriveUrl()) {
+            if ($obra->driveUrl) {
                     // Calculate SAIS code for the image
                     $saisImageCode = SaisClientService::calculateCode($obra->getDriveUrl(), self::SAIS_ROOT);
 
@@ -242,7 +253,7 @@ class LoadCommand extends Command
                         $this->em->persist($image);
                     }
                     $image->type = 'image';
-                    $image->setOriginalUrl($obra->getDriveUrl());
+                    $image->originalUrl = $obra->getDriveUrl();
 
                     // Store the SAIS image code for this obra
                     $obra->addImageCode($saisImageCode);
@@ -405,7 +416,7 @@ class LoadCommand extends Command
         return null;
     }
 
-    private function validateOrFail(object $entity, SymfonyStyle $io): void
+    private function validateOrFail(object $entity, SymfonyStyle $io): bool
     {
         $errors = $this->validator->validate($entity);
         if (\count($errors) > 0) {
@@ -413,7 +424,8 @@ class LoadCommand extends Command
                 dump($entity::class, $e->getPropertyPath(), $this->propertyAccessor->getValue($entity, $e->getPropertyPath()));
                 $io->error($e->getPropertyPath() . ' / ' . $e->getMessage());
             }
-            throw new \RuntimeException('Validation failed.');
+//            throw new \RuntimeException('Validation failed.');
         }
+        return (bool)count($errors);
     }
 }

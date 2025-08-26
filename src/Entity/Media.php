@@ -98,17 +98,6 @@ class Media implements \Stringable, MarkingInterface
         return $this;
     }
 
-    public function getOriginalUrl(): ?string
-    {
-        return $this->originalUrl;
-    }
-
-    public function setOriginalUrl(?string $originalUrl): static
-    {
-        $this->originalUrl = $originalUrl;
-        return $this;
-    }
-
     public function getMimeType(): ?string
     {
         return $this->mimeType;
