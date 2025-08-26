@@ -52,24 +52,18 @@ class Artist implements \Stringable, RouteParametersInterface, TranslatableResol
         'studio.closed',
     ];
 
-    // #[ORM\Id]
-    // #[ORM\GeneratedValue]
-    // #[ORM\Column]
-    // #[Groups(['artist.read'])]
-    // private ?int $id = null;
-
     #[ORM\Column(length: 255)]
     #[Groups(['artist.read','obra.artist.read'])]
-    private ?string $name = null;
+    public ?string $name = null;
 
     #[ORM\Column(nullable: true)]
     #[Groups(['artist.read'])]
-    private ?int $birthYear = null;
+    public ?int $birthYear = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\Email()]
     #[Groups(['artist.read'])]
-    private ?string $email = null;
+    public ?string $email = null;
 
     #[ORM\Column(length: 32, unique: true)]
     #[Groups(['artist.read'])]
@@ -77,7 +71,7 @@ class Artist implements \Stringable, RouteParametersInterface, TranslatableResol
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['artist.read'])]
-    private ?string $instagram = null;
+    public ?string $instagram = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Groups(['translation.orig'])]
@@ -91,11 +85,8 @@ class Artist implements \Stringable, RouteParametersInterface, TranslatableResol
     }
 
     
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    public ?string $sloganBacking = null;
-
-    #[Translatable]
-    #[Groups(['translatable'])]
+    #[ORM\Column(type: Types::TEXT, nullable: true)] public ?string $sloganBacking = null;
+    #[Translatable] #[Groups(['translatable'])]
     public ?string $slogan {
         get => $this->resolveTranslatable('slogan', $this->sloganBacking, 'slogan');
         set => $this->sloganBacking = $value;
