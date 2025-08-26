@@ -10,8 +10,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Knp\DoctrineBehaviors\Contract\Entity\TranslatableInterface;
-use Knp\DoctrineBehaviors\Model\Translatable\TranslatableTrait;
+use Survos\BabelBundle\Attribute\BabelStorage;
+use Survos\BabelBundle\Attribute\Translatable;
+use Survos\BabelBundle\Contract\TranslatableResolvedInterface;
+use Survos\BabelBundle\Entity\Traits\TranslatableHooksTrait;
 use Survos\CoreBundle\Entity\RouteParametersInterface;
 use Survos\CoreBundle\Entity\RouteParametersTrait;
 use Symfony\Component\Serializer\Attribute\Groups;
@@ -28,12 +30,12 @@ use App\Entity\Traits\ImageCodesTrait;
     ]
 )]
 #[Assert\EnableAutoMapping]
-class Artist implements \Stringable, RouteParametersInterface, TranslatableInterface
+#[BabelStorage]
+class Artist implements \Stringable, RouteParametersInterface, TranslatableResolvedInterface
 {
-
-
+    use MediaFieldsTrait;
     use RouteParametersTrait;
-    use TranslatableTrait;
+    use TranslatableHooksTrait;
     use ImageCodesTrait;
 
     const GENDER_MALE = 'male';
@@ -77,9 +79,15 @@ class Artist implements \Stringable, RouteParametersInterface, TranslatableInter
     #[Groups(['artist.read'])]
     private ?string $instagram = null;
 
-    //    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    //    #[Groups(['artist.read'])]
-    //    private ?string $textBio = null;
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['artist.read'])]
+    #[Translatable()]
+    public ?string $bio = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['artist.read'])]
+    #[Translatable()]
+    public ?string $slogan = null;
 
 //    #[ORM\Column(type: JsonTranslationType::TYPE, nullable: true)]
 //    #[Groups(['artist.read'])]
@@ -137,14 +145,6 @@ class Artist implements \Stringable, RouteParametersInterface, TranslatableInter
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['artist.read'])]
     private ?string $types = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['artist.read'])]
-    private ?string $slogan = null;
-
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $driveUrl = null;
-
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $preferredPronoun = null;

@@ -10,6 +10,8 @@ use Symfony\Component\Serializer\Attribute\Groups;
 
 /**
  * Trait for entities that can have associated Media entities via SAIS codes
+ *
+ * Loaded in postload, not regular fields.
  */
 trait ImageCodesTrait
 {

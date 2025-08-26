@@ -600,9 +600,6 @@
     "symfonycasts/verify-email-bundle": {
         "version": "v1.17.3"
     },
-    "tacman/doctrine-behaviors": {
-        "version": "dev-sf7.0"
-    },
     "twig/extra-bundle": {
         "version": "v3.20.0"
     },

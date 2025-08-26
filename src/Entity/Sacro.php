@@ -9,8 +9,9 @@ use App\Repository\SacroRepository;
 use App\Workflow\ISacroWorkflow;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Knp\DoctrineBehaviors\Contract\Entity\TranslatableInterface;
-use Knp\DoctrineBehaviors\Model\Translatable\TranslatableTrait;
+use Survos\BabelBundle\Attribute\Translatable;
+use Survos\BabelBundle\Contract\TranslatableResolvedInterface;
+use Survos\BabelBundle\Entity\Traits\TranslatableHooksTrait;
 use Survos\WorkflowBundle\Traits\MarkingInterface;
 use Survos\WorkflowBundle\Traits\MarkingTrait;
 use Symfony\Component\Serializer\Attribute\Groups;
@@ -21,12 +22,13 @@ use Symfony\Component\Serializer\Attribute\SerializedName;
     normalizationContext: ['groups' => ['sacro.read']],
     operations: [
         new Get(),
+
         new GetCollection(),
     ]
 )]
-class Sacro implements \Stringable, TranslatableInterface, MarkingInterface
+class Sacro implements \Stringable, TranslatableResolvedInterface, MarkingInterface
 {
-    use TranslatableTrait;
+    use TranslatableHooksTrait;
     use MarkingTrait;
 
     public function __construct(
@@ -37,6 +39,18 @@ class Sacro implements \Stringable, TranslatableInterface, MarkingInterface
         $this->id = $id;
         $this->marking = ISacroWorkflow::PLACE_NEW;
     }
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Translatable]
+    public ?string $notes = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Translatable]
+    public ?string $description = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Translatable]
+    public ?string $label = null;
 
 
     #[ORM\Column(nullable: true)]

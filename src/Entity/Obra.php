@@ -31,6 +31,7 @@ class Obra implements \Stringable, RouteParametersInterface
 {
     use RouteParametersTrait;
     use ImageCodesTrait;
+    use MediaFieldsTrait;
     public const array UNIQUE_PARAMETERS = ['obraId' => 'code'];
 
 
@@ -76,17 +77,6 @@ class Obra implements \Stringable, RouteParametersInterface
     #[ORM\Column(length: 32, nullable: true)]
     #[Groups(['obra.read'])]
     public ?string $type = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['obra.read'])]
-    public ?string $audioCode = null; // SAIS code for audio Media entity
-
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    public ?string $driveUrl = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['obra.read'])]
-    public ?string $youtubeUrl = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['obra.read'])]
