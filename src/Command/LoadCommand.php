@@ -74,12 +74,12 @@ class LoadCommand extends Command
         foreach ($this->iterArtists() as $row) {
             // normalize once
             $row = $this->normalizeRow($row);
+//            SurvosUtils::assertKeyExists('status', $row);
+//            if (!$this->isActive($row['status'])) {
+//                continue;
+//            }
 
-            if (!$this->isActive($row['status'] ?? null)) {
-                continue;
-            }
-
-            $email = $row['email'] ?? null;
+            $email = $row['email'];
             if (!$email) {
                 $this->logger->warning('Skipping artist without email', ['row' => $row]);
                 continue;
@@ -142,7 +142,7 @@ class LoadCommand extends Command
         foreach ($this->iterLocations() as $rowRaw) {
             $row = $this->normalizeRow($rowRaw);
 
-            if (!$this->isActive($row['status'] ?? null, activeWords: ['activo', 'active', 'sí', 'si'])) {
+            if (!$this->isActive($row['status'], activeWords: ['activo', 'active', 'sí', 'si'])) {
                 continue;
             }
 
@@ -190,7 +190,8 @@ class LoadCommand extends Command
             }
 
             // Optional audio process
-            if ($audioUrl = $row['audiodriveurl']) {
+            SurvosUtils::assertKeyExists('audioUrl', $row);
+            if ($audioUrl = $row['audioUrl']) {
                     $saisAudioCode = SaisClientService::calculateCode($audioUrl, self::SAIS_ROOT);
                     if (!$audioMedia = $this->mediaRepository->findOneBy(['code' => $saisAudioCode])) {
                         $audioMedia = new Media($saisAudioCode);
@@ -214,10 +215,15 @@ class LoadCommand extends Command
             }
 
             // Basic fields
-            $obra->materials = $row['materials']??null;
-            $obra->youtubeUrl = $row['youtubeurl']??null;
-            $obra->photodriveurl = $row['photodriveurl']??null;
+            SurvosUtils::assertKeyExists('material', $row);
+            $obra->materials = $row['material'];
+            // @todo: Trait
+
+            SurvosUtils::assertKeyExists('youtubeUrl', $row);
+            $obra->youtubeUrl = $row['youtubeUrl'];
+            $obra->photodriveurl = $row['photoUrl'];
             $obra->size = $row['size'];
+
             $obra->title = $row['title'];
             $obra->description = $row['description'];
 
@@ -346,7 +352,8 @@ class LoadCommand extends Command
                 $v = preg_replace('/\s+/', ' ', $v);
                 $v = trim($v, "\"' \t\n\r\0\x0B");
             }
-            $normalized[$this->normKey($k)] = $v === '' ? null : $v;
+            $normalized[$k] = $v === '' ? null : $v;
+//            $normalized[$this->normKey($k)] = $v === '' ? null : $v;
         }
         return $normalized;
     }
