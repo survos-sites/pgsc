@@ -347,7 +347,7 @@ final class AppController extends AbstractController
         }
         
         // Add audio code if present
-        if ($audioCode = $obra->getAudioCode()) {
+        if ($audioCode = $obra->audioCode) {
             $allMediaCodes[] = $audioCode;
         }
         
@@ -368,7 +368,7 @@ final class AppController extends AbstractController
             'obj' => $obra,
             'imagesByCode' => $mediaByCode, // Keep the same name for backward compatibility
             'mediaByCode' => $mediaByCode,  // New name for clarity
-            'audioMedia' => $obra->getAudioCode() ? ($mediaByCode[$obra->getAudioCode()] ?? null) : null,
+            'audioMedia' => $obra->audioCode ? ($mediaByCode[$obra->audioCode] ?? null) : null,
         ];
     }
 
@@ -376,7 +376,7 @@ final class AppController extends AbstractController
     #[Template('location/show.html.twig')]
     public function showLocation(Location $location): Response|array
     {
-        if ($location->getLat()) {
+        if ($location->lat) {
             $myMap = (new Map());
             $point = new Point($location->getLat(), $location->getLng());
             $myMap

@@ -127,12 +127,12 @@ class LoadCommand extends Command
             $loc = $this->locationRepo->find($code) ?? new Location($code);
             $this->em->persist($loc);
 
-            $loc->name = $row['nombre'] ?? $code;
+            $loc->name = $row['name'] ?? $code;
             $loc->status = $row['status'] ?? 'activo';
-            $loc->address = $row['direcciones'] ?? null;
-            $loc->type = $row['tipo'] ?? null;
-            $loc->contactName = $row['contacto'] ?? null;
-            $loc->phone = $row['cel'] ?? null;
+            $loc->address = $row['address'] ?? null;
+            $loc->type = $row['type'] ?? null;
+            $loc->contactName = $row['contact'] ?? null;
+            $loc->phone = $row['phone'] ?? null;
             $loc->setGeoFromString($row['geo'] ?? null);
 //            dd($row['geo'], $loc->lng, $loc->lat);
 
