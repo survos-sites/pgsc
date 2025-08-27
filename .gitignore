@@ -31,3 +31,11 @@ phpstan.neon
 ###< phpstan/phpstan ###
 
 .php-cs-fixer.cache
+
+###> survos/flickr-bundle ###
+/flickr-downloads
+###< survos/flickr-bundle ###
+
+###> survos/flickr-bundle ###
+/flickr-downloads
+###< survos/flickr-bundle ###

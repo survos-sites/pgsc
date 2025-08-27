@@ -94,8 +94,11 @@
                                                 {{ ux_icon('tabler:external-link', {class: 'icon'}) }}
                                             </a>
                                         </div>
-                                        {% if artist.slogan %}
+                                        {% if artist.slogan|default(false) %}
                                             <div class="text-secondary small">{{ artist.slogan }}</div>
+                                        {% else %}
+                                            !!NO TAGLINE
+{#                                            {{ dump(artist) }}#}
                                         {% endif %}
                                     </div>
                                 </div>

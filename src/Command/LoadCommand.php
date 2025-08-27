@@ -14,6 +14,7 @@ use App\Repository\ObraRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use League\Csv\Reader;
 use Psr\Log\LoggerInterface;
+use Survos\CoreBundle\Service\SurvosUtils;
 use Survos\SaisBundle\Model\AccountSetup;
 use Survos\SaisBundle\Service\SaisClientService;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -77,11 +78,16 @@ class LoadCommand extends Command
             $artist->phone = $row['whatsapp'] ?? null;
             $artist->birthYear = $this->parseBirthYear($row['nacimiento'] ?? ($row['birthyear'] ?? null));
 
-            $artist->driveUrl = $row['driveurl'] ?? null;
+//            $artist->driveUrl = $row['driveUrl'];
+
+            if ($row['tagline']??null) {
+                $artist->slogan = $row['tagline'];
+            }
 
 
             $artist->bio = $row['bio'] ?? ($row['long_bio'] ?? null);
-            $artist->slogan = $row['tagline'] ?? null;
+//            SurvosUtils::assertKeyExists('tagline', $row);
+//            $artist->slogan = $row['tagline'];
 
             if ($artist->driveUrl) {
                 $this->addToMedia($artist->driveUrl, $artist);
