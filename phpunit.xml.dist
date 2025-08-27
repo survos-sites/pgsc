@@ -17,6 +17,7 @@
     </testsuite>
   </testsuites>
   <extensions>
+        <bootstrap class="Zenstruck\Foundry\PHPUnit\FoundryExtension" />
     <bootstrap class="Symfony\Component\Panther\ServerExtension"/>
   </extensions>
   <source>

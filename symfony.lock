@@ -625,15 +625,16 @@
         }
     },
     "zenstruck/foundry": {
-        "version": "2.3",
+        "version": "2.6",
         "recipe": {
             "repo": "github.com/symfony/recipes",
             "branch": "main",
-            "version": "2.0",
-            "ref": "56bc588a1b6d5d218319f70c64c2f0fbebe30ec7"
+            "version": "2.6",
+            "ref": "50321333fa5e12324ac1d5a2aeb65fb276a6f9c8"
         },
         "files": [
-            "config/packages/zenstruck_foundry.yaml"
+            "config/packages/zenstruck_foundry.yaml",
+            "src/Story/AppStory.php"
         ]
     }
 }

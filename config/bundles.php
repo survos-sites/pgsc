@@ -23,7 +23,6 @@ return [
     Survos\AuthBundle\SurvosAuthBundle::class => ['all' => true],
     SymfonyCasts\Bundle\VerifyEmail\SymfonyCastsVerifyEmailBundle::class => ['all' => true],
     Inspector\Symfony\Bundle\InspectorBundle::class => ['all' => true],
-    Zenstruck\Foundry\ZenstruckFoundryBundle::class => ['dev' => true, 'test' => true],
     Symfony\UX\Icons\UXIconsBundle::class => ['all' => true],
     Survos\CoreBundle\SurvosCoreBundle::class => ['all' => true],
     Knp\Bundle\MenuBundle\KnpMenuBundle::class => ['all' => true],
@@ -48,4 +47,5 @@ return [
     Jawira\DoctrineDiagramBundle\DoctrineDiagramBundle::class => ['dev' => true, 'test' => true],
     Jwage\PhpAmqpLibMessengerBundle\PhpAmqpLibMessengerBundle::class => ['all' => true],
     Survos\BabelBundle\SurvosBabelBundle::class => ['all' => true],
+    Zenstruck\Foundry\ZenstruckFoundryBundle::class => ['dev' => true, 'test' => true],
 ];
