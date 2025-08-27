@@ -35,9 +35,11 @@
             background: white;
         }
         .header-section {
-            display: flex;
-            flex-direction: column;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            grid-template-rows: auto auto auto;
             gap: 2pt;
+            align-items: start;
         }
         .title {
             font-family: var(--serif);
@@ -47,42 +49,49 @@
             hyphens: auto;
             margin: 0;
             font-style: italic;
+            grid-column: 1 / 2;
+            grid-row: 1;
         }
         .price {
             font-family: var(--serif);
-            font-size: 14pt;
-            font-weight: 500;
+            font-size: 16pt;
+            font-weight: 600;
             color: var(--ink);
-            margin: 1pt 0 0 0;
+            margin: 0;
+            grid-column: 2 / 3;
+            grid-row: 1;
+            text-align: right;
         }
         .artist-info {
             font-family: var(--sans);
             font-size: 11pt;
             line-height: 1.2;
-            margin-top: 2pt;
+            margin: 0;
+            grid-column: 1 / -1;
+            grid-row: 2;
         }
         .artist-name {
             font-weight: 600;
         }
         .meta {
-            margin-top: 4pt;
             font-family: var(--sans);
             font-size: 9pt;
             line-height: 1.3;
             display: flex;
             flex-direction: column;
             gap: 1pt;
+            grid-column: 1 / -1;
+            grid-row: 3;
+            margin-top: 2pt;
         }
         .meta-row {
             display: flex;
             align-items: baseline;
             break-inside: avoid;
         }
-        .meta-label {
-            display: inline-block;
-            min-width: 70pt;
-            color: var(--muted);
-            font-weight: 500;
+        .meta-icon {
+            margin-right: 4pt;
+            font-size: 10pt;
         }
         .meta-value {
             flex: 1;
@@ -123,17 +132,27 @@
             display: flex;
             gap: 8pt;
             align-items: center;
-            justify-content: space-between;
+            justify-content: center;
+        }
+        .footer-content {
+            display: flex;
+            align-items: center;
+            gap: 10pt;
+        }
+        .qr-section {
+            display: flex;
+            align-items: center;
+            gap: 4pt;
+        }
+        .headphone-icon {
+            font-size: 12pt;
+            color: var(--muted);
         }
         .code {
             letter-spacing: 0.2pt;
             font-variant-numeric: tabular-nums;
             font-family: 'Monaco', 'Menlo', monospace;
             font-size: 8pt;
-        }
-        .gallery-info {
-            color: var(--muted);
-            line-height: 1.3;
         }
         .muted { color: var(--muted); }
         @media print {
@@ -165,14 +184,14 @@
         <div class="meta">
             {% if obj.materials %}
                 <div class="meta-row">
-                    <span class="meta-label">Materiales:</span>
+                    <span class="meta-icon">🎨</span>
                     <span class="meta-value">{{ obj.materials }}</span>
                 </div>
             {% endif %}
 
             {% if obj.size %}
                 <div class="meta-row">
-                    <span class="meta-label">Dimensiones:</span>
+                    <span class="meta-icon">📏</span>
                     <span class="meta-value">{{ obj.size }}</span>
                 </div>
             {% endif %}
@@ -200,17 +219,15 @@
     </section>
 
     <footer class="foot">
-{#        <div>#}
-{#            {% if app.environment == 'dev' %}#}
-{#                <code class="code">${{ obj.code }}</code>#}
-{#            {% endif %}#}
-{#        </div>#}
-        <div style="display:flex; align-items:center; gap:10pt;">
+        <div class="footer-content">
             <img src="{{ asset('/chijal-landscape.jpg') }}" alt="Chijal" style="height:54pt; width:auto;" />
             <div class="muted">Ruta Chijal</div>
             <div class="muted">San Cristóbal de las Casas, 2025</div>
-            {% set qrUrl = voxitourEndpoint ~ '/?obraId=' ~ obj.code ~ '#tab-obras' %}
-            <img src="{{ qr_code_url(qrUrl) }}" alt="QR Code" style="width:54pt;height:54pt;border:1pt solid #000;background:white;" />
+            <div class="qr-section">
+                <span class="headphone-icon">🎧</span>
+                {% set qrUrl = voxitourEndpoint ~ '/?obraId=' ~ obj.code ~ '#tab-obras' %}
+                <img src="{{ qr_code_url(qrUrl) }}" alt="QR Code" style="width:54pt;height:54pt;border:1pt solid #000;background:white;" />
+            </div>
         </div>
     </footer>
 </main>
