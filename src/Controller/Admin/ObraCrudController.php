@@ -2,7 +2,6 @@
 
 namespace App\Controller\Admin;
 
-use Adeliom\EasyMediaBundle\Admin\Field\EasyMediaField;
 use App\Entity\Obra;
 use App\Security\Voter\ObjVoter;
 use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminAction;
@@ -20,8 +19,9 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use App\Repository\MediaRepository;
+use Survos\CoreBundle\Controller\BaseCrudController;
 
-class ObraCrudController extends AbstractCrudController
+class ObraCrudController extends BaseCrudController
 {
     public function __construct(
         protected AdminUrlGenerator $adminUrlGenerator,

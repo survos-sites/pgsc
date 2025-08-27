@@ -1,0 +1,689 @@
+
+                                
+<!doctype html>
+<html lang="es">
+<head>
+
+                    <meta charset="utf-8">
+        <meta content="width=device-width, initial-scale=1" name="viewport">
+        <meta name="robots" content="noindex,nofollow">
+                <title>Hello AppController!</title>
+                            <link rel="stylesheet" type="text/css" href="/assets/bundles/survosbootstrap/bootstrap/style-5Ggs-Ei.css">
+
+            
+
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+
+                                
+        
+<link rel="stylesheet" href="/assets/styles/app-SfwjlQL.css">
+<link rel="stylesheet" href="/assets/vendor/@tabler/core/dist/css/tabler.min-DRtDCkA.css">
+<script type="importmap">
+{
+    "imports": {
+        "app": "/assets/app-66mg1vX.js",
+        "/assets/bootstrap.js": "/assets/bootstrap-HY1z13C.js",
+        "/assets/styles/app.css": "data:application/javascript,",
+        "@tabler/core": "/assets/vendor/@tabler/core/core.index-X1noXa-.js",
+        "@tabler/core/dist/css/tabler.min.css": "data:application/javascript,",
+        "d3-graphviz": "/assets/vendor/d3-graphviz/d3-graphviz.index-VRAbgWO.js",
+        "@symfony/stimulus-bundle": "/assets/@symfony/stimulus-bundle/loader-kxG46ja.js",
+        "autosize": "/assets/vendor/autosize/autosize.index-2B4ihvV.js",
+        "imask": "/assets/vendor/imask/imask.index-kCpZfDj.js",
+        "d3-selection": "/assets/vendor/d3-selection/d3-selection.index-EZ7z6jN.js",
+        "@hotwired/stimulus": "/assets/vendor/@hotwired/stimulus/stimulus.index-tbHQDkJ.js",
+        "/assets/@symfony/stimulus-bundle/controllers.js": "/assets/@symfony/stimulus-bundle/controllers-wb2Ck59.js",
+        "/assets/@survos/workflow-helper/src/controllers/workflow_controller.js": "/assets/@survos/workflow-helper/src/controllers/workflow_controller-gD_6jAt.js",
+        "/assets/controllers/hello_controller.js": "/assets/controllers/hello_controller-VYgvytJ.js",
+        "/assets/@survos/bootstrap/src/controllers/search_controller.js": "/assets/@survos/bootstrap/src/controllers/search_controller-FzHn-ue.js",
+        "/assets/@survos/simple-datatables/src/controllers/table_controller.js": "/assets/@survos/simple-datatables/src/controllers/table_controller-PNty_l9.js",
+        "/assets/@survos/simple-datatables/style.css": "data:application/javascript,document.head.appendChild%28Object.assign%28document.createElement%28%22link%22%29%2C%7Brel%3A%22stylesheet%22%2Chref%3A%22%2Fassets%2F%40survos%2Fsimple-datatables%2Fstyle-Eff35kN.css%22%7D%29%29",
+        "/assets/@symfony/ux-leaflet-map/map_controller.js": "/assets/@symfony/ux-leaflet-map/map_controller-zgYXhfr.js",
+        "/assets/controllers/csrf_protection_controller.js": "/assets/controllers/csrf_protection_controller-E_gSC5e.js",
+        "@hotwired/turbo": "/assets/vendor/@hotwired/turbo/turbo.index-gQ9E7xo.js",
+        "leaflet": "/assets/vendor/leaflet/leaflet.index-ApqMaB2.js",
+        "leaflet/dist/leaflet.min.css": "data:application/javascript,document.head.appendChild%28Object.assign%28document.createElement%28%22link%22%29%2C%7Brel%3A%22stylesheet%22%2Chref%3A%22%2Fassets%2Fvendor%2Fleaflet%2Fdist%2Fleaflet.min-eAGB7KE.css%22%7D%29%29",
+        "@symfony/ux-leaflet-map": "/assets/@symfony/ux-leaflet-map/map_controller-zgYXhfr.js",
+        "simple-datatables": "/assets/vendor/simple-datatables/simple-datatables.index-BE9VM8G.js",
+        "simple-datatables/dist/style.min.css": "data:application/javascript,document.head.appendChild%28Object.assign%28document.createElement%28%22link%22%29%2C%7Brel%3A%22stylesheet%22%2Chref%3A%22%2Fassets%2Fvendor%2Fsimple-datatables%2Fdist%2Fstyle.min-C1HLroy.css%22%7D%29%29",
+        "d3-dispatch": "/assets/vendor/d3-dispatch/d3-dispatch.index-R7-6fld.js",
+        "d3-transition": "/assets/vendor/d3-transition/d3-transition.index-y5-A8W5.js",
+        "d3-timer": "/assets/vendor/d3-timer/d3-timer.index-w3z37Nx.js",
+        "d3-interpolate": "/assets/vendor/d3-interpolate/d3-interpolate.index-Qsyxk4y.js",
+        "d3-zoom": "/assets/vendor/d3-zoom/d3-zoom.index-nIF74nJ.js",
+        "@hpcc-js/wasm/graphviz": "/assets/vendor/@hpcc-js/wasm/graphviz-GymrCnG.js",
+        "d3-format": "/assets/vendor/d3-format/d3-format.index-MmgupLZ.js",
+        "d3-path": "/assets/vendor/d3-path/d3-path.index-0ySLYgt.js",
+        "d3-color": "/assets/vendor/d3-color/d3-color.index-q9NFkzP.js",
+        "d3-ease": "/assets/vendor/d3-ease/d3-ease.index-6bMMQ5D.js",
+        "d3-drag": "/assets/vendor/d3-drag/d3-drag.index-vrkMWf3.js",
+        "d3": "/assets/vendor/d3/d3.index-LYD3dur.js",
+        "d3-array": "/assets/vendor/d3-array/d3-array.index-YvUp6pl.js",
+        "d3-axis": "/assets/vendor/d3-axis/d3-axis.index--gyiwhv.js",
+        "d3-brush": "/assets/vendor/d3-brush/d3-brush.index-0M_L3YZ.js",
+        "d3-chord": "/assets/vendor/d3-chord/d3-chord.index-DKbcMHb.js",
+        "d3-contour": "/assets/vendor/d3-contour/d3-contour.index-35AY9Nw.js",
+        "d3-delaunay": "/assets/vendor/d3-delaunay/d3-delaunay.index-7IUBHlh.js",
+        "d3-dsv": "/assets/vendor/d3-dsv/d3-dsv.index-lB1m6lf.js",
+        "d3-fetch": "/assets/vendor/d3-fetch/d3-fetch.index-hw2XCV3.js",
+        "d3-force": "/assets/vendor/d3-force/d3-force.index-a3ngVPA.js",
+        "d3-geo": "/assets/vendor/d3-geo/d3-geo.index-37zsum0.js",
+        "d3-hierarchy": "/assets/vendor/d3-hierarchy/d3-hierarchy.index-_hssmR5.js",
+        "d3-polygon": "/assets/vendor/d3-polygon/d3-polygon.index-I7sptLU.js",
+        "d3-quadtree": "/assets/vendor/d3-quadtree/d3-quadtree.index-lFJkxdJ.js",
+        "d3-random": "/assets/vendor/d3-random/d3-random.index-6DwdBZ_.js",
+        "d3-scale": "/assets/vendor/d3-scale/d3-scale.index-soaQFJt.js",
+        "d3-scale-chromatic": "/assets/vendor/d3-scale-chromatic/d3-scale-chromatic.index-VLgDBcP.js",
+        "d3-shape": "/assets/vendor/d3-shape/d3-shape.index-mo8XSLK.js",
+        "d3-time": "/assets/vendor/d3-time/d3-time.index-TC4J-UJ.js",
+        "d3-time-format": "/assets/vendor/d3-time-format/d3-time-format.index-3ERyU_R.js",
+        "internmap": "/assets/vendor/internmap/internmap.index-JXg6ydC.js",
+        "delaunator": "/assets/vendor/delaunator/delaunator.index-bbTPPB_.js",
+        "robust-predicates": "/assets/vendor/robust-predicates/robust-predicates.index-9J4SPIR.js"
+    }
+}
+</script><script>
+if (!HTMLScriptElement.supports || !HTMLScriptElement.supports('importmap')) (function () {
+    const script = document.createElement('script');
+    script.src = 'https://ga.jspm.io/npm:es-module-shims@1.10.0/dist/es-module-shims.js';
+    script.setAttribute('crossorigin', 'anonymous');
+    script.setAttribute('integrity', 'sha384-ie1x72Xck445i0j4SlNJ5W5iGeL3Dpa0zD48MZopgWsjNB/lt60SuG1iduZGNnJn');
+    document.head.appendChild(script);
+})();
+</script>
+<link rel="modulepreload" href="/assets/app-66mg1vX.js">
+<link rel="modulepreload" href="/assets/bootstrap-HY1z13C.js">
+<link rel="modulepreload" href="/assets/vendor/@tabler/core/core.index-X1noXa-.js">
+<link rel="modulepreload" href="/assets/vendor/d3-graphviz/d3-graphviz.index-VRAbgWO.js">
+<link rel="modulepreload" href="/assets/@symfony/stimulus-bundle/loader-kxG46ja.js">
+<link rel="modulepreload" href="/assets/vendor/autosize/autosize.index-2B4ihvV.js">
+<link rel="modulepreload" href="/assets/vendor/imask/imask.index-kCpZfDj.js">
+<link rel="modulepreload" href="/assets/vendor/d3-selection/d3-selection.index-EZ7z6jN.js">
+<link rel="modulepreload" href="/assets/vendor/@hotwired/stimulus/stimulus.index-tbHQDkJ.js">
+<link rel="modulepreload" href="/assets/@symfony/stimulus-bundle/controllers-wb2Ck59.js">
+<link rel="modulepreload" href="/assets/@survos/workflow-helper/src/controllers/workflow_controller-gD_6jAt.js">
+<link rel="modulepreload" href="/assets/controllers/hello_controller-VYgvytJ.js">
+<script type="module">import 'app';</script>
+    
+            <!-- trigger pwa -->
+    </head>
+
+<body class=""  data-turbo="false">
+<div class="page">
+
+                <header class="navbar navbar-expand-md d-print-none">
+    <div class="container-xxl">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+            <a href="/es/home">
+                <img src="" class="logo d-none d-md-block" style="max-width: 200px; height: 32px"/>
+                <img src="" class="logo d-md-none" style="max-width: 200px; height: 32px"/>
+            </a>
+        </div>
+
+        <div class="navbar-nav flex-row order-md-last align-items-center">
+            <div class="nav-item d-none d-md-flex me-3">
+                    <div title="NAVBAR_MENU2">
+
+                                <div class="btn-list">                                    <ul class="navbar-nav">
+                                    
+
+    
+                            
+        
+            
+
+                     
+        
+        
+        
+        
+
+        <li class="nav-item testt active">
+                                                            
+                
+
+    <a href="/es/home" class=" nav-link depth-1">
+                
+        <span class="nav-link-title">
+            
+                                                                                                    página principal        
+    
+
+
+                                        
+        
+        </span>
+    </a>
+
+
+
+                    </li>
+    
+                            
+        
+            
+
+                     
+        
+        
+        
+        
+
+        <li class="nav-item">
+                                                            
+    
+
+    <a href="/es/api/docs" class=" nav-link depth-1">
+                
+        <span class="nav-link-title">
+            
+                                                                                                    API        
+    
+
+
+                                        
+        
+        </span>
+    </a>
+
+
+
+                    </li>
+    
+                            
+        
+            
+
+                     
+        
+        
+        
+        
+
+        <li class="nav-item">
+                                                            
+    
+
+    <a href="/es/sync" class=" nav-link depth-1">
+                
+        <span class="nav-link-title">
+            
+                                                                                                    Sync        
+    
+
+
+                                        
+        
+        </span>
+    </a>
+
+
+
+                    </li>
+    
+                            
+        
+            
+
+                     
+        
+        
+        
+        
+
+        <li class="nav-item dropdown">
+                                
+        
+        <a  class="dropdown-toggle gap-1 dropdown-toggle nav-link" data-bs-toggle="dropdown" aria-expanded="false" role="button"
+            href="#" id="collapse_survos_bootstrap_bundle_event_knp_menu_event682c69b1437dc"
+    >
+                
+                                                                                                    sacro        
+    
+
+
+                                        
+    </a>
+
+
+                                   
+        
+                                        <ul class="dropdown-menu" aria-labelledby="collapse_survos_bootstrap_bundle_event_knp_menu_event682c69b1437dc">
+                            
+            <li class="" >
+                                                     
+    
+
+    <a href="/es/cmas" class=" dropdown-item depth-2">
+                
+        <span class="nav-link-title">
+            
+                                                                                                    Index        
+    
+
+
+                                        
+        
+        </span>
+    </a>
+
+
+            </li>
+    
+                            
+            <li class="" >
+                                                     
+    
+
+    <a href="/es/cmas/import" class=" dropdown-item depth-2">
+                
+        <span class="nav-link-title">
+            
+                                                                                                    Import        
+    
+
+
+                                        
+        
+        </span>
+    </a>
+
+
+            </li>
+    
+                            
+            <li class="" >
+                                                     
+    
+
+    <a href="/es/cmas-images" class=" dropdown-item depth-2">
+                
+        <span class="nav-link-title">
+            
+                                                                                                    Images        
+    
+
+
+                                        
+        
+        </span>
+    </a>
+
+
+            </li>
+    
+                    </ul>
+        
+                                    </li>
+    
+                            
+        
+                        
+
+    
+                            
+        
+                        
+
+    
+                            
+        
+                        
+
+    
+                            
+        
+            
+
+                     
+        
+        
+        
+        
+
+        <li class="current_ancestor nav-item dropdown">
+                                
+        
+        <a  class="dropdown-toggle gap-1 dropdown-toggle nav-link" data-bs-toggle="dropdown" aria-expanded="false" role="button"
+            href="#" id="collapse_survos_bootstrap_bundle_event_knp_menu_event682c69b143933"
+    >
+                
+                                                                                                    artwork        
+    
+
+
+                                        
+    </a>
+
+
+                                   
+        
+                                        <ul class="dropdown-menu" aria-labelledby="collapse_survos_bootstrap_bundle_event_knp_menu_event682c69b143933">
+                            
+            <li class="" >
+                                                     
+                
+
+    <a href="/es/home" class=" dropdown-item depth-2">
+                
+        <span class="nav-link-title">
+            
+                                                                                                    by_location        
+    
+
+
+                                        
+        
+        </span>
+    </a>
+
+
+            </li>
+    
+                            
+            <li class="" >
+                                                     
+                
+
+    <a href="/es/home" class=" dropdown-item depth-2">
+                
+        <span class="nav-link-title">
+            
+                                                                                                    by_artist        
+    
+
+
+                                        
+        
+        </span>
+    </a>
+
+
+            </li>
+    
+                    </ul>
+        
+                                    </li>
+    
+                            
+        
+            
+
+                     
+        
+        
+        
+        
+
+        <li class="nav-item">
+                                                            
+    
+
+    <a href="/es/admin" class=" nav-link depth-1">
+                
+        <span class="nav-link-title">
+            
+                                                                        EZ        
+    
+
+
+                                        
+        
+        </span>
+    </a>
+
+
+
+                    </li>
+    
+                            
+        
+            
+
+                     
+        
+        
+        
+        
+
+        <li class="nav-item">
+                                                            
+    
+
+    <a href="/login" class=" nav-link depth-1">
+                
+        <span class="nav-link-title">
+            
+                                                                                                    Entrar        
+    
+
+
+                                        
+        
+        </span>
+    </a>
+
+
+
+                    </li>
+    
+                            
+        
+            
+
+                     
+        
+        
+        
+        
+
+        <li icon="fa:sign-in"
+ class="nav-item">
+                                                            
+    
+
+    <a href="/register" class=" nav-link depth-1">
+                            <span class="nav-link-icon d-md-none header-icons d-lg-inline-block">
+                <svg viewBox="0 0 1536 1280" width="30px" fill="currentColor" aria-hidden="true"><path fill="currentColor" d="M1184 640q0 26-19 45l-544 544q-19 19-45 19t-45-19t-19-45V896H64q-26 0-45-19T0 832V448q0-26 19-45t45-19h448V96q0-26 19-45t45-19t45 19l544 544q19 19 19 45m352-352v704q0 119-84.5 203.5T1248 1280H928q-13 0-22.5-9.5T896 1248q0-4-1-20t-.5-26.5t3-23.5t10-19.5t20.5-6.5h320q66 0 113-47t47-113V288q0-66-47-113t-113-47H936l-11.5-1l-11.5-3l-8-5.5l-7-9l-2-13.5q0-4-1-20t-.5-26.5t3-23.5t10-19.5T928 0h320q119 0 203.5 84.5T1536 288"></path></svg>
+            </span>
+        
+        <span class="nav-link-title">
+            
+                                                                                                    Registrar        
+    
+
+
+                                        
+        
+        </span>
+    </a>
+
+
+
+                    </li>
+    
+                    </ul>
+
+            
+            </div>            
+</div>
+
+
+
+
+
+            </div>
+
+            
+            <div title="AUTH_MENU">
+
+                        
+
+    
+</div>
+
+
+
+
+
+                            <div class="d-none d-lg-flex gap-3">
+                    <div class="dropdown ms-1 topbar-head-dropdown header-item d-print-none">
+
+            
+    <button type="button" class="btn border-info rounded" data-bs-toggle="dropdown" aria-haspopup="true"
+            aria-expanded="false">
+        
+                                <span class="d-lg-inline-block d-none">español</span>
+                <span class="d-inline-block d-lg-none">es</span>
+    </button>
+
+    <div class="dropdown-menu dropdown-menu-end" >
+
+                
+
+    </div>
+</div>
+
+
+                    <div title="SEARCH_MENU">
+
+                    
+    
+</div>
+
+
+
+
+
+                </div>
+            
+                    </div>
+    </div>
+</header>
+
+        
+
+    
+            <div class="navbar-expand-md">
+            <div class="collapse navbar-collapse" id="navbar-menu">
+                <div class="navbar" data-bs-theme="light">
+                    <div class="container-xl">
+                        <div class="row flex-fill align-items-center">
+                            <div class="col">
+                                                            <div title="NAVBAR_MENU">
+
+                        
+</div>
+
+
+
+
+
+                                                            <div title="NAVBAR_MENU3">
+
+                        
+</div>
+
+
+
+
+
+                            </div>
+
+
+                                                                                </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+    <div id="" class="page-wrapper">
+                                
+                            
+<div class="container-fluid">
+        <div id="" class="page-header d-print-none">
+        <div class="row align-items-center">
+            <div class="col">
+                                                            <div class="page-pretitle">
+                            app_homepage                        </div>
+                                        <h2 class="page-title">
+                        página principal                    </h2>
+                                            <div class="text-body-secondary mt-1">
+                            
+                        </div>
+                                                </div>
+            <div class="col-12 col-md-auto ms-auto d-print-none">
+                                
+                            </div>
+        </div>
+    </div>
+</div>
+
+
+        <div class="page-body">
+            <div class="container-fluid">
+                <div class="row row-cards">
+                    
+                    <section id="" class="content">
+                                                                            _dashboard.html.twig
+<div class="row">
+    <div class="col-md-6">
+                    map
+            <div data-controller="symfony--ux-leaflet-map--map" data-symfony--ux-leaflet-map--map-provider-options-value="{}" data-symfony--ux-leaflet-map--map-zoom-value="16" data-symfony--ux-leaflet-map--map-fit-bounds-to-markers-value="true" data-symfony--ux-leaflet-map--map-options-value="{&quot;tileLayer&quot;:{&quot;url&quot;:&quot;https:\/\/tile.openstreetmap.org\/{z}\/{x}\/{y}.png&quot;,&quot;attribution&quot;:&quot;\u00a9 &lt;a href=\&quot;https:\/\/www.openstreetmap.org\/copyright\&quot;&gt;OpenStreetMap&lt;\/a&gt;&quot;,&quot;options&quot;:[]},&quot;@provider&quot;:&quot;leaflet&quot;}" data-symfony--ux-leaflet-map--map-markers-value="[]" data-symfony--ux-leaflet-map--map-polygons-value="[]" data-symfony--ux-leaflet-map--map-polylines-value="[]" style="height: 300px"></div>
+                </div>
+    <div class="col-md-3">
+        <ol>
+                    </ol>
+    </div>
+    <div class="col-md-3">
+        <ol>
+                    </ol>
+    </div>
+</div>
+
+
+
+        <p>
+            popup galleries of San Crisobal!
+        </p>
+        test
+
+        hola
+        artistas
+
+
+
+                                            </section>
+
+                                    </div>
+            </div>
+        </div>
+
+                    <footer id="" class="footer border-top py-3 d-print-none">
+                <div class="container-fluid">
+                                            <div title="FOOTER_MENU">
+
+                    
+
+    
+</div>
+
+
+
+
+
+                                    </div>
+            </footer>
+            </div>
+</div>
+
+
+
+</body>
+</html>
