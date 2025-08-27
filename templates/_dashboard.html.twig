@@ -17,6 +17,7 @@
             <div class="card-body p-0">
                 <ol class="list-group list-group-flush">
                     {% for obra in obras|default([]) %}
+                        {% set thumbnailUrl =  obra.thumbnailUrl %}
                         {% set linkToVoxitour = voxitourEndpoint ~ app.request.locale ~ '/chijal?obraId=' ~ obra.code ~ '#tab-obras' %}
                         <li class="list-group-item">
                             <div class="d-flex align-items-start gap-3">
@@ -26,9 +27,9 @@
                                          class="img-thumbnail" style="width:64px;height:64px;object-fit:contain;">
                                 </a>
 
-                                {% if obra.thumbnailUrl %}
+                                {% if thumbnailUrl %}
                                 <a href="{{ linkToVoxitour }}" target="_blank" class="text-decoration-none" title="Abrir en Voxitour">
-                                    <img src="{{ obra.thumbnailUrl }}"
+                                    <img src="{{ thumbnailUrl }}"
                                          class="img-thumbnail" style="width:64px;height:64px;object-fit:contain;">
                                 </a>
                                 {% endif %}
@@ -39,6 +40,7 @@
                                         <a href="{{ path('admin_obra_detail', obra.erp) }}" class="fw-semibold text-reset">
                                             {{ obra.title }}
                                         </a>
+                                        <span><code>{{ obra.code }}</code></span>
                                     </div>
                                     <div class="text-secondary small">
                                         {{ obra.artist.name }} · {{ obra.location.name }}
@@ -76,7 +78,6 @@
                                     {% endif %}
 
                                     <div class="flex-grow-1">
-                                        {{ dump(artist.images) }}
                                         <div class="d-flex align-items-center gap-2">
                                             <a href="{{ path('admin_artist_detail', {entityId: artist.id}) }}" class="fw-semibold text-reset">
                                                 {{ artist.name }}
@@ -131,7 +132,7 @@
                                                 {{ loc.name }}
                                             </a>
                                             <span class="badge bg-secondary">{{ loc.obras|length }}</span>
-                                            <span class="badge bg-light text-muted">{{ loc.typeString }}</span>
+                                            <span class="badge bg-light text-muted">{{ loc.type }}</span>
 
                                             {% if is_granted('LOCATION_EDIT', loc) %}
                                                 <a href="{{ path('admin_location_edit', {entityId: loc.id}) }}" class="text-muted" title="Editar">

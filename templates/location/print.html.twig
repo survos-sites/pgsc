@@ -2,9 +2,10 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8" />
-    <title>Location Card 6x4</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
     <style>
-        @page { size: 6in 4in; margin: 0; }
+        @page { size: A4 portrait; margin: 0; }
         html, body { height: 100%; }
         html, body, * { box-sizing: border-box; }
         body {
@@ -19,163 +20,2820 @@
             --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             --muted: #555;
             --ink: #111;
+            --max-width: 180pt; /* Maximum width for any artwork image */
+            --max-height: 120pt; /* Maximum height for any artwork image */
         }
-        .card-64 {
-            width: 6in;
-            height: 4in;
-            padding: 0.2in;
+        .card-portrait {
+            width: 210mm;
+            height: 297mm;
+            padding: 15mm;
             color: var(--ink);
             display: grid;
-            grid-template-rows: auto 1fr auto;
+            grid-template-rows: auto auto 1fr auto;
             gap: 6pt;
             overflow: hidden;
             page-break-after: always;
             border: 1pt solid #000; /* cut guide */
         }
+        .header-section {
+            display: grid;
+            grid-template-columns: 1fr 120pt;
+            gap: 15pt;
+            align-items: start;
+        }
+        .header-info {
+            min-width: 0; /* Allow text to wrap */
+        }
         .title {
             font-family: var(--serif);
             font-weight: 600;
-            font-size: 18pt;
+            font-size: 24pt;
             line-height: 1.2;
             hyphens: auto;
             margin: 0;
         }
         .subtitle {
-            margin-top: 2pt;
+            margin-top: 4pt;
             font-family: var(--sans);
-            font-size: 11pt;
+            font-size: 14pt;
             line-height: 1.25;
         }
         .italic { font-style: italic; }
         .muted { color: var(--muted); }
         .meta {
-            margin-top: 6pt;
+            margin-top: 8pt;
             font-family: var(--sans);
-            font-size: 10pt;
+            font-size: 11pt;
             line-height: 1.3;
         }
-        .meta .row { display: block; break-inside: avoid; }
-        .meta .label { display: inline-block; min-width: 82pt; color: var(--muted); }
+        .meta .row { display: block; break-inside: avoid; margin-bottom: 3pt; }
+        .meta .label { display: inline-block; min-width: 90pt; color: var(--muted); font-weight: 500; }
+
+        /* Scale reference */
+        .scale-reference {
+            margin: 12pt 0;
+            padding: 10pt;
+            background: #f9f9f9;
+            border-radius: 4pt;
+            font-family: var(--sans);
+            font-size: 10pt;
+            border: 1pt solid #e0e0e0;
+        }
+        .scale-container {
+            display: flex;
+            align-items: flex-end;
+            gap: 12pt;
+            margin-top: 6pt;
+        }
+        .scale-ruler {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .ruler-line {
+            width: 2pt;
+            height: 12pt;
+            background: #333;
+            margin-bottom: 2pt;
+        }
+        .ruler-segments {
+            display: flex;
+            align-items: flex-end;
+            gap: 0;
+        }
+        .segment {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .segment-line {
+            width: 20pt;
+            height: 2pt;
+            background: #333;
+            margin-bottom: 2pt;
+        }
+        .segment-label {
+            font-size: 7pt;
+            color: var(--muted);
+            font-weight: 500;
+        }
+        .scale-explanation {
+            color: var(--muted);
+            font-size: 9pt;
+            margin-left: 8pt;
+            align-self: center;
+        }
+
+        /* Proportional artwork grid */
+        .obras-content {
+            overflow-y: auto;
+        }
         .obras-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120pt, 1fr));
-            gap: 8pt;
-            margin-top: 8pt;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12pt;
+            align-items: flex-start;
+            justify-content: flex-start;
         }
         .obra-item {
             break-inside: avoid;
             page-break-inside: avoid;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: calc(var(--max-width) + 20pt);
+        }
+        .obra-container {
+            position: relative;
+            margin-bottom: 20pt; /* More space for dimension lines */
+            border: 0.5pt solid #ddd;
+            border-radius: 3pt;
+            padding: 3pt;
+            background: white;
+            box-shadow: 0 1pt 3pt rgba(0,0,0,0.1);
         }
         .obra-image {
-            width: 100%;
-            height: 70pt;
-            object-fit: cover;
-            border: 0.5pt solid #ddd;
+            display: block;
             border-radius: 2pt;
-            margin-bottom: 3pt;
-        }
-        .obra-title {
-            font-size: 9pt;
-            font-weight: 600;
-            line-height: 1.2;
-            margin-bottom: 2pt;
-        }
-        .obra-artist {
-            font-size: 8pt;
-            color: var(--muted);
-            font-style: italic;
+            object-fit: cover;
         }
         .no-image {
-            width: 100%;
-            height: 70pt;
             background: #f8f8f8;
             border: 1pt dashed #ccc;
             border-radius: 2pt;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 7pt;
+            font-size: 8pt;
             color: var(--muted);
-            margin-bottom: 3pt;
+        }
+
+        /* Dimension lines */
+        .dimension-lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+        }
+        .dimension-horizontal {
+            position: absolute;
+            bottom: -12pt;
+            left: 3pt;
+            right: 3pt;
+            height: 8pt;
+        }
+        .dimension-vertical {
+            position: absolute;
+            right: -12pt;
+            top: 3pt;
+            bottom: 3pt;
+            width: 8pt;
+        }
+        .dimension-line {
+            background: #666;
+            position: absolute;
+        }
+        .dimension-horizontal .dimension-line {
+            height: 0.5pt;
+            top: 3pt;
+            left: 0;
+            right: 0;
+        }
+        .dimension-vertical .dimension-line {
+            width: 0.5pt;
+            left: 3pt;
+            top: 0;
+            bottom: 0;
+        }
+        .dimension-horizontal::before,
+        .dimension-horizontal::after {
+            content: '';
+            position: absolute;
+            width: 0.5pt;
+            height: 4pt;
+            background: #666;
+            top: 1pt;
+        }
+        .dimension-horizontal::before {
+            left: 0;
+        }
+        .dimension-horizontal::after {
+            right: 0;
+        }
+        .dimension-vertical::before,
+        .dimension-vertical::after {
+            content: '';
+            position: absolute;
+            height: 0.5pt;
+            width: 4pt;
+            background: #666;
+            left: 1pt;
+        }
+        .dimension-vertical::before {
+            top: 0;
+        }
+        .dimension-vertical::after {
+            bottom: 0;
+        }
+        .dimension-label {
+            position: absolute;
+            font-size: 6pt;
+            color: #666;
+            font-weight: 500;
+            background: white;
+            padding: 0 2pt;
+            font-family: monospace;
+        }
+        .dimension-horizontal .dimension-label {
+            bottom: -2pt;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .dimension-vertical .dimension-label {
+            right: -2pt;
+            top: 50%;
+            transform: translateY(-50%) rotate(-90deg);
+            transform-origin: center;
+        }
+        .obra-info {
+            text-align: center;
+            max-width: 200pt;
+        }
+        .obra-title {
+            font-size: 10pt;
+            font-weight: 600;
+            line-height: 1.2;
+            margin-bottom: 2pt;
+        }
+        .obra-artist {
+            font-size: 9pt;
+            color: var(--muted);
+            font-style: italic;
+            margin-bottom: 2pt;
+        }
+        .obra-dimensions {
+            font-size: 8pt;
+            color: var(--muted);
+            font-family: monospace;
+            letter-spacing: 0.2pt;
+        }
+        .empty-location {
+            text-align: center;
+            color: var(--muted);
+            font-style: italic;
+            margin-top: 40pt;
+            font-size: 14pt;
         }
         .foot {
-            margin-top: 6pt;
-            padding-top: 6pt;
+            margin-top: 12pt;
+            padding-top: 8pt;
             border-top: 0.5pt solid #bbb;
             font-family: var(--sans);
-            font-size: 9pt;
+            font-size: 10pt;
             display: flex;
-            gap: 8pt;
+            gap: 12pt;
             align-items: center;
             justify-content: space-between;
         }
-        .code { letter-spacing: 0.2pt; font-variant-numeric: tabular-nums; }
-        @media print { body { margin: 0; } }
+        /* Leaflet map styles */
+        .location-map {
+            width: 120pt;
+            height: 90pt;
+            border-radius: 6pt;
+            overflow: hidden;
+            border: 1pt solid #ddd;
+            box-shadow: 0 2pt 4pt rgba(0,0,0,0.1);
+        }
+        .map-container {
+            width: 100%;
+            height: 70pt;
+            position: relative;
+        }
+        .map-info {
+            padding: 3pt 6pt;
+            background: rgba(255,255,255,0.95);
+            font-size: 7pt;
+            color: var(--muted);
+            border-top: 1pt solid #ddd;
+            text-align: center;
+            line-height: 1.2;
+        }
+        .code {
+            letter-spacing: 0.2pt;
+            font-variant-numeric: tabular-nums;
+            font-weight: 600;
+        }
+        @media print {
+            body { margin: 0; }
+            .card-portrait { border: none; }
+        }
     </style>
+    <script>
+        // Function to calculate proportional dimensions
+        function calculateProportionalSize(widthCm, heightCm, maxWidth = 180, maxHeight = 120) {
+            if (!widthCm || !heightCm) return { width: 80, height: 80 }; // Default for missing dimensions
+
+            // Our scale: 1cm = 1pt (so 100cm = 100pt = 1m)
+            let widthPt = widthCm;
+            let heightPt = heightCm;
+
+            // Apply maximum constraints while maintaining aspect ratio
+            const widthRatio = maxWidth / widthPt;
+            const heightRatio = maxHeight / heightPt;
+            const ratio = Math.min(widthRatio, heightRatio, 1); // Don't scale up
+
+            return {
+                width: Math.round(widthPt * ratio),
+                height: Math.round(heightPt * ratio)
+            };
+        }
+
+        // Function to apply proportional sizing to artwork images
+        function applyProportionalSizing() {
+            document.querySelectorAll('.obra-item').forEach(item => {
+                const widthCm = parseFloat(item.dataset.width);
+                const heightCm = parseFloat(item.dataset.height);
+                const imageElement = item.querySelector('.obra-image, .no-image');
+
+                if (imageElement && !isNaN(widthCm) && !isNaN(heightCm)) {
+                    const dimensions = calculateProportionalSize(widthCm, heightCm);
+                    imageElement.style.width = dimensions.width + 'pt';
+                    imageElement.style.height = dimensions.height + 'pt';
+                }
+            });
+        }
+
+        // Function to create Leaflet map
+        function createLeafletMap(lat, lng) {
+            const mapContainer = document.querySelector('.map-container');
+            if (!mapContainer || !lat || !lng) return;
+
+            // Create map with higher zoom level for street detail
+            const map = L.map(mapContainer, {
+                zoomControl: false,
+                attributionControl: false,
+                dragging: false,
+                touchZoom: false,
+                doubleClickZoom: false,
+                scrollWheelZoom: false,
+                boxZoom: false,
+                keyboard: false
+            }).setView([lat, lng], 17);
+
+            // Add OpenStreetMap tiles
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 18,
+            }).addTo(map);
+
+            // Add a custom marker
+            const customIcon = L.divIcon({
+                className: 'custom-marker',
+                html: '<div style="background: #d32f2f; width: 12px; height: 12px; border: 2px solid white; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.3);"></div>',
+                iconSize: [16, 16],
+                iconAnchor: [8, 8]
+            });
+
+            L.marker([lat, lng], { icon: customIcon }).addTo(map);
+
+            // Fit bounds to show closer context around the location
+            const bounds = L.latLngBounds([
+                [lat - 0.0015, lng - 0.0015],
+                [lat + 0.0015, lng + 0.0015]
+            ]);
+            map.fitBounds(bounds);
+        }
+
+        // Function to add dimension lines to artwork images
+        function addDimensionLines() {
+            document.querySelectorAll('.obra-item').forEach(item => {
+                const widthCm = parseFloat(item.dataset.width);
+                const heightCm = parseFloat(item.dataset.height);
+                const container = item.querySelector('.obra-container');
+
+                if (container && !isNaN(widthCm) && !isNaN(heightCm)) {
+                    // Create dimension lines container
+                    const dimensionLines = document.createElement('div');
+                    dimensionLines.className = 'dimension-lines';
+
+                    // Horizontal dimension (width)
+                    const horizontalDim = document.createElement('div');
+                    horizontalDim.className = 'dimension-horizontal';
+                    horizontalDim.innerHTML = `
+                        <div class="dimension-line"></div>
+                        <div class="dimension-label">${widthCm}cm</div>
+                    `;
+
+                    // Vertical dimension (height)
+                    const verticalDim = document.createElement('div');
+                    verticalDim.className = 'dimension-vertical';
+                    verticalDim.innerHTML = `
+                        <div class="dimension-line"></div>
+                        <div class="dimension-label">${heightCm}cm</div>
+                    `;
+
+                    dimensionLines.appendChild(horizontalDim);
+                    dimensionLines.appendChild(verticalDim);
+                    container.appendChild(dimensionLines);
+                }
+            });
+        }
+        // Apply sizing, add dimension lines, and create map when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            applyProportionalSizing();
+            addDimensionLines();
+
+            // Get coordinates from meta data and create Leaflet map
+            const coordsElement = document.querySelector('[data-lat]');
+            if (coordsElement) {
+                const lat = parseFloat(coordsElement.dataset.lat);
+                const lng = parseFloat(coordsElement.dataset.lng);
+
+                // Small delay to ensure map container is ready
+                setTimeout(() => {
+                    createLeafletMap(lat, lng);
+                }, 100);
+            }
+        });
+    </script>
 </head>
 <body>
-<main class="card-64">
-    <section>
-        {% if location.name %}
-            <h1 class="title">{{ location.name }}</h1>
+<main class="card-portrait">
+    <section class="header-section">
+        <div class="header-info">
+            {% if location.name %}
+                <h1 class="title">{{ location.name }}</h1>
+            {% endif %}
+            <div class="subtitle">
+                <strong>Ubicación</strong>
+                {% if location.type %} · {{ location.type }}{% endif %}
+            </div>
+            <div class="meta">
+                {% if location.obras|length %}
+                    <span class="row"><span class="label">Obras:</span> {{ location.obras|length }} obra{{ location.obras|length != 1 ? 's' : '' }}</span>
+                {% endif %}
+                {% if location.lat and location.lng %}
+                    <span class="row" data-lat="{{ location.lat }}" data-lng="{{ location.lng }}"><span class="label">Coordenadas:</span> {{ location.lat|round(4) }}°, {{ location.lng|round(4) }}°</span>
+                {% endif %}
+                {% if location.address %}
+                    <span class="row"><span class="label">Dirección:</span> {{ location.address }}</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Small location map -->
+        {% if location.lat and location.lng %}
+            <div class="location-map">
+                <div class="map-container" data-lat="{{ location.lat }}" data-lng="{{ location.lng }}">
+                    <!-- Map marker will be added by JavaScript -->
+                </div>
+                <div class="map-info">
+                    San Cristóbal de las Casas
+                </div>
+            </div>
         {% endif %}
-        <div class="subtitle">
-            <strong>Ubicación</strong>
-            {% if location.type %} · {{ location.typeString }}{% endif %}
-        </div>
-        <div class="meta">
-            {% if location.obras|length %}
-                <span class="row"><span class="label">Obras</span> {{ location.obras|length }} obra{{ location.obras|length != 1 ? 's' : '' }}</span>
-            {% endif %}
-            {% if location.lat and location.lng %}
-                <span class="row"><span class="label">Coordenadas</span> {{ location.lat }}, {{ location.lng }}</span>
-            {% endif %}
-            {% if location.address %}
-                <span class="row"><span class="label">Dirección</span> {{ location.address }}</span>
-            {% endif %}
-        </div>
     </section>
+
+    <!-- Compact Scale Reference Header -->
+{#    <section class="scale-reference">#}
+{#        <div class="scale-title">Escala de referencia:</div>#}
+{#        <div class="ruler-segments">#}
+{#            <div class="segment">#}
+{#                <div class="segment-line" style="width: 20pt;"></div>#}
+{#                <div class="segment-label">20cm</div>#}
+{#            </div>#}
+{#            <div class="segment">#}
+{#                <div class="segment-line" style="width: 50pt;"></div>#}
+{#                <div class="segment-label">50cm</div>#}
+{#            </div>#}
+{#            <div class="segment">#}
+{#                <div class="segment-line" style="width: 100pt;"></div>#}
+{#                <div class="segment-label">1m</div>#}
+{#            </div>#}
+{#        </div>#}
+{#    </section>#}
+
     <section class="obras-content">
         {% if obras|length %}
             <div class="obras-grid">
                 {% for obra in obras %}
-                    <div class="obra-item">
-                        {% set primaryImageCode = obra.primaryImageCode %}
-                        {% set primaryImage = primaryImageCode ? imagesByCode[primaryImageCode] : null %}
-                        {% if primaryImage and primaryImage.thumbnailUrl %}
-                            <img src="{{ primaryImage.thumbnailUrl }}" alt="{{ obra.title }}" class="obra-image" />
-                        {% else %}
-                            <div class="no-image">Sin imagen</div>
-                        {% endif %}
-                        <div class="obra-title">{{ obra.title ?: 'Sin título' }}</div>
-                        <div class="obra-artist">
-                            {% if obra.artist %}
-                                {{ obra.artist.name }}
+                    <div class="obra-item" data-width="{{ obra.width ?: 50 }}" data-height="{{ obra.height ?: 50 }}">
+                        <div class="obra-container">
+                            {% if obra.thumbnailUrl %}
+                                <img src="{{ obra.thumbnailUrl }}" alt="{{ obra.title }}" class="obra-image" />
                             {% else %}
-                                Artista desconocido
+                                <div class="no-image">Sin imagen</div>
+                            {% endif %}
+                        </div>
+                        <div class="obra-info">
+                            <div class="obra-title">{{ obra.title ?: 'Sin título' }}</div>
+                            <div class="obra-artist">
+                                {% if obra.artist %}
+                                    {{ obra.artist.name }}
+                                {% else %}
+                                    Artista desconocido
+                                {% endif %}
+                            </div>
+                            {% if obra.width and obra.height %}
+                                <div class="obra-dimensions">{{ obra.width }}×{{ obra.height }} cm</div>
                             {% endif %}
                         </div>
                     </div>
                 {% endfor %}
             </div>
         {% else %}
-            <div style="text-align: center; color: var(--muted); font-style: italic; margin-top: 20pt;">
-                No hay obras en esta ubicación
+            <div class="empty-location">
+                No hay obras registradas en esta ubicación
             </div>
         {% endif %}
     </section>
+
     <footer class="foot">
         <div>
             {% if location.code %}
-                <div class="code">Loc. {{ location.code }}</div>
+                <div class="code">Ubicación {{ location.code }}</div>
             {% endif %}
             <div class="muted">Chijal, San Cristóbal de las Casas, 2025</div>
         </div>
-        <div style="display:flex; align-items:center; gap:10pt;">
-            <img src="https://pgsc.survos.com/chijal-landscape.jpg" alt="Chijal" style="height:18pt; width:auto;" />
-            {% set qrUrl = voxitourEndpoint ~ '/?locationId=' ~ location.code ~ '#tab-locations' %}
-            <img src="{{ qr_code_url(qrUrl) }}" alt="QR Code" style="width:54pt;height:54pt;border:1pt solid #000;background:white;" />
+        <div style="display:flex; align-items:center; gap:12pt;">
+            <img src="https://pgsc.survos.com/chijal-landscape.jpg" alt="Chijal" style="height:20pt; width:auto;" />
+            {% if location.code %}
+                {% set qrUrl = voxitourEndpoint ~ '/?locationId=' ~ location.code ~ '#tab-locations' %}
+                <img src="{{ qr_code_url(qrUrl) }}" alt="QR Code" style="width:60pt;height:60pt;border:1pt solid #000;background:white;" />
+            {% endif %}
+        </div>
+    </footer>
+</main>
+</body>
+</html><!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+    <style>
+        @page { size: A4 portrait; margin: 0; }
+        html, body { height: 100%; }
+        html, body, * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+            font-feature-settings: "liga" 1, "kern" 1;
+            font-kerning: normal;
+        }
+        :root {
+            --serif: Georgia, "Times New Roman", Times, serif;
+            --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            --muted: #555;
+            --ink: #111;
+            --max-width: 180pt; /* Maximum width for any artwork image */
+            --max-height: 120pt; /* Maximum height for any artwork image */
+        }
+        .card-portrait {
+            width: 210mm;
+            height: 297mm;
+            padding: 15mm;
+            color: var(--ink);
+            display: grid;
+            grid-template-rows: auto auto 1fr auto;
+            gap: 6pt;
+            overflow: hidden;
+            page-break-after: always;
+            border: 1pt solid #000; /* cut guide */
+        }
+        .header-section {
+            display: grid;
+            grid-template-columns: 1fr 120pt;
+            gap: 15pt;
+            align-items: start;
+        }
+        .header-info {
+            min-width: 0; /* Allow text to wrap */
+        }
+        .title {
+            font-family: var(--serif);
+            font-weight: 600;
+            font-size: 24pt;
+            line-height: 1.2;
+            hyphens: auto;
+            margin: 0;
+        }
+        .subtitle {
+            margin-top: 4pt;
+            font-family: var(--sans);
+            font-size: 14pt;
+            line-height: 1.25;
+        }
+        .italic { font-style: italic; }
+        .muted { color: var(--muted); }
+        .meta {
+            margin-top: 8pt;
+            font-family: var(--sans);
+            font-size: 11pt;
+            line-height: 1.3;
+        }
+        .meta .row { display: block; break-inside: avoid; margin-bottom: 3pt; }
+        .meta .label { display: inline-block; min-width: 90pt; color: var(--muted); font-weight: 500; }
+
+        /* Scale reference */
+        .scale-reference {
+            margin: 12pt 0;
+            padding: 10pt;
+            background: #f9f9f9;
+            border-radius: 4pt;
+            font-family: var(--sans);
+            font-size: 10pt;
+            border: 1pt solid #e0e0e0;
+        }
+        .scale-container {
+            display: flex;
+            align-items: flex-end;
+            gap: 12pt;
+            margin-top: 6pt;
+        }
+        .scale-ruler {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .ruler-line {
+            width: 2pt;
+            height: 12pt;
+            background: #333;
+            margin-bottom: 2pt;
+        }
+        .ruler-segments {
+            display: flex;
+            align-items: flex-end;
+            gap: 0;
+        }
+        .segment {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .segment-line {
+            width: 20pt;
+            height: 2pt;
+            background: #333;
+            margin-bottom: 2pt;
+        }
+        .segment-label {
+            font-size: 7pt;
+            color: var(--muted);
+            font-weight: 500;
+        }
+        .scale-explanation {
+            color: var(--muted);
+            font-size: 9pt;
+            margin-left: 8pt;
+            align-self: center;
+        }
+
+        /* Proportional artwork grid */
+        .obras-content {
+            overflow-y: auto;
+        }
+        .obras-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12pt;
+            align-items: flex-start;
+            justify-content: flex-start;
+        }
+        .obra-item {
+            break-inside: avoid;
+            page-break-inside: avoid;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: calc(var(--max-width) + 20pt);
+        }
+        .obra-container {
+            position: relative;
+            margin-bottom: 20pt; /* More space for dimension lines */
+            border: 0.5pt solid #ddd;
+            border-radius: 3pt;
+            padding: 3pt;
+            background: white;
+            box-shadow: 0 1pt 3pt rgba(0,0,0,0.1);
+        }
+        .obra-image {
+            display: block;
+            border-radius: 2pt;
+            object-fit: cover;
+        }
+        .no-image {
+            background: #f8f8f8;
+            border: 1pt dashed #ccc;
+            border-radius: 2pt;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8pt;
+            color: var(--muted);
+        }
+
+        /* Dimension lines */
+        .dimension-lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+        }
+        .dimension-horizontal {
+            position: absolute;
+            bottom: -12pt;
+            left: 3pt;
+            right: 3pt;
+            height: 8pt;
+        }
+        .dimension-vertical {
+            position: absolute;
+            right: -12pt;
+            top: 3pt;
+            bottom: 3pt;
+            width: 8pt;
+        }
+        .dimension-line {
+            background: #666;
+            position: absolute;
+        }
+        .dimension-horizontal .dimension-line {
+            height: 0.5pt;
+            top: 3pt;
+            left: 0;
+            right: 0;
+        }
+        .dimension-vertical .dimension-line {
+            width: 0.5pt;
+            left: 3pt;
+            top: 0;
+            bottom: 0;
+        }
+        .dimension-horizontal::before,
+        .dimension-horizontal::after {
+            content: '';
+            position: absolute;
+            width: 0.5pt;
+            height: 4pt;
+            background: #666;
+            top: 1pt;
+        }
+        .dimension-horizontal::before {
+            left: 0;
+        }
+        .dimension-horizontal::after {
+            right: 0;
+        }
+        .dimension-vertical::before,
+        .dimension-vertical::after {
+            content: '';
+            position: absolute;
+            height: 0.5pt;
+            width: 4pt;
+            background: #666;
+            left: 1pt;
+        }
+        .dimension-vertical::before {
+            top: 0;
+        }
+        .dimension-vertical::after {
+            bottom: 0;
+        }
+        .dimension-label {
+            position: absolute;
+            font-size: 6pt;
+            color: #666;
+            font-weight: 500;
+            background: white;
+            padding: 0 2pt;
+            font-family: monospace;
+        }
+        .dimension-horizontal .dimension-label {
+            bottom: -2pt;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .dimension-vertical .dimension-label {
+            right: -2pt;
+            top: 50%;
+            transform: translateY(-50%) rotate(-90deg);
+            transform-origin: center;
+        }
+        .obra-info {
+            text-align: center;
+            max-width: 200pt;
+        }
+        .obra-title {
+            font-size: 10pt;
+            font-weight: 600;
+            line-height: 1.2;
+            margin-bottom: 2pt;
+        }
+        .obra-artist {
+            font-size: 9pt;
+            color: var(--muted);
+            font-style: italic;
+            margin-bottom: 2pt;
+        }
+        .obra-dimensions {
+            font-size: 8pt;
+            color: var(--muted);
+            font-family: monospace;
+            letter-spacing: 0.2pt;
+        }
+        .empty-location {
+            text-align: center;
+            color: var(--muted);
+            font-style: italic;
+            margin-top: 40pt;
+            font-size: 14pt;
+        }
+        .foot {
+            margin-top: 12pt;
+            padding-top: 8pt;
+            border-top: 0.5pt solid #bbb;
+            font-family: var(--sans);
+            font-size: 10pt;
+            display: flex;
+            gap: 12pt;
+            align-items: center;
+            justify-content: space-between;
+        }
+        /* Leaflet map styles */
+        .location-map {
+            width: 120pt;
+            height: 90pt;
+            border-radius: 6pt;
+            overflow: hidden;
+            border: 1pt solid #ddd;
+            box-shadow: 0 2pt 4pt rgba(0,0,0,0.1);
+        }
+        .map-container {
+            width: 100%;
+            height: 70pt;
+            position: relative;
+        }
+        .map-info {
+            padding: 3pt 6pt;
+            background: rgba(255,255,255,0.95);
+            font-size: 7pt;
+            color: var(--muted);
+            border-top: 1pt solid #ddd;
+            text-align: center;
+            line-height: 1.2;
+        }
+        .code {
+            letter-spacing: 0.2pt;
+            font-variant-numeric: tabular-nums;
+            font-weight: 600;
+        }
+        @media print {
+            body { margin: 0; }
+            .card-portrait { border: none; }
+        }
+    </style>
+    <script>
+        // Function to calculate proportional dimensions
+        function calculateProportionalSize(widthCm, heightCm, maxWidth = 180, maxHeight = 120) {
+            if (!widthCm || !heightCm) return { width: 80, height: 80 }; // Default for missing dimensions
+
+            // Our scale: 1cm = 1pt (so 100cm = 100pt = 1m)
+            let widthPt = widthCm;
+            let heightPt = heightCm;
+
+            // Apply maximum constraints while maintaining aspect ratio
+            const widthRatio = maxWidth / widthPt;
+            const heightRatio = maxHeight / heightPt;
+            const ratio = Math.min(widthRatio, heightRatio, 1); // Don't scale up
+
+            return {
+                width: Math.round(widthPt * ratio),
+                height: Math.round(heightPt * ratio)
+            };
+        }
+
+        // Function to apply proportional sizing to artwork images
+        function applyProportionalSizing() {
+            document.querySelectorAll('.obra-item').forEach(item => {
+                const widthCm = parseFloat(item.dataset.width);
+                const heightCm = parseFloat(item.dataset.height);
+                const imageElement = item.querySelector('.obra-image, .no-image');
+
+                if (imageElement && !isNaN(widthCm) && !isNaN(heightCm)) {
+                    const dimensions = calculateProportionalSize(widthCm, heightCm);
+                    imageElement.style.width = dimensions.width + 'pt';
+                    imageElement.style.height = dimensions.height + 'pt';
+                }
+            });
+        }
+
+        // Function to create Leaflet map
+        function createLeafletMap(lat, lng) {
+            const mapContainer = document.querySelector('.map-container');
+            if (!mapContainer || !lat || !lng) return;
+
+            // Create map with higher zoom level for street detail
+            const map = L.map(mapContainer, {
+                zoomControl: false,
+                attributionControl: false,
+                dragging: false,
+                touchZoom: false,
+                doubleClickZoom: false,
+                scrollWheelZoom: false,
+                boxZoom: false,
+                keyboard: false
+            }).setView([lat, lng], 17);
+
+            // Add OpenStreetMap tiles
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 18,
+            }).addTo(map);
+
+            // Add a custom marker
+            const customIcon = L.divIcon({
+                className: 'custom-marker',
+                html: '<div style="background: #d32f2f; width: 12px; height: 12px; border: 2px solid white; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.3);"></div>',
+                iconSize: [16, 16],
+                iconAnchor: [8, 8]
+            });
+
+            L.marker([lat, lng], { icon: customIcon }).addTo(map);
+
+            // Fit bounds to show closer context around the location
+            const bounds = L.latLngBounds([
+                [lat - 0.0015, lng - 0.0015],
+                [lat + 0.0015, lng + 0.0015]
+            ]);
+            map.fitBounds(bounds);
+        }
+
+        // Function to add dimension lines to artwork images
+        function addDimensionLines() {
+            document.querySelectorAll('.obra-item').forEach(item => {
+                const widthCm = parseFloat(item.dataset.width);
+                const heightCm = parseFloat(item.dataset.height);
+                const container = item.querySelector('.obra-container');
+
+                if (container && !isNaN(widthCm) && !isNaN(heightCm)) {
+                    // Create dimension lines container
+                    const dimensionLines = document.createElement('div');
+                    dimensionLines.className = 'dimension-lines';
+
+                    // Horizontal dimension (width)
+                    const horizontalDim = document.createElement('div');
+                    horizontalDim.className = 'dimension-horizontal';
+                    horizontalDim.innerHTML = `
+                        <div class="dimension-line"></div>
+                        <div class="dimension-label">${widthCm}cm</div>
+                    `;
+
+                    // Vertical dimension (height)
+                    const verticalDim = document.createElement('div');
+                    verticalDim.className = 'dimension-vertical';
+                    verticalDim.innerHTML = `
+                        <div class="dimension-line"></div>
+                        <div class="dimension-label">${heightCm}cm</div>
+                    `;
+
+                    dimensionLines.appendChild(horizontalDim);
+                    dimensionLines.appendChild(verticalDim);
+                    container.appendChild(dimensionLines);
+                }
+            });
+        }
+        // Apply sizing, add dimension lines, and create map when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            applyProportionalSizing();
+            addDimensionLines();
+
+            // Get coordinates from meta data and create Leaflet map
+            const coordsElement = document.querySelector('[data-lat]');
+            if (coordsElement) {
+                const lat = parseFloat(coordsElement.dataset.lat);
+                const lng = parseFloat(coordsElement.dataset.lng);
+
+                // Small delay to ensure map container is ready
+                setTimeout(() => {
+                    createLeafletMap(lat, lng);
+                }, 100);
+            }
+        });
+    </script>
+</head>
+<body>
+<main class="card-portrait">
+    <section class="header-section">
+        <div class="header-info">
+            {% if location.name %}
+                <h1 class="title">{{ location.name }}</h1>
+            {% endif %}
+            <div class="subtitle">
+                <strong>Ubicación</strong>
+                {% if location.type %} · {{ location.type }}{% endif %}
             </div>
+            <div class="meta">
+                {% if location.obras|length %}
+                    <span class="row"><span class="label">Obras:</span> {{ location.obras|length }} obra{{ location.obras|length != 1 ? 's' : '' }}</span>
+                {% endif %}
+                {% if location.lat and location.lng %}
+                    <span class="row" data-lat="{{ location.lat }}" data-lng="{{ location.lng }}"><span class="label">Coordenadas:</span> {{ location.lat|round(4) }}°, {{ location.lng|round(4) }}°</span>
+                {% endif %}
+                {% if location.address %}
+                    <span class="row"><span class="label">Dirección:</span> {{ location.address }}</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Small location map -->
+        {% if location.lat and location.lng %}
+            <div class="location-map">
+                <div class="map-container" data-lat="{{ location.lat }}" data-lng="{{ location.lng }}">
+                    <!-- Map marker will be added by JavaScript -->
+                </div>
+                <div class="map-info">
+                    San Cristóbal de las Casas
+                </div>
+            </div>
+        {% endif %}
+    </section>
+
+    <!-- Compact Scale Reference Header -->
+    <section class="scale-reference">
+        <div class="scale-title">Escala de referencia:</div>
+        <div class="ruler-segments">
+            <div class="segment">
+                <div class="segment-line" style="width: 20pt;"></div>
+                <div class="segment-label">20cm</div>
+            </div>
+            <div class="segment">
+                <div class="segment-line" style="width: 50pt;"></div>
+                <div class="segment-label">50cm</div>
+            </div>
+            <div class="segment">
+                <div class="segment-line" style="width: 100pt;"></div>
+                <div class="segment-label">1m</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="obras-content">
+        {% if obras|length %}
+            <div class="obras-grid">
+                {% for obra in obras %}
+                    <div class="obra-item" data-width="{{ obra.width ?: 50 }}" data-height="{{ obra.height ?: 50 }}">
+                        <div class="obra-container">
+                            {% if obra.thumbnailUrl %}
+                                <img src="{{ obra.thumbnailUrl }}" alt="{{ obra.title }}" class="obra-image" />
+                            {% else %}
+                                <div class="no-image">Sin imagen</div>
+                            {% endif %}
+                        </div>
+                        <div class="obra-info">
+                            <div class="obra-title">{{ obra.title ?: 'Sin título' }}</div>
+                            <div class="obra-artist">
+                                {% if obra.artist %}
+                                    {{ obra.artist.name }}
+                                {% else %}
+                                    Artista desconocido
+                                {% endif %}
+                            </div>
+                            {% if obra.width and obra.height %}
+                                <div class="obra-dimensions">{{ obra.width }}×{{ obra.height }} cm</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-location">
+                No hay obras registradas en esta ubicación
+            </div>
+        {% endif %}
+    </section>
+
+    <footer class="foot">
+        <div>
+            {% if location.code %}
+                <div class="code">Ubicación {{ location.code }}</div>
+            {% endif %}
+            <div class="muted">Chijal, San Cristóbal de las Casas, 2025</div>
+        </div>
+        <div style="display:flex; align-items:center; gap:12pt;">
+            <img src="https://pgsc.survos.com/chijal-landscape.jpg" alt="Chijal" style="height:20pt; width:auto;" />
+            {% if location.code %}
+                {% set qrUrl = voxitourEndpoint ~ '/?locationId=' ~ location.code ~ '#tab-locations' %}
+                <img src="{{ qr_code_url(qrUrl) }}" alt="QR Code" style="width:60pt;height:60pt;border:1pt solid #000;background:white;" />
+            {% endif %}
+        </div>
+    </footer>
+</main>
+</body>
+</html><!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+    <style>
+        @page { size: A4 portrait; margin: 0; }
+        html, body { height: 100%; }
+        html, body, * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+            font-feature-settings: "liga" 1, "kern" 1;
+            font-kerning: normal;
+        }
+        :root {
+            --serif: Georgia, "Times New Roman", Times, serif;
+            --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            --muted: #555;
+            --ink: #111;
+            --max-width: 180pt; /* Maximum width for any artwork image */
+            --max-height: 120pt; /* Maximum height for any artwork image */
+        }
+        .card-portrait {
+            width: 210mm;
+            height: 297mm;
+            padding: 15mm;
+            color: var(--ink);
+            display: grid;
+            grid-template-rows: auto auto 1fr auto;
+            gap: 6pt;
+            overflow: hidden;
+            page-break-after: always;
+            border: 1pt solid #000; /* cut guide */
+        }
+        .header-section {
+            display: grid;
+            grid-template-columns: 1fr 120pt;
+            gap: 15pt;
+            align-items: start;
+        }
+        .header-info {
+            min-width: 0; /* Allow text to wrap */
+        }
+        .title {
+            font-family: var(--serif);
+            font-weight: 600;
+            font-size: 24pt;
+            line-height: 1.2;
+            hyphens: auto;
+            margin: 0;
+        }
+        .subtitle {
+            margin-top: 4pt;
+            font-family: var(--sans);
+            font-size: 14pt;
+            line-height: 1.25;
+        }
+        .italic { font-style: italic; }
+        .muted { color: var(--muted); }
+        .meta {
+            margin-top: 8pt;
+            font-family: var(--sans);
+            font-size: 11pt;
+            line-height: 1.3;
+        }
+        .meta .row { display: block; break-inside: avoid; margin-bottom: 3pt; }
+        .meta .label { display: inline-block; min-width: 90pt; color: var(--muted); font-weight: 500; }
+
+        /* Scale reference */
+        .scale-reference {
+            margin: 12pt 0;
+            padding: 10pt;
+            background: #f9f9f9;
+            border-radius: 4pt;
+            font-family: var(--sans);
+            font-size: 10pt;
+            border: 1pt solid #e0e0e0;
+        }
+        .scale-container {
+            display: flex;
+            align-items: flex-end;
+            gap: 12pt;
+            margin-top: 6pt;
+        }
+        .scale-ruler {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .ruler-line {
+            width: 2pt;
+            height: 12pt;
+            background: #333;
+            margin-bottom: 2pt;
+        }
+        .ruler-segments {
+            display: flex;
+            align-items: flex-end;
+            gap: 0;
+        }
+        .segment {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .segment-line {
+            width: 20pt;
+            height: 2pt;
+            background: #333;
+            margin-bottom: 2pt;
+        }
+        .segment-label {
+            font-size: 7pt;
+            color: var(--muted);
+            font-weight: 500;
+        }
+        .scale-explanation {
+            color: var(--muted);
+            font-size: 9pt;
+            margin-left: 8pt;
+            align-self: center;
+        }
+
+        /* Proportional artwork grid */
+        .obras-content {
+            overflow-y: auto;
+        }
+        .obras-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12pt;
+            align-items: flex-start;
+            justify-content: flex-start;
+        }
+        .obra-item {
+            break-inside: avoid;
+            page-break-inside: avoid;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: calc(var(--max-width) + 20pt);
+        }
+        .obra-container {
+            position: relative;
+            margin-bottom: 20pt; /* More space for dimension lines */
+            border: 0.5pt solid #ddd;
+            border-radius: 3pt;
+            padding: 3pt;
+            background: white;
+            box-shadow: 0 1pt 3pt rgba(0,0,0,0.1);
+        }
+        .obra-image {
+            display: block;
+            border-radius: 2pt;
+            object-fit: cover;
+        }
+        .no-image {
+            background: #f8f8f8;
+            border: 1pt dashed #ccc;
+            border-radius: 2pt;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8pt;
+            color: var(--muted);
+        }
+
+        /* Dimension lines */
+        .dimension-lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+        }
+        .dimension-horizontal {
+            position: absolute;
+            bottom: -12pt;
+            left: 3pt;
+            right: 3pt;
+            height: 8pt;
+        }
+        .dimension-vertical {
+            position: absolute;
+            right: -12pt;
+            top: 3pt;
+            bottom: 3pt;
+            width: 8pt;
+        }
+        .dimension-line {
+            background: #666;
+            position: absolute;
+        }
+        .dimension-horizontal .dimension-line {
+            height: 0.5pt;
+            top: 3pt;
+            left: 0;
+            right: 0;
+        }
+        .dimension-vertical .dimension-line {
+            width: 0.5pt;
+            left: 3pt;
+            top: 0;
+            bottom: 0;
+        }
+        .dimension-horizontal::before,
+        .dimension-horizontal::after {
+            content: '';
+            position: absolute;
+            width: 0.5pt;
+            height: 4pt;
+            background: #666;
+            top: 1pt;
+        }
+        .dimension-horizontal::before {
+            left: 0;
+        }
+        .dimension-horizontal::after {
+            right: 0;
+        }
+        .dimension-vertical::before,
+        .dimension-vertical::after {
+            content: '';
+            position: absolute;
+            height: 0.5pt;
+            width: 4pt;
+            background: #666;
+            left: 1pt;
+        }
+        .dimension-vertical::before {
+            top: 0;
+        }
+        .dimension-vertical::after {
+            bottom: 0;
+        }
+        .dimension-label {
+            position: absolute;
+            font-size: 6pt;
+            color: #666;
+            font-weight: 500;
+            background: white;
+            padding: 0 2pt;
+            font-family: monospace;
+        }
+        .dimension-horizontal .dimension-label {
+            bottom: -2pt;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .dimension-vertical .dimension-label {
+            right: -2pt;
+            top: 50%;
+            transform: translateY(-50%) rotate(-90deg);
+            transform-origin: center;
+        }
+        .obra-info {
+            text-align: center;
+            max-width: 200pt;
+        }
+        .obra-title {
+            font-size: 10pt;
+            font-weight: 600;
+            line-height: 1.2;
+            margin-bottom: 2pt;
+        }
+        .obra-artist {
+            font-size: 9pt;
+            color: var(--muted);
+            font-style: italic;
+            margin-bottom: 2pt;
+        }
+        .obra-dimensions {
+            font-size: 8pt;
+            color: var(--muted);
+            font-family: monospace;
+            letter-spacing: 0.2pt;
+        }
+        .empty-location {
+            text-align: center;
+            color: var(--muted);
+            font-style: italic;
+            margin-top: 40pt;
+            font-size: 14pt;
+        }
+        .foot {
+            margin-top: 12pt;
+            padding-top: 8pt;
+            border-top: 0.5pt solid #bbb;
+            font-family: var(--sans);
+            font-size: 10pt;
+            display: flex;
+            gap: 12pt;
+            align-items: center;
+            justify-content: space-between;
+        }
+        /* Leaflet map styles */
+        .location-map {
+            width: 120pt;
+            height: 90pt;
+            border-radius: 6pt;
+            overflow: hidden;
+            border: 1pt solid #ddd;
+            box-shadow: 0 2pt 4pt rgba(0,0,0,0.1);
+        }
+        .map-container {
+            width: 100%;
+            height: 70pt;
+            position: relative;
+        }
+        .map-info {
+            padding: 3pt 6pt;
+            background: rgba(255,255,255,0.95);
+            font-size: 7pt;
+            color: var(--muted);
+            border-top: 1pt solid #ddd;
+            text-align: center;
+            line-height: 1.2;
+        }
+        .code {
+            letter-spacing: 0.2pt;
+            font-variant-numeric: tabular-nums;
+            font-weight: 600;
+        }
+        @media print {
+            body { margin: 0; }
+            .card-portrait { border: none; }
+        }
+    </style>
+    <script>
+        // Function to calculate proportional dimensions
+        function calculateProportionalSize(widthCm, heightCm, maxWidth = 180, maxHeight = 120) {
+            if (!widthCm || !heightCm) return { width: 80, height: 80 }; // Default for missing dimensions
+
+            // Our scale: 1cm = 1pt (so 100cm = 100pt = 1m)
+            let widthPt = widthCm;
+            let heightPt = heightCm;
+
+            // Apply maximum constraints while maintaining aspect ratio
+            const widthRatio = maxWidth / widthPt;
+            const heightRatio = maxHeight / heightPt;
+            const ratio = Math.min(widthRatio, heightRatio, 1); // Don't scale up
+
+            return {
+                width: Math.round(widthPt * ratio),
+                height: Math.round(heightPt * ratio)
+            };
+        }
+
+        // Function to apply proportional sizing to artwork images
+        function applyProportionalSizing() {
+            document.querySelectorAll('.obra-item').forEach(item => {
+                const widthCm = parseFloat(item.dataset.width);
+                const heightCm = parseFloat(item.dataset.height);
+                const imageElement = item.querySelector('.obra-image, .no-image');
+
+                if (imageElement && !isNaN(widthCm) && !isNaN(heightCm)) {
+                    const dimensions = calculateProportionalSize(widthCm, heightCm);
+                    imageElement.style.width = dimensions.width + 'pt';
+                    imageElement.style.height = dimensions.height + 'pt';
+                }
+            });
+        }
+
+        // Function to create Leaflet map
+        function createLeafletMap(lat, lng) {
+            const mapContainer = document.querySelector('.map-container');
+            if (!mapContainer || !lat || !lng) return;
+
+            // Create map with higher zoom level for street detail
+            const map = L.map(mapContainer, {
+                zoomControl: false,
+                attributionControl: false,
+                dragging: false,
+                touchZoom: false,
+                doubleClickZoom: false,
+                scrollWheelZoom: false,
+                boxZoom: false,
+                keyboard: false
+            }).setView([lat, lng], 17);
+
+            // Add OpenStreetMap tiles
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 18,
+            }).addTo(map);
+
+            // Add a custom marker
+            const customIcon = L.divIcon({
+                className: 'custom-marker',
+                html: '<div style="background: #d32f2f; width: 12px; height: 12px; border: 2px solid white; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.3);"></div>',
+                iconSize: [16, 16],
+                iconAnchor: [8, 8]
+            });
+
+            L.marker([lat, lng], { icon: customIcon }).addTo(map);
+
+            // Fit bounds to show closer context around the location
+            const bounds = L.latLngBounds([
+                [lat - 0.0015, lng - 0.0015],
+                [lat + 0.0015, lng + 0.0015]
+            ]);
+            map.fitBounds(bounds);
+        }
+
+        // Function to add dimension lines to artwork images
+        function addDimensionLines() {
+            document.querySelectorAll('.obra-item').forEach(item => {
+                const widthCm = parseFloat(item.dataset.width);
+                const heightCm = parseFloat(item.dataset.height);
+                const container = item.querySelector('.obra-container');
+
+                if (container && !isNaN(widthCm) && !isNaN(heightCm)) {
+                    // Create dimension lines container
+                    const dimensionLines = document.createElement('div');
+                    dimensionLines.className = 'dimension-lines';
+
+                    // Horizontal dimension (width)
+                    const horizontalDim = document.createElement('div');
+                    horizontalDim.className = 'dimension-horizontal';
+                    horizontalDim.innerHTML = `
+                        <div class="dimension-line"></div>
+                        <div class="dimension-label">${widthCm}cm</div>
+                    `;
+
+                    // Vertical dimension (height)
+                    const verticalDim = document.createElement('div');
+                    verticalDim.className = 'dimension-vertical';
+                    verticalDim.innerHTML = `
+                        <div class="dimension-line"></div>
+                        <div class="dimension-label">${heightCm}cm</div>
+                    `;
+
+                    dimensionLines.appendChild(horizontalDim);
+                    dimensionLines.appendChild(verticalDim);
+                    container.appendChild(dimensionLines);
+                }
+            });
+        }
+        // Apply sizing, add dimension lines, and create map when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            applyProportionalSizing();
+            addDimensionLines();
+
+            // Get coordinates from meta data and create Leaflet map
+            const coordsElement = document.querySelector('[data-lat]');
+            if (coordsElement) {
+                const lat = parseFloat(coordsElement.dataset.lat);
+                const lng = parseFloat(coordsElement.dataset.lng);
+
+                // Small delay to ensure map container is ready
+                setTimeout(() => {
+                    createLeafletMap(lat, lng);
+                }, 100);
+            }
+        });
+    </script>
+</head>
+<body>
+<main class="card-portrait">
+    <section class="header-section">
+        <div class="header-info">
+            {% if location.name %}
+                <h1 class="title">{{ location.name }}</h1>
+            {% endif %}
+            <div class="subtitle">
+                <strong>Ubicación</strong>
+                {% if location.type %} · {{ location.type }}{% endif %}
+            </div>
+            <div class="meta">
+                {% if location.obras|length %}
+                    <span class="row"><span class="label">Obras:</span> {{ location.obras|length }} obra{{ location.obras|length != 1 ? 's' : '' }}</span>
+                {% endif %}
+                {% if location.lat and location.lng %}
+                    <span class="row" data-lat="{{ location.lat }}" data-lng="{{ location.lng }}"><span class="label">Coordenadas:</span> {{ location.lat|round(4) }}°, {{ location.lng|round(4) }}°</span>
+                {% endif %}
+                {% if location.address %}
+                    <span class="row"><span class="label">Dirección:</span> {{ location.address }}</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Small location map -->
+        {% if location.lat and location.lng %}
+            <div class="location-map">
+                <div class="map-container" data-lat="{{ location.lat }}" data-lng="{{ location.lng }}">
+                    <!-- Map marker will be added by JavaScript -->
+                </div>
+                <div class="map-info">
+                    San Cristóbal de las Casas
+                </div>
+            </div>
+        {% endif %}
+    </section>
+
+    <!-- Compact Scale Reference Header -->
+    <section class="scale-reference">
+        <div class="scale-title">Escala de referencia:</div>
+        <div class="ruler-segments">
+            <div class="segment">
+                <div class="segment-line" style="width: 20pt;"></div>
+                <div class="segment-label">20cm</div>
+            </div>
+            <div class="segment">
+                <div class="segment-line" style="width: 50pt;"></div>
+                <div class="segment-label">50cm</div>
+            </div>
+            <div class="segment">
+                <div class="segment-line" style="width: 100pt;"></div>
+                <div class="segment-label">1m</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="obras-content">
+        {% if obras|length %}
+            <div class="obras-grid">
+                {% for obra in obras %}
+                    <div class="obra-item" data-width="{{ obra.width ?: 50 }}" data-height="{{ obra.height ?: 50 }}">
+                        <div class="obra-container">
+                            {% if obra.thumbnailUrl %}
+                                <img src="{{ obra.thumbnailUrl }}" alt="{{ obra.title }}" class="obra-image" />
+                            {% else %}
+                                <div class="no-image">Sin imagen</div>
+                            {% endif %}
+                        </div>
+                        <div class="obra-info">
+                            <div class="obra-title">{{ obra.title ?: 'Sin título' }}</div>
+                            <div class="obra-artist">
+                                {% if obra.artist %}
+                                    {{ obra.artist.name }}
+                                {% else %}
+                                    Artista desconocido
+                                {% endif %}
+                            </div>
+                            {% if obra.width and obra.height %}
+                                <div class="obra-dimensions">{{ obra.width }}×{{ obra.height }} cm</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-location">
+                No hay obras registradas en esta ubicación
+            </div>
+        {% endif %}
+    </section>
+
+    <footer class="foot">
+        <div>
+            {% if location.code %}
+                <div class="code">Ubicación {{ location.code }}</div>
+            {% endif %}
+            <div class="muted">Chijal, San Cristóbal de las Casas, 2025</div>
+        </div>
+        <div style="display:flex; align-items:center; gap:12pt;">
+            <img src="https://pgsc.survos.com/chijal-landscape.jpg" alt="Chijal" style="height:20pt; width:auto;" />
+            {% if location.code %}
+                {% set qrUrl = voxitourEndpoint ~ '/?locationId=' ~ location.code ~ '#tab-locations' %}
+                <img src="{{ qr_code_url(qrUrl) }}" alt="QR Code" style="width:60pt;height:60pt;border:1pt solid #000;background:white;" />
+            {% endif %}
+        </div>
+    </footer>
+</main>
+</body>
+</html><!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+    <style>
+        @page { size: A4 portrait; margin: 0; }
+        html, body { height: 100%; }
+        html, body, * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+            font-feature-settings: "liga" 1, "kern" 1;
+            font-kerning: normal;
+        }
+        :root {
+            --serif: Georgia, "Times New Roman", Times, serif;
+            --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            --muted: #555;
+            --ink: #111;
+            --max-width: 180pt; /* Maximum width for any artwork image */
+            --max-height: 120pt; /* Maximum height for any artwork image */
+        }
+        .card-portrait {
+            width: 210mm;
+            height: 297mm;
+            padding: 15mm;
+            color: var(--ink);
+            display: grid;
+            grid-template-rows: auto auto 1fr auto;
+            gap: 6pt;
+            overflow: hidden;
+            page-break-after: always;
+            border: 1pt solid #000; /* cut guide */
+        }
+        .header-section {
+            display: grid;
+            grid-template-columns: 1fr 120pt;
+            gap: 15pt;
+            align-items: start;
+        }
+        .header-info {
+            min-width: 0; /* Allow text to wrap */
+        }
+        .title {
+            font-family: var(--serif);
+            font-weight: 600;
+            font-size: 24pt;
+            line-height: 1.2;
+            hyphens: auto;
+            margin: 0;
+        }
+        .subtitle {
+            margin-top: 4pt;
+            font-family: var(--sans);
+            font-size: 14pt;
+            line-height: 1.25;
+        }
+        .italic { font-style: italic; }
+        .muted { color: var(--muted); }
+        .meta {
+            margin-top: 8pt;
+            font-family: var(--sans);
+            font-size: 11pt;
+            line-height: 1.3;
+        }
+        .meta .row { display: block; break-inside: avoid; margin-bottom: 3pt; }
+        .meta .label { display: inline-block; min-width: 90pt; color: var(--muted); font-weight: 500; }
+
+        /* Scale reference */
+        .scale-reference {
+            margin: 12pt 0;
+            padding: 10pt;
+            background: #f9f9f9;
+            border-radius: 4pt;
+            font-family: var(--sans);
+            font-size: 10pt;
+            border: 1pt solid #e0e0e0;
+        }
+        .scale-container {
+            display: flex;
+            align-items: flex-end;
+            gap: 12pt;
+            margin-top: 6pt;
+        }
+        .scale-ruler {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .ruler-line {
+            width: 2pt;
+            height: 12pt;
+            background: #333;
+            margin-bottom: 2pt;
+        }
+        .ruler-segments {
+            display: flex;
+            align-items: flex-end;
+            gap: 0;
+        }
+        .segment {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .segment-line {
+            width: 20pt;
+            height: 2pt;
+            background: #333;
+            margin-bottom: 2pt;
+        }
+        .segment-label {
+            font-size: 7pt;
+            color: var(--muted);
+            font-weight: 500;
+        }
+        .scale-explanation {
+            color: var(--muted);
+            font-size: 9pt;
+            margin-left: 8pt;
+            align-self: center;
+        }
+
+        /* Proportional artwork grid */
+        .obras-content {
+            overflow-y: auto;
+        }
+        .obras-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12pt;
+            align-items: flex-start;
+            justify-content: flex-start;
+        }
+        .obra-item {
+            break-inside: avoid;
+            page-break-inside: avoid;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: calc(var(--max-width) + 20pt);
+        }
+        .obra-container {
+            position: relative;
+            margin-bottom: 20pt; /* More space for dimension lines */
+            border: 0.5pt solid #ddd;
+            border-radius: 3pt;
+            padding: 3pt;
+            background: white;
+            box-shadow: 0 1pt 3pt rgba(0,0,0,0.1);
+        }
+        .obra-image {
+            display: block;
+            border-radius: 2pt;
+            object-fit: cover;
+        }
+        .no-image {
+            background: #f8f8f8;
+            border: 1pt dashed #ccc;
+            border-radius: 2pt;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8pt;
+            color: var(--muted);
+        }
+
+        /* Dimension lines */
+        .dimension-lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+        }
+        .dimension-horizontal {
+            position: absolute;
+            bottom: -12pt;
+            left: 3pt;
+            right: 3pt;
+            height: 8pt;
+        }
+        .dimension-vertical {
+            position: absolute;
+            right: -12pt;
+            top: 3pt;
+            bottom: 3pt;
+            width: 8pt;
+        }
+        .dimension-line {
+            background: #666;
+            position: absolute;
+        }
+        .dimension-horizontal .dimension-line {
+            height: 0.5pt;
+            top: 3pt;
+            left: 0;
+            right: 0;
+        }
+        .dimension-vertical .dimension-line {
+            width: 0.5pt;
+            left: 3pt;
+            top: 0;
+            bottom: 0;
+        }
+        .dimension-horizontal::before,
+        .dimension-horizontal::after {
+            content: '';
+            position: absolute;
+            width: 0.5pt;
+            height: 4pt;
+            background: #666;
+            top: 1pt;
+        }
+        .dimension-horizontal::before {
+            left: 0;
+        }
+        .dimension-horizontal::after {
+            right: 0;
+        }
+        .dimension-vertical::before,
+        .dimension-vertical::after {
+            content: '';
+            position: absolute;
+            height: 0.5pt;
+            width: 4pt;
+            background: #666;
+            left: 1pt;
+        }
+        .dimension-vertical::before {
+            top: 0;
+        }
+        .dimension-vertical::after {
+            bottom: 0;
+        }
+        .dimension-label {
+            position: absolute;
+            font-size: 6pt;
+            color: #666;
+            font-weight: 500;
+            background: white;
+            padding: 0 2pt;
+            font-family: monospace;
+        }
+        .dimension-horizontal .dimension-label {
+            bottom: -2pt;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .dimension-vertical .dimension-label {
+            right: -2pt;
+            top: 50%;
+            transform: translateY(-50%) rotate(-90deg);
+            transform-origin: center;
+        }
+        .obra-info {
+            text-align: center;
+            max-width: 200pt;
+        }
+        .obra-title {
+            font-size: 10pt;
+            font-weight: 600;
+            line-height: 1.2;
+            margin-bottom: 2pt;
+        }
+        .obra-artist {
+            font-size: 9pt;
+            color: var(--muted);
+            font-style: italic;
+            margin-bottom: 2pt;
+        }
+        .obra-dimensions {
+            font-size: 8pt;
+            color: var(--muted);
+            font-family: monospace;
+            letter-spacing: 0.2pt;
+        }
+        .empty-location {
+            text-align: center;
+            color: var(--muted);
+            font-style: italic;
+            margin-top: 40pt;
+            font-size: 14pt;
+        }
+        .foot {
+            margin-top: 12pt;
+            padding-top: 8pt;
+            border-top: 0.5pt solid #bbb;
+            font-family: var(--sans);
+            font-size: 10pt;
+            display: flex;
+            gap: 12pt;
+            align-items: center;
+            justify-content: space-between;
+        }
+        /* Leaflet map styles */
+        .location-map {
+            width: 120pt;
+            height: 90pt;
+            border-radius: 6pt;
+            overflow: hidden;
+            border: 1pt solid #ddd;
+            box-shadow: 0 2pt 4pt rgba(0,0,0,0.1);
+        }
+        .map-container {
+            width: 100%;
+            height: 70pt;
+            position: relative;
+        }
+        .map-info {
+            padding: 3pt 6pt;
+            background: rgba(255,255,255,0.95);
+            font-size: 7pt;
+            color: var(--muted);
+            border-top: 1pt solid #ddd;
+            text-align: center;
+            line-height: 1.2;
+        }
+        .code {
+            letter-spacing: 0.2pt;
+            font-variant-numeric: tabular-nums;
+            font-weight: 600;
+        }
+        @media print {
+            body { margin: 0; }
+            .card-portrait { border: none; }
+        }
+    </style>
+    <script>
+        // Function to calculate proportional dimensions
+        function calculateProportionalSize(widthCm, heightCm, maxWidth = 180, maxHeight = 120) {
+            if (!widthCm || !heightCm) return { width: 80, height: 80 }; // Default for missing dimensions
+
+            // Our scale: 1cm = 1pt (so 100cm = 100pt = 1m)
+            let widthPt = widthCm;
+            let heightPt = heightCm;
+
+            // Apply maximum constraints while maintaining aspect ratio
+            const widthRatio = maxWidth / widthPt;
+            const heightRatio = maxHeight / heightPt;
+            const ratio = Math.min(widthRatio, heightRatio, 1); // Don't scale up
+
+            return {
+                width: Math.round(widthPt * ratio),
+                height: Math.round(heightPt * ratio)
+            };
+        }
+
+        // Function to apply proportional sizing to artwork images
+        function applyProportionalSizing() {
+            document.querySelectorAll('.obra-item').forEach(item => {
+                const widthCm = parseFloat(item.dataset.width);
+                const heightCm = parseFloat(item.dataset.height);
+                const imageElement = item.querySelector('.obra-image, .no-image');
+
+                if (imageElement && !isNaN(widthCm) && !isNaN(heightCm)) {
+                    const dimensions = calculateProportionalSize(widthCm, heightCm);
+                    imageElement.style.width = dimensions.width + 'pt';
+                    imageElement.style.height = dimensions.height + 'pt';
+                }
+            });
+        }
+
+        // Function to create Leaflet map
+        function createLeafletMap(lat, lng) {
+            const mapContainer = document.querySelector('.map-container');
+            if (!mapContainer || !lat || !lng) return;
+
+            // Create map with higher zoom level for street detail
+            const map = L.map(mapContainer, {
+                zoomControl: false,
+                attributionControl: false,
+                dragging: false,
+                touchZoom: false,
+                doubleClickZoom: false,
+                scrollWheelZoom: false,
+                boxZoom: false,
+                keyboard: false
+            }).setView([lat, lng], 17);
+
+            // Add OpenStreetMap tiles
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 18,
+            }).addTo(map);
+
+            // Add a custom marker
+            const customIcon = L.divIcon({
+                className: 'custom-marker',
+                html: '<div style="background: #d32f2f; width: 12px; height: 12px; border: 2px solid white; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.3);"></div>',
+                iconSize: [16, 16],
+                iconAnchor: [8, 8]
+            });
+
+            L.marker([lat, lng], { icon: customIcon }).addTo(map);
+
+            // Fit bounds to show closer context around the location
+            const bounds = L.latLngBounds([
+                [lat - 0.0015, lng - 0.0015],
+                [lat + 0.0015, lng + 0.0015]
+            ]);
+            map.fitBounds(bounds);
+        }
+
+        // Function to add dimension lines to artwork images
+        function addDimensionLines() {
+            document.querySelectorAll('.obra-item').forEach(item => {
+                const widthCm = parseFloat(item.dataset.width);
+                const heightCm = parseFloat(item.dataset.height);
+                const container = item.querySelector('.obra-container');
+
+                if (container && !isNaN(widthCm) && !isNaN(heightCm)) {
+                    // Create dimension lines container
+                    const dimensionLines = document.createElement('div');
+                    dimensionLines.className = 'dimension-lines';
+
+                    // Horizontal dimension (width)
+                    const horizontalDim = document.createElement('div');
+                    horizontalDim.className = 'dimension-horizontal';
+                    horizontalDim.innerHTML = `
+                        <div class="dimension-line"></div>
+                        <div class="dimension-label">${widthCm}cm</div>
+                    `;
+
+                    // Vertical dimension (height)
+                    const verticalDim = document.createElement('div');
+                    verticalDim.className = 'dimension-vertical';
+                    verticalDim.innerHTML = `
+                        <div class="dimension-line"></div>
+                        <div class="dimension-label">${heightCm}cm</div>
+                    `;
+
+                    dimensionLines.appendChild(horizontalDim);
+                    dimensionLines.appendChild(verticalDim);
+                    container.appendChild(dimensionLines);
+                }
+            });
+        }
+        // Apply sizing, add dimension lines, and create map when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            applyProportionalSizing();
+            addDimensionLines();
+
+            // Get coordinates from meta data and create Leaflet map
+            const coordsElement = document.querySelector('[data-lat]');
+            if (coordsElement) {
+                const lat = parseFloat(coordsElement.dataset.lat);
+                const lng = parseFloat(coordsElement.dataset.lng);
+
+                // Small delay to ensure map container is ready
+                setTimeout(() => {
+                    createLeafletMap(lat, lng);
+                }, 100);
+            }
+        });
+    </script>
+</head>
+<body>
+<main class="card-portrait">
+    <section class="header-section">
+        <div class="header-info">
+            {% if location.name %}
+                <h1 class="title">{{ location.name }}</h1>
+            {% endif %}
+            <div class="subtitle">
+                <strong>Ubicación</strong>
+                {% if location.type %} · {{ location.type }}{% endif %}
+            </div>
+            <div class="meta">
+                {% if location.obras|length %}
+                    <span class="row"><span class="label">Obras:</span> {{ location.obras|length }} obra{{ location.obras|length != 1 ? 's' : '' }}</span>
+                {% endif %}
+                {% if location.lat and location.lng %}
+                    <span class="row" data-lat="{{ location.lat }}" data-lng="{{ location.lng }}"><span class="label">Coordenadas:</span> {{ location.lat|round(4) }}°, {{ location.lng|round(4) }}°</span>
+                {% endif %}
+                {% if location.address %}
+                    <span class="row"><span class="label">Dirección:</span> {{ location.address }}</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Small location map -->
+        {% if location.lat and location.lng %}
+            <div class="location-map">
+                <div class="map-container" data-lat="{{ location.lat }}" data-lng="{{ location.lng }}">
+                    <!-- Map marker will be added by JavaScript -->
+                </div>
+                <div class="map-info">
+                    San Cristóbal de las Casas
+                </div>
+            </div>
+        {% endif %}
+    </section>
+
+    <!-- Compact Scale Reference Header -->
+    <section class="scale-reference">
+        <div class="scale-title">Escala de referencia:</div>
+        <div class="ruler-segments">
+            <div class="segment">
+                <div class="segment-line" style="width: 20pt;"></div>
+                <div class="segment-label">20cm</div>
+            </div>
+            <div class="segment">
+                <div class="segment-line" style="width: 50pt;"></div>
+                <div class="segment-label">50cm</div>
+            </div>
+            <div class="segment">
+                <div class="segment-line" style="width: 100pt;"></div>
+                <div class="segment-label">1m</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="obras-content">
+        {% if obras|length %}
+            <div class="obras-grid">
+                {% for obra in obras %}
+                    <div class="obra-item" data-width="{{ obra.width ?: 50 }}" data-height="{{ obra.height ?: 50 }}">
+                        <div class="obra-container">
+                            {% if obra.thumbnailUrl %}
+                                <img src="{{ obra.thumbnailUrl }}" alt="{{ obra.title }}" class="obra-image" />
+                            {% else %}
+                                <div class="no-image">Sin imagen</div>
+                            {% endif %}
+                        </div>
+                        <div class="obra-info">
+                            <div class="obra-title">{{ obra.title ?: 'Sin título' }}</div>
+                            <div class="obra-artist">
+                                {% if obra.artist %}
+                                    {{ obra.artist.name }}
+                                {% else %}
+                                    Artista desconocido
+                                {% endif %}
+                            </div>
+                            {% if obra.width and obra.height %}
+                                <div class="obra-dimensions">{{ obra.width }}×{{ obra.height }} cm</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-location">
+                No hay obras registradas en esta ubicación
+            </div>
+        {% endif %}
+    </section>
+
+    <footer class="foot">
+        <div>
+            {% if location.code %}
+                <div class="code">Ubicación {{ location.code }}</div>
+            {% endif %}
+            <div class="muted">Chijal, San Cristóbal de las Casas, 2025</div>
+        </div>
+        <div style="display:flex; align-items:center; gap:12pt;">
+            <img src="https://pgsc.survos.com/chijal-landscape.jpg" alt="Chijal" style="height:20pt; width:auto;" />
+            {% if location.code %}
+                {% set qrUrl = voxitourEndpoint ~ '/?locationId=' ~ location.code ~ '#tab-locations' %}
+                <img src="{{ qr_code_url(qrUrl) }}" alt="QR Code" style="width:60pt;height:60pt;border:1pt solid #000;background:white;" />
+            {% endif %}
+        </div>
+    </footer>
+</main>
+</body>
+</html><!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+    <style>
+        @page { size: A4 portrait; margin: 0; }
+        html, body { height: 100%; }
+        html, body, * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+            font-feature-settings: "liga" 1, "kern" 1;
+            font-kerning: normal;
+        }
+        :root {
+            --serif: Georgia, "Times New Roman", Times, serif;
+            --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            --muted: #555;
+            --ink: #111;
+            --max-width: 180pt; /* Maximum width for any artwork image */
+            --max-height: 120pt; /* Maximum height for any artwork image */
+        }
+        .card-portrait {
+            width: 210mm;
+            height: 297mm;
+            padding: 15mm;
+            color: var(--ink);
+            display: grid;
+            grid-template-rows: auto auto 1fr auto;
+            gap: 6pt;
+            overflow: hidden;
+            page-break-after: always;
+            border: 1pt solid #000; /* cut guide */
+        }
+        .header-section {
+            display: grid;
+            grid-template-columns: 1fr 120pt;
+            gap: 15pt;
+            align-items: start;
+        }
+        .header-info {
+            min-width: 0; /* Allow text to wrap */
+        }
+        .title {
+            font-family: var(--serif);
+            font-weight: 600;
+            font-size: 24pt;
+            line-height: 1.2;
+            hyphens: auto;
+            margin: 0;
+        }
+        .subtitle {
+            margin-top: 4pt;
+            font-family: var(--sans);
+            font-size: 14pt;
+            line-height: 1.25;
+        }
+        .italic { font-style: italic; }
+        .muted { color: var(--muted); }
+        .meta {
+            margin-top: 8pt;
+            font-family: var(--sans);
+            font-size: 11pt;
+            line-height: 1.3;
+        }
+        .meta .row { display: block; break-inside: avoid; margin-bottom: 3pt; }
+        .meta .label { display: inline-block; min-width: 90pt; color: var(--muted); font-weight: 500; }
+
+        /* Scale reference */
+        .scale-reference {
+            margin: 12pt 0;
+            padding: 10pt;
+            background: #f9f9f9;
+            border-radius: 4pt;
+            font-family: var(--sans);
+            font-size: 10pt;
+            border: 1pt solid #e0e0e0;
+        }
+        .scale-container {
+            display: flex;
+            align-items: flex-end;
+            gap: 12pt;
+            margin-top: 6pt;
+        }
+        .scale-ruler {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .ruler-line {
+            width: 2pt;
+            height: 12pt;
+            background: #333;
+            margin-bottom: 2pt;
+        }
+        .ruler-segments {
+            display: flex;
+            align-items: flex-end;
+            gap: 0;
+        }
+        .segment {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .segment-line {
+            width: 20pt;
+            height: 2pt;
+            background: #333;
+            margin-bottom: 2pt;
+        }
+        .segment-label {
+            font-size: 7pt;
+            color: var(--muted);
+            font-weight: 500;
+        }
+        .scale-explanation {
+            color: var(--muted);
+            font-size: 9pt;
+            margin-left: 8pt;
+            align-self: center;
+        }
+
+        /* Proportional artwork grid */
+        .obras-content {
+            overflow-y: auto;
+        }
+        .obras-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12pt;
+            align-items: flex-start;
+            justify-content: flex-start;
+        }
+        .obra-item {
+            break-inside: avoid;
+            page-break-inside: avoid;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: calc(var(--max-width) + 20pt);
+        }
+        .obra-container {
+            position: relative;
+            margin-bottom: 20pt; /* More space for dimension lines */
+            border: 0.5pt solid #ddd;
+            border-radius: 3pt;
+            padding: 3pt;
+            background: white;
+            box-shadow: 0 1pt 3pt rgba(0,0,0,0.1);
+        }
+        .obra-image {
+            display: block;
+            border-radius: 2pt;
+            object-fit: cover;
+        }
+        .no-image {
+            background: #f8f8f8;
+            border: 1pt dashed #ccc;
+            border-radius: 2pt;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8pt;
+            color: var(--muted);
+        }
+
+        /* Dimension lines */
+        .dimension-lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+        }
+        .dimension-horizontal {
+            position: absolute;
+            bottom: -12pt;
+            left: 3pt;
+            right: 3pt;
+            height: 8pt;
+        }
+        .dimension-vertical {
+            position: absolute;
+            right: -12pt;
+            top: 3pt;
+            bottom: 3pt;
+            width: 8pt;
+        }
+        .dimension-line {
+            background: #666;
+            position: absolute;
+        }
+        .dimension-horizontal .dimension-line {
+            height: 0.5pt;
+            top: 3pt;
+            left: 0;
+            right: 0;
+        }
+        .dimension-vertical .dimension-line {
+            width: 0.5pt;
+            left: 3pt;
+            top: 0;
+            bottom: 0;
+        }
+        .dimension-horizontal::before,
+        .dimension-horizontal::after {
+            content: '';
+            position: absolute;
+            width: 0.5pt;
+            height: 4pt;
+            background: #666;
+            top: 1pt;
+        }
+        .dimension-horizontal::before {
+            left: 0;
+        }
+        .dimension-horizontal::after {
+            right: 0;
+        }
+        .dimension-vertical::before,
+        .dimension-vertical::after {
+            content: '';
+            position: absolute;
+            height: 0.5pt;
+            width: 4pt;
+            background: #666;
+            left: 1pt;
+        }
+        .dimension-vertical::before {
+            top: 0;
+        }
+        .dimension-vertical::after {
+            bottom: 0;
+        }
+        .dimension-label {
+            position: absolute;
+            font-size: 6pt;
+            color: #666;
+            font-weight: 500;
+            background: white;
+            padding: 0 2pt;
+            font-family: monospace;
+        }
+        .dimension-horizontal .dimension-label {
+            bottom: -2pt;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .dimension-vertical .dimension-label {
+            right: -2pt;
+            top: 50%;
+            transform: translateY(-50%) rotate(-90deg);
+            transform-origin: center;
+        }
+        .obra-info {
+            text-align: center;
+            max-width: 200pt;
+        }
+        .obra-title {
+            font-size: 10pt;
+            font-weight: 600;
+            line-height: 1.2;
+            margin-bottom: 2pt;
+        }
+        .obra-artist {
+            font-size: 9pt;
+            color: var(--muted);
+            font-style: italic;
+            margin-bottom: 2pt;
+        }
+        .obra-dimensions {
+            font-size: 8pt;
+            color: var(--muted);
+            font-family: monospace;
+            letter-spacing: 0.2pt;
+        }
+        .empty-location {
+            text-align: center;
+            color: var(--muted);
+            font-style: italic;
+            margin-top: 40pt;
+            font-size: 14pt;
+        }
+        .foot {
+            margin-top: 12pt;
+            padding-top: 8pt;
+            border-top: 0.5pt solid #bbb;
+            font-family: var(--sans);
+            font-size: 10pt;
+            display: flex;
+            gap: 12pt;
+            align-items: center;
+            justify-content: space-between;
+        }
+        /* Leaflet map styles */
+        .location-map {
+            width: 120pt;
+            height: 90pt;
+            border-radius: 6pt;
+            overflow: hidden;
+            border: 1pt solid #ddd;
+            box-shadow: 0 2pt 4pt rgba(0,0,0,0.1);
+        }
+        .map-container {
+            width: 100%;
+            height: 70pt;
+            position: relative;
+        }
+        .map-info {
+            padding: 3pt 6pt;
+            background: rgba(255,255,255,0.95);
+            font-size: 7pt;
+            color: var(--muted);
+            border-top: 1pt solid #ddd;
+            text-align: center;
+            line-height: 1.2;
+        }
+        .code {
+            letter-spacing: 0.2pt;
+            font-variant-numeric: tabular-nums;
+            font-weight: 600;
+        }
+        @media print {
+            body { margin: 0; }
+            .card-portrait { border: none; }
+        }
+    </style>
+    <script>
+        // Function to calculate proportional dimensions
+        function calculateProportionalSize(widthCm, heightCm, maxWidth = 180, maxHeight = 120) {
+            if (!widthCm || !heightCm) return { width: 80, height: 80 }; // Default for missing dimensions
+
+            // Our scale: 1cm = 1pt (so 100cm = 100pt = 1m)
+            let widthPt = widthCm;
+            let heightPt = heightCm;
+
+            // Apply maximum constraints while maintaining aspect ratio
+            const widthRatio = maxWidth / widthPt;
+            const heightRatio = maxHeight / heightPt;
+            const ratio = Math.min(widthRatio, heightRatio, 1); // Don't scale up
+
+            return {
+                width: Math.round(widthPt * ratio),
+                height: Math.round(heightPt * ratio)
+            };
+        }
+
+        // Function to apply proportional sizing to artwork images
+        function applyProportionalSizing() {
+            document.querySelectorAll('.obra-item').forEach(item => {
+                const widthCm = parseFloat(item.dataset.width);
+                const heightCm = parseFloat(item.dataset.height);
+                const imageElement = item.querySelector('.obra-image, .no-image');
+
+                if (imageElement && !isNaN(widthCm) && !isNaN(heightCm)) {
+                    const dimensions = calculateProportionalSize(widthCm, heightCm);
+                    imageElement.style.width = dimensions.width + 'pt';
+                    imageElement.style.height = dimensions.height + 'pt';
+                }
+            });
+        }
+
+        // Function to create Leaflet map
+        function createLeafletMap(lat, lng) {
+            const mapContainer = document.querySelector('.map-container');
+            if (!mapContainer || !lat || !lng) return;
+
+            // Create map with higher zoom level for street detail
+            const map = L.map(mapContainer, {
+                zoomControl: false,
+                attributionControl: false,
+                dragging: false,
+                touchZoom: false,
+                doubleClickZoom: false,
+                scrollWheelZoom: false,
+                boxZoom: false,
+                keyboard: false
+            }).setView([lat, lng], 17);
+
+            // Add OpenStreetMap tiles
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 18,
+            }).addTo(map);
+
+            // Add a custom marker
+            const customIcon = L.divIcon({
+                className: 'custom-marker',
+                html: '<div style="background: #d32f2f; width: 12px; height: 12px; border: 2px solid white; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.3);"></div>',
+                iconSize: [16, 16],
+                iconAnchor: [8, 8]
+            });
+
+            L.marker([lat, lng], { icon: customIcon }).addTo(map);
+
+            // Fit bounds to show closer context around the location
+            const bounds = L.latLngBounds([
+                [lat - 0.0015, lng - 0.0015],
+                [lat + 0.0015, lng + 0.0015]
+            ]);
+            map.fitBounds(bounds);
+        }
+
+        // Function to add dimension lines to artwork images
+        function addDimensionLines() {
+            document.querySelectorAll('.obra-item').forEach(item => {
+                const widthCm = parseFloat(item.dataset.width);
+                const heightCm = parseFloat(item.dataset.height);
+                const container = item.querySelector('.obra-container');
+
+                if (container && !isNaN(widthCm) && !isNaN(heightCm)) {
+                    // Create dimension lines container
+                    const dimensionLines = document.createElement('div');
+                    dimensionLines.className = 'dimension-lines';
+
+                    // Horizontal dimension (width)
+                    const horizontalDim = document.createElement('div');
+                    horizontalDim.className = 'dimension-horizontal';
+                    horizontalDim.innerHTML = `
+                        <div class="dimension-line"></div>
+                        <div class="dimension-label">${widthCm}cm</div>
+                    `;
+
+                    // Vertical dimension (height)
+                    const verticalDim = document.createElement('div');
+                    verticalDim.className = 'dimension-vertical';
+                    verticalDim.innerHTML = `
+                        <div class="dimension-line"></div>
+                        <div class="dimension-label">${heightCm}cm</div>
+                    `;
+
+                    dimensionLines.appendChild(horizontalDim);
+                    dimensionLines.appendChild(verticalDim);
+                    container.appendChild(dimensionLines);
+                }
+            });
+        }
+        // Apply sizing, add dimension lines, and create map when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            applyProportionalSizing();
+            addDimensionLines();
+
+            // Get coordinates from meta data and create Leaflet map
+            const coordsElement = document.querySelector('[data-lat]');
+            if (coordsElement) {
+                const lat = parseFloat(coordsElement.dataset.lat);
+                const lng = parseFloat(coordsElement.dataset.lng);
+
+                // Small delay to ensure map container is ready
+                setTimeout(() => {
+                    createLeafletMap(lat, lng);
+                }, 100);
+            }
+        });
+    </script>
+</head>
+<body>
+<main class="card-portrait">
+    <section class="header-section">
+        <div class="header-info">
+            {% if location.name %}
+                <h1 class="title">{{ location.name }}</h1>
+            {% endif %}
+            <div class="subtitle">
+                <strong>Ubicación</strong>
+                {% if location.type %} · {{ location.type }}{% endif %}
+            </div>
+            <div class="meta">
+                {% if location.obras|length %}
+                    <span class="row"><span class="label">Obras:</span> {{ location.obras|length }} obra{{ location.obras|length != 1 ? 's' : '' }}</span>
+                {% endif %}
+                {% if location.lat and location.lng %}
+                    <span class="row" data-lat="{{ location.lat }}" data-lng="{{ location.lng }}"><span class="label">Coordenadas:</span> {{ location.lat|round(4) }}°, {{ location.lng|round(4) }}°</span>
+                {% endif %}
+                {% if location.address %}
+                    <span class="row"><span class="label">Dirección:</span> {{ location.address }}</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Small location map -->
+        {% if location.lat and location.lng %}
+            <div class="location-map">
+                <div class="map-container" data-lat="{{ location.lat }}" data-lng="{{ location.lng }}">
+                    <!-- Map marker will be added by JavaScript -->
+                </div>
+                <div class="map-info">
+                    San Cristóbal de las Casas
+                </div>
+            </div>
+        {% endif %}
+    </section>
+
+    <!-- Compact Scale Reference Header -->
+    <section class="scale-reference">
+        <div class="scale-title">Escala de referencia:</div>
+        <div class="ruler-segments">
+            <div class="segment">
+                <div class="segment-line" style="width: 20pt;"></div>
+                <div class="segment-label">20cm</div>
+            </div>
+            <div class="segment">
+                <div class="segment-line" style="width: 50pt;"></div>
+                <div class="segment-label">50cm</div>
+            </div>
+            <div class="segment">
+                <div class="segment-line" style="width: 100pt;"></div>
+                <div class="segment-label">1m</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="obras-content">
+        {% if obras|length %}
+            <div class="obras-grid">
+                {% for obra in obras %}
+                    <div class="obra-item" data-width="{{ obra.width ?: 50 }}" data-height="{{ obra.height ?: 50 }}">
+                        <div class="obra-container">
+                            {% if obra.thumbnailUrl %}
+                                <img src="{{ obra.thumbnailUrl }}" alt="{{ obra.title }}" class="obra-image" />
+                            {% else %}
+                                <div class="no-image">Sin imagen</div>
+                            {% endif %}
+                        </div>
+                        <div class="obra-info">
+                            <div class="obra-title">{{ obra.title ?: 'Sin título' }}</div>
+                            <div class="obra-artist">
+                                {% if obra.artist %}
+                                    {{ obra.artist.name }}
+                                {% else %}
+                                    Artista desconocido
+                                {% endif %}
+                            </div>
+                            {% if obra.width and obra.height %}
+                                <div class="obra-dimensions">{{ obra.width }}×{{ obra.height }} cm</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-location">
+                No hay obras registradas en esta ubicación
+            </div>
+        {% endif %}
+    </section>
+
+    <footer class="foot">
+        <div>
+            {% if location.code %}
+                <div class="code">Ubicación {{ location.code }}</div>
+            {% endif %}
+            <div class="muted">Chijal, San Cristóbal de las Casas, 2025</div>
+        </div>
+        <div style="display:flex; align-items:center; gap:12pt;">
+            <img src="https://pgsc.survos.com/chijal-landscape.jpg" alt="Chijal" style="height:20pt; width:auto;" />
+            {% if location.code %}
+                {% set qrUrl = voxitourEndpoint ~ '/?locationId=' ~ location.code ~ '#tab-locations' %}
+                <img src="{{ qr_code_url(qrUrl) }}" alt="QR Code" style="width:60pt;height:60pt;border:1pt solid #000;background:white;" />
+            {% endif %}
         </div>
     </footer>
 </main>

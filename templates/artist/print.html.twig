@@ -180,6 +180,7 @@
                         {% else %}
                             <div class="no-image">Sin imagen</div>
                         {% endif %}
+                        {{ obra.width }} x {{ obra.height }} cm
                         <div class="obra-title">{{ obra.title ?: 'Sin título' }}</div>
                     </div>
                 {% endfor %}
