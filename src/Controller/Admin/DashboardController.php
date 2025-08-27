@@ -63,11 +63,11 @@ class DashboardController extends AbstractDashboardController
 
         ;
         foreach ($this->locationRepository->findAll() as $location) {
-            if ($location->getLat()) {
-                $point = new Point($location->getLat(), $location->getLng());
+            if ($location->lat) {
+                $point = new Point($location->lat, $location->lng);
                 $myMap->addMarker(new Marker(
                     position: $point,
-                    title: $location->getName(),
+                    title: $location->name,
                 ));
             }
         }
@@ -81,7 +81,7 @@ class DashboardController extends AbstractDashboardController
                 if ($imageCode = $artist->getImageCodes()[0]??null) {
                     $image = $this->imageRepository->findOneBy(['code' => $imageCode]);
                     if ($image && $image->getResized()) {
-                        $artistImages[$artist->getId()] = $image->getResized();
+                        $artistImages[$artist->id] = $image->getResized();
                     }
                 } // Get first image code
             }
@@ -90,6 +90,7 @@ class DashboardController extends AbstractDashboardController
         return $this->render('admin/dashboard.html.twig', [
             'artists' => $artists,
             'artistImages' => $artistImages,
+            'obras' => $this->obraRepository->findAll(),
             'locations' => $this->locationRepository->findAll(),
             'myMap' => $myMap,
         ]);
@@ -97,7 +98,6 @@ class DashboardController extends AbstractDashboardController
         //        return $this->render('admin/dashboard.html.twig', [
         //            'locations' => $this->locationRepository->findAll(),
         //            'artists' => $this->artistRepository->findAll(),
-        //            'obras' => $this->obraRepository->findAll(),
         //        ]);
 
         // Option 1. You can make your dashboard redirect to some common page of your backend
@@ -198,9 +198,9 @@ class DashboardController extends AbstractDashboardController
         $filters = [];
         foreach ($this->locationRepository->findAll() as $location) {
             $filters[] =
-                MenuItem::linkToCrud($location->getName(), null, Obra::class)
+                MenuItem::linkToCrud($location->name, null, Obra::class)
                 ->setQueryParameter('filters[location][comparison]', '=')
-                ->setQueryParameter('filters[location][value]', $location->getId())
+                ->setQueryParameter('filters[location][value]', $location->code)
             ;
         }
         yield MenuItem::subMenu(t('by.location'), 'tabler:building')->setSubItems($filters);
@@ -208,9 +208,9 @@ class DashboardController extends AbstractDashboardController
         $filters = [];
         foreach ($this->artistRepository->findAll() as $entity) {
             $filters[] =
-                MenuItem::linkToCrud($entity->getName(), null, Obra::class)
+                MenuItem::linkToCrud($entity->name, null, Obra::class)
                     ->setQueryParameter('filters[artist][comparison]', '=')
-                    ->setQueryParameter('filters[artist][value]', $entity->getId())
+                    ->setQueryParameter('filters[artist][value]', $entity->code)
             ;
         }
         yield MenuItem::subMenu(t('by.artist'), 'tabler:user')->setSubItems($filters);
@@ -228,6 +228,8 @@ class DashboardController extends AbstractDashboardController
     public function configureActions(): Actions
     {
         return parent::configureActions()
-            ->add(Crud::PAGE_INDEX, Action::DETAIL);
+            // this is now in base
+//            ->add(Crud::PAGE_INDEX, Action::DETAIL)
+            ;
     }
 }

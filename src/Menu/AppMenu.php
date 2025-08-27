@@ -68,14 +68,14 @@ final class AppMenu implements KnpMenuHelperInterface
         foreach ($this->artistRepo->findAll() as $artist) {
             $this->add($nestedMenu, 'artist_show', $artist,
                 translationDomain: false,
-                label: $artist->getName(),
-                badge: $artist->getObraCount());
+                label: $artist->name,
+                badge: $artist->obraCount);
         }
         $nestedMenu = $this->addSubmenu($menu, 'locations');
         foreach ($this->locationRepo->findAll() as $location) {
             $this->add($nestedMenu, 'location_show', $location,
                 translationDomain: false,
-                label: $location->getName(), badge: $location->getObraCount());
+                label: $location->name, badge: $location->obraCount);
         }
 
         $nestedMenu = $this->addSubmenu($menu, 'artwork');

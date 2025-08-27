@@ -110,10 +110,10 @@ class ArtistCrudController extends BaseCrudController
                 ->hideOnIndex()
                 ->setHelp('Google Drive URL for images'),
 
-            // Social media
-            TextareaField::new('socialMedia')
-                ->setHelp('URLs, one per line')
-                ->hideOnIndex(),
+            // Social media @todo SocialBundle?
+//            TextareaField::new('socialMedia')
+//                ->setHelp('URLs, one per line')
+//                ->hideOnIndex(),
 
             TextareaField::new('social')->hideOnIndex()
                 ->setNumOfRows(2)
@@ -147,7 +147,7 @@ class ArtistCrudController extends BaseCrudController
             ->add(Crud::PAGE_INDEX, $rowPrintAction)
             ->setPermission(Action::EDIT, ArtistVoter::EDIT)
             ->setPermission(Action::DELETE, ArtistVoter::DELETE)
-            ->remove(Crud::PAGE_INDEX, Action::DETAIL)
+//            ->remove(Crud::PAGE_INDEX, Action::DETAIL)
             ->update(Crud::PAGE_INDEX, Action::EDIT, function (Action $action) {
                 return $action->setLabel(false)->setIcon('fa:edit');
             })

@@ -1,438 +1,353 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Command;
 
 use App\Entity\Artist;
-use App\Entity\Media;
 use App\Entity\Location;
+use App\Entity\Media;
 use App\Entity\Obra;
 use App\Repository\ArtistRepository;
-use App\Repository\MediaRepository;
 use App\Repository\LocationRepository;
+use App\Repository\MediaRepository;
 use App\Repository\ObraRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use League\Csv\Reader;
 use Psr\Log\LoggerInterface;
-use Survos\CoreBundle\Service\SurvosUtils;
 use Survos\SaisBundle\Model\AccountSetup;
-use Survos\SaisBundle\Model\ProcessPayload;
 use Survos\SaisBundle\Service\SaisClientService;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Attribute\Option;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\ObjectMapper\ObjectMapperInterface;
-use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use function Symfony\Component\String\u;
+use Symfony\Component\String\UnicodeString;
 
-#[AsCommand('app:load', 'Load the chijal data')]
+#[AsCommand('app:load', 'Import Artists, Locations and Obras from CSVs')]
 class LoadCommand extends Command
 {
     public const SAIS_ROOT = 'chijal';
 
     public function __construct(
         private readonly EntityManagerInterface $em,
-        private readonly ObjectMapperInterface  $objectMapper,
-        private readonly ArtistRepository       $artistRepo,
-        private readonly LocationRepository     $locationRepo,
-        private readonly SaisClientService      $sais,
-        private readonly ObraRepository         $obraRepo,
-        private readonly MediaRepository        $imageRepo,
-        private readonly ValidatorInterface     $validator,
-        private readonly TranslatorInterface    $translator,
-        private readonly UrlGeneratorInterface  $urls,
-        private readonly LoggerInterface        $logger,
-        private readonly MediaRepository $mediaRepository,
-        private readonly PropertyAccessorInterface $propertyAccessor,
+        private readonly ArtistRepository $artistRepo,
+        private readonly LocationRepository $locationRepo,
+        private readonly ObraRepository $obraRepo,
+        private readonly MediaRepository $mediaRepo,
+        private readonly SaisClientService $sais,
+        private readonly LoggerInterface $logger,
+        private readonly ValidatorInterface $validator,
+        private readonly TranslatorInterface $translator,
     ) { parent::__construct(); }
 
     public function __invoke(
         SymfonyStyle $io,
-        #[Option('Refresh the cached data from Google Sheets')] ?bool $refresh = null,
-        #[Option('Dispatch SAIS requests')] ?bool $resize = null
+        #[Option('Path to data dir containing artistas.csv, artists.csv, locations.csv, piezas.csv')] ?string $dir = null,
+        #[Option('Refresh cached Google Sheets first (placeholder)')] ?bool $refresh = null,
+        #[Option('Also initialize SAIS account (images/audio)')] ?bool $sais = null
     ): int {
-        if ($refresh) {
-            $io->writeln('Option refresh: true');
+        $dir ??= 'data';
+        $io->title('Chijal CSV Import');
+
+        if ($sais) {
+            $response = $this->sais->accountSetup(new AccountSetup(self::SAIS_ROOT, 100));
+            $io->info(sprintf("Sais %s setup with %d bin(s)", $response['code'], $response['binCount']));
         }
 
-        //resize arg no longer needed , run the account setup anyway
-        if ($resize) {
-            $this->sais->accountSetup(new AccountSetup(self::SAIS_ROOT, 100));
-        }
+        $artistsByCode = [];
+        $locsByCode = [];
 
-        $artists   = []; // code => Artist
-        $locations = []; // code => Location
-
-        foreach ($this->artistRepo->findAll() as $artist) {
-            $artists[$artist->getCode()] = $artist;
-        }
-
-        // ---------- Artists ----------
-        foreach ($this->iterArtists() as $row) {
-            // normalize once
+        // ---- Artists
+        $io->section('Importing Artists');
+        foreach ($this->iterArtists("$dir/artistas.csv", "$dir/artists.csv") as $row) {
             $row = $this->normalizeRow($row);
-//            SurvosUtils::assertKeyExists('status', $row);
-//            if (!$this->isActive($row['status'])) {
-//                continue;
-//            }
 
-            $email = $row['email'];
-            if (!$email) {
-                $this->logger->warning('Skipping artist without email', ['row' => $row]);
-                continue;
-            }
+            $email = $row['email'] ?? null;
+            if (!$email) { $this->logger->warning('Skipping artist with no email', ['row'=>$row]); continue; }
 
-            // code may be missing in artistas.csv; derive if needed
             $code = $this->normCode($row['code'] ?? null, $email, $row['name'] ?? null);
+            if (!$code) { $this->logger->warning('Could not derive artist code', ['email'=>$email,'row'=>$row]); continue; }
 
-            if (!$artist = $artists[$code] ?? null) {
-                $artist = new Artist($code);
-                $this->em->persist($artist);
-                $artists[$code] = $artist;
-            }
-//            if(!$artist = $this->artistRepo->find($code)) {
-////                $this->em->persist($artist);
-//            }
+            $artist = $this->artistRepo->find($code) ?? new Artist($code);
+            $this->em->persist($artist);
 
-            $artist->bio = $row['long_bio'] ?? $row['bio'] ?? null;
-            $artist->slogan = $this->truncate($row['tagline'] ?? '', 80);
+            $artist->name = $row['name'] ?? $email;
+            $artist->email = $email;
+            $artist->phone = $row['whatsapp'] ?? null;
+            $artist->birthYear = $this->parseBirthYear($row['nacimiento'] ?? ($row['birthyear'] ?? null));
+
             $artist->driveUrl = $row['driveurl'] ?? null;
-            $artist
-                ->setEmail($email)
-                ->setCode($code)
-                ->setName($row['name'] ?? $email)
-                ->setBirthYear($this->parseBirthYear($row['nacimiento'] ?? ($row['birthyear'] ?? null)));
 
-            $artist->imageCodes=[];
-            // Create Media entity directly in database (commenting out SAIS dispatch for now)
-            if ($driveUrl = $artist->driveUrl) {
-                    // Calculate SAIS code for the image
-                    $saisImageCode = SaisClientService::calculateCode($driveUrl, self::SAIS_ROOT);
-                    $artist->imageCodes[] = $saisImageCode;
 
-                    // Create or update Media entity directly in database
+            $artist->bio = $row['bio'] ?? ($row['long_bio'] ?? null);
+            $artist->slogan = $row['tagline'] ?? null;
 
-                    if (!$image = $this->imageRepo->findByCode($saisImageCode)) {
-                        $image = new Media($saisImageCode);
-                        $this->em->persist($image);
-                    }
-                    $image->originalUrl = $driveUrl;
-
-                    // Store the SAIS image code for this artist
-
-                    $this->logger->info('Media entity created for artist', [
-                        'email' => $email,
-                        'saisImageCode' => $saisImageCode,
-                        'driveUrl' => $artist->getDriveUrl()
-                    ]);
+            if ($artist->driveUrl) {
+                $this->addToMedia($artist->driveUrl, $artist);
             }
 
-            if (!$this->validateOrFail($artist, $io)) {
-//                $this->em->remove($artist);
-            } else {
-                $artists[$artist->getCode()] = $artist;
+            if (!empty($row['youtube_url'])) {
+                $artist->youtubeUrl = $row['youtube_url'];
+            } elseif (!empty($row['youtubeurl'])) {
+                $artist->youtubeUrl = $row['youtubeurl'];
             }
 
+            if (!empty($row['audio_url'])) {
+                $audioUrl = $row['audio_url'];
+                $audioCode = SaisClientService::calculateCode($audioUrl, self::SAIS_ROOT);
+                $artist->audioCode = $audioCode;
+                $this->upsertMedia($audioCode, original: $audioUrl, type: 'audio');
+            } elseif (!empty($row['audioUrl'])) {
+                $audioUrl = $row['audioUrl'];
+                $audioCode = SaisClientService::calculateCode($audioUrl, self::SAIS_ROOT);
+                $artist->audioCode = $audioCode;
+                $this->upsertMedia($audioCode, original: $audioUrl, type: 'audio');
+            }
+
+            $artistsByCode[$code] = $artist;
         }
-
-        // ---------- Locations ----------
-        foreach ($this->iterLocations() as $rowRaw) {
-            $row = $this->normalizeRow($rowRaw);
-
-            if (!$this->isActive($row['status'], activeWords: ['activo', 'active', 'sí', 'si'])) {
-                continue;
-            }
-
-            $code = $this->normCode($row['code'] ?? null);
-
-            if (!$code) {
-                $this->logger->warning('Skipping location with empty code', ['row' => $row]);
-                continue;
-            }
-
-            if (
-                !$location = $this->locationRepo->find($code)
-                ?? $this->locationRepo->findOneBy(['name' => $row['nombre'] ?? null])
-            ) {
-                $location = new Location($code);
-                $this->em->persist($location);
-            }
-
-            $location
-                ->setCode($code)
-                ->setName($row['nombre'] ?? $code)
-                ->setStatus($row['status'] ?? 'activo')
-                ->setAddress($row['direcciones'] ?? null);
-
-            $locations[$location->getCode()] = $location;
-        }
-
         $this->em->flush();
 
-        // ---------- Obras (pieces) ----------
-        $piezas = $this->csv('data/piezas.csv');
-        $piezas->setHeaderOffset(0);
+        // ---- Locations
+        $io->section('Importing Locations');
+        foreach ($this->csv("$dir/locations.csv")->getRecords() as $row) {
+            $row = $this->normalizeRow($row);
+            if (!$this->isActive(($row['status'] ?? null), ['activo','active','sí','si'])) { continue; }
 
-        foreach ($piezas->getRecords() as $row) {
+            $code = $this->normCode($row['code'] ?? null);
+            if (!$code) { $this->logger->warning('Skipping location without code', ['row'=>$row]); continue; }
+
+            $loc = $this->locationRepo->find($code) ?? new Location($code);
+            $this->em->persist($loc);
+
+            $loc->name = $row['nombre'] ?? $code;
+            $loc->status = $row['status'] ?? 'activo';
+            $loc->address = $row['direcciones'] ?? null;
+            $loc->type = $row['tipo'] ?? null;
+            $loc->contactName = $row['contacto'] ?? null;
+            $loc->phone = $row['cel'] ?? null;
+            $loc->setGeoFromString($row['geo'] ?? null);
+//            dd($row['geo'], $loc->lng, $loc->lat);
+
+            $locsByCode[$code] = $loc;
+        }
+        $this->em->flush();
+
+        // ---- Obras
+        $io->section('Importing Obras');
+        foreach ($this->csv("$dir/piezas.csv")->getRecords() as $row) {
             $row = $this->normalizeRow($row);
 
             $code = $this->normCode($row['code'] ?? null);
-            if (!$code) {
-                continue;
+            if (!$code) { continue; }
+
+            $obra = $this->obraRepo->find($code) ?? new Obra($code);
+            $this->em->persist($obra);
+
+            $obra->title = $row['title'] ?? null;
+            $obra->description = $row['description'] ?? null;
+            $obra->materials = $row['material'] ?? null;
+            $obra->size = $row['size'] ?? null;
+            $obra->year = $this->parseInt($row['year'] ?? null);
+            $obra->price = $this->parseMoneyInt($row['price'] ?? null);
+            $obra->type = $row['type'] ?? null;
+
+            $this->parseSizeIntoDims($obra, $obra->size);
+
+            $artistCode = $this->normCode($row['artist_code'] ?? null);
+            if ($artistCode && isset($artistsByCode[$artistCode])) {
+                $obra->artist = $artistsByCode[$artistCode];
+                $obra->artist->addObra($obra);
+            } elseif ($artistCode) {
+                $this->logger->warning('Unknown artist code on obra', ['obra'=>$code, 'artist_code'=>$artistCode]);
             }
 
-            if (!$obra = $this->obraRepo->find($code)) {
-                $obra = new Obra($code);
-                $this->em->persist($obra);
+            $locCode = $this->normCode($row['loc_code'] ?? null);
+            if ($locCode && isset($locsByCode[$locCode])) {
+                $obra->location = $locsByCode[$locCode];
+                $obra->location->addObra($obra);
+            } elseif ($locCode) {
+                $this->logger->warning('Unknown location code on obra', ['obra'=>$code, 'loc_code'=>$locCode]);
             }
 
-            // Optional audio process
-            SurvosUtils::assertKeyExists('audioUrl', $row);
-            if ($audioUrl = $row['audioUrl']) {
-                    $saisAudioCode = SaisClientService::calculateCode($audioUrl, self::SAIS_ROOT);
-                    if (!$audioMedia = $this->mediaRepository->findOneBy(['code' => $saisAudioCode])) {
-                        $audioMedia = new Media($saisAudioCode);
-                        $this->em->persist($audioMedia);
-                    }
-                    $audioMedia->type = 'audio';
-                    $audioMedia->originalUrl = $audioUrl;
-
-                    // Connect the audio media to the obra
-                    $obra->setAudioCode($saisAudioCode);
-
-                    $this->logger->info('Audio media entity created for obra', [
-                        'code' => $code,
-                        'saisAudioCode' => $saisAudioCode,
-                        'audioUrl' => $audioUrl
-                    ]);
-
-                    if ($resize) {
-                        // TODO: Dispatch SAIS processing for audio if needed
-                    }
-            }
-
-            // Basic fields
-            SurvosUtils::assertKeyExists('material', $row);
-            $obra->materials = $row['material'];
-            // @todo: Trait
-
-            SurvosUtils::assertKeyExists('youtubeUrl', $row);
-            $obra->youtubeUrl = $row['youtubeUrl'];
-            $obra->photodriveurl = $row['photoUrl'];
-            $obra->size = $row['size'];
-
-            $obra->title = $row['title'];
-            $obra->description = $row['description'];
-
-            // Location link
-            if (!empty($row['loc_code'])) {
-                $locCode = $this->normCode($row['loc_code']);
-                if (isset($locations[$locCode])) {
-                    $locations[$locCode]->addObra($obra);
-                } else {
-                    $this->logger->warning('Unknown location code on pieza', ['pieza' => $code, 'loc_code' => $locCode]);
+            foreach (['photo_url','photodriveurl2','photoUrl','photoDriveUrl2'] as $pf) {
+                if (!empty($row[$pf])) {
+                    $drive = $row[$pf];
+                    $imgCode = SaisClientService::calculateCode($drive, self::SAIS_ROOT);
+                    $obra->addImageCode($imgCode);
+                    $this->upsertMedia($imgCode, original: $drive, type: 'image');
+                    $obra->driveUrl ??= $drive; // first becomes primary
                 }
             }
 
-            // Artist link
-            if (!empty($row['artist_code'])) {
-                $artistCode = $this->normCode($row['artist_code']);
-                if (isset($artists[$artistCode])) {
-                    $artists[$artistCode]->addObra($obra);
-                } else {
-                    $this->logger->warning('Unknown artist code on pieza', ['pieza' => $code, 'artist_code' => $artistCode]);
-                }
+            if (!empty($row['audio_url'])) {
+                $a = $row['audio_url'];
+                $aCode = SaisClientService::calculateCode($a, self::SAIS_ROOT);
+                $obra->audioCode = $aCode;
+                $this->upsertMedia($aCode, original: $a, type: 'audio');
+            } elseif (!empty($row['audioUrl'])) {
+                $a = $row['audioUrl'];
+                $aCode = SaisClientService::calculateCode($a, self::SAIS_ROOT);
+                $obra->audioCode = $aCode;
+                $this->upsertMedia($aCode, original: $a, type: 'audio');
             }
 
-            // Create Media entity directly in database (commenting out SAIS dispatch for now)
-            if ($obra->driveUrl) {
-                    // Calculate SAIS code for the image
-                    $saisImageCode = SaisClientService::calculateCode($obra->getDriveUrl(), self::SAIS_ROOT);
-
-                    // Create or update Media entity directly in database
-                    $image = $this->imageRepo->findByCode($saisImageCode);
-                    if (!$image) {
-                        $image = new Media($saisImageCode);
-                        $this->em->persist($image);
-                    }
-                    $image->type = 'image';
-                    $image->originalUrl = $obra->getDriveUrl();
-
-                    // Store the SAIS image code for this obra
-                    $obra->addImageCode($saisImageCode);
-
-                    $this->logger->info('Media entity created for obra', [
-                        'code' => $code,
-                        'saisImageCode' => $saisImageCode,
-                        'driveUrl' => $obra->getDriveUrl()
-                    ]);
+            if (!empty($row['youtube_url'])) {
+                $obra->youtubeUrl = $row['youtube_url'];
+            } elseif (!empty($row['youtubeUrl'])) {
+                $obra->youtubeUrl = $row['youtubeUrl'];
             }
         }
 
-        // ---------- counts ----------
-        foreach ($this->locationRepo->findAll() as $loc) {
-            $loc->setObraCount($loc->getObras()->count());
-        }
-        foreach ($this->artistRepo->findAll() as $art) {
-            $art->setObraCount($art->getObras()->count());
-        }
+        foreach ($locsByCode as $loc) { $loc->obraCount = $loc->obras->count(); }
+        foreach ($artistsByCode as $a) { $a->obraCount = $a->obras->count(); }
 
         $this->em->flush();
-        $io->success(self::class . ' success.');
-
+        $io->success('Import complete.');
         return Command::SUCCESS;
     }
 
-    // ================== Helpers ==================
+    // -------------- helpers --------------
 
-    private function iterArtists(): iterable
+    private function csv(string $path): Reader
     {
-        // Internal list (codes + status) keyed by email
-        $our = [];
-        foreach ($this->csv('data/artistas.csv', header: 0)->getRecords() as $r) {
-            $r = $this->normalizeRow($r);
-            if (!empty($r['email'])) {
-                $our[$r['email']] = $r;
-            }
-        }
-
-        // Google Form responses (details) keyed by email
-        $responses = [];
-        foreach ($this->csv('data/artists.csv', header: 0)->getRecords() as $r) {
-            $r = $this->normalizeRow($r);
-            if (empty($r['email'])) {
-                continue;
-            }
-            if (!isset($our[$r['email']])) {
-                // Warn but still include, with minimal defaults
-                $this->logger->warning('Email present in artists.csv but missing in artistas.csv', ['email' => $r['email']]);
-                $merged = $r;
-            } else {
-                $merged = array_merge($our[$r['email']], $r);
-            }
-            $responses[$r['email']] = $merged;
-        }
-
-        // Also include any internal-only rows that didn’t fill the form (if desired)
-        foreach ($our as $email => $r) {
-            if (!isset($responses[$email])) {
-                $responses[$email] = $r;
-            }
-        }
-
-        return array_values($responses);
-    }
-
-    private function iterLocations(): iterable
-    {
-        return $this->csv('data/locations.csv', header: 0)->getRecords();
-    }
-
-    private function csv(string $path, int $header = 0): Reader
-    {
-        if (!file_exists($path)) {
-            throw new \RuntimeException(sprintf('CSV file "%s" does not exist', $path));
+        if (!is_file($path)) {
+            throw new \RuntimeException(sprintf('CSV file not found: %s', $path));
         }
         $csv = Reader::createFromPath($path, 'r');
-        $csv->setHeaderOffset($header);
+        $csv->setHeaderOffset(0);
         return $csv;
+    }
+
+    private function iterArtists(string $artistas, string $artists): iterable
+    {
+        $our = [];
+        foreach ($this->csv($artistas)->getRecords() as $r) {
+            $r = $this->normalizeRow($r);
+            if (!empty($r['email'])) { $our[$r['email']] = $r; }
+        }
+
+        $merged = [];
+        foreach ($this->csv($artists)->getRecords() as $r) {
+            $r = $this->normalizeRow($r);
+            if (empty($r['email'])) { continue; }
+            $merged[$r['email']] = isset($our[$r['email']]) ? array_merge($our[$r['email']], $r) : $r;
+        }
+        foreach ($our as $email => $r) {
+            if (!isset($merged[$email])) { $merged[$email] = $r; }
+        }
+        return array_values($merged);
     }
 
     private function normalizeRow(array $row): array
     {
-        $normalized = [];
+        $out = [];
         foreach ($row as $k => $v) {
-            if ($v === null) { $normalized[$this->normKey($k)] = null; continue; }
-            $v = is_string($v) ? trim($v) : $v;
-            // Collapse weird multiple spaces and stray quotes
+            $k = $this->normKey($k);
+            if ($v === null) { $out[$k] = null; continue; }
             if (is_string($v)) {
-                $v = preg_replace('/\s+/', ' ', $v);
+                $v = trim(preg_replace('/\s+/', ' ', $v));
                 $v = trim($v, "\"' \t\n\r\0\x0B");
+                $out[$k] = ($v === '') ? null : $v;
+            } else {
+                $out[$k] = $v;
             }
-            $normalized[$k] = $v === '' ? null : $v;
-//            $normalized[$this->normKey($k)] = $v === '' ? null : $v;
         }
-        return $normalized;
+        return $out;
     }
 
     private function normKey(?string $key): ?string
     {
         if ($key === null) { return null; }
-        $key = strtolower(trim($key));
-        $key = str_replace(
-            [' ', '-', '/', 'á','é','í','ó','ú','ñ'],
-            ['_', '_', '_','a','e','i','o','u','n'],
-            $key
-        );
-        return $key;
+        $key = mb_strtolower(trim($key));
+        $repl = [' '=>'_','-'=>'_','/'=>'_','á'=>'a','é'=>'e','í'=>'i','ó'=>'o','ú'=>'u','ñ'=>'n','.'=>'_'];
+        return strtr($key, $repl);
     }
 
-    private function isActive(?string $status, array $activeWords = ['active', 'activo', 'yes', 'sí', 'si']): bool
+    private function isActive(?string $status, array $activeWords): bool
     {
         if (!$status) { return false; }
-        $s = strtolower(trim($status));
-        // common typos & variants
-        $s = str_replace(['no active', 'not active', 'inactivo', 'inactive'], 'inactive', $s);
+        $s = mb_strtolower(trim($status));
+        $s = str_replace(['no active','not active','inactivo','inactive'], 'inactive', $s);
         if ($s === 'acive') { $s = 'active'; }
-
-        foreach ($activeWords as $word) {
-            if ($s === $word) { return true; }
-        }
+        foreach ($activeWords as $w) { if ($s === $w) { return true; } }
         return $s === 'active';
     }
 
     private function normCode(?string $code, ?string $email = null, ?string $name = null): ?string
     {
-        $code = $code ? strtolower(trim($code)) : null;
         if ($code) {
-            $code = preg_replace('/\s+/', '', $code);
+            $c = preg_replace('/\s+/', '', mb_strtolower(trim($code)));
+            if ($c !== '') { return $c; }
         }
-        if (!$code && $email) {
-            $code = strtolower(u($email)->before('@')->toString());
+        if ($email) {
+            $u = new UnicodeString($email);
+            return mb_strtolower($u->before('@')->toString());
         }
-        if (!$code && $name) {
-            $code = $this->initials($name);
+        if ($name) {
+            $n = new UnicodeString($name);
+            $ascii = $n->ascii()->toString();
+            $parts = array_values(array_filter(explode(' ', mb_strtolower($ascii))));
+            $letters = array_map(static fn($p) => preg_replace('/(?<=\w).*/', '', $p), $parts);
+            $c = implode('', $letters);
+            return $c !== '' ? $c : null;
         }
-        return $code ?: null;
-    }
-
-    private function initials(string $name): string
-    {
-        $name = u($name)->ascii()->toString();
-        $parts = array_values(array_filter(explode(' ', strtolower($name))));
-        $letters = array_map(fn($n) => preg_replace('/(?<=\w).*/', '', $n), $parts);
-        return implode('', $letters);
-    }
-
-    private function truncate(?string $s, int $len): ?string
-    {
-        if (!$s) { return $s; }
-        return mb_strlen($s) > $len ? mb_substr($s, 0, $len) : $s;
+        return null;
     }
 
     private function parseBirthYear(?string $raw): ?int
     {
         if (!$raw) { return null; }
-        // Grab the first 4-digit year between 1900 and 2100
-        if (preg_match('/(19|20)\d{2}/', $raw, $m)) {
-            return (int)$m[0];
-        }
-        return null;
+        return preg_match('/\b(19|20)\d{2}\b/', $raw, $m) ? (int)$m[0] : null;
     }
 
-    private function validateOrFail(object $entity, SymfonyStyle $io): bool
+    private function parseInt(?string $s): ?int
     {
-        $errors = $this->validator->validate($entity);
-        if (\count($errors) > 0) {
-            foreach ($errors as $e) {
-                dump($entity::class, $e->getPropertyPath(), $this->propertyAccessor->getValue($entity, $e->getPropertyPath()));
-                $io->error($e->getPropertyPath() . ' / ' . $e->getMessage());
-            }
-//            throw new \RuntimeException('Validation failed.');
+        if ($s === null) { return null; }
+        $s = preg_replace('/[^\d\-]/', '', $s);
+        return $s === '' ? null : (int)$s;
+    }
+
+    private function parseMoneyInt(?string $s): ?int
+    {
+        if ($s === null) { return null; }
+        $s = str_replace([',','$',' '], '', $s);
+        return is_numeric($s) ? (int)$s : null;
+    }
+
+    private function parseSizeIntoDims(Obra $obra, ?string $size): void
+    {
+        if (!$size) { return; }
+        if (preg_match('/(\d+)\s*[xX]\s*(\d+)(?:\s*[xX]\s*(\d+))?/u', $size, $m)) {
+            $obra->width = (int)$m[1];
+            $obra->height = (int)$m[2];
+            $obra->depth = isset($m[3]) ? (int)$m[3] : null;
         }
-        return (bool)count($errors);
+    }
+
+    private function upsertMedia(string $code, string $original, string $type): Media
+    {
+        $media = $this->mediaRepo->findOneBy(['code' => $code]) ?? new Media($code);
+        $this->em->persist($media);
+        $media->type = $type;
+        $media->originalUrl = $original;
+        $errors = $this->validator->validate($media);
+        dump($original);
+        if (count($errors) > 0) {
+            dd($errors);
+        }
+        return $media;
+    }
+
+    private function addToMedia(?string $driveUrl, Artist|Obra $entity)
+    {
+        foreach (explode(',', $driveUrl) as $url) {
+            $url = trim($url);
+            $imgCode = SaisClientService::calculateCode($url, self::SAIS_ROOT);
+            $entity->addImageCode($imgCode);
+            $media = $this->upsertMedia($imgCode, original: $url, type: 'image');
+        }
+
     }
 }

@@ -13,6 +13,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 
@@ -31,12 +32,13 @@ class LocationCrudController extends AbstractCrudController
     {
         return [
             IdField::new('code'),
+            NumberField::new('lat'),
             TextField::new('name')
                 ->formatValue(function ($value, $entity) {
                     return '<a href="' . $this->adminUrlGenerator
                         ->setController(self::class)
                         ->setAction('detail')
-                        ->setEntityId($entity->getId())
+                        ->setEntityId($entity->id)
                         ->generateUrl() . '">' . $value . '</a>';
                 })->onlyOnIndex(),
             TextField::new('name')->hideOnIndex(),
@@ -46,7 +48,7 @@ class LocationCrudController extends AbstractCrudController
                 ->renderAsBadges()
                 ->setRequired(true),
             IntegerField::new('obraCount', '#obj')
-                ->formatValue(fn ($value, $entity) => $entity->getObras()->count())
+                ->formatValue(fn ($value, $entity) => $entity->obraCount)
                 ->onlyOnIndex(),
             CollectionField::new('obras')
                 ->setTemplatePath('admin/field/obras.html.twig')
@@ -60,7 +62,7 @@ class LocationCrudController extends AbstractCrudController
     {
         $rowPrintAction = Action::new('print', false, 'fa:print')
             ->linkToUrl(function ($entity) {
-                return $this->generateUrl('location_print', ['locationId' => $entity->getId()]);
+                return $this->generateUrl('location_print', ['locationId' => $entity->id]);
             });
 
         return $actions
@@ -68,7 +70,6 @@ class LocationCrudController extends AbstractCrudController
             // you can set permissions for built-in actions in the same way
             ->setPermission(Action::EDIT, LocationVoter::EDIT)
             ->setPermission(Action::DELETE, LocationVoter::DELETE)
-            ->remove(Crud::PAGE_INDEX, Action::DETAIL)
             ->update(Crud::PAGE_INDEX, Action::EDIT, function (Action $action) {
                 return $action->setLabel(false)->setIcon('fa:edit');
             })

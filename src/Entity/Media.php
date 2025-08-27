@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Survos\WorkflowBundle\Traits\MarkingInterface;
 use Survos\WorkflowBundle\Traits\MarkingTrait;
 use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: MediaRepository::class)]
 class Media implements \Stringable, MarkingInterface
@@ -30,6 +31,7 @@ class Media implements \Stringable, MarkingInterface
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Groups(['media.read'])]
+    #[Assert\Url(message: "The URL '{{ value }}' is not a valid URL.")]
     public ?string $originalUrl = null; // Original Google Drive URL
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -212,9 +214,8 @@ class Media implements \Stringable, MarkingInterface
      * Get the thumbnail URL (small size)
      */
     #[Groups(['media.read'])]
-    public function getThumbnailUrl(): ?string
-    {
-        return $this->resized['small'] ?? null;
+    public ?string $thumbnailUrl {
+        get => $this->resized['small'] ?? null;
     }
 
     /**

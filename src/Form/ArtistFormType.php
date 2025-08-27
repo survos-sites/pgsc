@@ -33,9 +33,9 @@ class ArtistFormType extends AbstractType
             ->add('email')
             ->add('code')
             ->add('instagram')
-            ->add('socialMedia')
-            ->add('studioAddress')
-            ->add('studioVisitable');
+//            ->add('studioAddress')
+//            ->add('studioVisitable')
+        ;
         $builder->add('submit', SubmitType::class, []);
     }
 

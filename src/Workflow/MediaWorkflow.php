@@ -65,7 +65,7 @@ class MediaWorkflow implements IMediaWorkflow
         } else {
             $resp = $this->sais->dispatchProcess(new ProcessPayload(
                 LoadCommand::SAIS_ROOT,
-                [$media->getOriginalUrl()],
+                [$media->originalUrl],
 
                 mediaCallbackUrl: $this->urlGenerator->generate(
                     'app_media_webhook',
@@ -83,6 +83,7 @@ class MediaWorkflow implements IMediaWorkflow
         // Also store immediate response URLs if available
         if ($resized = $resp[0]['resized'] ?? null) {
             $media->resized = $resized;
+            dump($resized);
         }
 	}
 

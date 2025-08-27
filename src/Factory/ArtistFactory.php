@@ -37,7 +37,7 @@ final class ArtistFactory extends PersistentProxyObjectFactory
         $name = self::faker()->name();
 
         return [
-            'socialMedia' => join("\n", $social),
+//            'socialMedia' => join("\n", $social),
             'studioVisitable' => self::faker()->randomElement(Artist::STUDIO_VISITABLE),
             //            'email' => self::faker()->email(),
             //            'bio' => self::faker()->paragraph(3),

@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\ObjRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\MediaFieldsTrait;
 
 #[ORM\Entity(repositoryClass: ObjRepository::class)]
 class Obj

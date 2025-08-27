@@ -77,7 +77,7 @@ class ObraCrudController extends AbstractCrudController
                     return '<a href="' . $this->adminUrlGenerator
                         ->setController(self::class)
                         ->setAction('detail')
-                        ->setEntityId($entity->getId())
+                        ->setEntityId($entity->id)
                         ->generateUrl() . '">' . $value . '</a>';
                 })->onlyOnIndex(),
             TextField::new('title')->hideOnIndex(),
@@ -126,7 +126,7 @@ class ObraCrudController extends AbstractCrudController
 
         $rowPrintAction = Action::new('print', false, 'fa:print')
             ->linkToUrl(function ($entity) {
-                return $this->generateUrl('obj_show', ['obraId' => $entity->getId()]);
+                return $this->generateUrl('obj_show', ['obraId' => $entity->id]);
             });
 
         $batchPrintAction = Action::new('batchPrint', 'Print')
@@ -138,7 +138,6 @@ class ObraCrudController extends AbstractCrudController
             ->addBatchAction($batchPrintAction)
             ->setPermission(Action::EDIT, ObjVoter::EDIT)
             ->setPermission(Action::DELETE, ObjVoter::DELETE)
-            ->remove(Crud::PAGE_INDEX, Action::DETAIL)
             ->update(Crud::PAGE_INDEX, Action::EDIT, function (Action $action) {
                 return $action->setLabel(false)->setIcon('fa:edit');
             })

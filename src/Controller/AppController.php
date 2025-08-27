@@ -403,11 +403,9 @@ final class AppController extends AbstractController
     public function printLocation(Location $location): Response|array
     {
         // Use the existing location->obras relationship
-        $obras = $location->getObras();
-        
         // Collect all image codes from the obras and load corresponding Media entities
         $allImageCodes = [];
-        foreach ($obras as $obra) {
+        foreach ($location->obras as $obra) {
             $imageCodes = $obra->getImageCodes();
             if (!empty($imageCodes)) {
                 $allImageCodes = array_merge($allImageCodes, $imageCodes);
@@ -429,7 +427,7 @@ final class AppController extends AbstractController
 
         return [
             'location' => $location,
-            'obras' => $obras,
+            'obras' => $location->obras,
             'imagesByCode' => $imagesByCode,
         ];
     }
@@ -439,7 +437,7 @@ final class AppController extends AbstractController
     public function printArtist(Artist $artist): Response|array
     {
         // Use the existing artist->obras relationship
-        $obras = $artist->getObras();
+        $obras = $artist->obras;
         
         // Collect all image codes from the obras and artist for batch loading
         $allImageCodes = [];

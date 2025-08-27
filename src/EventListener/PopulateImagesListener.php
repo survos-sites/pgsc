@@ -44,7 +44,7 @@ final class PopulateImagesListener
         }
 
         // Load audio for Obra entities
-        if ($entity instanceof Obra && $audioCode = $entity->getAudioCode()) {
+        if ($entity instanceof Obra && $audioCode = $entity->audioCode) {
             $audioMedia = $this->imageRepository->findByCode($audioCode);
             $entity->audio = $audioMedia;
         }
