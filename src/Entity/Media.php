@@ -213,7 +213,7 @@ class Media implements \Stringable, MarkingInterface
     /**
      * Get the thumbnail URL (small size)
      */
-    #[Groups(['media.read'])]
+    #[Groups(['media.read', 'obra.read'])]
     public ?string $thumbnailUrl {
         get => $this->resized['small'] ?? null;
     }

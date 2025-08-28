@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Obra;
+use App\Repository\ObraRepository;
 use App\Security\Voter\ObjVoter;
 use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminAction;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
@@ -25,7 +26,8 @@ class ObraCrudController extends BaseCrudController
 {
     public function __construct(
         protected AdminUrlGenerator $adminUrlGenerator,
-        protected MediaRepository $imageRepository
+        protected MediaRepository $imageRepository,
+        private ObraRepository $obraRepository,
     ) {
     }
 
@@ -148,8 +150,10 @@ class ObraCrudController extends BaseCrudController
     public function batchPrint(BatchActionDto $batchActionDto, AdminContext $context)
     {
         $ids = $batchActionDto->getEntityIds();
-
+        $obras = $this->obraRepository->findBy(['id' => $ids]);
         dd($ids);
+        return $this->render('@EasyCorp/easyadmin-batch-print.html.twig', []);
+
 
         return $this->redirectToRoute('admin_obra_index');
     }

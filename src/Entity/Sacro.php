@@ -11,8 +11,6 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Survos\BabelBundle\Attribute\BabelStorage;
 use Survos\BabelBundle\Attribute\Translatable;
-use Survos\BabelBundle\Contract\TranslatableResolvedInterface;
-use Survos\BabelBundle\Entity\Traits\TranslatableHooksTrait;
 use Survos\WorkflowBundle\Traits\MarkingInterface;
 use Survos\WorkflowBundle\Traits\MarkingTrait;
 use Symfony\Component\Serializer\Attribute\Groups;
@@ -28,9 +26,8 @@ use Symfony\Component\Serializer\Attribute\SerializedName;
     ]
 )]
 #[BabelStorage]
-class Sacro implements \Stringable, TranslatableResolvedInterface, MarkingInterface
+class Sacro implements \Stringable, MarkingInterface
 {
-    use TranslatableHooksTrait;
     use MarkingTrait;
 
     public function __construct(

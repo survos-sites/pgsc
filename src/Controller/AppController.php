@@ -344,7 +344,7 @@ final class AppController extends AbstractController
         $imageCodes = $obra->getImageCodes();
         if (!empty($imageCodes)) {
             $allMediaCodes = array_merge($allMediaCodes, $imageCodes);
-        }
+        }https://pgsc.wip/es/obj/fe1https://pgsc.wip/es/obj/fe1https://pgsc.wip/es/obj/fe1https://pgsc.wip/es/obj/fe1
         
         // Add audio code if present
         if ($audioCode = $obra->audioCode) {
@@ -437,7 +437,7 @@ final class AppController extends AbstractController
     public function printArtist(Artist $artist): Response|array
     {
         // Use the existing artist->obras relationship
-        $obras = $artist->obras;
+        $obras = $artist->obras;https://pgsc.wip/es/obj/fe1
         
         // Collect all image codes from the obras and artist for batch loading
         $allImageCodes = [];
