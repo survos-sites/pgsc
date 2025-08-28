@@ -38,9 +38,6 @@ class Obra implements \Stringable, RouteParametersInterface
     }
     public string $id { get => $this->code; }
 
-    #[Groups(['obra.read'])]
-    public ?Media $image { get => $this->images->first() ? $this->images->first() : null; }
-
 
 // AFTER — reference code, and name the FK columns
     #[ORM\ManyToOne(inversedBy: 'obras')]

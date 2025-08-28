@@ -108,8 +108,14 @@ trait MediaFieldsTrait
         return $this;
     }
 
+    #[Groups(['media.read'])]
     public ?string $thumbnailUrl {
         get => $this->images->first() ? $this->images->first()->thumbnailUrl : null;
     }
+
+    #[Groups(['media.read'])]
+    public ?Media $image { get => $this->images->first() ? $this->images->first() : null; }
+
+
 
 }
