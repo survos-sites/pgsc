@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <title>Tombstone 6x4</title>
+    <style>
+        @page { size: 17in 11in; margin: 0.25in; } /* Tabloid landscape */
+        html, body { height: 100%; }
+        html, body, * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+            font-feature-settings: "liga" 1, "kern" 1;
+            font-kerning: normal;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(4, 1fr);
+            gap: 0.25in;
+            padding: 0.25in;
+        }
+        :root {
+            --serif: Georgia, "Times New Roman", Times, serif;
+            --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            --muted: #666;
+            --ink: #111;
+            --border: #ccc;
+        }
+        .card-64 {
+            width: 6in;
+            height: 2.8in;
+            max-width: 6in;
+            max-height: 2.8in;
+            padding: 0.15in;
+            color: var(--ink);
+            display: grid;
+            grid-template-rows: auto auto auto auto;
+            gap: 4pt;
+            overflow: hidden;
+            border: 1pt solid #000; /* cut guide */
+            background: white;
+        }
+        .header-section {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            grid-template-rows: auto auto auto;
+            gap: 2pt;
+            align-items: start;
+        }
+        .title {
+            font-family: var(--serif);
+            font-weight: 600;
+            font-size: 18pt;
+            line-height: 1.1;
+            hyphens: auto;
+            margin: 0;
+            font-style: italic;
+            grid-column: 1 / 2;
+            grid-row: 1;
+        }
+        .price {
+            font-family: var(--serif);
+            font-size: 16pt;
+            font-weight: 600;
+            color: var(--ink);
+            margin: 0;
+            grid-column: 2 / 3;
+            grid-row: 1;
+            text-align: right;
+        }
+        .artist-info {
+            font-family: var(--sans);
+            font-size: 11pt;
+            line-height: 1.2;
+            margin: 0;
+            grid-column: 1 / -1;
+            grid-row: 2;
+        }
+        .artist-name {
+            font-weight: 600;
+        }
+        .meta {
+            font-family: var(--sans);
+            font-size: 9pt;
+            line-height: 1.3;
+            display: flex;
+            flex-direction: column;
+            gap: 1pt;
+            grid-column: 1 / -1;
+            grid-row: 3;
+            margin-top: 2pt;
+        }
+        .meta-row {
+            display: flex;
+            align-items: baseline;
+            break-inside: avoid;
+        }
+        .meta-icon {
+            margin-right: 3pt;
+            font-size: 9pt;
+        }
+        .meta-value {
+            flex: 1;
+        }
+        .content-section {
+            display: none;
+        }
+        .foot {
+            margin-top: 2pt;
+            padding-top: 4pt;
+            border-top: 1pt solid var(--border);
+            font-family: var(--sans);
+            font-size: 8pt;
+            display: flex;
+            gap: 6pt;
+            align-items: center;
+            justify-content: center;
+        }
+        .footer-content {
+            display: flex;
+            align-items: center;
+            gap: 8pt;
+            flex-wrap: nowrap;
+            justify-content: space-between;
+            width: 100%;
+        }
+        .exhibition-name {
+            text-align: center;
+            font-family: var(--sans);
+            font-size: 8pt;
+            color: var(--muted);
+            margin-top: 2pt;
+            padding-top: 2pt;
+            border-top: 0.5pt solid var(--border);
+            width: 100%;
+        }
+        .qr-section {
+            display: flex;
+            align-items: center;
+            gap: 4pt;
+        }
+        .headphone-icon {
+            font-size: 10pt;
+            color: var(--muted);
+        }
+        .artwork-image {
+            width: 42pt;
+            height: 42pt;
+            object-fit: cover;
+            border-radius: 3pt;
+            border: 1pt solid var(--border);
+            background: #f8f8f8;
+        }
+        .artwork-placeholder {
+            width: 42pt;
+            height: 42pt;
+            background: #f8f8f8;
+            border: 1pt dashed var(--border);
+            border-radius: 3pt;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--muted);
+            font-size: 6pt;
+            text-align: center;
+        }
+        .code {
+            letter-spacing: 0.2pt;
+            font-variant-numeric: tabular-nums;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 8pt;
+        }
+        .muted { color: var(--muted); }
+        @media print {
+            body { margin: 0; padding: 0.25in; }
+            .card-64 { border: 1pt solid #000; break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+{% for obra in obras %}
+    <main class="card-64">
+        <section class="header-section">
+            {% if obra.title %}
+                <h1 class="title">{{ obra.title }}</h1>
+            {% endif %}
+
+            {% if obra.price %}
+                <div class="price">${{ obra.price|number_format }}</div>
+            {% endif %}
+
+            <div class="artist-info">
+                {% if obra.artist and obra.artist.name %}
+                    <span class="artist-name">{{ obra.artist.name }}</span>
+                {% else %}
+                    <span class="artist-name">Artista desconocido</span>
+                {% endif %}
+                {% if obra.year %} · {{ obra.year }}{% endif %}
+            </div>
+
+            <div class="meta">
+                {% if obra.materials %}
+                    <div class="meta-row">
+                        <span class="meta-icon">🎨</span>
+                        <span class="meta-value">{{ obra.materials }}</span>
+                    </div>
+                {% endif %}
+
+                {% if obra.size %}
+                    <div class="meta-row">
+                        <span class="meta-icon">📏</span>
+                        <span class="meta-value">{{ obra.size }}</span>
+                    </div>
+                {% endif %}
+            </div>
+        </section>
+
+        <footer class="foot">
+            <div class="footer-content">
+                <img src="{{ asset('/chijal-landscape.jpg') }}" alt="Chijal" style="height:36pt; width:auto;" />
+
+                <div class="qr-section">
+                    <span class="headphone-icon">🎧</span>
+                    {% set qrUrl = voxitourEndpoint ~ '/?obraId=' ~ obra.code ~ '#tab-obras' %}
+                    <img src="{{ qr_code_url(qrUrl) }}" alt="QR Code" style="width:42pt;height:42pt;border:1pt solid #000;background:white;" />
+                </div>
+
+                {% set primaryImage = null %}
+                {% if obra.imageCodes and obra.imageCodes|length > 0 %}
+                    {% set primaryImageCode = obra.imageCodes[0] %}
+                    {% if imagesByCode[primaryImageCode] is defined %}
+                        {% set primaryImage = imagesByCode[primaryImageCode] %}
+                    {% endif %}
+                {% endif %}
+
+                {% if primaryImage %}
+                    <img src="{{ primaryImage.resized.medium ?? primaryImage.originalUrl }}"
+                         alt="{{ obra.title }}"
+                         class="artwork-image" />
+                {% else %}
+                    <div class="artwork-placeholder">
+                        Sin imagen
+                    </div>
+                {% endif %}
+            </div>
+        </footer>
+
+        <div class="exhibition-name">
+            Senderos del Arte • San Cristóbal de las Casas, 2025
+        </div>
+    </main>
+{% endfor %}
+</body>
+</html>
