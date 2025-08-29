@@ -326,6 +326,7 @@ class LoadCommand extends Command
         if (count($errors) > 0) {
             dd($errors);
         }
+        $this->em->flush(); // hack, not tracking duplidates right
         return $media;
     }
 
