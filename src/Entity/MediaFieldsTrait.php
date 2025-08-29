@@ -114,8 +114,21 @@ trait MediaFieldsTrait
     }
 
     #[Groups(['media.read'])]
-    public ?Media $image { get => $this->images->first() ? $this->images->first() : null; }
+    public ?Media $image { get => $this->firstByType('image'); }
+    #[Groups(['media.read'])]
+    // populated in PopulateImagesListener
+    public ?Media $video; #  { get => $this->firstByType('video'); }
+    public ?Media $audio; #  { get => $this->firstByType('audio'); }
+    #[Groups(['media.read'])]
+    public ?string $audioUrl {
+        get => $this->audio?->resized ? $this->audio->resized['large'] : null;
+    }
 
+    private function firstByType(string $type): ?Media
+    {
+        $image =  $this->images->filter(fn($m) => $m->type === $type)->first();
+        return $image ?: null;
+    }
 
 
 }

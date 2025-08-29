@@ -98,17 +98,7 @@ class LoadCommand extends Command
                 $artist->youtubeUrl = $row['youtubeurl'];
             }
 
-            if (!empty($row['audio_url'])) {
-                $audioUrl = $row['audio_url'];
-                $audioCode = SaisClientService::calculateCode($audioUrl, self::SAIS_ROOT);
-                $artist->audioCode = $audioCode;
-                $this->upsertMedia($audioCode, original: $audioUrl, type: 'audio');
-            } elseif (!empty($row['audioUrl'])) {
-                $audioUrl = $row['audioUrl'];
-                $audioCode = SaisClientService::calculateCode($audioUrl, self::SAIS_ROOT);
-                $artist->audioCode = $audioCode;
-                $this->upsertMedia($audioCode, original: $audioUrl, type: 'audio');
-            }
+
 
             $artistsByCode[$code] = $artist;
         }
@@ -186,12 +176,7 @@ class LoadCommand extends Command
                 }
             }
 
-            if (!empty($row['audio_url'])) {
-                $a = $row['audio_url'];
-                $aCode = SaisClientService::calculateCode($a, self::SAIS_ROOT);
-                $obra->audioCode = $aCode;
-                $this->upsertMedia($aCode, original: $a, type: 'audio');
-            } elseif (!empty($row['audioUrl'])) {
+            if (!empty($row['audioUrl'])) {
                 $a = $row['audioUrl'];
                 $aCode = SaisClientService::calculateCode($a, self::SAIS_ROOT);
                 $obra->audioCode = $aCode;
@@ -338,7 +323,6 @@ class LoadCommand extends Command
         $media->type = $type;
         $media->originalUrl = $original;
         $errors = $this->validator->validate($media);
-        dump($original);
         if (count($errors) > 0) {
             dd($errors);
         }
