@@ -32,7 +32,7 @@ class Media implements \Stringable, MarkingInterface
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Groups(['media.read'])]
     #[Assert\Url(message: "The URL '{{ value }}' is not a valid URL.")]
-    public ?string $originalUrl = null; // Original Google Drive URL
+    public ?string $originalUrl = null; // Original URL, including Google Drive URL
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['media.read'])]
@@ -45,6 +45,18 @@ class Media implements \Stringable, MarkingInterface
     #[ORM\Column(nullable: true)]
     #[Groups(['media.read'])]
     private ?int $originalWidth = null;
+
+    #[ORM\Column(nullable: true)]
+    #[Groups(['media.read'])]
+    public ?string $flickrId = null;
+
+    #[ORM\Column(nullable: true)]
+    #[Groups(['media.read'])]
+    public ?string $title = null;
+
+    #[ORM\Column(nullable: true)]
+    #[Groups(['media.read'])]
+    public ?string $description = null;
 
     #[ORM\Column(nullable: true)]
     #[Groups(['media.read'])]

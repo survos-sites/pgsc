@@ -39,7 +39,6 @@ class LoadCommand extends Command
         private readonly SaisClientService $sais,
         private readonly LoggerInterface $logger,
         private readonly ValidatorInterface $validator,
-        private readonly TranslatorInterface $translator,
     ) { parent::__construct(); }
 
     public function __invoke(
@@ -76,9 +75,9 @@ class LoadCommand extends Command
             $artist->name = $row['name'] ?? $email;
             $artist->email = $email;
             $artist->phone = $row['whatsapp'] ?? null;
-            $artist->birthYear = $this->parseBirthYear($row['nacimiento'] ?? ($row['birthyear'] ?? null));
+            $artist->birthYear = $this->parseBirthYear($row['birthyear'] ?? ($row['birthyear'] ?? null));
 
-//            $artist->driveUrl = $row['driveUrl'];
+            $artist->driveUrl = $row['driveUrl']??null;
 
             if ($row['tagline']??null) {
                 $artist->slogan = $row['tagline'];
@@ -250,7 +249,7 @@ class LoadCommand extends Command
     {
         $out = [];
         foreach ($row as $k => $v) {
-            $k = $this->normKey($k);
+//            $k = $this->normKey($k);
             if ($v === null) { $out[$k] = null; continue; }
             if (is_string($v)) {
                 $v = trim(preg_replace('/\s+/', ' ', $v));
@@ -346,6 +345,7 @@ class LoadCommand extends Command
         return $media;
     }
 
+    // @todo: move this into a service so that FlickrListener can access it.
     private function addToMedia(?string $driveUrl, Artist|Obra $entity)
     {
         foreach (explode(',', $driveUrl) as $url) {

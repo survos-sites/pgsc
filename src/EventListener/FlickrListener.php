@@ -2,10 +2,13 @@
 
 namespace App\EventListener;
 
+use App\Command\LoadCommand;
 use App\Entity\Obra;
 use App\Entity\Media; // Adjust to your Media entity
+use App\Repository\MediaRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Survos\FlickrBundle\Event\FlickrPhotoEvent;
+use Survos\SaisBundle\Service\SaisClientService;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Psr\Log\LoggerInterface;
 
@@ -13,20 +16,19 @@ class FlickrListener
 {
     public function __construct(
         private EntityManagerInterface $entityManager,
-        private LoggerInterface $logger
+        private LoggerInterface $logger,
+        private MediaRepository $mediaRepository,
     ) {
     }
 
     #[AsEventListener()]
     public function __invoke(FlickrPhotoEvent $event): void
     {
-        // Only process photos that have obra codes
-        dd($event, $event->getPhotoDescription(), $event->processingContext);
-        if (!$event->hasObraCode()) {
-            return;
+
+        if (preg_match('/^\$(.*)\b/', $event->getPhotoDescription(), $matches)) {
+            $obraCode = $matches[1];
         }
 
-        $obraCode = $event->getObraCode();
         $photoData = $event->getPhotoData();
 
         $this->logger->info('Processing Flickr photo for Obra', [
@@ -35,18 +37,18 @@ class FlickrListener
             'photo_title' => $event->getPhotoTitle()
         ]);
 
-        try {
-            $obra = $this->findOrCreateObra($obraCode);
 
-            if (!$obra) {
+            if (!$obra = $this->entityManager->find(Obra::class, $obraCode)) {
                 $this->logger->warning('Obra not found', ['code' => $obraCode]);
                 return;
             }
+            $obra = $this->findOrCreateObra($obraCode);
 
             $this->attachPhotoToObra($obra, $photoData, $event);
 
             $this->entityManager->flush();
 
+        try {
         } catch (\Exception $e) {
             $this->logger->error('Error processing Flickr photo for Obra', [
                 'obra_code' => $obraCode,
@@ -65,29 +67,33 @@ class FlickrListener
 
     private function attachPhotoToObra(Obra $obra, array $photoData, FlickrPhotoEvent $event): void
     {
-        // Get the first media or create new one
-        $media = $obra->getMedias()->first();
-
-        if (!$media) {
-            $media = new Media();
-            $media->setObra($obra);
-            $media->setType('flickr_photo');
-            $obra->addMedia($media);
+        $url = $photoData['url_o'];
+        $imgCode = SaisClientService::calculateCode($url, LoadCommand::SAIS_ROOT);
+        $obra->addImageCode($imgCode);
+        // $media = $this->upsertMedia($imgCode, original: $url, type: 'image');
+        if (!$this->mediaRepository->find($imgCode)) {
+            $media = new Media($imgCode);
             $this->entityManager->persist($media);
+            $media->originalUrl = $url;
         }
 
+//        dd($media->resized, $photoData);
         // Update media with Flickr data
-        $media->setTitle($event->getPhotoTitle());
-        $media->setDescription($event->getPhotoDescription());
-        $media->setFlickrId($event->getPhotoId());
+
+        $media->title = $event->getPhotoTitle();
+        $media->description = $event->getPhotoDescription();
+        $media->flickrId = $event->getPhotoId();
 
         // Set main Flickr URL if available
+        $directUrls = $event->getDirectUrls();
+        return;
+        dd($directUrls, $media);
+
         if (isset($photoData['urls']['url'][0]['_content'])) {
             $media->setFlickrUrl($photoData['urls']['url'][0]['_content']);
         }
 
         // Add direct URLs for different sizes if available (info_level = 'full')
-        $directUrls = $event->getDirectUrls();
         if (!empty($directUrls)) {
             $media->setResized($directUrls);
         }

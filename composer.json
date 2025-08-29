@@ -158,6 +158,7 @@
         "symfony/stopwatch": "^7.3.0",
         "symfony/web-profiler-bundle": "^7.3.2",
         "zenstruck/browser": "^1.9.1",
+        "zenstruck/console-extra": "^1.4",
         "zenstruck/console-test": "^1.7",
         "zenstruck/foundry": "^2.6.3"
     },

@@ -18,7 +18,7 @@ interface IMediaWorkflow
 	#[Place]
 	public const PLACE_RESIZED = 'resized';
 
-	#[Transition(from: [self::PLACE_NEW], to: self::PLACE_DISPATCHED)]
+	#[Transition(from: [self::PLACE_NEW, self::PLACE_DISPATCHED], to: self::PLACE_DISPATCHED)]
 	public const TRANSITION_DISPATCH = 'dispatch';
 
 	#[Transition(from: [self::PLACE_DISPATCHED], to: self::PLACE_RESIZED,

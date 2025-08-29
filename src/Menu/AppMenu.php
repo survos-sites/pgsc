@@ -82,6 +82,18 @@ final class AppMenu implements KnpMenuHelperInterface
         foreach (['by_location', 'by_artist'] as $grouping) {
             $this->add($nestedMenu, 'app_homepage', label: $grouping);
         }
+        $this->add($menu, 'app_labels');
+        $subMenu = $this->addSubmenu($menu, 'commands');
+        $this->add($subMenu, 'survos_commands');
+        $this->add($subMenu, 'survos_command',
+            ['commandName' => 'app:load'],
+            'app:load'
+        );
+        $this->add($subMenu, 'survos_command',
+            ['commandName' => 'survos:flickr:import'],
+            'survos:flickr:import'
+        );
+
         $this->add($menu, 'admin', translationDomain: false, label: 'EZ');
         $this->appAuthMenu($event);
     }

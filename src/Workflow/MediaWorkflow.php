@@ -49,7 +49,7 @@ class MediaWorkflow implements IMediaWorkflow
             // Handle audio files the same way as images - check for existing processed files
             $resp = $this->sais->dispatchProcess(new ProcessPayload(
                 LoadCommand::SAIS_ROOT,
-                [$media->getOriginalUrl()],
+                [$media->originalUrl],
                 mediaCallbackUrl: $this->urlGenerator->generate(
                     'sais_audio_callback',
                     ['code' => $code, '_locale' => 'es'],

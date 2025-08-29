@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <title>Tombstone 6x4</title>
     <style>
-        @page { size: 6in 4in; margin: 0; }
+        @page { size: 17in 11in; margin: 0.25in; } /* Tabloid landscape */
         html, body { height: 100%; }
         html, body, * { box-sizing: border-box; }
         body {
@@ -13,6 +13,11 @@
             print-color-adjust: exact;
             font-feature-settings: "liga" 1, "kern" 1;
             font-kerning: normal;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 0.25in;
+            padding: 0.25in;
         }
         :root {
             --serif: Georgia, "Times New Roman", Times, serif;
@@ -22,15 +27,14 @@
             --border: #ccc;
         }
         .card-64 {
-            width: 6in;
-            height: 4in;
+            width: 100%;
+            height: 100%;
             padding: 0.2in;
             color: var(--ink);
             display: grid;
             grid-template-rows: auto 1fr auto;
             gap: 6pt;
             overflow: hidden;
-            page-break-after: always;
             border: 1pt solid #000; /* cut guide */
             background: white;
         }
@@ -96,32 +100,12 @@
         .meta-value {
             flex: 1;
         }
-        .image-section {
+        .content-section {
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 4pt 0;
-        }
-        .obra-image {
-            width: 120pt;
-            height: 90pt;
-            object-fit: cover;
-            border-radius: 4pt;
-            background: #f8f8f8;
-            border: 1pt solid var(--border);
-        }
-        .image-placeholder {
-            width: 120pt;
-            height: 90pt;
-            background: #f8f8f8;
-            border: 2pt dashed var(--border);
-            border-radius: 4pt;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--muted);
-            font-size: 10pt;
-            font-family: var(--sans);
+            padding: 8pt 0;
+            flex: 1;
         }
         .foot {
             margin-top: 4pt;
@@ -137,7 +121,10 @@
         .footer-content {
             display: flex;
             align-items: center;
-            gap: 10pt;
+            gap: 12pt;
+            flex-wrap: nowrap;
+            justify-content: space-between;
+            width: 100%;
         }
         .qr-section {
             display: flex;
@@ -148,6 +135,27 @@
             font-size: 12pt;
             color: var(--muted);
         }
+        .artwork-image {
+            width: 54pt;
+            height: 54pt;
+            object-fit: cover;
+            border-radius: 4pt;
+            border: 1pt solid var(--border);
+            background: #f8f8f8;
+        }
+        .artwork-placeholder {
+            width: 54pt;
+            height: 54pt;
+            background: #f8f8f8;
+            border: 1pt dashed var(--border);
+            border-radius: 4pt;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--muted);
+            font-size: 7pt;
+            text-align: center;
+        }
         .code {
             letter-spacing: 0.2pt;
             font-variant-numeric: tabular-nums;
@@ -156,80 +164,86 @@
         }
         .muted { color: var(--muted); }
         @media print {
-            body { margin: 0; }
-            .card-64 { border: none; }
+            body { margin: 0; padding: 0.25in; }
+            .card-64 { border: 1pt solid #000; break-inside: avoid; }
         }
     </style>
 </head>
 <body>
-<main class="card-64">
-    <section class="header-section">
-        {% if obj.title %}
-            <h1 class="title">{{ obj.title }}</h1>
-        {% endif %}
-
-        {% if obj.price %}
-            <div class="price">${{ obj.price|number_format }}</div>
-        {% endif %}
-
-        <div class="artist-info">
-            {% if obj.artist and obj.artist.name %}
-                <span class="artist-name">{{ obj.artist.name }}</span>
-            {% else %}
-                <span class="artist-name">Artista desconocido</span>
-            {% endif %}
-            {% if obj.year %} · {{ obj.year }}{% endif %}
-        </div>
-
-        <div class="meta">
-            {% if obj.materials %}
-                <div class="meta-row">
-                    <span class="meta-icon">🎨</span>
-                    <span class="meta-value">{{ obj.materials }}</span>
-                </div>
+{% for obra in obras %}
+    <main class="card-64">
+        <section class="header-section">
+            {% if obra.title %}
+                <h1 class="title">{{ obra.title }}</h1>
             {% endif %}
 
-            {% if obj.size %}
-                <div class="meta-row">
-                    <span class="meta-icon">📏</span>
-                    <span class="meta-value">{{ obj.size }}</span>
-                </div>
+            {% if obra.price %}
+                <div class="price">${{ obra.price|number_format }}</div>
             {% endif %}
-        </div>
-    </section>
 
-    <section class="image-section">
-        {% set primaryImage = null %}
-        {% if obj.imageCodes and obj.imageCodes|length > 0 %}
-            {% set primaryImageCode = obj.imageCodes[0] %}
-            {% if imagesByCode[primaryImageCode] is defined %}
-                {% set primaryImage = imagesByCode[primaryImageCode] %}
-            {% endif %}
-        {% endif %}
-
-        {% if primaryImage %}
-            <img src="{{ primaryImage.resized.medium ?? primaryImage.originalUrl }}"
-                 alt="{{ obj.title }}"
-                 class="obra-image" />
-        {% else %}
-            <div class="image-placeholder">
-                Sin imagen disponible
+            <div class="artist-info">
+                {% if obra.artist and obra.artist.name %}
+                    <span class="artist-name">{{ obra.artist.name }}</span>
+                {% else %}
+                    <span class="artist-name">Artista desconocido</span>
+                {% endif %}
+                {% if obra.year %} · {{ obra.year }}{% endif %}
             </div>
-        {% endif %}
-    </section>
 
-    <footer class="foot">
-        <div class="footer-content">
-            <img src="{{ asset('/chijal-landscape.jpg') }}" alt="Chijal" style="height:54pt; width:auto;" />
-            <div class="muted">Ruta Chijal</div>
-            <div class="muted">San Cristóbal de las Casas, 2025</div>
-            <div class="qr-section">
-                <span class="headphone-icon">🎧</span>
-                {% set qrUrl = voxitourEndpoint ~ '/?obraId=' ~ obj.code ~ '#tab-obras' %}
-                <img src="{{ qr_code_url(qrUrl) }}" alt="QR Code" style="width:54pt;height:54pt;border:1pt solid #000;background:white;" />
+            <div class="meta">
+                {% if obra.materials %}
+                    <div class="meta-row">
+                        <span class="meta-icon">🎨</span>
+                        <span class="meta-value">{{ obra.materials }}</span>
+                    </div>
+                {% endif %}
+
+                {% if obra.size %}
+                    <div class="meta-row">
+                        <span class="meta-icon">📏</span>
+                        <span class="meta-value">{{ obra.size }}</span>
+                    </div>
+                {% endif %}
             </div>
-        </div>
-    </footer>
-</main>
+        </section>
+
+        <section class="content-section">
+            <!-- Empty space in middle, like your reference -->
+        </section>
+
+        <footer class="foot">
+            <div class="footer-content">
+                {% set primaryImage = null %}
+                {% if obra.imageCodes and obra.imageCodes|length > 0 %}
+                    {% set primaryImageCode = obra.imageCodes[0] %}
+                    {% if imagesByCode[primaryImageCode] is defined %}
+                        {% set primaryImage = imagesByCode[primaryImageCode] %}
+                    {% endif %}
+                {% endif %}
+
+                <div style="display: flex; align-items: center; gap: 8pt;">
+                    <img src="{{ asset('/chijal-landscape.jpg') }}" alt="Chijal" style="height:48pt; width:auto;" />
+                    <div class="muted" style="font-size: 9pt;">Ruta Chijal</div>
+                </div>
+
+                {% if primaryImage %}
+                    <img src="{{ primaryImage.resized.medium ?? primaryImage.originalUrl }}"
+                         alt="{{ obra.title }}"
+                         class="artwork-image" />
+                {% else %}
+                    <div class="artwork-placeholder">
+                        Sin imagen
+                    </div>
+                {% endif %}
+
+                <div class="qr-section">
+                    <span class="headphone-icon">🎧</span>
+                    {% set qrUrl = voxitourEndpoint ~ '/?obraId=' ~ obra.code ~ '#tab-obras' %}
+                    <img src="{{ qr_code_url(qrUrl) }}" alt="QR Code" style="width:54pt;height:54pt;border:1pt solid #000;background:white;" />
+                </div>
+            </div>
+        </footer>
+    </main>
+{% endfor %}
 </body>
 </html>
