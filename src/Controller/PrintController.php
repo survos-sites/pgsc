@@ -18,8 +18,9 @@ final class PrintController extends AbstractController
     #[Route('/labels', name: 'app_labels')]
     public function index(): Response
     {
+        $obras = $this->obraRepository->findAll();
         return $this->render('print/labels.html.twig', [
-            'obras' => $this->obraRepository->findBy(['year' => date('Y')]),
+            'obras' => $this->obraRepository->findAll(), // findBy(['year' => date('Y')]),
         ]);
     }
 }
