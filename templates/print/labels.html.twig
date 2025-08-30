@@ -217,7 +217,7 @@
 
         <footer class="foot">
             <div class="footer-content">
-                <img src="{{ asset('/chijal-landscape.jpg') }}" alt="Chijal" style="height:36pt; width:auto;" />
+                <img src="{{ asset('/chijal-logo.jpg') }}" alt="Chijal" style="height:140pt; width:auto;" />
 
                 <div class="qr-section">
                     <span class="headphone-icon">🎧</span>
@@ -225,16 +225,16 @@
                     <img src="{{ qr_code_url(qrUrl) }}" alt="QR Code" style="width:42pt;height:42pt;border:1pt solid #000;background:white;" />
                 </div>
 
-                {% set primaryImage = null %}
-                {% if obra.imageCodes and obra.imageCodes|length > 0 %}
-                    {% set primaryImageCode = obra.imageCodes[0] %}
-                    {% if imagesByCode[primaryImageCode] is defined %}
-                        {% set primaryImage = imagesByCode[primaryImageCode] %}
-                    {% endif %}
-                {% endif %}
+                {% set primaryImage = obra.image %}
+{#                {% if obra.imageCodes and obra.imageCodes|length > 0 %}#}
+{#                    {% set primaryImageCode = obra.imageCodes[0] %}#}
+{#                    {% if imagesByCode[primaryImageCode] is defined %}#}
+{#                        {% set primaryImage = imagesByCode[primaryImageCode] %}#}
+{#                    {% endif %}#}
+{#                {% endif %}#}
 
-                {% if primaryImage %}
-                    <img src="{{ primaryImage.resized.medium ?? primaryImage.originalUrl }}"
+                {% if primaryImage and primaryImage.resized %}
+                    <img src="{{ primaryImage.resized.large }}"
                          alt="{{ obra.title }}"
                          class="artwork-image" />
                 {% else %}
