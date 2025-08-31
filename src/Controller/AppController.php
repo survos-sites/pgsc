@@ -289,7 +289,41 @@ final class AppController extends AbstractController
     public function landing(): Response|array
     {
         return [
+            'myMap' => $this->getMap(),
             'url' => 'https://vt.survos.com/es/chijal'
+        ];
+    }
+
+    private function getMap(): Map
+    {
+        $myMap = (new Map());
+        $myMap
+            // Explicitly set the center and zoom
+//                ->center($point)
+            ->zoom(16)
+            // Or automatically fit the bounds to the markers
+            ->fitBoundsToMarkers()
+
+        ;
+        foreach ($this->locationRepository->findAll() as $location) {
+            if ($location->lat) {
+                $point = new Point($location->lat, $location->lng);
+                $myMap->addMarker(new Marker(
+                    position: $point,
+                    title: $location->name,
+                ));
+            }
+        }
+        return $myMap;
+    }
+
+    #[Route('/map', name: 'app_map')]
+    #[Template('map.html.twig')]
+    public function map(): Response|array
+    {
+        return [
+            'myMap' => $this->map(),
+            'locations' => $this->locationRepository->findAll(),
         ];
     }
 

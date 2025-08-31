@@ -31,6 +31,11 @@ trait MediaFieldsTrait
     #[Groups(['media.read','artist.read','obra.read'])]
     public ?string $audioCode = null;
 
+    #[Groups(['media.read','artist.read','obra.read'])]
+    public ?string $youtubeId {
+        get => $this->youtubeUrl ? pathinfo($this->youtubeUrl, PATHINFO_BASENAME) : null;
+    }
+
     /** Array of SAIS media codes for images */
     #[ORM\Column(type: Types::JSON, nullable: true)]
     #[Groups(['media.read','artist.read','obra.read'])]
@@ -129,6 +134,7 @@ trait MediaFieldsTrait
         $image =  $this->images->filter(fn($m) => $m->type === $type)->first();
         return $image ?: null;
     }
+
 
 
 }

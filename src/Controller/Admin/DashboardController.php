@@ -140,6 +140,8 @@ class DashboardController extends AbstractDashboardController
             ->setBadge($this->locationRepository->count())
         ;
 
+        yield MenuItem::linkToRoute('map', 'tabler:map', 'app_map');
+
         yield MenuItem::linkToCrud('objects', 'ri:image-line', Obra::class)
             ->setBadge($this->obraRepository->count())
         ;
