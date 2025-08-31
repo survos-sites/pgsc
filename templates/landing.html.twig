@@ -29,6 +29,8 @@
 {% endblock %}
 {% block body %}
     <section id="landing" class="container-xl py-5">
+
+
         <div class="row justify-content-between align-items-start g-5">
             <!-- Copy / intro -->
             <div class="col-lg-6 order-2 order-lg-1">
@@ -36,6 +38,11 @@
                 <p class="lead text-secondary">
                     Una experiencia que conecta <strong>artistas</strong>, <strong>lugares</strong> y <strong>visitantes</strong> en San Cristóbal de las Casas a través del arte contemporáneo y la iconografía textil.
                 </p>
+
+                <div class="ratio ratio-21x9 rounded border">
+                    {{ ux_map(myMap, { style: 'height: 300px; width: 800px' }) }}
+                </div>
+
 
                 <div class="card mt-4">
                     <div class="card-body">
