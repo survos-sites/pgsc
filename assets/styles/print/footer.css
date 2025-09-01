@@ -1,0 +1,145 @@
+/* assets/styles/print/footer.css */
+/* Dedicated styles for print footer component */
+
+.chijal-footer {
+    margin-top: auto;
+    padding: 12pt 6pt 6pt 6pt; /* More top padding to drop it down */
+    font-family: var(--sans);
+    font-size: 9pt;
+    flex-shrink: 0;
+}
+
+.footer-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8pt;
+    width: 100%;
+    height: 32pt; /* Taller to accommodate elements without lines */
+    margin-bottom: 4pt; /* Space before contact line */
+}
+
+.footer-left {
+    display: flex;
+    align-items: center;
+}
+
+.footer-right {
+    display: flex;
+    align-items: center;
+    gap: 8pt;
+}
+
+/* Logo - 20% smaller than before */
+.chijal-logo {
+    height: 38pt; /* Reduced from 48pt (20% less) */
+    width: auto;
+    object-fit: contain;
+}
+
+/* QR and audio tour elements - match logo size */
+.qr-section {
+    display: flex;
+    align-items: center;
+    gap: 4pt;
+    height: 100%;
+}
+
+.qr-code {
+    width: 48pt;  /* Match logo height (48pt) */
+    height: 48pt; /* Match logo height (48pt) */
+    background: var(--background);
+    border-radius: 3pt;
+}
+
+.headphone-icon {
+    font-size: 12pt;
+    color: var(--muted);
+}
+
+/* Artwork images - 20% smaller */
+.artwork-image {
+    height: 48pt;     /* Reduced from 60pt (20% less) */
+    max-width: 72pt;  /* Reduced proportionally */
+    object-fit: cover;
+    border-radius: 4pt;
+    border: 1pt solid var(--border);
+    background: #f8f8f8;
+}
+
+.artwork-placeholder {
+    height: 48pt;     /* Reduced from 60pt (20% less) */
+    width: 48pt;      /* Reduced from 60pt (20% less) */
+    background: #f8f8f8;
+    border: 1pt dashed var(--border);
+    border-radius: 4pt;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    font-size: 8pt;
+    text-align: center;
+    gap: 2pt;
+}
+
+.placeholder-icon {
+    font-size: 16pt;
+}
+
+/* CONSOLIDATED CONTACT INFO - Integrated into footer layout */
+.contact-info {
+    font-family: var(--sans);
+    font-size: 7pt;
+    color: var(--ink);
+    line-height: 1.2;
+    display: flex;
+    align-items: center;
+    gap: 4pt;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 2pt;
+    white-space: nowrap;
+}
+
+.contact-icon {
+    font-size: 7pt;
+    color: var(--muted);
+}
+
+.whatsapp-icon {
+    color: #25D366; /* WhatsApp green */
+}
+
+.email-icon {
+    color: var(--muted);
+}
+
+.credit-card-icon {
+    font-size: 8pt;
+    color: var(--ink);
+}
+
+/* Remove exhibition-name styles since it's deleted */
+
+/* Print optimizations */
+@media print {
+    .chijal-footer { 
+        break-inside: avoid; 
+        page-break-inside: avoid;
+    }
+    
+    .footer-content {
+        align-items: center !important;
+    }
+    
+    .whatsapp-icon {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+}

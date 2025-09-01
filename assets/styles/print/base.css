@@ -1,0 +1,173 @@
+/* assets/styles/print/base.css */
+/* Base styles for all Chijal print layouts */
+
+:root {
+    --serif: Georgia, "Times New Roman", Times, serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --muted: #666;
+    --ink: #111;
+    --border: #ccc;
+    --light-border: #e0e0e0;
+    --background: white;
+}
+
+/* Common Chijal branding elements */
+.chijal-logo {
+    height: 60pt;
+    width: auto;
+    object-fit: contain;
+}
+
+.chijal-footer {
+    margin-top: auto;
+    padding-top: 4pt;
+    border-top: 1pt solid var(--border);
+    font-family: var(--sans);
+    font-size: 9pt;
+    flex-shrink: 0;
+}
+
+.footer-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8pt;
+    width: 100%;
+    margin-bottom: 3pt;
+    height: 36pt;
+}
+
+.footer-left {
+    display: flex;
+    align-items: center;
+    flex: 0 0 auto;
+}
+
+.footer-right {
+    display: flex;
+    align-items: center;
+    gap: 8pt;
+    margin-left: auto;
+}
+
+/* QR and audio tour elements */
+.qr-section {
+    display: flex;
+    align-items: center;
+    gap: 3pt;
+    height: 100%;
+}
+
+.qr-code {
+    width: 32pt;
+    height: 32pt;
+    background: var(--background);
+    border-radius: 2pt;
+}
+
+.headphone-icon {
+    font-size: 10pt;
+    color: var(--muted);
+}
+
+/* Contact information */
+.contact-info {
+    text-align: center;
+    font-family: var(--sans);
+    font-size: 8pt;
+    color: var(--muted);
+    padding: 2pt 0;
+    border-top: 0.5pt solid var(--light-border);
+    line-height: 1.2;
+    margin-top: 2pt;
+}
+
+.contact-row {
+    margin: 1pt 0;
+}
+
+.payment-info {
+    font-weight: 500;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4pt;
+}
+
+.payment-icon {
+    font-size: 8pt;
+}
+
+/* Exhibition/location branding */
+.exhibition-name {
+    text-align: center;
+    font-family: var(--sans);
+    font-size: 7pt;
+    color: var(--muted);
+    padding-top: 2pt;
+    border-top: 0.5pt solid var(--border);
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4pt;
+}
+
+/* Common utility classes */
+.muted { color: var(--muted); }
+
+.code {
+    letter-spacing: 0.2pt;
+    font-variant-numeric: tabular-nums;
+    font-family: 'Monaco', 'Menlo', monospace;
+}
+
+/* Icon sizing */
+.meta-icon {
+    font-size: 12pt;
+    margin-right: 4pt;
+    color: var(--muted);
+}
+
+/* Artwork images - shared across templates */
+.artwork-image {
+    height: 32pt;
+    max-width: 60pt;
+    object-fit: cover;
+    border-radius: 3pt;
+    border: 1pt solid var(--border);
+    background: #f8f8f8;
+}
+
+.artwork-placeholder {
+    height: 32pt;
+    width: 32pt;
+    background: #f8f8f8;
+    border: 1pt dashed var(--border);
+    border-radius: 3pt;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    font-size: 6pt;
+    text-align: center;
+    gap: 1pt;
+}
+
+.placeholder-icon {
+    font-size: 8pt;
+}
+
+/* Print optimizations */
+@media print {
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+    
+    .chijal-footer { 
+        break-inside: avoid; 
+    }
+}
