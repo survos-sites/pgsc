@@ -4,6 +4,7 @@
         <div class="footer-left">
             <img src="https://chijal.org/chijal-landscape.jpg" alt="Chijal" class="chijal-logo" />
         </div>
+        
         <div class="footer-right">
             <div class="qr-section">
                 <twig:ux:icon name="headphones" class="headphone-icon" />
@@ -21,12 +22,12 @@
             {% else %}
                 <div class="artwork-placeholder">
                     <twig:ux:icon name="image" class="placeholder-icon" />
-                    <span>Sin imagen</span>
                 </div>
             {% endif %}
         </div>
     </div>
-
+    
+    {# Contact info as separate centered line below #}
     <div class="contact-info">
         <div class="contact-item">
             <strong>Ruta Chijal</strong>
@@ -42,9 +43,5 @@
         <div class="contact-item">
             <twig:ux:icon name="credit-card" class="contact-icon credit-card-icon" />
         </div>
-    </div>
-
-    <div class="exhibition-name">
-        <span>{{ app.request.get('tagline', 'Ruta Chijal • San Cristóbal de las Casas, 2025') }}{% if app.environment == 'dev' %} • {{ obra.code }}{% endif %}</span>
     </div>
 </footer>

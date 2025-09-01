@@ -37,14 +37,14 @@
             <div class="meta">
                 {% if obra.materials %}
                     <div class="meta-row">
-                        <twig:ux:icon name="palette" class="meta-icon" />
+                        {{ ux_icon('tabler:brush', {class: 'meta-icon'}) }}
                         <span class="meta-value">{{ obra.materials }}</span>
                     </div>
                 {% endif %}
 
                 {% if obra.size %}
                     <div class="meta-row">
-                        <twig:ux:icon name="ruler" class="meta-icon" />
+                        {{ ux_icon('tabler:ruler-measure', {class: 'meta-icon'}) }}
                         <span class="meta-value">{{ obra.size }}</span>
                     </div>
                 {% endif %}

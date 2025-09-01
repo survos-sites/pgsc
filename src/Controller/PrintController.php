@@ -27,7 +27,7 @@ final class PrintController extends AbstractController
             'location' => $this->locationRepository->findAll(),
             'artists' => $this->artistRepository->findAll(),
         };
-        return $this->render("print/$shortClass-labels.html.twig", [
+        return $this->render("print/obras.html.twig", [
             'entities' => $entities,
             'obras' => $entities,
             'locations' => $entities,

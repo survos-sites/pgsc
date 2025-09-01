@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inauguración Ruta Chijal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            line-height: 1.4;
+            color: #2c1810;
+            background: #faf7f3;
+        }
+
+        .page {
+            page-break-after: always;
+            margin: 0;
+            padding: 0;
+        }
+
+        .page:last-child {
+            page-break-after: auto;
+        }
+
+        /* Print Flyer - Vertical */
+        .print-flyer {
+            width: 8.5in;
+            height: 11in;
+            padding: 0.75in;
+            background: linear-gradient(135deg, #faf7f3 0%, #f5f0ea 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .print-flyer .logo {
+            width: 180px;
+            height: auto;
+            margin-bottom: 1rem;
+        }
+
+        .print-flyer .title {
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: #c4621a;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .print-flyer .subtitle {
+            font-size: 1rem;
+            color: #8b4513;
+            margin-bottom: 1.5rem;
+            font-style: italic;
+        }
+
+        .print-flyer .description {
+            font-size: 1rem;
+            max-width: 500px;
+            margin-bottom: 1.5rem;
+            text-align: justify;
+            line-height: 1.6;
+        }
+
+        .print-flyer .event-details {
+            background: rgba(196, 98, 26, 0.1);
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 1rem;
+            border: 2px solid #c4621a;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .print-flyer .detail-item {
+            margin-bottom: 0.8rem;
+            font-size: 1.1rem;
+        }
+
+        .print-flyer .detail-label {
+            font-weight: bold;
+            color: #8b4513;
+            display: inline-block;
+            min-width: 80px;
+        }
+
+        .print-flyer .closing {
+            font-size: 1rem;
+            color: #8b4513;
+            text-align: center;
+            margin-top: 1rem;
+            font-style: italic;
+            max-width: 500px;
+        }
+
+        /* Social Media Square */
+        .social-square {
+            width: 800px;
+            height: 800px;
+            background: linear-gradient(135deg, #c4621a 0%, #8b4513 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 60px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .social-square::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: url('/public/chijal-pattern.png') repeat;
+            opacity: 0.1;
+            transform: rotate(45deg);
+        }
+
+        .social-square .content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .social-square .logo {
+            width: 150px;
+            height: auto;
+            margin-bottom: 30px;
+            filter: brightness(0) invert(1);
+        }
+
+        .social-square .title {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .social-square .date-time {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            background: rgba(255,255,255,0.2);
+            padding: 15px 25px;
+            border-radius: 25px;
+        }
+
+        .social-square .location {
+            font-size: 1.3rem;
+            margin-bottom: 25px;
+        }
+
+        .social-square .hashtag {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ffd700;
+        }
+
+        /* Horizontal Banner */
+        .horizontal-banner {
+            width: 1200px;
+            height: 400px;
+            background: linear-gradient(90deg, #faf7f3 0%, #c4621a 100%);
+            display: flex;
+            align-items: center;
+            padding: 40px;
+            gap: 40px;
+        }
+
+        .horizontal-banner .left-section {
+            flex: 1;
+            color: #2c1810;
+        }
+
+        .horizontal-banner .logo {
+            width: 120px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        .horizontal-banner .title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #8b4513;
+        }
+
+        .horizontal-banner .date-location {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .horizontal-banner .right-section {
+            flex: 1;
+            color: white;
+            text-align: right;
+        }
+
+        .horizontal-banner .description-short {
+            font-size: 1.1rem;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .horizontal-banner .call-to-action {
+            font-size: 1.3rem;
+            font-weight: bold;
+            background: rgba(255,255,255,0.2);
+            padding: 10px 20px;
+            border-radius: 15px;
+            display: inline-block;
+        }
+
+        /* Instagram Story */
+        .instagram-story {
+            width: 375px;
+            height: 667px;
+            background: linear-gradient(180deg, #c4621a 0%, #8b4513 50%, #2c1810 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 40px 30px;
+            color: white;
+            position: relative;
+        }
+
+        .instagram-story .logo {
+            width: 100px;
+            height: auto;
+            margin-bottom: 30px;
+            filter: brightness(0) invert(1);
+        }
+
+        .instagram-story .title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .instagram-story .event-info {
+            background: rgba(255,255,255,0.15);
+            padding: 25px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        .instagram-story .info-item {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .instagram-story .swipe-up {
+            position: absolute;
+            bottom: 40px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+
+        /* Print styles */
+        @media print {
+            body {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .social-square, .horizontal-banner, .instagram-story {
+                display: none;
+            }
+        }
+
+        /* Screen only styles */
+        @media screen {
+            .page {
+                margin-bottom: 2rem;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            }
+
+            .print-flyer {
+                margin: 2rem auto;
+            }
+
+            .social-square, .horizontal-banner, .instagram-story {
+                margin: 2rem auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Print Flyer -->
+<div class="page print-flyer">
+    <img src="/public/ruta-chijal-logo.png" alt="Ruta Chijal Logo" class="logo">
+
+    <h1 class="title">¡Inauguración de la Ruta Chijal!</h1>
+
+    <p class="subtitle">Un viaje artístico por San Cristóbal de las Casas</p>
+
+    <p class="description">
+        Te invitamos a vivir el comienzo de un viaje artístico que transformará las calles de San Cristóbal de las Casas en un gran circuito de arte latente, convirtiendo la ciudad en una galería viva.
+    </p>
+
+    <div class="event-details">
+        <div class="detail-item">
+            <span class="detail-label">Fecha:</span> Lunes 2 de septiembre
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Hora:</span> 5:00 PM
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Lugar:</span> Talleres La Enseñanza
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Dirección:</span> Flavio Pan y Agua #17
+        </div>
+    </div>
+
+    <p class="description">
+        La Ruta Chijal es una invitación a navegar con la ayuda de un mapa de la ciudad visitando espacios para contemplar el arte contemporáneo, conectando galerías, talleres, restaurantes y espacios públicos en un mismo recorrido cultural.
+    </p>
+
+    <p class="closing">
+        Acompáñanos en esta primera parada, donde la creatividad de artistas locales y comunidades se encuentra con la tradición para darle un nuevo latido a nuestras calles.<br><br>
+        Ven a ser parte de esta historia y camina con nosotrxs de la mano del arte local y de comunidad.
+    </p>
+</div>
+
+<!-- Social Media Square -->
+<div class="page social-square">
+    <div class="content">
+        <img src="/public/chijal-diamond-logo.png" alt="Chijal Logo" class="logo">
+        <h1 class="title">INAUGURACIÓN<br>RUTA CHIJAL</h1>
+        <div class="date-time">2 SEPTIEMBRE • 5:00 PM</div>
+        <div class="location">Talleres La Enseñanza<br>San Cristóbal de las Casas</div>
+        <div class="hashtag">#RutaChijal #ArteLocal</div>
+    </div>
+</div>
+
+<!-- Horizontal Banner -->
+<div class="page horizontal-banner">
+    <div class="left-section">
+        <img src="/public/ruta-chijal-logo.png" alt="Ruta Chijal Logo" class="logo">
+        <h1 class="title">INAUGURACIÓN RUTA CHIJAL</h1>
+        <div class="date-location">
+            <strong>2 de Septiembre, 5:00 PM</strong><br>
+            Talleres La Enseñanza • Flavio Pan y Agua #17
+        </div>
+    </div>
+    <div class="right-section">
+        <div class="description-short">
+            Un viaje artístico que transformará las calles de San Cristóbal de las Casas en una galería viva, conectando espacios culturales en un mismo recorrido.
+        </div>
+        <div class="call-to-action">
+            ¡Ven y camina con nosotrxs!
+        </div>
+    </div>
+</div>
+
+<!-- Instagram Story -->
+<div class="page instagram-story">
+    <img src="/public/chijal-diamond-logo.png" alt="Chijal Logo" class="logo">
+    <h1 class="title">INAUGURACIÓN<br>RUTA CHIJAL</h1>
+
+    <div class="event-info">
+        <div class="info-item"><strong>📅 2 de Septiembre</strong></div>
+        <div class="info-item"><strong>🕔 5:00 PM</strong></div>
+        <div class="info-item"><strong>📍 Talleres La Enseñanza</strong></div>
+        <div class="info-item">Flavio Pan y Agua #17</div>
+    </div>
+
+    <div style="font-size: 1rem; text-align: center; line-height: 1.4;">
+        Galería viva • Arte local<br>
+        Camina con nosotrxs ✨
+    </div>
+
+    <div class="swipe-up">Desliza hacia arriba para más info ↑</div>
+</div>
+
+</body>
+</html>

@@ -5,7 +5,7 @@ body {
     display: grid;
     grid-template-columns: repeat(3, 1fr); /* 3 columns across on landscape */
     gap: 0.2in;
-    row-gap: 0.3in; /* Explicit vertical spacing between rows */
+    row-gap: 0.3in; /* Explicit vertical pacing between rows */
     padding: 0.4in;
     align-items: start;
 }
