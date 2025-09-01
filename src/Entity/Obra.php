@@ -52,6 +52,11 @@ class Obra implements \Stringable, RouteParametersInterface
     #[Groups(['obra.read','obra.artist.read'])]
     public ?Artist $artist = null;
 
+    #[Groups(['obra.read'])]
+    public ?string $artistCode {
+        get => $this->artist->code;
+    }
+
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['obra.read'])]
     public ?string $title = null;
