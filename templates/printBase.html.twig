@@ -1,0 +1,33 @@
+{# templates/printBase.html.twig #}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <title>{% block title %}Chijal Print{% endblock %}</title>
+    {{ importmap('app') }}
+    
+    {# Base print styles #}
+    <link rel="stylesheet" href="{{ asset('styles/print/base.css') }}">
+    <link rel="stylesheet" href="{{ asset('styles/print/footer.css') }}">
+    
+    {# Page-specific styles #}
+    {% block styles %}{% endblock %}
+    
+    <style>
+        {# Common print page setup #}
+        @page { size: 11in 17in; margin: 0.25in; } /* Tabloid portrait */
+        html, body { height: 100%; }
+        html, body, * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+            font-feature-settings: "liga" 1, "kern" 1;
+            font-kerning: normal;
+        }
+    </style>
+</head>
+<body>
+    {% block body %}{% endblock %}
+</body>
+</html>

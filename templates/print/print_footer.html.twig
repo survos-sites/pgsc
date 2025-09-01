@@ -1,0 +1,50 @@
+{# templates/print/print_footer.html.twig #}
+<footer class="chijal-footer">
+    <div class="footer-content">
+        <div class="footer-left">
+            <img src="https://chijal.org/chijal-landscape.jpg" alt="Chijal" class="chijal-logo" />
+        </div>
+        <div class="footer-right">
+            <div class="qr-section">
+                <twig:ux:icon name="headphones" class="headphone-icon" />
+                {% set qrUrl = voxitourEndpoint ~ 'es/chijal?obraId=' ~ obra.code ~ '#tab-obras' %}
+                <a href="{{ qrUrl }}" target="_blank">
+                    <img src="{{ qr_code_url(qrUrl) }}" alt="QR Code" class="qr-code" />
+                </a>
+            </div>
+
+            {% set primaryImage = obra.image %}
+            {% if primaryImage and primaryImage.resized %}
+                <img src="{{ primaryImage.resized.large }}"
+                     alt="{{ obra.title }}"
+                     class="artwork-image" />
+            {% else %}
+                <div class="artwork-placeholder">
+                    <twig:ux:icon name="image" class="placeholder-icon" />
+                    <span>Sin imagen</span>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="contact-info">
+        <div class="contact-item">
+            <strong>Ruta Chijal</strong>
+        </div>
+        <div class="contact-item">
+            <twig:ux:icon name="phone" class="contact-icon whatsapp-icon" />
+            +52 1 967 266 4122
+        </div>
+        <div class="contact-item">
+            <twig:ux:icon name="mail" class="contact-icon email-icon" />
+            proyectochijal@gmail.com
+        </div>
+        <div class="contact-item">
+            <twig:ux:icon name="credit-card" class="contact-icon credit-card-icon" />
+        </div>
+    </div>
+
+    <div class="exhibition-name">
+        <span>{{ app.request.get('tagline', 'Ruta Chijal • San Cristóbal de las Casas, 2025') }}{% if app.environment == 'dev' %} • {{ obra.code }}{% endif %}</span>
+    </div>
+</footer>

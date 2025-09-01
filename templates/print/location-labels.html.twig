@@ -1,0 +1,434 @@
+{# Location Cards Template for Ruta Chijal #}
+{# Usage: Pass locations array from controller with location data and related artworks #}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ruta Chijal - Tarjetas de Ubicación</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+
+        .page {
+            width: 8.5in;
+            height: 11in;
+            background: white;
+            margin: 0 auto 20px;
+            display: flex;
+            flex-direction: column;
+            page-break-after: always;
+            position: relative;
+        }
+
+        .card {
+            width: 8.5in;
+            height: 5.5in;
+            border: 2px solid #8B4513;
+            background: linear-gradient(135deg, #fff 0%, #fefefe 100%);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:first-child {
+            margin-bottom: 0;
+        }
+
+        /* Header with logo */
+        .card-header {
+            background: linear-gradient(135deg, #FF8C42 0%, #ED8936 100%);
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 80px;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .chijal-logo {
+            width: 50px;
+            height: 50px;
+        }
+
+        .header-text {
+            color: white;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .header-text .ruta {
+            font-size: 16px;
+            font-style: italic;
+            font-weight: 400;
+            line-height: 1;
+        }
+
+        .header-text .chijal {
+            font-size: 24px;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .route-number {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        /* Main content area */
+        .card-content {
+            flex: 1;
+            padding: 25px;
+            display: flex;
+            gap: 25px;
+        }
+
+        .left-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .location-info {
+            margin-bottom: 20px;
+        }
+
+        .location-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: #881337;
+            margin-bottom: 8px;
+            line-height: 1.2;
+        }
+
+        .location-address {
+            font-size: 14px;
+            color: #6B7280;
+            margin-bottom: 4px;
+        }
+
+        .location-type {
+            font-size: 12px;
+            color: #8B4513;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .artwork-section {
+            flex: 1;
+        }
+
+        .artwork-item {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        .artwork-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .artwork-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2C7A7B;
+            margin-bottom: 4px;
+        }
+
+        .artist-name {
+            font-size: 14px;
+            color: #4A5568;
+            margin-bottom: 8px;
+            font-style: italic;
+        }
+
+        .artwork-description {
+            font-size: 12px;
+            line-height: 1.4;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+
+        .artwork-details {
+            font-size: 10px;
+            color: #6B7280;
+            line-height: 1.3;
+        }
+
+        .right-content {
+            width: 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .location-image {
+            width: 180px;
+            height: 120px;
+            border-radius: 12px;
+            object-fit: cover;
+            border: 3px solid #E5E7EB;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .artwork-thumbnails {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+
+        .artwork-thumb {
+            width: 50px;
+            height: 50px;
+            border-radius: 6px;
+            object-fit: cover;
+            border: 2px solid #E5E7EB;
+        }
+
+        .qr-section {
+            text-align: center;
+        }
+
+        .qr-code {
+            width: 80px;
+            height: 80px;
+            border: 2px solid #8B4513;
+            border-radius: 8px;
+            background: white;
+            margin-bottom: 8px;
+        }
+
+        .qr-label {
+            font-size: 10px;
+            color: #6B7280;
+            font-weight: 500;
+        }
+
+        /* Decorative elements */
+        .decorative-pattern {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, #E53E3E 0%, #FF8C42 25%, #319795 50%, #B83280 75%, #8B4513 100%);
+        }
+
+        .corner-decoration {
+            position: absolute;
+            top: 85px;
+            right: 25px;
+            width: 30px;
+            height: 30px;
+            opacity: 0.1;
+        }
+
+        /* Print styles */
+        @media print {
+            body {
+                padding: 0;
+                background: white;
+            }
+
+            .page {
+                margin: 0;
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body>
+{# Loop through locations and create cards, 2 per page #}
+{% for location in entities %}
+    {# Start new page every 2 cards #}
+    {% if loop.index0 % 2 == 0 %}
+        <div class="page">
+    {% endif %}
+
+    <div class="card">
+        {# Header with Chijal logo #}
+        <div class="card-header">
+            <div class="logo-section">
+                <svg class="chijal-logo" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="redGrad{{ loop.index }}" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#E53E3E"/>
+                            <stop offset="100%" style="stop-color:#C53030"/>
+                        </linearGradient>
+                        <linearGradient id="orangeGrad{{ loop.index }}" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#FF8C42"/>
+                            <stop offset="100%" style="stop-color:#ED8936"/>
+                        </linearGradient>
+                        <linearGradient id="tealGrad{{ loop.index }}" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#319795"/>
+                            <stop offset="100%" style="stop-color:#2C7A7B"/>
+                        </linearGradient>
+                        <linearGradient id="burgundyGrad{{ loop.index }}" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#B83280"/>
+                            <stop offset="100%" style="stop-color:#97266D"/>
+                        </linearGradient>
+                    </defs>
+
+                    {# Diamond border #}
+                    <path d="M 60 10 L 90 40 L 60 70 L 30 40 Z"
+                          fill="none"
+                          stroke="white"
+                          stroke-width="2"/>
+
+                    {# Top diamond section #}
+                    <path d="M 60 10 L 75 25 L 60 40 L 45 25 Z" fill="url(#redGrad{{ loop.index }})"/>
+
+                    {# Left section #}
+                    <path d="M 30 40 L 45 25 L 45 55 L 30 40 Z" fill="url(#tealGrad{{ loop.index }})"/>
+
+                    {# Right section #}
+                    <path d="M 90 40 L 75 25 L 75 55 L 90 40 Z" fill="url(#burgundyGrad{{ loop.index }})"/>
+
+                    {# Bottom section #}
+                    <path d="M 45 55 L 60 40 L 75 55 L 60 70 Z" fill="url(#orangeGrad{{ loop.index }})"/>
+
+                    {# Center small diamond #}
+                    <path d="M 60 30 L 65 35 L 60 40 L 55 35 Z" fill="white" opacity="0.8"/>
+                </svg>
+
+                <div class="header-text">
+                    <div class="ruta">Ruta</div>
+                    <div class="chijal">Chijal</div>
+                </div>
+            </div>
+
+            <div class="route-number">
+                Parada {{ loop.index }}
+            </div>
+        </div>
+
+        {# Main content #}
+        <div class="card-content">
+            <div class="left-content">
+                {# Location information #}
+                <div class="location-info">
+                    <h2 class="location-name">{{ location.name ?? location.title ?? 'Ubicación' }}</h2>
+                    {% if location.address %}
+                        <div class="location-address">{{ location.address }}</div>
+                    {% endif %}
+                    {% if location.type %}
+                        <div class="location-type">{{ location.type }}</div>
+                    {% endif %}
+                </div>
+
+                {# Artworks at this location #}
+                <div class="artwork-section">
+                    {% if location.obras is defined and location.obras|length > 0 %}
+                        {% for obra in location.obras|slice(0, 3) %}
+                            <div class="artwork-item">
+                                <h3 class="artwork-title">{{ obra.title ?? obra.name ?? 'Sin título' }}</h3>
+                                {% if obra.artist %}
+                                    <div class="artist-name">{{ obra.artist }}</div>
+                                {% endif %}
+                                {% if obra.description %}
+                                    <div class="artwork-description">
+                                        {{ obra.description|length > 120 ? obra.description|slice(0, 120) ~ '...' : obra.description }}
+                                    </div>
+                                {% endif %}
+                                {% if obra.thumbnailUrl or obra.year %}
+                                    <div class="artwork-details">
+                                        <img src="{{ obra.thumbnailUrl }}" />
+                                        {% if obra.thumbnailUrl %}{{ obra.thumbnailUrl }}{% endif %}
+                                        {% if obra.year %} • {{ obra.year }}{% endif %}
+                                        {% if obra.dimensions %} • {{ obra.dimensions }}{% endif %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    {% elseif location.description|default(false) %}
+                        <div class="artwork-description">{{ location.description }}</div>
+                    {% else %}
+                        <div class="artwork-description">Descubre las obras de arte en esta ubicación especial de la Ruta Chijal.</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="right-content">
+                {# Location image #}
+                {% if location.image|default(false) %}
+                    <img src="{{ location.image }}"
+                         alt="{{ location.name ?? location.title }}"
+                         class="location-image" />
+                {% else %}
+                    <div class="location-image" style="background: linear-gradient(135deg, #E5E7EB 0%, #D1D5DB 100%); display: flex; align-items: center; justify-content: center; color: #6B7280; font-size: 12px; text-align: center;">
+                        Sin imagen<br>disponible
+                    </div>
+                {% endif %}
+
+                {# Artwork thumbnails #}
+                {% if location.obras is defined and location.obras|length > 0 %}
+                    <div class="artwork-thumbnails">
+                        {% for obra in location.obras|slice(0, 4) %}
+                            {% if obra.image %}
+                                <img src="{{ obra.image }}"
+                                     alt="{{ obra.title ?? obra.name }}"
+                                     class="artwork-thumb" />
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                {# QR Code section #}
+                <div class="qr-section">
+                    {% if location.qrUrl is defined %}
+                        <img src="{{ qr_code_url(location.qrUrl) }}"
+                             alt="QR Code"
+                             class="qr-code" />
+                    {% else %}
+                        <div class="qr-code" style="background: linear-gradient(135deg, #E5E7EB 0%, #D1D5DB 100%); display: flex; align-items: center; justify-content: center; font-size: 10px; color: #6B7280;">
+                            QR Code
+                        </div>
+                    {% endif %}
+                    <div class="qr-label">Escanea para más info</div>
+                </div>
+            </div>
+        </div>
+
+        {# Decorative elements #}
+        <div class="decorative-pattern"></div>
+
+        {# Corner decoration #}
+        <svg class="corner-decoration" viewBox="0 0 30 30">
+            <path d="M 15 5 L 20 10 L 15 15 L 10 10 Z" fill="#8B4513"/>
+        </svg>
+    </div>
+
+    {# Close page div every 2 cards #}
+    {% if loop.index0 % 2 == 1 or loop.last %}
+        </div>
+    {% endif %}
+{% endfor %}
+</body>
+</html>

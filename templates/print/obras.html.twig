@@ -1,0 +1,57 @@
+{# templates/print/obras.html.twig #}
+{% extends 'printBase.html.twig' %}
+
+{% block title %}Tombstones - Obras{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ asset('styles/print/obras.css') }}">
+    <link rel="stylesheet" href="{{ asset('styles/print/footer.css') }}">
+{% endblock %}
+
+{% block body %}
+{% for idx, obra in obras %}
+    <main class="card-64">
+        <section class="header-section">
+            <div class="title-price-row">
+                {% if obra.title %}
+                    <h1 class="title">{{ obra.title }}</h1>
+                {% endif %}
+                {% if obra.price %}
+                    <div class="price">${{ obra.price|number_format }}</div>
+                {% endif %}
+            </div>
+
+            <div class="artist-info">
+                {% if obra.artist and obra.artist.name %}
+                    <span class="artist-name">{{ obra.artist.name }}</span>
+                {% else %}
+                    <span class="artist-name">Artista desconocido</span>
+                {% endif %}
+                {% if obra.year %} · {{ obra.year }}{% endif %}
+                
+                {% if obra.artist and obra.artist.tagline %}
+                    <div class="artist-tagline">{{ obra.artist.tagline }}</div>
+                {% endif %}
+            </div>
+
+            <div class="meta">
+                {% if obra.materials %}
+                    <div class="meta-row">
+                        <twig:ux:icon name="palette" class="meta-icon" />
+                        <span class="meta-value">{{ obra.materials }}</span>
+                    </div>
+                {% endif %}
+
+                {% if obra.size %}
+                    <div class="meta-row">
+                        <twig:ux:icon name="ruler" class="meta-icon" />
+                        <span class="meta-value">{{ obra.size }}</span>
+                    </div>
+                {% endif %}
+            </div>
+        </section>
+
+        {% include 'print/print_footer.html.twig' %}
+    </main>
+{% endfor %}
+{% endblock %}
