@@ -3,10 +3,10 @@ twig:
     globals:
         mobile_base: '%env(MOBILE_BASE_URL)%'
         spreadsheetId: '%env(GOOGLE_SPREADSHEET_ID)%'
-        voxitourEndpoint: '%env(VOXiTOUR_ENDPOINT)%'
+        voxitourEndpoint: '%env(VOXITOUR_ENDPOINT)%'
         app_name: 'Chijal'
 #        app_logo: '/logo.webp'
-        voxitour_base: '%env(VOXiTOUR_ENDPOINT)%'
+        voxitour_base: '%env(VOXITOUR_ENDPOINT)%'
 
     form_themes:
         - 'bootstrap_5_horizontal_layout.html.twig'

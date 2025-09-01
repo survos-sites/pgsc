@@ -16,10 +16,13 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 class LocationCrudController extends AbstractCrudController
 {
-    public function __construct(protected AdminUrlGenerator $adminUrlGenerator)
+    public function __construct(
+
+        protected AdminUrlGenerator $adminUrlGenerator)
     {
     }
 
