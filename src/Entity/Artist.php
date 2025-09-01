@@ -100,9 +100,10 @@ class Artist implements \Stringable, RouteParametersInterface, BabelHooksInterfa
     #[Translatable]
     #[Groups(['translatable','artist.read'])]
     public ?string $slogan {
-        get => $this->resolveTranslatable('slogan', $this->sloganBacking, 'slogan');
+        get => $this->resolveTranslatable('slogan', $this->sloganBacking);
         set => $this->sloganBacking = $value;
     }
+    public ?string $tagline { get => $this->sloganBacking; }
 
     /** @var Collection<int, Obra> */
     #[ORM\OneToMany(targetEntity: Obra::class, mappedBy: 'artist', orphanRemoval: true)]

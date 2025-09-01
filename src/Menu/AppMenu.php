@@ -52,17 +52,10 @@ final class AppMenu implements KnpMenuHelperInterface
 
         $this->add($menu, 'app_homepage');
         $this->add($menu, 'api_doc', label: 'API');
-        $this->add($menu, 'app_sync');
-        $this->add($menu, 'jsonrpc_test');
         // for nested menus, don't add a route, just a label, then use it for the argument to addMenuItem
 
         $subMenu = $this->addSubmenu($menu, 'sacro');
         array_map(fn($route) => $this->add($subMenu, $route), ['cmas_index','cmas_import','cmas_images']);
-        $subMenu = $this->addSubmenu($menu, 'debug');
-        if ('dev' === $this->env) {
-            $this->add($subMenu, 'survos_workflows');
-            $this->add($subMenu, 'survos_crawler_data');
-        }
 
         $nestedMenu = $this->addSubmenu($menu, 'artists');
         foreach ($this->artistRepo->findAll() as $artist) {
@@ -82,8 +75,8 @@ final class AppMenu implements KnpMenuHelperInterface
         foreach (['by_location', 'by_artist'] as $grouping) {
             $this->add($nestedMenu, 'app_homepage', label: $grouping);
         }
-        $this->add($menu, 'app_labels');
         $subMenu = $this->addSubmenu($menu, 'commands');
+
         $this->add($subMenu, 'survos_commands');
         $this->add($subMenu, 'survos_command',
             ['commandName' => 'app:load'],
@@ -93,6 +86,18 @@ final class AppMenu implements KnpMenuHelperInterface
             ['commandName' => 'survos:flickr:import'],
             'survos:flickr:import'
         );
+        $subMenu = $this->addSubmenu($menu, 'extra');
+        $this->add($subMenu, 'app_sync');
+        $this->add($subMenu, 'jsonrpc_test');
+        foreach (['obra','artist','location'] as $shortClass) {
+            $this->add($subMenu, 'print_labels', ['shortClass' => $shortClass], label: $shortClass . ' labels');
+        }
+//        $subMenu = $this->addSubmenu($menu, 'debug');
+        if ('dev' === $this->env) {
+            $this->add($subMenu, 'survos_workflows');
+            $this->add($subMenu, 'survos_crawler_data');
+        }
+
 
         $this->add($menu, 'admin', translationDomain: false, label: 'EZ');
         $this->appAuthMenu($event);

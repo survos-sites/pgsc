@@ -6,8 +6,9 @@
 {% for obra in entity.instance.obras %}
     <tr valign="top">
         <td>
-            {% if obra.images.small|default(false) %}
-                <img src="{{ obra.images.small }}" alt="{{ obra.title|e }}" style="max-width: 200px; display: block; margin-bottom: 1em;max-height: 200px;">
+            {{ dump(obra, obra.thumbnailUrl, obra.images) }}
+            {% if obra.thumbnailUrl|default(false) %}
+                <img src="{{ obra.thumbnailUrl }}" alt="{{ obra.title|e }}" style="max-width: 200px; display: block; margin-bottom: 1em;max-height: 200px;">
             {% endif %}
 
             {% set linkToVoxitour = voxitourEndpoint ~ app.request.locale ~ '/chijal?obraId=' ~ obra.code ~ '#tab-obras' %}

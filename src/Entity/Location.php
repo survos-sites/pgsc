@@ -51,6 +51,10 @@ class Location implements \Stringable, RouteParametersInterface, MarkingInterfac
     #[Groups(['location.read', 'obra.location.read'])]
     public ?string $address = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['location.read', 'obra.location.read'])]
+    public ?string $barrio = null;
+
     /** @var Collection<int, Obra> */
     #[ORM\OneToMany(targetEntity: Obra::class, mappedBy: 'location')]
     public Collection $obras;

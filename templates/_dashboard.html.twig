@@ -43,7 +43,7 @@
                                         <span><code>{{ obra.code }}</code></span>
                                     </div>
                                     <div class="text-secondary small">
-                                        {{ obra.artist.name }} · {{ obra.location.name }}
+                                        {{ obra.artist.name }} · {{ obra.location ? obra.location.name }}
                                     </div>
                                 </div>
 
@@ -134,6 +134,7 @@
                                             <a href="{{ path('admin_location_detail', {entityId: loc.id}) }}" class="fw-semibold text-reset">
                                                 {{ loc.name }}
                                             </a>
+                                            <br /><span>{{ loc.barrio }}</span>
                                             <span class="badge bg-secondary">{{ loc.obras|length }}</span>
                                             <span class="badge bg-light text-muted">{{ loc.type }}</span>
 

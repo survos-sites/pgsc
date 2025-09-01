@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Trait\CollectionNullHelperTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -14,6 +15,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
  */
 trait MediaFieldsTrait
 {
+    use CollectionNullHelperTrait;
     // ---- persisted fields ----
 
     /** Primary media source (e.g. a Google Drive URL for the main image) */
@@ -115,7 +117,15 @@ trait MediaFieldsTrait
 
     #[Groups(['media.read'])]
     public ?string $thumbnailUrl {
-        get => $this->images->first() ? $this->images->first()->thumbnailUrl : null;
+        get => $this->firstOrNull($this->images)?->thumbnailUrl;
+    }
+    #[Groups(['media.read'])]
+    public ?string $medium {
+        get => $this->firstOrNull($this->images)?->resized['medium']??null;
+    }
+    #[Groups(['media.read'])]
+    public ?string $large {
+        get => $this->firstOrNull($this->images)?->resized['large']??null;
     }
 
     #[Groups(['media.read'])]

@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Repository\ArtistRepository;
+use App\Repository\LocationRepository;
 use App\Repository\ObraRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -11,16 +13,25 @@ final class PrintController extends AbstractController
 {
     public function __construct(
         private ObraRepository $obraRepository,
+        private LocationRepository $locationRepository,
+        private ArtistRepository $artistRepository,
     )
     {
     }
 
-    #[Route('/labels', name: 'app_labels')]
-    public function index(): Response
+    #[Route('/labels/{shortClass}', name: 'print_labels')]
+    public function labels(string $shortClass): Response
     {
-        $obras = $this->obraRepository->findAll();
-        return $this->render('print/labels.html.twig', [
-            'obras' => $this->obraRepository->findAll(), // findBy(['year' => date('Y')]),
+        $entities = match ($shortClass) {
+            'obra' => $this->obraRepository->findAll(),
+            'location' => $this->locationRepository->findAll(),
+            'artists' => $this->artistRepository->findAll(),
+        };
+        return $this->render("print/$shortClass-labels.html.twig", [
+            'entities' => $entities,
+            'obras' => $entities,
+            'locations' => $entities,
+            'artists' => $entities,
         ]);
     }
 }

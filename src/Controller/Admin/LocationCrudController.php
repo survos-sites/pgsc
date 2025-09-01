@@ -42,6 +42,7 @@ class LocationCrudController extends AbstractCrudController
                         ->generateUrl() . '">' . $value . '</a>';
                 })->onlyOnIndex(),
             TextField::new('name')->hideOnIndex(),
+            TextField::new('barrio'),
             ChoiceField::new('type')
                 ->setChoices(LocationType::choices())
                 ->renderExpanded()

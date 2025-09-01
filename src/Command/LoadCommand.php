@@ -45,10 +45,17 @@ class LoadCommand extends Command
         SymfonyStyle $io,
         #[Option('Path to data dir containing artistas.csv, artists.csv, locations.csv, piezas.csv')] ?string $dir = null,
         #[Option('Refresh cached Google Sheets first (placeholder)')] ?bool $refresh = null,
+        #[Option('purge first')] ?bool $reset = null,
         #[Option('Also initialize SAIS account (images/audio)')] ?bool $sais = null
     ): int {
         $dir ??= 'data';
         $io->title('Chijal CSV Import');
+
+        if ($reset) {
+            foreach ([Artist::class, Location::class, Obra::class, Media::class] as $class) {
+                $this->em->createQuery("DELETE FROM $class e")->execute();
+            }
+        }
 
         if ($sais) {
             $response = $this->sais->accountSetup(new AccountSetup(self::SAIS_ROOT, 100));
@@ -62,6 +69,10 @@ class LoadCommand extends Command
         $io->section('Importing Artists');
         foreach ($this->iterArtists("$dir/artistas.csv", "$dir/artists.csv") as $row) {
             $row = $this->normalizeRow($row);
+            if (!$this->isActive($row['status']??null)) {
+                continue;
+            }
+
 
             $email = $row['email'] ?? null;
             if (!$email) { $this->logger->warning('Skipping artist with no email', ['row'=>$row]); continue; }
@@ -102,6 +113,7 @@ class LoadCommand extends Command
 
             $artistsByCode[$code] = $artist;
         }
+//        dd(array_keys($artistsByCode));
         $this->em->flush();
 
         // ---- Locations
@@ -117,7 +129,8 @@ class LoadCommand extends Command
             $this->em->persist($loc);
 
             $loc->name = $row['name'] ?? $code;
-            $loc->status = $row['status'] ?? 'activo';
+            $loc->status = $row['status'] ?? 'inactive';
+            $loc->barrio = $row['barrio'] ?? null;
             $loc->address = $row['address'] ?? null;
             $loc->type = $row['type'] ?? null;
             $loc->contactName = $row['contact'] ?? null;
@@ -255,14 +268,17 @@ class LoadCommand extends Command
         return strtr($key, $repl);
     }
 
-    private function isActive(?string $status, array $activeWords): bool
+    private function isActive(?string $status, array $activeWords=[]): bool
     {
-        if (!$status) { return false; }
-        $s = mb_strtolower(trim($status));
-        $s = str_replace(['no active','not active','inactivo','inactive'], 'inactive', $s);
-        if ($s === 'acive') { $s = 'active'; }
-        foreach ($activeWords as $w) { if ($s === $w) { return true; } }
-        return $s === 'active';
+        return in_array($status, ['active', 'activo']);
+//        || in_array($status, $activeWords, true);
+//        if (!$status) { return false; }
+//        $s = mb_strtolower(trim($status));
+//
+//        $s = str_replace(['no active','not active','inactivo','inactive'], 'inactive', $s);
+//        if ($s === 'acive') { $s = 'active'; }
+//        foreach ($activeWords as $w) { if ($s === $w) { return true; } }
+//        return $s === 'active';
     }
 
     private function normCode(?string $code, ?string $email = null, ?string $name = null): ?string

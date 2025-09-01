@@ -14,6 +14,7 @@ use Survos\BabelBundle\Attribute\BabelStorage;
 use Survos\CoreBundle\Entity\RouteParametersInterface;
 use Survos\CoreBundle\Entity\RouteParametersTrait;
 use Symfony\Component\Serializer\Attribute\Groups;
+use App\Trait\CollectionNullHelperTrait;
 
 #[ORM\Entity(repositoryClass: ObraRepository::class)]
 #[ApiResource(
@@ -23,6 +24,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
 #[BabelStorage]
 class Obra implements \Stringable, RouteParametersInterface
 {
+    use CollectionNullHelperTrait;
     use RouteParametersTrait;
     use MediaFieldsTrait;
 
