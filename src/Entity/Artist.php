@@ -23,7 +23,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ArtistRepository::class)]
 #[ApiResource(
-    normalizationContext: ['groups' => ['artist.read', 'artist.obra.read', 'media.read']],
+    normalizationContext: ['groups' => ['artist.read', 'artist.obra.read', 'media.read', 'media.embedded']],
     operations: [new Get(), new GetCollection()]
 )]
 #[Assert\EnableAutoMapping]

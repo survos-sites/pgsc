@@ -100,7 +100,7 @@ class LoadCommand extends Command
 //            $artist->slogan = $row['tagline'];
 
             if ($artist->driveUrl) {
-//                $this->addToMedia($artist->driveUrl, $artist);
+                $this->addToMedia($artist->driveUrl, $artist);
             }
 
             if (!empty($row['youtube_url'])) {
@@ -335,7 +335,6 @@ class LoadCommand extends Command
 
     private function upsertMedia(string $code, string $original, string $type): ?Media
     {
-        return null;
         $media = $this->mediaRepo->findOneBy(['code' => $code]) ?? new Media($code);
         $this->em->persist($media);
         $media->type = $type;
