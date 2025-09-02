@@ -1,50 +1,82 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Entity;
 
-use Gedmo\Mapping\Annotation as Gedmo;
-use Gedmo\Tree\Traits\NestedSetEntity;
 use App\Repository\LocRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Survos\Tree\TreeInterface;
 use Survos\Tree\Traits\TreeTrait;
-use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: LocRepository::class)]
+#[ORM\Table(name: 'loc')]
+#[ORM\UniqueConstraint(name: 'uniq_loc_code', fields: ['code'])]
+#[ORM\Index(name: 'idx_loc_type', fields: ['type'])]
 #[Gedmo\Tree(type: 'nested')]
-
-class Loc
+final class Loc implements TreeInterface, \Stringable
 {
     use TreeTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
+    public ?int $id = null;
 
-    public function getId(): ?int
-    {
-        return $this->id;
+    /**
+     * Optional natural key (e.g., SALA-1, VIT-1-2, POS-1-2-3).
+     * Unique so re-imports can upsert reliably.
+     */
+    #[ORM\Column(length: 80, unique: true, nullable: true)]
+    public ?string $code = null {
+        set => $this->code = $value === null ? null : strtoupper(trim($value));
+        get => $this->code;
     }
 
-    #[Assert\Valid]
-    #[Groups(['write'])]
-    #[Gedmo\TreeParent]
-    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
-    #[ORM\JoinColumn(referencedColumnName: 'id', onDelete: 'CASCADE')]
-    public $parent;
-
-    #[Groups(['tree', 'read'])]
-    public function getParentId(): ?Uuid
-    {
-        return $this->parent?->getId();
+    /**
+     * Semantic type for this node (e.g., sala, vitrina, ficha_descriptiva, location).
+     */
+    #[ORM\Column(length: 40)]
+    #[Assert\NotBlank]
+    public string $type = 'location' {
+        set => $this->type = strtolower(trim($value));
+        get => $this->type;
     }
 
-    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parent')]
-    #[ORM\OrderBy([
-        'left' => 'ASC', // @gedmo traits missing?
-    ])]
-    public $children;
+    /**
+     * Visible label/title of the location.
+     * Example input: "SALA-1: Intro" → importer should set code separately;
+     * hook keeps label clean.
+     */
+    #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
+    public string $label {
+        set => $this->label = trim(preg_replace('/^(SALA-\d+|VIT-\d+-\d+|POS-\d+-\d+-\d+):\s*/i', '', (string)$value) ?? '');
+        get => $this->label;
+    }
 
+    /**
+     * Optional short line under the label.
+     */
+    #[ORM\Column(length: 255, nullable: true)]
+    public ?string $subtitle = null {
+        set => $this->subtitle = ($value === null) ? null : trim((string)$value);
+        get => $this->subtitle;
+    }
 
+    /**
+     * Long Markdown body for this node (printed at any depth).
+     */
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    public ?string $description = null {
+        set => $this->description = ($value === null) ? null : rtrim((string)$value) . (str_ends_with((string)$value, "\n") ? '' : '');
+        get => $this->description;
+    }
+
+    public function __toString(): string
+    {
+        return $this->code ? "{$this->label} [{$this->code}]" : $this->label;
+    }
 }
