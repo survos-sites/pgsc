@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0779ef20f80becd7637375e4c47029cc",
+    "content-hash": "5a6559571abea801847654d3a0e77105",
     "packages": [
         {
             "name": "a2lix/auto-form-bundle",
@@ -7224,26 +7224,25 @@
         },
         {
             "name": "survos/tree-bundle",
-            "version": "1.6.44",
+            "version": "dev-main",
             "source": {
                 "type": "git",
                 "url": "https://github.com/survos/SurvosTreeBundle.git",
-                "reference": "217f2dc19941cdb8426509bf4f4bf7ad878177ac"
+                "reference": "f6ef8a40f7f6e2852d6e2e2305f7df1ff846ba1c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/survos/SurvosTreeBundle/zipball/217f2dc19941cdb8426509bf4f4bf7ad878177ac",
-                "reference": "217f2dc19941cdb8426509bf4f4bf7ad878177ac",
+                "url": "https://api.github.com/repos/survos/SurvosTreeBundle/zipball/f6ef8a40f7f6e2852d6e2e2305f7df1ff846ba1c",
+                "reference": "f6ef8a40f7f6e2852d6e2e2305f7df1ff846ba1c",
                 "shasum": ""
             },
             "require": {
                 "doctrine/doctrine-bundle": "^2.7",
                 "doctrine/orm": "^3.3",
                 "doctrine/persistence": "^2.0 || ^3.0 || ^4.0",
-                "php": "^8.3",
+                "php": "^8.4",
                 "stof/doctrine-extensions-bundle": "^1.8",
                 "survos/core-bundle": "^1.5",
-                "survos/inspection-bundle": "^1.5",
                 "symfony/config": "^7.3",
                 "symfony/dependency-injection": "^7.3",
                 "symfony/http-kernel": "^7.3",
@@ -7263,6 +7262,7 @@
                 "symfony/twig-bundle": "^7.3",
                 "symfony/var-dumper": "^7.3"
             },
+            "default-branch": true,
             "type": "symfony-bundle",
             "extra": {
                 "symfony": {
@@ -7294,7 +7294,7 @@
             ],
             "support": {
                 "issues": "https://github.com/survos/SurvosTreeBundle/issues",
-                "source": "https://github.com/survos/SurvosTreeBundle/tree/1.6.44"
+                "source": "https://github.com/survos/SurvosTreeBundle/tree/main"
             },
             "funding": [
                 {
@@ -7302,7 +7302,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-07-26T14:04:30+00:00"
+            "time": "2025-09-02T13:59:13+00:00"
         },
         {
             "name": "survos/workflow-helper-bundle",
@@ -18843,7 +18843,8 @@
         "survos/babel-bundle": 20,
         "survos/code-bundle": 20,
         "survos/core-bundle": 20,
-        "survos/translatable-field-bundle": 20
+        "survos/translatable-field-bundle": 20,
+        "survos/tree-bundle": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
