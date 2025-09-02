@@ -27,6 +27,9 @@ class FlickrListener
 
         if (preg_match('/^\$(.*)\b/', $event->getPhotoDescription(), $matches)) {
             $obraCode = $matches[1];
+        } else {
+            $this->logger->warning('Obra code not found in description', ['description' => $event->getPhotoDescription()]);
+            return;
         }
 
         $photoData = $event->getPhotoData();
@@ -34,7 +37,8 @@ class FlickrListener
         $this->logger->info('Processing Flickr photo for Obra', [
             'obra_code' => $obraCode,
             'photo_id' => $event->getPhotoId(),
-            'photo_title' => $event->getPhotoTitle()
+            'photo_title' => $event->getPhotoTitle(),
+            'description' => $event->getPhotoDescription(),
         ]);
 
 
@@ -71,7 +75,7 @@ class FlickrListener
         $imgCode = SaisClientService::calculateCode($url, LoadCommand::SAIS_ROOT);
         $obra->addImageCode($imgCode);
         // $media = $this->upsertMedia($imgCode, original: $url, type: 'image');
-        if (!$this->mediaRepository->find($imgCode)) {
+        if (!$media = $this->mediaRepository->find($imgCode)) {
             $media = new Media($imgCode);
             $this->entityManager->persist($media);
             $media->originalUrl = $url;
