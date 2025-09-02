@@ -33,7 +33,7 @@ class Obra implements \Stringable, RouteParametersInterface
     public function __construct(
         #[ORM\Id]
         #[ORM\Column(length: 32)]
-        #[Groups(['obra.read', 'obra.embedded'])]
+        #[Groups(['obra.read', 'obra.embedded', 'artist.obra.read'])]
         public string $code,
     ) {
         $this->initMediaCollections();
@@ -58,7 +58,7 @@ class Obra implements \Stringable, RouteParametersInterface
     }
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['obra.read','obra.embedded'])]
+    #[Groups(['obra.read','obra.embedded','artist.obra.read'])]
     public ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
@@ -66,7 +66,7 @@ class Obra implements \Stringable, RouteParametersInterface
     public ?string $description = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['obra.read','obra.embedded'])]
+    #[Groups(['obra.read','obra.embedded','artist.obra.read'])]
     public ?int $year = null;
 
     #[ORM\Column(nullable: true)]
