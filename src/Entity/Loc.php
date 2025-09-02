@@ -10,6 +10,9 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Survos\Tree\TreeInterface;
 use Survos\Tree\Traits\TreeTrait;
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use App\Entity\AltosObj;
 
 #[ORM\Entity(repositoryClass: LocRepository::class)]
 #[ORM\Table(name: 'loc')]
@@ -20,10 +23,39 @@ final class Loc implements TreeInterface, \Stringable
 {
     use TreeTrait;
 
+    public function __construct()
+    {
+        // if you don't already have a constructor, add this
+        $this->altosObjects = new ArrayCollection();
+    }
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     public ?int $id = null;
+
+    /** @var Collection<int, AltosObj> */
+    #[ORM\OneToMany(mappedBy: 'loc', targetEntity: AltosObj::class, cascade: ['persist'], orphanRemoval: false)]
+    public Collection $altosObjects;
+
+    public function addAltosObj(AltosObj $obj): self
+    {
+        if (!$this->altosObjects->contains($obj)) {
+            $this->altosObjects->add($obj);
+            $obj->loc = $this; // keep owning side in sync
+        }
+        return $this;
+    }
+
+    public function removeAltosObj(AltosObj $obj): self
+    {
+        if ($this->altosObjects->removeElement($obj)) {
+            if ($obj->loc === $this) {
+                $obj->loc = null;
+            }
+        }
+        return $this;
+    }
 
     /**
      * Optional natural key (e.g., SALA-1, VIT-1-2, POS-1-2-3).

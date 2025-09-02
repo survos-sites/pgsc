@@ -2,7 +2,9 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\AltosObj;
 use App\Entity\Artist;
+use App\Entity\Loc;
 use App\Entity\Media;
 use App\Entity\Location;
 use App\Entity\Obra;
@@ -12,6 +14,7 @@ use App\Repository\LocationRepository;
 use App\Repository\ObraRepository;
 use App\Repository\SacroRepository;
 use App\Repository\MediaRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminDashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
@@ -41,7 +44,7 @@ class DashboardController extends AbstractDashboardController
         private UrlGeneratorInterface    $urlGenerator,
         private readonly Security        $security,
         private readonly SacroRepository $sacroRepository,
-        private readonly MediaRepository $imageRepository,
+        private readonly MediaRepository $imageRepository, private readonly EntityManagerInterface $entityManager,
     ) {
     }
 
@@ -139,6 +142,13 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('locations', 'tabler:location', Location::class)
             ->setBadge($this->locationRepository->count())
         ;
+        foreach ([Loc::class, AltosObj::class] as $class) {
+            $shortName = new \ReflectionClass($class)->getShortName();
+            yield MenuItem::linkToCrud($shortName, 'tabler:location', $class)
+                ->setBadge($this->entityManager->getRepository($class)->count())
+            ;
+
+        }
 
         yield MenuItem::linkToRoute('map', 'tabler:map', 'app_map');
 
