@@ -38,7 +38,7 @@
         "survos/command-bundle": "^1.6.44",
         "survos/core-bundle": "dev-main",
         "survos/deployment-bundle": "^1.6.44",
-        "survos/flickr-bundle": "^1.6.44",
+        "survos/flickr-bundle": "dev-main",
         "survos/geoapify-bundle": "^1.6.44",
         "survos/google-sheets-bundle": "^1.6.44",
         "survos/inspection-bundle": "^1.6",

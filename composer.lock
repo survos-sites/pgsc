@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5a6559571abea801847654d3a0e77105",
+    "content-hash": "c3079800d90b2d801f54c5d164c3022b",
     "packages": [
         {
             "name": "a2lix/auto-form-bundle",
@@ -6681,23 +6681,25 @@
         },
         {
             "name": "survos/flickr-bundle",
-            "version": "1.6.44",
+            "version": "dev-main",
             "source": {
                 "type": "git",
                 "url": "https://github.com/survos/SurvosFlickrBundle.git",
-                "reference": "d2f68e19a2fa496618b2a261c8f8091bc475c898"
+                "reference": "0baf05ab4085e5a9cf634f7de6b13a3f7c846593"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/survos/SurvosFlickrBundle/zipball/d2f68e19a2fa496618b2a261c8f8091bc475c898",
-                "reference": "d2f68e19a2fa496618b2a261c8f8091bc475c898",
+                "url": "https://api.github.com/repos/survos/SurvosFlickrBundle/zipball/0baf05ab4085e5a9cf634f7de6b13a3f7c846593",
+                "reference": "0baf05ab4085e5a9cf634f7de6b13a3f7c846593",
                 "shasum": ""
             },
             "require": {
-                "php": "^8.3",
+                "php": "^8.4",
                 "samwilson/phpflickr": "^6.0",
                 "survos/installer": "*",
+                "symfony/cache": "^7.3",
                 "symfony/config": "^7.3",
+                "symfony/console": "^7.3",
                 "symfony/dependency-injection": "^7.3",
                 "symfony/http-kernel": "^7.3",
                 "twig/twig": "^3.4"
@@ -6711,6 +6713,7 @@
                 "symfony/twig-bundle": "^7.3",
                 "symfony/var-dumper": "^7.3"
             },
+            "default-branch": true,
             "type": "symfony-bundle",
             "autoload": {
                 "psr-4": {
@@ -6728,7 +6731,7 @@
             ],
             "support": {
                 "issues": "https://github.com/survos/SurvosFlickrBundle/issues",
-                "source": "https://github.com/survos/SurvosFlickrBundle/tree/1.6.44"
+                "source": "https://github.com/survos/SurvosFlickrBundle/tree/main"
             },
             "funding": [
                 {
@@ -6736,7 +6739,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-07-26T14:04:30+00:00"
+            "time": "2025-09-02T14:16:21+00:00"
         },
         {
             "name": "survos/geoapify-bundle",
@@ -18843,6 +18846,7 @@
         "survos/babel-bundle": 20,
         "survos/code-bundle": 20,
         "survos/core-bundle": 20,
+        "survos/flickr-bundle": 20,
         "survos/translatable-field-bundle": 20,
         "survos/tree-bundle": 20
     },
