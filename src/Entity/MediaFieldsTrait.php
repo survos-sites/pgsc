@@ -33,7 +33,7 @@ trait MediaFieldsTrait
     #[Groups(['media.read','artist.read','obra.read'])]
     public ?string $audioCode = null;
 
-    #[Groups(['media.read','artist.read','obra.read'])]
+    #[Groups(['media.read','artist.read','obra.read', 'obra.embedded'])]
     public ?string $youtubeId {
         get => $this->youtubeUrl ? pathinfo($this->youtubeUrl, PATHINFO_BASENAME) : null;
     }
@@ -115,7 +115,7 @@ trait MediaFieldsTrait
         return $this;
     }
 
-    #[Groups(['media.read'])]
+    #[Groups(['media.read','media.embedded'])]
     public ?string $thumbnailUrl {
         get => $this->firstOrNull($this->images)?->thumbnailUrl;
     }

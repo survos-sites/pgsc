@@ -251,6 +251,9 @@
     "survos/google-sheets-bundle": {
         "version": "1.5.529"
     },
+    "survos/inspection-bundle": {
+        "version": "1.6.44"
+    },
     "survos/sais-bundle": {
         "version": "1.5.529"
     },
@@ -259,6 +262,9 @@
     },
     "survos/translatable-field-bundle": {
         "version": "dev-main"
+    },
+    "survos/tree-bundle": {
+        "version": "1.6.44"
     },
     "survos/workflow-helper-bundle": {
         "version": "1.5.529"

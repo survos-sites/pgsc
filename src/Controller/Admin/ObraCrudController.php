@@ -16,6 +16,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Dto\BatchActionDto;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AvatarField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
@@ -84,6 +85,7 @@ class ObraCrudController extends BaseCrudController
                 })->onlyOnIndex(),
             TextField::new('title')->hideOnIndex(),
             ArrayField::new('imageCodes'),
+            CollectionField::new('images'),
             TextField::new('description')
                      ->hideOnIndex(),
         ] as $field) {

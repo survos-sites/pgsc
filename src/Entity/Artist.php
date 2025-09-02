@@ -63,7 +63,7 @@ class Artist implements \Stringable, RouteParametersInterface, BabelHooksInterfa
     public string $id { get => $this->code; }
 
     #[ORM\Column(length: 255)]
-    #[Groups(['artist.read','obra.artist.read'])]
+    #[Groups(['artist.read','obra.artist.read', 'obra.embedded'])]
     public ?string $name = null;
 
     #[ORM\Column(nullable: true)]
@@ -117,6 +117,7 @@ class Artist implements \Stringable, RouteParametersInterface, BabelHooksInterfa
     public ?array $languages = null;
 
     #[ORM\Column(length: 22, nullable: true)]
+    #[Groups(['artist.read','media.embedded'])]
     public ?string $gender = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]

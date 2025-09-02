@@ -6,15 +6,17 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Tree\Traits\NestedSetEntity;
 use App\Repository\LocRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Survos\Tree\Traits\TreeTrait;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: LocRepository::class)]
-//#[Gedmo\Tree(type: 'nested')]
+#[Gedmo\Tree(type: 'nested')]
 
 class Loc
 {
+    use TreeTrait;
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -27,7 +29,7 @@ class Loc
 
     #[Assert\Valid]
     #[Groups(['write'])]
-//    #[Gedmo\TreeParent]
+    #[Gedmo\TreeParent]
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
     #[ORM\JoinColumn(referencedColumnName: 'id', onDelete: 'CASCADE')]
     public $parent;

@@ -24,17 +24,19 @@ class FlickrListener
     #[AsEventListener()]
     public function __invoke(FlickrPhotoEvent $event): void
     {
-
         if (preg_match('/^\$(.*)\b/', $event->getPhotoDescription(), $matches)) {
             $obraCode = $matches[1];
         } else {
-            $this->logger->warning('Obra code not found in description', ['description' => $event->getPhotoDescription()]);
+            $this->logger->warning('Obra code not found in description', [
+                'url' => $event->getDirectUrls(),
+                'description' => $event->getPhotoDescription()]);
+//            dd($event->photoData);
             return;
         }
 
         $photoData = $event->getPhotoData();
 
-        $this->logger->info('Processing Flickr photo for Obra', [
+        $this->logger->info("Processing Flickr photo for Obra $obraCode: ", [
             'obra_code' => $obraCode,
             'photo_id' => $event->getPhotoId(),
             'photo_title' => $event->getPhotoTitle(),
@@ -47,6 +49,7 @@ class FlickrListener
                 return;
             }
             $obra = $this->findOrCreateObra($obraCode);
+            assert($obra, "Missing obra $obraCode");
 
             $this->attachPhotoToObra($obra, $photoData, $event);
 
@@ -85,6 +88,9 @@ class FlickrListener
         // Update media with Flickr data
 
         $media->title = $event->getPhotoTitle();
+        $media->type = array_key_exists('video', $event->photoData) ? 'video' : 'image';
+//        dump($event->photoData['video']??null);
+//        str_contains($media->title, 'VIDEO') && dd($event, $event->photoData);
         $media->description = $event->getPhotoDescription();
         $media->flickrId = $event->getPhotoId();
 

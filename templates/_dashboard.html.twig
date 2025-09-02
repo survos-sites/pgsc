@@ -77,6 +77,13 @@
                                              src="{{ artist.thumbnailUrl }}" alt="artist image" />
                                     {% endif %}
 
+                                    {% set linkToVoxitour = voxitourEndpoint ~ app.request.locale ~ '/chijal?artistId='
+                                        ~ artist.code ~ '#tab-artists' %}
+                                    <a href="{{ linkToVoxitour }}" class="fw-semibold text-reset">
+                                        {{ linkToVoxitour }}
+                                    </a>
+
+
                                     <div class="flex-grow-1">
                                         <div class="d-flex align-items-center gap-2">
                                             <a href="{{ path('admin_artist_detail', {entityId: artist.id}) }}" class="fw-semibold text-reset">

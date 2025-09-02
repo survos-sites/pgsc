@@ -33,7 +33,7 @@ class Obra implements \Stringable, RouteParametersInterface
     public function __construct(
         #[ORM\Id]
         #[ORM\Column(length: 32)]
-        #[Groups(['obra.read'])]
+        #[Groups(['obra.read', 'obra.embedded'])]
         public string $code,
     ) {
         $this->initMediaCollections();
@@ -49,16 +49,16 @@ class Obra implements \Stringable, RouteParametersInterface
 
     #[ORM\ManyToOne(inversedBy: 'obras')]
     #[ORM\JoinColumn(name: 'artist_code', referencedColumnName: 'code', nullable: false, onDelete: 'CASCADE')]
-    #[Groups(['obra.read','obra.artist.read'])]
+    #[Groups(['obra.read','obra.artist.read','obra.embedded'])]
     public ?Artist $artist = null;
 
-    #[Groups(['obra.read'])]
+    #[Groups(['obra.read', 'obra.embedded'])]
     public ?string $artistCode {
         get => $this->artist->code;
     }
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['obra.read'])]
+    #[Groups(['obra.read','obra.embedded'])]
     public ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
@@ -66,7 +66,7 @@ class Obra implements \Stringable, RouteParametersInterface
     public ?string $description = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['obra.read'])]
+    #[Groups(['obra.read','obra.embedded'])]
     public ?int $year = null;
 
     #[ORM\Column(nullable: true)]

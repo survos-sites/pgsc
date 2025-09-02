@@ -20,7 +20,7 @@ use Symfony\Component\Serializer\Attribute\SerializedName;
 
 #[ORM\Entity(repositoryClass: LocationRepository::class)]
 #[ApiResource(
-    normalizationContext: ['groups' => ['location.obra.read', 'location.read']],
+    normalizationContext: ['groups' => ['location.obra.read', 'location.read','obra.embedded', 'media.embedded']],
     operations: [new Get(), new GetCollection()]
 )]
 class Location implements \Stringable, RouteParametersInterface, MarkingInterface
@@ -57,6 +57,7 @@ class Location implements \Stringable, RouteParametersInterface, MarkingInterfac
 
     /** @var Collection<int, Obra> */
     #[ORM\OneToMany(targetEntity: Obra::class, mappedBy: 'location')]
+    #[Groups(['obra.embedded'])]
     public Collection $obras;
 
     #[ORM\Column(length: 255, nullable: true)]

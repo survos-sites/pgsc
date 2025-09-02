@@ -49,4 +49,6 @@ return [
     Survos\BabelBundle\SurvosBabelBundle::class => ['all' => true],
     Zenstruck\Foundry\ZenstruckFoundryBundle::class => ['dev' => true, 'test' => true],
     Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle::class => ['all' => true],
+    Survos\InspectionBundle\SurvosInspectionBundle::class => ['all' => true],
+    Survos\Tree\SurvosTreeBundle::class => ['all' => true],
 ];

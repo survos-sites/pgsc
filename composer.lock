@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "74fbab7410452a3a5c4b63a7c5d5ef57",
+    "content-hash": "0779ef20f80becd7637375e4c47029cc",
     "packages": [
         {
             "name": "a2lix/auto-form-bundle",
@@ -6872,6 +6872,95 @@
             "time": "2025-07-26T14:04:27+00:00"
         },
         {
+            "name": "survos/inspection-bundle",
+            "version": "1.6.44",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/survos/SurvosInspectionBundle.git",
+                "reference": "577ee3fe8868db31343858469aa14fe3c0186cf4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/survos/SurvosInspectionBundle/zipball/577ee3fe8868db31343858469aa14fe3c0186cf4",
+                "reference": "577ee3fe8868db31343858469aa14fe3c0186cf4",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.3",
+                "survos/core-bundle": "^1.5",
+                "symfony/config": "^7.3",
+                "symfony/dependency-injection": "^7.3",
+                "symfony/http-kernel": "^7.3",
+                "symfony/string": "^7.3",
+                "twig/twig": "^3.4"
+            },
+            "conflict": {
+                "survos/api-grid-bundle": "<1.2.57",
+                "survos/auth-bundle": "<1.2.57",
+                "survos/barcode-bundle": "<1.2.57",
+                "survos/bootstrap-bundle": "<1.2.57",
+                "survos/command-bundle": "<1.2.57",
+                "survos/crawler-bundle": "<1.2.57",
+                "survos/doc-bundle": "<1.2.57",
+                "survos/faker-bundle": "<1.2.57",
+                "survos/grid-bundle": "<1.2.57",
+                "survos/grid-group-bundle": "<1.2.57",
+                "survos/html-prettify-bundle": "<1.2.57",
+                "survos/import-bridge": "<1.2.57",
+                "survos/location-bundle": "<1.2.57",
+                "survos/maker-bundle": "<1.2.57",
+                "survos/providence-bundle": "<1.2.57",
+                "survos/ruler-bundle": "<1.2.57",
+                "survos/stripe-product": "<1.2.57",
+                "survos/tree-bundle": "<1.2.57",
+                "survos/wiki-bundle": "<1.2.57",
+                "survos/workflow-helper-bundle": "<1.2.57"
+            },
+            "require-dev": {
+                "api-platform/core": "^4.0",
+                "phpstan/phpstan": "^2.0",
+                "roave/security-advisories": "dev-latest",
+                "survos/api-grid-bundle": "^1.5",
+                "symfony/routing": "^7.2"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "symfony": {
+                    "require": "^7.3"
+                },
+                "branch-alias": {
+                    "dev-main": "1.6-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Survos\\InspectionBundle\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tac Tacelosky",
+                    "email": "tacman@gmail.com"
+                }
+            ],
+            "description": "Inspects Doctrine entities with APIPlatform attributes",
+            "support": {
+                "issues": "https://github.com/survos/SurvosInspectionBundle/issues",
+                "source": "https://github.com/survos/SurvosInspectionBundle/tree/1.6.44"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/kbond",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-08-03T13:59:11+00:00"
+        },
+        {
             "name": "survos/installer",
             "version": "2.1.4",
             "source": {
@@ -7132,6 +7221,88 @@
                 }
             ],
             "time": "2025-04-06T14:12:30+00:00"
+        },
+        {
+            "name": "survos/tree-bundle",
+            "version": "1.6.44",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/survos/SurvosTreeBundle.git",
+                "reference": "217f2dc19941cdb8426509bf4f4bf7ad878177ac"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/survos/SurvosTreeBundle/zipball/217f2dc19941cdb8426509bf4f4bf7ad878177ac",
+                "reference": "217f2dc19941cdb8426509bf4f4bf7ad878177ac",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/doctrine-bundle": "^2.7",
+                "doctrine/orm": "^3.3",
+                "doctrine/persistence": "^2.0 || ^3.0 || ^4.0",
+                "php": "^8.3",
+                "stof/doctrine-extensions-bundle": "^1.8",
+                "survos/core-bundle": "^1.5",
+                "survos/inspection-bundle": "^1.5",
+                "symfony/config": "^7.3",
+                "symfony/dependency-injection": "^7.3",
+                "symfony/http-kernel": "^7.3",
+                "symfony/options-resolver": "^7.3",
+                "symfony/stimulus-bundle": "^2.21",
+                "symfony/ux-twig-component": "^2.8",
+                "tacman/twig-tree-tag": "^3.0.1",
+                "twig/twig": "^3.4"
+            },
+            "require-dev": {
+                "api-platform/core": "^4.0",
+                "phpstan/phpstan": "^2.0",
+                "phpunit/phpunit": "^11.4",
+                "symfony/browser-kit": "^7.3",
+                "symfony/framework-bundle": "^7.3",
+                "symfony/phpunit-bridge": "^7.3",
+                "symfony/twig-bundle": "^7.3",
+                "symfony/var-dumper": "^7.3"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "symfony": {
+                    "require": "^7.0 || ^6.3"
+                },
+                "branch-alias": {
+                    "dev-master": "1.4-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Survos\\Tree\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tac Tacelosky",
+                    "email": "tacman@gmail.com"
+                }
+            ],
+            "description": "incorporate jstree, using twig and stimulus and api-platform",
+            "keywords": [
+                "hierarchical",
+                "symfony-ux"
+            ],
+            "support": {
+                "issues": "https://github.com/survos/SurvosTreeBundle/issues",
+                "source": "https://github.com/survos/SurvosTreeBundle/tree/1.6.44"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/kbond",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-07-26T14:04:30+00:00"
         },
         {
             "name": "survos/workflow-helper-bundle",
@@ -13623,6 +13794,59 @@
                 "source": "https://github.com/SymfonyCasts/verify-email-bundle/tree/v1.17.4"
             },
             "time": "2025-08-15T14:29:56+00:00"
+        },
+        {
+            "name": "tacman/twig-tree-tag",
+            "version": "3.1.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tacman/twig-tree-tag.git",
+                "reference": "94f98df299f41a6a2fa656aaba3996410b6241a3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tacman/twig-tree-tag/zipball/94f98df299f41a6a2fa656aaba3996410b6241a3",
+                "reference": "94f98df299f41a6a2fa656aaba3996410b6241a3",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.1",
+                "twig/twig": "^3|^4"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^1.11.7",
+                "rector/rector": "^1.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "JordanLev\\TwigTreeTag\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Alain Tiemblo",
+                    "email": "alain@fuz.org"
+                },
+                {
+                    "name": "Jordan Lev",
+                    "email": "github@jordanlev.com"
+                },
+                {
+                    "name": "Tac Tacelosky",
+                    "email": "tacman@gmail.com"
+                }
+            ],
+            "description": "A Twig extension for succinctly traversing nested lists (e.g. navigation menus), supporting Twig 3",
+            "homepage": "https://github.com/tacman/twig-tree-tag",
+            "support": {
+                "source": "https://github.com/tacman/twig-tree-tag/tree/3.1.7"
+            },
+            "time": "2024-07-23T14:14:11+00:00"
         },
         {
             "name": "twig/extra-bundle",

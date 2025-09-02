@@ -44,6 +44,7 @@
         "survos/sais-bundle": ">=1.6.44",
         "survos/simple-datatables-bundle": "^1.6.44",
         "survos/translatable-field-bundle": "dev-main",
+        "survos/tree-bundle": "*",
         "survos/workflow-helper-bundle": "^1.6.44",
         "symfony/asset": "^7.3",
         "symfony/asset-mapper": "^7.3.2",
