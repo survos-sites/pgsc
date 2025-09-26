@@ -9,6 +9,7 @@ use App\Repository\SacroRepository;
 use App\Workflow\ISacroWorkflow;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Survos\BabelBundle\Attribute\BabelLocale;
 use Survos\BabelBundle\Attribute\BabelStorage;
 use Survos\BabelBundle\Attribute\Translatable;
 use Survos\WorkflowBundle\Traits\MarkingInterface;
@@ -16,6 +17,10 @@ use Survos\WorkflowBundle\Traits\MarkingTrait;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Serializer\Attribute\SerializedName;
 
+
+use Survos\BabelBundle\Entity\Traits\BabelHooksTrait;
+
+use Doctrine\ORM\Mapping\Column;
 #[ORM\Entity(repositoryClass: SacroRepository::class)]
 #[ApiResource(
     normalizationContext: ['groups' => ['sacro.read']],
@@ -28,6 +33,8 @@ use Symfony\Component\Serializer\Attribute\SerializedName;
 #[BabelStorage]
 class Sacro implements \Stringable, MarkingInterface
 {
+    use BabelHooksTrait;
+
     use MarkingTrait;
 
     public function __construct(
@@ -39,18 +46,12 @@ class Sacro implements \Stringable, MarkingInterface
         $this->marking = ISacroWorkflow::PLACE_NEW;
     }
 
+    #[BabelLocale()]
+    public string $locale = 'es';
+
     #[ORM\Column(length: 255, nullable: true)]
     #[Translatable]
     public ?string $notes = null;
-
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Translatable]
-    public ?string $description = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    #[Translatable]
-    public ?string $label = null;
-
 
     #[ORM\Column(nullable: true)]
     private ?array $extra = null;
@@ -69,7 +70,7 @@ class Sacro implements \Stringable, MarkingInterface
     private ?array $imageSizes = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $driveUrl = null;
+    public ?string $driveUrl = null;
 
     #[Groups('sacro.read')]
     #[SerializedName('code')]
@@ -98,25 +99,25 @@ class Sacro implements \Stringable, MarkingInterface
 
     public function __toString()
     {
-        return $this->getLabel();
+        return $this->label;
     }
 
-    #[Groups('sacro.read')]
-    public function getNotes(?string $locale = null): ?string
-    {
-        return $this->translate($locale)->getNotes();
-    }
-    #[Groups('sacro.read')]
-    public function getLabel(?string $locale = null): ?string
-    {
-        return $this->translate($locale)->getLabel();
-    }
-
-    #[Groups('sacro.read')]
-    public function getDescription(?string $locale = null): ?string
-    {
-        return $this->translate($locale)->getDescription();
-    }
+//    #[Groups('sacro.read')]
+//    public function getNotes(?string $locale = null): ?string
+//    {
+//        return $this->translate($locale)->getNotes();
+//    }
+//    #[Groups('sacro.read')]
+//    public function getLabel(?string $locale = null): ?string
+//    {
+//        return $this->translate($locale)->getLabel();
+//    }
+//
+//    #[Groups('sacro.read')]
+//    public function getDescription(?string $locale = null): ?string
+//    {
+//        return $this->translate($locale)->getDescription();
+//    }
     public function getFlickrId(): ?string
     {
         if ($url =  $this->extra['flickr'] ?? null) {
@@ -189,4 +190,26 @@ class Sacro implements \Stringable, MarkingInterface
 
         return $this;
     }
+
+        // <BABEL:TRANSLATABLE:START label>
+        #[Column(type: Types::STRING, length: 255, nullable: false)]
+        private ?string $labelBacking = null;
+
+        #[Translatable(context: NULL)]
+        public ?string $label {
+            get => $this->resolveTranslatable('label', $this->labelBacking, NULL);
+            set => $this->labelBacking = $value;
+        }
+        // <BABEL:TRANSLATABLE:END label>
+
+        // <BABEL:TRANSLATABLE:START description>
+        #[Column(type: Types::TEXT, nullable: true)]
+        private ?string $descriptionBacking = null;
+
+        #[Translatable(context: NULL)]
+        public ?string $description {
+            get => $this->resolveTranslatable('description', $this->descriptionBacking, NULL);
+            set => $this->descriptionBacking = $value;
+        }
+        // <BABEL:TRANSLATABLE:END description>
 }

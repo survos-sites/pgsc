@@ -35,7 +35,7 @@ final class AppCmasCommand
     public function __invoke(
         SymfonyStyle $io,
         #[Argument('', 'path file downloaded csv')]
-        string $path = 'data/cmas.csv',
+        string $path = 'cmas.csv',
         #[Option(description: 'Process Google Drive images')]
         bool $images = false,
         #[Option(description: 'Process Google Drive images')]
@@ -64,25 +64,28 @@ final class AppCmasCommand
             if (!$sacro = $this->sacroRepository->find($code)) {
                 $sacro = new Sacro($code);
                 $this->entityManager->persist($sacro);
-                $this->entityManager->flush();
             }
             $driveUrl = $extra['vinculo'];
             $sacro->setDriveUrl($driveUrl);
 
             $sacro->setExtra($extra);
-            assert(false, "set the rows");
-            foreach (['es', 'en'] as $locale) {
+
+            foreach (['es'] as $locale) {
                 foreach (['label', 'description', 'notes'] as $field) {
-                    $translate = $sacro->translate($locale);
-                    $value = $row[$field . '.' . $locale];
-                    if ('label' == $field) {
-                        $value = u($value)->lower()->localeTitle('es')->title(true)->toString();
+                    if ($locale == 'es') {
+                        $value = $row[$field . '.' . $locale];
+                        if ('label' == $field) {
+                            $value = u($value)->lower()->localeTitle('es')->title(true)->toString();
+                        }
+                        $sacro->{$field} = $value;
+//                        dd($field, $value);
                     }
-                    $this->accessor->setValue(
-                        $translate,
-                        $field,
-                        $value
-                    );
+//                    $translate = $sacro->translate($locale);
+//                    $this->accessor->setValue(
+//                        $translate,
+//                        $field,
+//                        $value
+//                    );
                 }
             }
             // this should be done in a transition, not during the load

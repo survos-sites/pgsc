@@ -43,3 +43,7 @@ phpstan.neon
 ###> survos/flickr-bundle ###
 /flickr-downloads
 ###< survos/flickr-bundle ###
+
+###> survos/flickr-bundle ###
+/flickr-downloads
+###< survos/flickr-bundle ###

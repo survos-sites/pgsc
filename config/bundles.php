@@ -51,4 +51,5 @@ return [
     Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle::class => ['all' => true],
     Survos\InspectionBundle\SurvosInspectionBundle::class => ['all' => true],
     Survos\Tree\SurvosTreeBundle::class => ['all' => true],
+    Survos\McpBundle\SurvosMcpBundle::class => ['all' => true],
 ];

@@ -13,6 +13,7 @@ use App\Repository\MediaRepository;
 use App\Repository\ObraRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use League\Csv\Reader;
+use Survos\McpBundle\Service\McpClientService;
 use Symfony\Bridge\Twig\Attribute\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -47,6 +48,7 @@ final class AppController extends AbstractController
         private PropertyAccessorInterface $propertyAccessor,
         private GoogleDriveService $driveService,
         private \Psr\Log\LoggerInterface $logger,
+        private McpClientService $mcpClientService,
 
         #[Autowire('%env(GOOGLE_SPREADSHEET_ID)%')] private ?string $googleSpreadsheetId = null,
     ) {
@@ -79,7 +81,7 @@ final class AppController extends AbstractController
                 'message' => 'Google Spreadsheet ID not configured in this environment. Sync functionality disabled.'
             ]);
         }
-        
+
         try {
             $this->logger->info('Starting sync process', ['spreadsheetId' => $this->googleSpreadsheetId]);
             $spreadsheet = $sheetService->getGoogleSpreadSheet($this->googleSpreadsheetId);
@@ -232,13 +234,13 @@ final class AppController extends AbstractController
 //        // integrate with Google Sheets
 //        dd();
             return $this->render('app/index.html.twig', []);
-            
+
         } catch (\Exception $e) {
             $this->logger->error('Error during sync process', [
                 'message' => $e->getMessage(),
                 'spreadsheetId' => $this->googleSpreadsheetId
             ]);
-            
+
             return $this->render('app/index.html.twig', [
                 'error' => 'Sync process failed: ' . $e->getMessage()
             ]);
@@ -379,12 +381,12 @@ final class AppController extends AbstractController
         if (!empty($imageCodes)) {
             $allMediaCodes = array_merge($allMediaCodes, $imageCodes);
         }https://pgsc.wip/es/obj/fe1https://pgsc.wip/es/obj/fe1https://pgsc.wip/es/obj/fe1https://pgsc.wip/es/obj/fe1
-        
+
         // Add audio code if present
         if ($audioCode = $obra->audioCode) {
             $allMediaCodes[] = $audioCode;
         }
-        
+
         $mediaByCode = [];
         if (!empty($allMediaCodes)) {
             $mediaItems = $this->mediaRepository->createQueryBuilder('m')
@@ -392,12 +394,12 @@ final class AppController extends AbstractController
                 ->setParameter('codes', array_unique($allMediaCodes))
                 ->getQuery()
                 ->getResult();
-            
+
             foreach ($mediaItems as $media) {
                 $mediaByCode[$media->getCode()] = $media;
             }
         }
-        
+
         return [
             'obj' => $obra,
             'imagesByCode' => $mediaByCode, // Keep the same name for backward compatibility
@@ -445,7 +447,7 @@ final class AppController extends AbstractController
                 $allImageCodes = array_merge($allImageCodes, $imageCodes);
             }
         }
-        
+
         $imagesByCode = [];
         if (!empty($allImageCodes)) {
             $images = $this->mediaRepository->createQueryBuilder('m')
@@ -453,7 +455,7 @@ final class AppController extends AbstractController
                 ->setParameter('codes', array_unique($allImageCodes))
                 ->getQuery()
                 ->getResult();
-            
+
             foreach ($images as $image) {
                 $imagesByCode[$image->getCode()] = $image;
             }
@@ -472,16 +474,16 @@ final class AppController extends AbstractController
     {
         // Use the existing artist->obras relationship
         $obras = $artist->obras;https://pgsc.wip/es/obj/fe1
-        
+
         // Collect all image codes from the obras and artist for batch loading
         $allImageCodes = [];
-        
+
         // Add artist's image codes
         $artistImageCodes = $artist->getImageCodes();
         if (!empty($artistImageCodes)) {
             $allImageCodes = array_merge($allImageCodes, $artistImageCodes);
         }
-        
+
         // Add obra image codes
         foreach ($obras as $obra) {
             $imageCodes = $obra->getImageCodes();
@@ -489,7 +491,7 @@ final class AppController extends AbstractController
                 $allImageCodes = array_merge($allImageCodes, $imageCodes);
             }
         }
-        
+
         $imagesByCode = [];
         if (!empty($allImageCodes)) {
             $images = $this->mediaRepository->createQueryBuilder('m')
@@ -497,7 +499,7 @@ final class AppController extends AbstractController
                 ->setParameter('codes', array_unique($allImageCodes))
                 ->getQuery()
                 ->getResult();
-            
+
             foreach ($images as $image) {
                 $imagesByCode[$image->getCode()] = $image;
             }
@@ -574,7 +576,7 @@ final class AppController extends AbstractController
 
         // Update the updated timestamp
         $media->setUpdatedAt(new \DateTimeImmutable());
-        
+
         // Persist changes
         $this->entityManager->flush();
 
@@ -700,37 +702,32 @@ final class AppController extends AbstractController
     #[Route('/jsonrpc/test', name: 'jsonrpc_test')]
     public function jsonRpcTest(): Response
     {
+        $client = 'sais';
+        $tools = $this->mcpClientService->listTools($client);
 
-        //prepare the http client from the jsonrpc pack
-        $httpClient = new \JsonRPC\HttpClient(
-            'https://sais.wip/tools',
-        );
-
-        //add curl proxy option
-        $httpClient->addOption(
-            CURLOPT_PROXY,
-            'http://127.0.0.1:7080'
-        );
-
-        // This is a temporary route to test JsonRPC\Client
-        // You can use this to test the JsonRPC\Client functionality
-        $client = new \JsonRPC\Client('https://sais.wip/tools', false, $httpClient);
-
+//        //prepare the http client from the jsonrpc pack
+//        $httpClient = new \JsonRPC\HttpClient(
+//            'https://sais.wip/tools',
+//        );
+//
+//        //add curl proxy option
+//        $httpClient->addOption(
+//            CURLOPT_PROXY,
+//            'http://127.0.0.1:7080'
+//        );
+//
+//        // This is a temporary route to test JsonRPC\Client
+//        // You can use this to test the JsonRPC\Client functionality
+//        $client = new \JsonRPC\Client('https://sais.wip/tools', false, $httpClient);
+//
         $arguments = (array) new AccountSetup('rootdd', 1400);
 
-        $result = $client->execute('tools/call', [
-            'name' => 'create_account',
-            'arguments' => $arguments,
-        ]);
+        $result = $this->mcpClientService->callTool($client,
+            'create_account',
+            $arguments
+        );
 
-        //call for tools list
-        // $result = $client->execute('tools/list', [
-        //     'root' => 'chijal',
-        //     'limit' => 10,
-        //     'offset' => 0,
-        // ]);
-
-        //dd($result);
+        dd($result, $tools);
 
         return new Response('JsonRPC Client created successfully: ' . get_class($client));
     }

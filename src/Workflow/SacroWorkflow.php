@@ -32,9 +32,8 @@ class SacroWorkflow implements ISacroWorkflow
 		$sacro = $this->getSacro($event);
         $result = $this->saisClientService->dispatchProcess(
             new ProcessPayload('sacro', [
-                $sacro->getDriveUrl()
+                $sacro->driveUrl
             ])
         );
-        dd($result);
 	}
 }

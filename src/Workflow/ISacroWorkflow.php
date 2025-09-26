@@ -15,6 +15,6 @@ interface ISacroWorkflow
 	#[Place]
 	public const PLACE_RESIZED = 'resized';
 
-	#[Transition(from: [self::PLACE_NEW], to: self::PLACE_RESIZED, guard: 'subject.getDriveUrl')]
+	#[Transition(from: [self::PLACE_NEW], to: self::PLACE_RESIZED, guard: 'subject.driveUrl')]
 	public const TRANSITION_RESIZE = 'resize';
 }

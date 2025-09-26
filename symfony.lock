@@ -254,6 +254,9 @@
     "survos/inspection-bundle": {
         "version": "1.6.44"
     },
+    "survos/mcp-bundle": {
+        "version": "dev-main"
+    },
     "survos/sais-bundle": {
         "version": "1.5.529"
     },
