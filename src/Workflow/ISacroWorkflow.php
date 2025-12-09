@@ -2,10 +2,14 @@
 
 namespace App\Workflow;
 
-use Survos\WorkflowBundle\Attribute\Place;
-use Survos\WorkflowBundle\Attribute\Transition;
+use App\Entity\Sacro;
+use App\Workflow\ISacroWorkflow as WF;
+use Survos\StateBundle\Attribute\Place;
+use Survos\StateBundle\Attribute\Transition;
+use Survos\StateBundle\Attribute\Workflow;
 
-interface ISacroWorkflow
+#[Workflow(supports: [Sacro::class], name: WF::WORKFLOW_NAME)]
+class ISacroWorkflow
 {
 	public const WORKFLOW_NAME = 'SacroWorkflow';
 

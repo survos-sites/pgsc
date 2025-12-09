@@ -2,10 +2,14 @@
 
 namespace App\Workflow;
 
-use Survos\WorkflowBundle\Attribute\Place;
-use Survos\WorkflowBundle\Attribute\Transition;
+use App\Entity\Media;
+use Survos\StateBundle\Attribute\Place;
+use Survos\StateBundle\Attribute\Transition;
+use Survos\StateBundle\Attribute\Workflow;
 
-interface IMediaWorkflow
+#[Workflow(supports: [Media::class], name: self::WORKFLOW_NAME)]
+
+class IMediaWorkflow
 {
 	public const WORKFLOW_NAME = 'MediaWorkflow';
 

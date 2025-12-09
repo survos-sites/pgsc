@@ -5,14 +5,14 @@ namespace App\Workflow;
 use App\Entity\Sacro;
 use Survos\SaisBundle\Model\ProcessPayload;
 use Survos\SaisBundle\Service\SaisClientService;
-use Survos\WorkflowBundle\Attribute\Workflow;
+use Survos\StateBundle\Attribute\Workflow;
 use Symfony\Component\Workflow\Attribute\AsGuardListener;
 use Symfony\Component\Workflow\Attribute\AsTransitionListener;
 use Symfony\Component\Workflow\Event\GuardEvent;
 use Symfony\Component\Workflow\Event\TransitionEvent;
+use App\Workflow\ISacroWorkflow as WF;
 
-#[Workflow(supports: [Sacro::class], name: self::WORKFLOW_NAME)]
-class SacroWorkflow implements ISacroWorkflow
+class SacroWorkflow
 {
 	public const WORKFLOW_NAME = 'SacroWorkflow';
 
@@ -26,7 +26,7 @@ class SacroWorkflow implements ISacroWorkflow
 		/** @var Sacro */ return $event->getSubject();
 	}
 
-	#[AsTransitionListener(self::WORKFLOW_NAME, self::TRANSITION_RESIZE)]
+	#[AsTransitionListener(WF::WORKFLOW_NAME, WF::TRANSITION_RESIZE)]
 	public function onTransition(TransitionEvent $event): void
 	{
 		$sacro = $this->getSacro($event);

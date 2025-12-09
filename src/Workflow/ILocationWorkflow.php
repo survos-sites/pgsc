@@ -2,9 +2,12 @@
 
 namespace App\Workflow;
 
-use Survos\WorkflowBundle\Attribute\Place;
-use Survos\WorkflowBundle\Attribute\Transition;
+use App\Entity\Location;
+use Survos\StateBundle\Attribute\Place;
+use Survos\StateBundle\Attribute\Transition;
+use Survos\StateBundle\Attribute\Workflow;
 
+#[Workflow(type: 'state_machine', supports: [Location::class], name: self::WORKFLOW_NAME)]
 interface ILocationWorkflow
 {
     public const WORKFLOW_NAME = 'LocationWorkflow';

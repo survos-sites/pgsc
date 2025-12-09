@@ -4,17 +4,15 @@ namespace App\Workflow;
 
 use App\Entity\Location;
 use Survos\GeoapifyBundle\Service\GeoapifyService;
-use Survos\WorkflowBundle\Attribute\Workflow;
+use Survos\StateBundle\Attribute\Workflow;
 use Symfony\Component\Workflow\Attribute\AsGuardListener;
 use Symfony\Component\Workflow\Attribute\AsTransitionListener;
 use Symfony\Component\Workflow\Event\CompletedEvent;
 use Symfony\Component\Workflow\Event\GuardEvent;
 use Symfony\Component\Workflow\Event\TransitionEvent;
-
-#[Workflow(type: 'state_machine', supports: [Location::class], name: self::WORKFLOW_NAME)]
-class LocationWorkflow implements ILocationWorkflow
+use App\Workflow\ILocationWorkflow as WF;
+class LocationWorkflow
 {
-    public const WORKFLOW_NAME = 'LocationWorkflow';
 
     public function __construct(
         private GeoapifyService $geoapifyService,
@@ -28,7 +26,7 @@ class LocationWorkflow implements ILocationWorkflow
         return $event->getSubject();
     }
 
-    #[AsTransitionListener(self::WORKFLOW_NAME, self::TRANSITION_GEOCODE)]
+    #[AsTransitionListener(WF::WORKFLOW_NAME, WF::TRANSITION_GEOCODE)]
     public function onGeocode(TransitionEvent $event): void
     {
         $location = $this->getLocation($event);

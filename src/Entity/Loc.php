@@ -18,10 +18,10 @@ use App\Entity\AltosObj;
 #[ORM\Table(name: 'loc')]
 #[ORM\UniqueConstraint(name: 'uniq_loc_code', fields: ['code'])]
 #[ORM\Index(name: 'idx_loc_type', fields: ['type'])]
-#[Gedmo\Tree(type: 'nested')]
-final class Loc implements TreeInterface, \Stringable
+//#[Gedmo\Tree(type: 'nested')]
+final class Loc implements \Stringable
 {
-    use TreeTrait;
+//    use TreeTrait;
 
     public function __construct()
     {

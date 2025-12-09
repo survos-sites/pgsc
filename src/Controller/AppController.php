@@ -13,7 +13,6 @@ use App\Repository\MediaRepository;
 use App\Repository\ObraRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use League\Csv\Reader;
-use Survos\McpBundle\Service\McpClientService;
 use Symfony\Bridge\Twig\Attribute\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -33,9 +32,6 @@ use Survos\GoogleSheetsBundle\Service\GoogleDriveService;
 //call symfony String
 use Symfony\Component\String\Slugger\AsciiSlugger;
 
-use Survos\SaisBundle\Mcp\Schema\CreateUserSchema;
-use Survos\SaisBundle\Model\AccountSetup;
-
 #[Route('/{_locale}')]
 final class AppController extends AbstractController
 {
@@ -48,7 +44,6 @@ final class AppController extends AbstractController
         private PropertyAccessorInterface $propertyAccessor,
         private GoogleDriveService $driveService,
         private \Psr\Log\LoggerInterface $logger,
-        private McpClientService $mcpClientService,
 
         #[Autowire('%env(GOOGLE_SPREADSHEET_ID)%')] private ?string $googleSpreadsheetId = null,
     ) {

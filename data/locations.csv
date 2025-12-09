@@ -5,11 +5,11 @@ laez,activo,Cerrillo,"La Enseñanza Casa de la Ciudad ","Belisario Domínguez 13
 gart,activo,,"Galeria Arteria","29230, Real de Guadalupe 118, Barrio de Guadalupe, 29230 San Cristóbal de las Casas, Chis.","Galeria ","Adrian,  Mac ",9671643812,"16.73804957533023, -92.63000271834244"
 bioes,activo,"San Ramon","Biocafeteria Espiral","Diagonal Hermanos Paniagua 38, San Ramon, 29240 San Cristóbal de las Casas, Chis.",Cafeteria,Sergio,9671146317,"16.732547622984455, -92.6541417201932"
 snds,activo,,"Sendas - Libre Café","C. María Adelina Flores 50, Barrio de Guadalupe, 29230 San Cristóbal de las Casas, Chis.",cc,Paco,9671036013,"16.73864042042995, -92.63224673368563"
-venajo,activo,,"VENAS DE JOVEL",,cc,Camilo,"967 130 6611"
+venajo,inactivo,,"VENAS DE JOVEL",,cc,Camilo,"967 130 6611"
 chijal,activo,Cerrillo,"Oficina de Chijal",,cc
 libjo,activo,,"Librería Jovel",,,,,"16.739149094157337, -92.63429824717825"
 cora,activo,,"Galería de Mi Corazón ",,,,,"16.74026741884907, -92.63431524902877"
-kiki,inactive,,"Galeria Kikimundo",,,,,"16.736380625147287, -92.63821974717834"
+kiki,inactivo,,"Galeria Kikimundo",,,,,"16.736380625147287, -92.63821974717834"
 brujo,inactivo,,"Cerro Brujo ","Real de Guadalupe, Barrio de Guadalupe, 29200 San Cristóbal de las Casas, Chis.","Galeria ","Karla Lorenzana",7226495669
 mualtos,inactivo,,"Museo de los Altos de Chiapas ","Av 20 de Noviembre s/n, Barrio del Cerrillo, 29200 San Cristóbal de las Casas, Chis.",Museo,"Raul Durón",9671380867,"16.742033094938463, -92.63728727601396"
 camt,inactivo,,"El Caminante","El Pedregal 3, Corral de Piedra, San Cristóbal de las Casas, Chis. 29299",Restaurant
@@ -35,4 +35,4 @@ castro,,,"Museo Sergio Castro","29240, C. Guadalupe Victoria 38, Barrio de la Me
 ,,,"Museo Tatik Samuel ","Carretera Chamula km. 1 San Martin "
 ,,,"Lab Batsi"
 ,,,Leñateros
-bikesh,active,,Cicletaria
+bikesh,active,,Bicicletería

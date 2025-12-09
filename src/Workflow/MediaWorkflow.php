@@ -4,7 +4,7 @@ namespace App\Workflow;
 
 use App\Command\LoadCommand;
 use App\Entity\Media;
-use Survos\WorkflowBundle\Attribute\Workflow;
+use Survos\StateBundle\Attribute\Workflow;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Workflow\Attribute\AsCompletedListener;
@@ -17,16 +17,14 @@ use Symfony\Component\Workflow\Event\TransitionEvent;
 use Survos\SaisBundle\Service\SaisClientService;
 use Survos\SaisBundle\Model\ProcessPayload;
 use Symfony\Component\Workflow\WorkflowInterface;
+use App\Workflow\IMediaWorkflow as WF;
 
-#[Workflow(supports: [Media::class], name: self::WORKFLOW_NAME)]
-class MediaWorkflow implements IMediaWorkflow
+class MediaWorkflow
 {
-	public const WORKFLOW_NAME = 'MediaWorkflow';
-
 	public function __construct(
         private SaisClientService     $sais,
         private UrlGeneratorInterface $urlGenerator,
-        #[Target(self::WORKFLOW_NAME)] private WorkflowInterface $mediaWorkflow,
+        #[Target(WF::WORKFLOW_NAME)] private WorkflowInterface $mediaWorkflow,
     )
 	{
 	}
@@ -39,7 +37,7 @@ class MediaWorkflow implements IMediaWorkflow
 
 
 
-	#[AsTransitionListener(self::WORKFLOW_NAME, self::TRANSITION_DISPATCH)]
+	#[AsTransitionListener(WF::WORKFLOW_NAME, WF::TRANSITION_DISPATCH)]
 	public function onDispatch(TransitionEvent $event): void
 	{
 		$media = $this->getMedia($event);
@@ -87,7 +85,7 @@ class MediaWorkflow implements IMediaWorkflow
         }
 	}
 
-    #[AsCompletedListener(self::WORKFLOW_NAME, self::TRANSITION_DISPATCH)]
+    #[AsCompletedListener(WF::WORKFLOW_NAME, WF::TRANSITION_DISPATCH)]
     public function OnDispatchCompleted(CompletedEvent $event): void
     {
         $media = $this->getMedia($event);
@@ -98,7 +96,7 @@ class MediaWorkflow implements IMediaWorkflow
     }
 
 
-	#[AsTransitionListener(self::WORKFLOW_NAME, self::TRANSITION_RESIZE)]
+	#[AsTransitionListener(WF::WORKFLOW_NAME, WF::TRANSITION_RESIZE)]
 	public function onResize(TransitionEvent $event): void
 	{
 		$media = $this->getMedia($event);
