@@ -97,6 +97,7 @@ final class AppController extends AbstractController
                 if (!is_dir(dirname($filePath))) {
                     mkdir(dirname($filePath), 0777, true);
                 }
+                dump($filePath);
                 file_put_contents($filePath, $csv);
                 return;
                 //dd(sprintf('Saved %s to %s', $sheet, $filePath));

@@ -144,7 +144,8 @@ class LoadCommand extends Command
 
         // ---- Obras
         $io->section('Importing Obras');
-        foreach ($this->csv("$dir/piezas.csv")->getRecords() as $row) {
+//        foreach ($this->csv("$dir/piezas.csv")->getRecords() as $row) {
+        foreach ($this->csv("$dir/omar_exhibition.csv")->getRecords() as $row) {
             $row = $this->normalizeRow($row);
 
             $code = $this->normCode($row['code'] ?? null);
