@@ -7,6 +7,18 @@
 
     <h2>Sync results</h2>
 
+    {% if error %}
+    <div class="alert alert-danger">
+        <strong>Sync failed:</strong> {{ error }}
+        {% if 'does not exist' in error and 'private_key' in error %}
+        <div class="mt-2 small text-muted">
+            The <code>JSON_AUTH</code> environment variable on the server may have mangled newlines in the private key.
+            Run: <code>dokku config:set pgsc JSON_AUTH="$(cat google-credentials.json)"</code>
+        </div>
+        {% endif %}
+    </div>
+    {% endif %}
+
     <div class="row g-3 mb-4">
         <div class="col-auto">
             <div class="card text-center px-4 py-3">

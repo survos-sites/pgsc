@@ -67,12 +67,22 @@ final class AppController extends AbstractController
             return $this->redirectToRoute('app_homepage');
         }
 
-        $counts         = $syncService->sync($refresh);
         $spreadsheetUrl = 'https://docs.google.com/spreadsheets/d/' . $this->googleSpreadsheetId;
+
+        try {
+            $counts = $syncService->sync($refresh);
+        } catch (\Throwable $e) {
+            return $this->render('app/sync_results.html.twig', [
+                'counts'         => ['artists' => 0, 'locations' => 0, 'obras' => 0, 'skipped' => [], 'warnings' => []],
+                'spreadsheetUrl' => $spreadsheetUrl,
+                'error'          => $e->getMessage(),
+            ]);
+        }
 
         return $this->render('app/sync_results.html.twig', [
             'counts'         => $counts,
             'spreadsheetUrl' => $spreadsheetUrl,
+            'error'          => null,
         ]);
     }
 
