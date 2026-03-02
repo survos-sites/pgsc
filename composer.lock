@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "012c9f9a7e92df9012dd210e0f97517d",
+    "content-hash": "fa29862baa97f1d1abee7a68fdce3624",
     "packages": [
         {
             "name": "alexandre-fernandez/json-translation-bundle",
@@ -6354,16 +6354,10 @@
         {
             "name": "survos/google-sheets-bundle",
             "version": "2.0.83",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/survos/SurvosGoogleSheetsBundle.git",
-                "reference": "31b3bcf95449ee77df3a0c0ea523334897c85f2c"
-            },
             "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/survos/SurvosGoogleSheetsBundle/zipball/31b3bcf95449ee77df3a0c0ea523334897c85f2c",
-                "reference": "31b3bcf95449ee77df3a0c0ea523334897c85f2c",
-                "shasum": ""
+                "type": "path",
+                "url": "lib/google-sheets-bundle",
+                "reference": "9b2ae8dfc0e1ff90092ec68a52a9fe14d6a7ed9b"
             },
             "require": {
                 "ext-zlib": "*",
@@ -6386,7 +6380,6 @@
                     "Survos\\GoogleSheetsBundle\\": "src"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -6403,23 +6396,16 @@
             "description": "This bundle manages Google Spreadsheets using the Google api.",
             "homepage": "https://github.com/survos/SurvosGoogleSheetsBundle",
             "keywords": [
+                "Symfony",
                 "api",
                 "bundle",
                 "google",
-                "spreadsheets",
-                "symfony"
+                "spreadsheets"
             ],
-            "support": {
-                "issues": "https://github.com/survos/SurvosGoogleSheetsBundle/issues",
-                "source": "https://github.com/survos/SurvosGoogleSheetsBundle/tree/symfonycon-2025"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/kbond",
-                    "type": "github"
-                }
-            ],
-            "time": "2025-10-27T12:45:39+00:00"
+            "transport-options": {
+                "symlink": false,
+                "relative": true
+            }
         },
         {
             "name": "survos/inspection-bundle",
