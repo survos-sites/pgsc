@@ -51,53 +51,38 @@ final class AppMenu implements KnpMenuHelperInterface
         $options = $event->getOptions();
 
         $this->add($menu, 'app_homepage');
-        $this->add($menu, 'api_doc', label: 'API');
-        // for nested menus, don't add a route, just a label, then use it for the argument to addMenuItem
+        $this->add($menu, 'app_sync', label: 'Sync');
 
-        $subMenu = $this->addSubmenu($menu, 'sacro');
-        array_map(fn($route) => $this->add($subMenu, $route), ['cmas_index','cmas_import','cmas_images']);
+        $labelsMenu = $this->addSubmenu($menu, 'Labels');
+        foreach (['obra', 'artist', 'location'] as $shortClass) {
+            $this->add($labelsMenu, 'print_labels_config', ['shortClass' => $shortClass], label: ucfirst($shortClass) . ' labels');
+        }
 
-        $nestedMenu = $this->addSubmenu($menu, 'artists');
+        $nestedMenu = $this->addSubmenu($menu, 'Artists');
         foreach ($this->artistRepo->findAll() as $artist) {
             $this->add($nestedMenu, 'artist_show', $artist,
                 translationDomain: false,
                 label: $artist->name,
                 badge: $artist->obraCount);
         }
-        $nestedMenu = $this->addSubmenu($menu, 'locations');
+
+        $nestedMenu = $this->addSubmenu($menu, 'Locations');
         foreach ($this->locationRepo->findAll() as $location) {
             $this->add($nestedMenu, 'location_show', $location,
                 translationDomain: false,
                 label: $location->name, badge: $location->obraCount);
         }
 
-        $nestedMenu = $this->addSubmenu($menu, 'artwork');
-        foreach (['by_location', 'by_artist'] as $grouping) {
-            $this->add($nestedMenu, 'app_homepage', label: $grouping);
-        }
-        $subMenu = $this->addSubmenu($menu, 'commands');
-
+        $subMenu = $this->addSubmenu($menu, 'Dev');
+        $this->add($subMenu, 'api_doc', label: 'API');
         $this->add($subMenu, 'survos_commands');
-        $this->add($subMenu, 'survos_command',
-            ['commandName' => 'app:load'],
-            'app:load'
-        );
-        $this->add($subMenu, 'survos_command',
-            ['commandName' => 'survos:flickr:import'],
-            'survos:flickr:import'
-        );
-        $subMenu = $this->addSubmenu($menu, 'extra');
-        $this->add($subMenu, 'app_sync');
+        $this->add($subMenu, 'survos_command', ['commandName' => 'app:load'], 'app:load');
+        $this->add($subMenu, 'survos_command', ['commandName' => 'survos:flickr:import'], 'survos:flickr:import');
         $this->add($subMenu, 'jsonrpc_test');
-        foreach (['obra','artist','location'] as $shortClass) {
-            $this->add($subMenu, 'print_labels', ['shortClass' => $shortClass], label: $shortClass . ' labels');
-        }
-//        $subMenu = $this->addSubmenu($menu, 'debug');
         if ('dev' === $this->env) {
             $this->add($subMenu, 'survos_workflows');
             $this->add($subMenu, 'survos_crawler_data');
         }
-
 
         $this->add($menu, 'admin', translationDomain: false, label: 'EZ');
         $this->appAuthMenu($event);

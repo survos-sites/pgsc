@@ -34,3 +34,5 @@ phpstan.neon
 
 
 /data
+
+.castor.stub.php

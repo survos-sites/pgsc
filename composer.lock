@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fb5b7545675ecfd7acc058ea16ee5a0b",
+    "content-hash": "012c9f9a7e92df9012dd210e0f97517d",
     "packages": [
         {
             "name": "alexandre-fernandez/json-translation-bundle",
@@ -3329,51 +3329,6 @@
                 }
             ],
             "time": "2025-09-22T17:04:34+00:00"
-        },
-        {
-            "name": "genkgo/favicon",
-            "version": "0.3.7",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/genkgo/favicon.git",
-                "reference": "7f5275c4961443c4ed1742b55f08dac77950a2c6"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/genkgo/favicon/zipball/7f5275c4961443c4ed1742b55f08dac77950a2c6",
-                "reference": "7f5275c4961443c4ed1742b55f08dac77950a2c6",
-                "shasum": ""
-            },
-            "require": {
-                "ext-dom": "*",
-                "ext-imagick": "*",
-                "php": "~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0"
-            },
-            "require-dev": {
-                "friendsofphp/php-cs-fixer": "^3.0",
-                "phpstan/phpstan": "^2.0"
-            },
-            "bin": [
-                "bin/favicon-generator"
-            ],
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Genkgo\\Favicon\\": [
-                        "src"
-                    ]
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "Generate browser favicons",
-            "support": {
-                "issues": "https://github.com/genkgo/favicon/issues",
-                "source": "https://github.com/genkgo/favicon/tree/0.3.7"
-            },
-            "time": "2025-05-13T15:17:33+00:00"
         },
         {
             "name": "google/apiclient",
@@ -18210,5 +18165,5 @@
         "ext-intl": "*"
     },
     "platform-dev": {},
-    "plugin-api-version": "2.9.0"
+    "plugin-api-version": "2.6.0"
 }

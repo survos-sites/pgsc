@@ -97,6 +97,11 @@ class Obra implements \Stringable, RouteParametersInterface
     #[Groups(['obra.read'])]
     public ?string $size = null;
 
+    /** Sheet tab name the obra was imported from (non-@ tabs only, e.g. "Omar exhibition", "march2026 pieces") */
+    #[ORM\Column(length: 128, nullable: true)]
+    #[Groups(['obra.read'])]
+    public ?string $exhibition = null;
+
     public function __toString(): string
     {
         return $this->title ?? $this->code;
