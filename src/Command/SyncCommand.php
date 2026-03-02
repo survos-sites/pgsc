@@ -32,11 +32,21 @@ class SyncCommand extends Command
         $counts = $this->syncService->sync($refresh);
 
         $io->success(sprintf(
-            'Sync complete. Artists: %d  |  Locations: %d  |  Sheets skipped: %d',
+            'Sync complete. Artists: %d  |  Locations: %d  |  Obras: %d  |  Sheets skipped: %d',
             $counts['artists'],
             $counts['locations'],
-            $counts['skipped'],
+            $counts['obras'],
+            count($counts['skipped']),
         ));
+
+        if (!empty($counts['warnings'])) {
+            $io->warning(sprintf('%d warning(s):', count($counts['warnings'])));
+            $rows = array_map(
+                fn(array $w) => [$w['sheet'], $w['row'] ?? '-', $w['obra'] ?? '-', $w['message']],
+                $counts['warnings']
+            );
+            $io->table(['Sheet', 'Row', 'Obra', 'Message'], $rows);
+        }
 
         return Command::SUCCESS;
     }

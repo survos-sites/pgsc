@@ -150,7 +150,7 @@ class SyncService
      */
     private function processArtistsSheet(string $csvString, array &$warnings): int
     {
-        $reader = Reader::createFromString($csvString);
+        $reader = Reader::fromString($csvString);
         $reader->setHeaderOffset(0);
 
         $count = 0;
@@ -216,7 +216,7 @@ class SyncService
      */
     private function processLocationsSheet(string $csvString, array &$warnings): int
     {
-        $reader = Reader::createFromString($csvString);
+        $reader = Reader::fromString($csvString);
         $reader->setHeaderOffset(0);
 
         $count = 0;
@@ -271,7 +271,7 @@ class SyncService
         array $locations,
         array &$warnings,
     ): int {
-        $reader = Reader::createFromString($csvString);
+        $reader = Reader::fromString($csvString);
         $reader->setHeaderOffset(0);
 
         $count  = 0;
