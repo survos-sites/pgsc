@@ -138,6 +138,21 @@ body {
     color: var(--ink);
 }
 
+/* ARTWORK IMAGE - floated right, fills available card height */
+.artwork-image-wrap {
+    float: right;
+    margin: 0 0 4pt 8pt;
+    flex-shrink: 0;
+}
+
+.artwork-image {
+    display: block;
+    width: 1.4in;
+    height: 1.4in;
+    object-fit: cover;
+    border: 0.5pt solid var(--border);
+}
+
 /* Override footer for obra-specific sizing - keep the beautiful layout */
 .chijal-footer {
     margin-top: auto;

@@ -3,14 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\Artist;
-use App\Entity\Media;
 use App\Entity\Location;
 use App\Entity\Obra;
 use App\Form\ArtistFormType;
 use App\Repository\ArtistRepository;
 use App\Repository\LocationRepository;
-use App\Repository\MediaRepository;
 use App\Repository\ObraRepository;
+use Survos\MediaBundle\Repository\MediaRepository;
 use App\Service\SyncService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Attribute\Template;
@@ -219,7 +218,7 @@ final class AppController extends AbstractController
         $imageCodes = $obra->getImageCodes();
         if (!empty($imageCodes)) {
             $allMediaCodes = array_merge($allMediaCodes, $imageCodes);
-        }https://pgsc.wip/es/obj/fe1https://pgsc.wip/es/obj/fe1https://pgsc.wip/es/obj/fe1https://pgsc.wip/es/obj/fe1
+        }
 
         // Add audio code if present
         if ($audioCode = $obra->audioCode) {
@@ -229,20 +228,20 @@ final class AppController extends AbstractController
         $mediaByCode = [];
         if (!empty($allMediaCodes)) {
             $mediaItems = $this->mediaRepository->createQueryBuilder('m')
-                ->where('m.code IN (:codes)')
+                ->where('m.id IN (:codes)')
                 ->setParameter('codes', array_unique($allMediaCodes))
                 ->getQuery()
                 ->getResult();
 
             foreach ($mediaItems as $media) {
-                $mediaByCode[$media->getCode()] = $media;
+                $mediaByCode[$media->id] = $media;
             }
         }
 
         return [
             'obj' => $obra,
-            'imagesByCode' => $mediaByCode, // Keep the same name for backward compatibility
-            'mediaByCode' => $mediaByCode,  // New name for clarity
+            'imagesByCode' => $mediaByCode,
+            'mediaByCode' => $mediaByCode,
             'audioMedia' => $obra->audioCode ? ($mediaByCode[$obra->audioCode] ?? null) : null,
         ];
     }
@@ -290,13 +289,13 @@ final class AppController extends AbstractController
         $imagesByCode = [];
         if (!empty($allImageCodes)) {
             $images = $this->mediaRepository->createQueryBuilder('m')
-                ->where('m.code IN (:codes)')
+                ->where('m.id IN (:codes)')
                 ->setParameter('codes', array_unique($allImageCodes))
                 ->getQuery()
                 ->getResult();
 
             foreach ($images as $image) {
-                $imagesByCode[$image->getCode()] = $image;
+                $imagesByCode[$image->id] = $image;
             }
         }
 
@@ -312,7 +311,7 @@ final class AppController extends AbstractController
     public function printArtist(Artist $artist): Response|array
     {
         // Use the existing artist->obras relationship
-        $obras = $artist->obras;https://pgsc.wip/es/obj/fe1
+        $obras = $artist->obras;
 
         // Collect all image codes from the obras and artist for batch loading
         $allImageCodes = [];
@@ -334,13 +333,13 @@ final class AppController extends AbstractController
         $imagesByCode = [];
         if (!empty($allImageCodes)) {
             $images = $this->mediaRepository->createQueryBuilder('m')
-                ->where('m.code IN (:codes)')
+                ->where('m.id IN (:codes)')
                 ->setParameter('codes', array_unique($allImageCodes))
                 ->getQuery()
                 ->getResult();
 
             foreach ($images as $image) {
-                $imagesByCode[$image->getCode()] = $image;
+                $imagesByCode[$image->id] = $image;
             }
         }
 
@@ -359,182 +358,6 @@ final class AppController extends AbstractController
         return $this->render('location/index.html.twig', [
             'locations' => $this->locationRepository->findAll(),
         ]);
-    }
-
-    #[Route('/sais_audio_callback', name: 'sais_audio_callback')]
-    public function saisAudioCallback(Request $request): Response
-    {
-        $data = json_decode($request->getContent(), true);
-
-        $this->logger->info('PGSC Audio callback received', [
-            'data' => $data,
-            'query' => $request->query->all(),
-        ]);
-
-        // Extract the SAIS code from the data or URL parameters
-        $saisCode = $request->query->get('code') ?? $data['code'] ?? null;
-
-        if (!$saisCode) {
-            $this->logger->error('Audio callback: No SAIS code found in request', [
-                'data' => $data,
-                'query' => $request->query->all()
-            ]);
-            return new Response('No SAIS code found in request', Response::HTTP_BAD_REQUEST);
-        }
-
-        // Find the Media entity by SAIS code
-        /** @var Media $media */
-        if (!$media = $this->mediaRepository->find($saisCode)) {
-            $this->logger->error('Audio callback: Media entity not found', [
-                'saisCode' => $saisCode,
-                'data' => $data,
-                'query' => $request->query->all()
-            ]);
-            return new Response('Media entity not found for SAIS code: ' . $saisCode, Response::HTTP_NOT_FOUND);
-        }
-
-        // Update Media entity with SAIS processing results
-        if (isset($data['statusCode'])) {
-            $media->setStatusCode($data['statusCode']);
-        }
-        if (isset($data['mimeType'])) {
-            $media->setMimeType($data['mimeType']);
-        }
-        if (isset($data['size'])) {
-            $media->setSize($data['size']);
-        }
-        if (isset($data['blur'])) {
-            $media->setBlur($data['blur']);
-        }
-        if (isset($data['context'])) {
-            $media->setContext($data['context']);
-        }
-        if (isset($data['resized'])) {
-            $media->resized = $data['resized'];
-        }
-
-        // Update the updated timestamp
-        $media->setUpdatedAt(new \DateTimeImmutable());
-
-        // Persist changes
-        $this->entityManager->flush();
-
-        $this->logger->info('Audio callback: Updated Media entity', [
-            'saisCode' => $saisCode,
-            'type' => $media->type,
-            'statusCode' => $data['statusCode'] ?? null,
-            'mimeType' => $data['mimeType'] ?? null,
-            'size' => $data['size'] ?? null
-        ]);
-
-        return new Response(
-            json_encode([
-                'success' => true,
-                'message' => 'Audio callback processed successfully',
-                'saisCode' => $saisCode,
-                'type' => $media->type,
-                'statusCode' => $data['statusCode'] ?? null
-            ]),
-            Response::HTTP_OK,
-            ['Content-Type' => 'application/json']
-        );
-    }
-
-    #[Route('/webhook/media', name: 'app_media_webhook')]
-    public function mediaWebhook(Request $request): Response
-    {
-        $data = json_decode($request->getContent(), true);
-
-        $this->logger->info('PGSC Media webhook callback received', [
-            'data' => $data,
-            'query' => $request->query->all(),
-        ]);
-
-        // Extract the SAIS code from the data
-        $saisCode = $data['code'] ?? null;
-
-        if (!$saisCode) {
-            $this->logger->error('Media webhook: No SAIS code found in request', [
-                'data' => $data,
-                'query' => $request->query->all()
-            ]);
-            return new Response('No SAIS code found in request', Response::HTTP_BAD_REQUEST);
-        }
-
-        // Create or update Media entity with SAIS data
-        /** @var Media $image */
-        if (!$image = $this->mediaRepository->find($saisCode)) {
-            return $this->json([
-                'error' => 'Media webhook: No SAIS code found in request',
-            ]);
-        }
-        $image->resized = $data['resized'] ?? null;
-
-        $this->logger->info('Media webhook: Updated Media entity', [
-            'saisCode' => $saisCode,
-            'hasResized' => !empty($data['resized']),
-            'statusCode' => $data['statusCode'] ?? null
-        ]);
-
-        return new Response(
-            json_encode([
-                'success' => true,
-                'message' => 'Media webhook processed successfully',
-                'saisCode' => $saisCode,
-                'imageProcessed' => !empty($data['resized'])
-            ]),
-            Response::HTTP_OK,
-            ['Content-Type' => 'application/json']
-        );
-    }
-
-    #[Route('/webhook/thumb', name: 'app_thumb_webhook')]
-    public function thumbWebhook(Request $request): Response
-    {
-        $data = json_decode($request->getContent(), true);
-
-        $this->logger->info('PGSC Thumb webhook callback received', [
-            'data' => $data,
-            'query' => $request->query->all(),
-        ]);
-
-        // Extract the SAIS image code from URL parameters or data
-        $saisCode = $request->query->get('code') ?? $data['code'] ?? null;
-
-        if (!$saisCode) {
-            $this->logger->error('Thumb webhook: No SAIS code found in request', [
-                'data' => $data,
-                'query' => $request->query->all()
-            ]);
-            return new Response('No SAIS code found in request', Response::HTTP_BAD_REQUEST);
-        }
-
-        // Find the Media entity by SAIS code
-        if (!$image = $this->mediaRepository->find($saisCode)) {
-            $this->logger->error('Thumb webhook: Media entity not found', [
-                'saisCode' => $saisCode,
-                'data' => $data,
-                'query' => $request->query->all()
-            ]);
-            return new Response('Media entity not found for SAIS code: ' . $saisCode, Response::HTTP_NOT_FOUND);
-        }
-
-        $liipCode = $data['liipCode']; // 'small', 'medium', 'large'
-        $url = $data['url'];
-        $image->resized[$liipCode] = $url;
-        $this->entityManager->flush();
-
-        return new Response(
-            json_encode([
-                'success' => true,
-                'message' => 'Thumb webhook processed successfully',
-                'saisCode' => $saisCode,
-                'liipCode' => $data['liipCode'] ?? null,
-                'resizedCount' => count($image->resized??[])
-            ]),
-            Response::HTTP_OK,
-            ['Content-Type' => 'application/json']
-        );
     }
 
     //A Temp route to test  JsonRPC\Client;
@@ -559,7 +382,7 @@ final class AppController extends AbstractController
 //        // You can use this to test the JsonRPC\Client functionality
 //        $client = new \JsonRPC\Client('https://sais.wip/tools', false, $httpClient);
 //
-        $arguments = (array) new AccountSetup('rootdd', 1400);
+        $arguments = ['username' => 'rootdd', 'quota' => 1400];
 
         $result = $this->mcpClientService->callTool($client,
             'create_account',

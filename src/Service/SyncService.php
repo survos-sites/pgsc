@@ -5,21 +5,19 @@ namespace App\Service;
 
 use App\Entity\Artist;
 use App\Entity\Location;
-use App\Entity\Media;
 use App\Entity\Obra;
 use App\Repository\ArtistRepository;
 use App\Repository\LocationRepository;
-use App\Repository\MediaRepository;
 use App\Repository\ObraRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use League\Csv\Reader;
 use Psr\Log\LoggerInterface;
 use Survos\CoreBundle\Service\SurvosUtils;
 use Survos\GoogleSheetsBundle\Service\SheetService;
-use Survos\SaisBundle\Service\SaisClientService;
+use Survos\MediaBundle\Entity\Audio;
+use Survos\MediaBundle\Service\MediaRegistry;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\String\UnicodeString;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * Syncs data from the Google Spreadsheet directly to the database.
@@ -30,21 +28,19 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
  *     @locations / @ubicaciones → Location entities (keyed by code column)
  *   Everything else → Obra/exhibition sheet (tab name stored as obra.exhibition)
  *
- * The spreadsheet is the authority.  No CSV intermediary.
+ * Images are registered via MediaRegistry::ensureMedia() → dispatched later
+ * by `php bin/console media:sync`.
  */
 class SyncService
 {
-    public const SAIS_ROOT = 'chijal';
-
     public function __construct(
         private readonly EntityManagerInterface $em,
         private readonly ArtistRepository $artistRepo,
         private readonly LocationRepository $locationRepo,
         private readonly ObraRepository $obraRepo,
-        private readonly MediaRepository $mediaRepo,
         private readonly SheetService $sheetService,
+        private readonly MediaRegistry $mediaRegistry,
         private readonly LoggerInterface $logger,
-        private readonly ValidatorInterface $validator,
         #[Autowire('%env(GOOGLE_SPREADSHEET_ID)%')] private readonly ?string $spreadsheetId = null,
     ) {
     }
@@ -137,17 +133,6 @@ class SyncService
     // Sheet processors
     // -------------------------------------------------------------------------
 
-    /**
-     * @artists / @artistas tab.
-     *
-     * Expected columns (already normalised/English — this is the admin sheet,
-     * not the Google Form response tab):
-     *   code, email, name, phone, youtubeUrl, audioUrl, bio, birthYear, social, status
-     *
-     * The Google Form response tab (@DATOS ARTISTAS) has long Spanish headers
-     * and no code column — it is handled by the same processor via the column
-     * map that normalises headers before any field access.
-     */
     private function processArtistsSheet(string $csvString, array &$warnings): int
     {
         $reader = Reader::fromString($csvString);
@@ -171,7 +156,6 @@ class SyncService
                 continue;
             }
 
-            // Upsert: prefer finding by email, then by code
             $artist = ($email ? $this->artistRepo->findOneBy(['email' => $email]) : null)
                 ?? $this->artistRepo->find($code)
                 ?? new Artist($code);
@@ -180,9 +164,9 @@ class SyncService
                 $this->em->persist($artist);
             }
 
-            if ($email)              $artist->email     = $email;
-            if ($row['name'] ?? null) $artist->name     = $row['name'];
-            if ($row['phone'] ?? null) $artist->phone   = $row['phone'];
+            if ($email)               $artist->email  = $email;
+            if ($row['name'] ?? null)  $artist->name   = $row['name'];
+            if ($row['phone'] ?? null) $artist->phone  = $row['phone'];
             if ($row['social'] ?? null) $artist->social = $row['social'];
 
             $artist->birthYear = $this->parseBirthYear($row['birthyear'] ?? $row['birth_year'] ?? null);
@@ -199,7 +183,7 @@ class SyncService
             $drive = $row['driveurl'] ?? $row['drive_url'] ?? null;
             if ($drive) {
                 $artist->driveUrl = $drive;
-                $this->addToMedia($drive, $artist);
+                $this->ensureImage($drive, $artist);
             }
 
             $count++;
@@ -209,11 +193,6 @@ class SyncService
         return $count;
     }
 
-    /**
-     * @locations / @ubicaciones tab.
-     *
-     * Expected columns: code, status, barrio, name, address, type, contact, phone, geo
-     */
     private function processLocationsSheet(string $csvString, array &$warnings): int
     {
         $reader = Reader::fromString($csvString);
@@ -256,13 +235,8 @@ class SyncService
     }
 
     /**
-     * Exhibition / obra sheet — any tab NOT starting with @.
-     *
-     * Expected columns: code, artist_code, loc_code, title, material, size,
-     *                   year, price, description, photoUrl, audioUrl, youtubeUrl
-     *
-     * @param array<string, Artist>   $artists   pre-loaded by code
-     * @param array<string, Location> $locations pre-loaded by code
+     * @param array<string, Artist>   $artists
+     * @param array<string, Location> $locations
      */
     private function processObrasSheet(
         string $csvString,
@@ -306,14 +280,14 @@ class SyncService
                 $this->em->persist($obra);
             }
 
-            $obra->artist     = $artists[$artistCode];
-            $obra->exhibition = $sheetName;
-            $obra->title      = $row['title'] ?? null;
-            $obra->description= $row['description'] ?? null;
-            $obra->materials  = $row['material'] ?? null;
-            $obra->size       = $row['size'] ?? null;
-            $obra->year       = $this->parseInt($row['year'] ?? null);
-            $obra->price      = $this->parseMoneyInt($row['price'] ?? null);
+            $obra->artist      = $artists[$artistCode];
+            $obra->exhibition  = $sheetName;
+            $obra->title       = $row['title'] ?? null;
+            $obra->description = $row['description'] ?? null;
+            $obra->materials   = $row['material'] ?? null;
+            $obra->size        = $row['size'] ?? null;
+            $obra->year        = $this->parseInt($row['year'] ?? null);
+            $obra->price       = $this->parseMoneyInt($row['price'] ?? null);
 
             $locCode = $row['loc_code'] ?? null;
             if ($locCode && !array_key_exists($locCode, $locations)) {
@@ -321,6 +295,20 @@ class SyncService
                     'message' => "Location code '$locCode' not found — add it to the @locations tab"];
             } elseif ($locCode) {
                 $obra->location = $locations[$locCode];
+            }
+
+            // Image: accept photoUrl / photo_url / driveUrl column variants
+            $photoUrl = $row['photourl'] ?? $row['photo_url'] ?? $row['driveurl'] ?? $row['drive_url'] ?? null;
+            if ($photoUrl) {
+                $obra->driveUrl = $photoUrl;
+                $this->ensureImage($photoUrl, $obra);
+            }
+
+            // Audio
+            $audioUrl = $row['audiourl'] ?? $row['audio_url'] ?? null;
+            if ($audioUrl) {
+                $audio = $this->mediaRegistry->ensureMedia($audioUrl, Audio::class);
+                $obra->audioCode = $audio->id;
             }
 
             $count++;
@@ -334,58 +322,59 @@ class SyncService
     // Helpers
     // -------------------------------------------------------------------------
 
-    /**
-     * Normalise all header keys in a row to lowercase+underscored ASCII,
-     * with specific mappings for the long Spanish Google Form headers.
-     */
+    /** Register one or more comma-separated image URLs and attach their ids to $entity. */
+    private function ensureImage(string $urls, Artist|Obra $entity): void
+    {
+        foreach (explode(',', $urls) as $url) {
+            $url = trim($url);
+            if (!$url) continue;
+            $media = $this->mediaRegistry->ensureMedia($url);
+            $entity->addImageCode($media->id);
+        }
+    }
+
     private function normalizeHeaders(array $row): array
     {
         static $headerMap = [
-            // Spanish Google Form headers → internal key
-            'nombre completo y/o artístico'   => 'name',
-            'año de nacimiento'               => 'birthyear',
-            'pronombres preferidos'           => 'gender',
-            'redes sociales'                  => 'social',
-            'teléfono'                        => 'phone',
-            'método de contacto preferido'    => 'contact_method',
-            'biografía larga'                 => 'long_bio',
-            'biografía larga (2-3 párrafos)'  => 'long_bio',
-            'short_bio'                       => 'short_bio',
-            'shortbio'                        => 'short_bio',
-            '¿tu estudio esta abierto'        => 'studio_open',
-            'si tu estudio esta abierto'      => 'studio_address',
+            'nombre completo y/o artístico'      => 'name',
+            'año de nacimiento'                  => 'birthyear',
+            'pronombres preferidos'              => 'gender',
+            'redes sociales'                     => 'social',
+            'teléfono'                           => 'phone',
+            'método de contacto preferido'       => 'contact_method',
+            'biografía larga'                    => 'long_bio',
+            'biografía larga (2-3 párrafos)'     => 'long_bio',
+            'short_bio'                          => 'short_bio',
+            'shortbio'                           => 'short_bio',
+            '¿tu estudio esta abierto'           => 'studio_open',
+            'si tu estudio esta abierto'         => 'studio_address',
             'te pedimos una foto de los hombros' => 'driveurl',
-            'te pedimos una foto de tu local' => 'driveurl',
-            'aparte de español'               => 'languages',
-            'incluye todos los tipos de arte' => 'art_types',
-            'un slogan'                       => 'tagline',
-            'email address'                   => 'email',
-            // Location form headers
-            'nombre del negocio'              => 'name',
-            '¿qué tipo de negocio tienes?'    => 'type',
-            'incluye los enlaces de internet' => 'social',
+            'te pedimos una foto de tu local'    => 'driveurl',
+            'aparte de español'                  => 'languages',
+            'incluye todos los tipos de arte'    => 'art_types',
+            'un slogan'                          => 'tagline',
+            'email address'                      => 'email',
+            'nombre del negocio'                 => 'name',
+            '¿qué tipo de negocio tienes?'       => 'type',
+            'incluye los enlaces de internet'    => 'social',
             'proporciona un enlace de google map' => 'maps_url',
-            'timestamp'                       => 'timestamp',
+            'timestamp'                          => 'timestamp',
         ];
 
         $out = [];
         foreach ($row as $rawKey => $rawValue) {
-            // Trim whitespace from value
             $value = is_string($rawValue)
                 ? (trim(trim($rawValue), "\"' \t\n\r\0\x0B") ?: null)
                 : $rawValue;
 
-            // Normalise key: lowercase, collapse spaces
             $key = mb_strtolower(trim((string) $rawKey));
             $key = preg_replace('/\s+/', ' ', $key);
 
-            // Exact match in map
             if (isset($headerMap[$key])) {
                 $out[$headerMap[$key]] ??= $value;
                 continue;
             }
 
-            // Prefix match for long Spanish questions
             foreach ($headerMap as $pattern => $target) {
                 if (str_starts_with($key, $pattern)) {
                     $out[$target] ??= $value;
@@ -393,12 +382,11 @@ class SyncService
                 }
             }
 
-            // Fall back: convert to snake_case (remove accents, replace spaces)
             $snake = strtr($key, [
-                ' '=>'_', '-'=>'_', '/'=>'_',
-                'á'=>'a','é'=>'e','í'=>'i','ó'=>'o','ú'=>'u','ü'=>'u','ñ'=>'n',
-                '¿'=>'', '?'=>'', '¡'=>'', '!'=>'', ','=>'', '.'=>'',
-                '('=>'', ')'=>'',
+                ' ' => '_', '-' => '_', '/' => '_',
+                'á' => 'a', 'é' => 'e', 'í' => 'i', 'ó' => 'o', 'ú' => 'u', 'ü' => 'u', 'ñ' => 'n',
+                '¿' => '', '?' => '', '¡' => '', '!' => '', ',' => '', '.' => '',
+                '(' => '', ')' => '',
             ]);
             $out[$snake] ??= $value;
         }
@@ -428,44 +416,20 @@ class SyncService
     private function parseBirthYear(?string $raw): ?int
     {
         if (!$raw) return null;
-        return preg_match('/\b(19|20)\d{2}\b/', $raw, $m) ? (int)$m[0] : null;
+        return preg_match('/\b(19|20)\d{2}\b/', $raw, $m) ? (int) $m[0] : null;
     }
 
     private function parseInt(?string $s): ?int
     {
         if ($s === null) return null;
         $s = preg_replace('/[^\d\-]/', '', $s);
-        return $s === '' ? null : (int)$s;
+        return $s === '' ? null : (int) $s;
     }
 
     private function parseMoneyInt(?string $s): ?int
     {
         if ($s === null) return null;
         $s = str_replace([',', '$', ' '], '', $s);
-        return is_numeric($s) ? (int)$s : null;
-    }
-
-    private function upsertMedia(string $code, string $original, string $type): void
-    {
-        $media = $this->mediaRepo->findOneBy(['code' => $code]) ?? new Media($code);
-        $this->em->persist($media);
-        $media->type        = $type;
-        $media->originalUrl = $original;
-
-        if (count($this->validator->validate($media)) === 0) {
-            $this->em->flush();
-        }
-    }
-
-    private function addToMedia(?string $driveUrl, Artist $artist): void
-    {
-        if (!$driveUrl) return;
-        foreach (explode(',', $driveUrl) as $url) {
-            $url = trim($url);
-            if (!$url) continue;
-            $imgCode = SaisClientService::calculateCode($url, self::SAIS_ROOT);
-            $artist->addImageCode($imgCode);
-            $this->upsertMedia($imgCode, $url, 'image');
-        }
+        return is_numeric($s) ? (int) $s : null;
     }
 }

@@ -357,10 +357,9 @@
                                         {{ obra.description|length > 120 ? obra.description|slice(0, 120) ~ '...' : obra.description }}
                                     </div>
                                 {% endif %}
-                                {% if obra.thumbnailUrl or obra.year %}
+                                {% if obra.image or obra.year %}
                                     <div class="artwork-details">
-                                        <img src="{{ obra.thumbnailUrl }}" />
-                                        {% if obra.thumbnailUrl %}{{ obra.thumbnailUrl }}{% endif %}
+                                        {% if obra.image %}<img src="{{ media_resize(obra.image, 'small') }}" />{% endif %}
                                         {% if obra.year %} • {{ obra.year }}{% endif %}
                                         {% if obra.dimensions %} • {{ obra.dimensions }}{% endif %}
                                     </div>

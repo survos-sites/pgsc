@@ -9,7 +9,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-use Survos\CoreBundle\Controller\BaseCrudController;
+use Survos\EzBundle\Controller\BaseCrudController;
 use Survos\TranslatableFieldBundle\EasyAdmin\Field\TranslationsField;
 use function Symfony\Component\Translation\t;
 

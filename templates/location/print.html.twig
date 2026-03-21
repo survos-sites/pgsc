@@ -520,8 +520,8 @@
                 {% for obra in obras %}
                     <div class="obra-item" data-width="{{ obra.width ?: 50 }}" data-height="{{ obra.height ?: 50 }}">
                         <div class="obra-container">
-                            {% if obra.thumbnailUrl %}
-                                <img src="{{ obra.thumbnailUrl }}" alt="{{ obra.title }}" class="obra-image" />
+                            {% if obra.image %}
+                                <img src="{{ media_resize(obra.image, 'medium') }}" alt="{{ obra.title }}" class="obra-image" />
                             {% else %}
                                 <div class="no-image">Sin imagen</div>
                             {% endif %}
@@ -1088,8 +1088,8 @@
                 {% for obra in obras %}
                     <div class="obra-item" data-width="{{ obra.width ?: 50 }}" data-height="{{ obra.height ?: 50 }}">
                         <div class="obra-container">
-                            {% if obra.thumbnailUrl %}
-                                <img src="{{ obra.thumbnailUrl }}" alt="{{ obra.title }}" class="obra-image" />
+                            {% if obra.image %}
+                                <img src="{{ media_resize(obra.image, 'medium') }}" alt="{{ obra.title }}" class="obra-image" />
                             {% else %}
                                 <div class="no-image">Sin imagen</div>
                             {% endif %}
@@ -1656,8 +1656,8 @@
                 {% for obra in obras %}
                     <div class="obra-item" data-width="{{ obra.width ?: 50 }}" data-height="{{ obra.height ?: 50 }}">
                         <div class="obra-container">
-                            {% if obra.thumbnailUrl %}
-                                <img src="{{ obra.thumbnailUrl }}" alt="{{ obra.title }}" class="obra-image" />
+                            {% if obra.image %}
+                                <img src="{{ media_resize(obra.image, 'medium') }}" alt="{{ obra.title }}" class="obra-image" />
                             {% else %}
                                 <div class="no-image">Sin imagen</div>
                             {% endif %}
@@ -2224,8 +2224,8 @@
                 {% for obra in obras %}
                     <div class="obra-item" data-width="{{ obra.width ?: 50 }}" data-height="{{ obra.height ?: 50 }}">
                         <div class="obra-container">
-                            {% if obra.thumbnailUrl %}
-                                <img src="{{ obra.thumbnailUrl }}" alt="{{ obra.title }}" class="obra-image" />
+                            {% if obra.image %}
+                                <img src="{{ media_resize(obra.image, 'medium') }}" alt="{{ obra.title }}" class="obra-image" />
                             {% else %}
                                 <div class="no-image">Sin imagen</div>
                             {% endif %}
@@ -2792,8 +2792,8 @@
                 {% for obra in obras %}
                     <div class="obra-item" data-width="{{ obra.width ?: 50 }}" data-height="{{ obra.height ?: 50 }}">
                         <div class="obra-container">
-                            {% if obra.thumbnailUrl %}
-                                <img src="{{ obra.thumbnailUrl }}" alt="{{ obra.title }}" class="obra-image" />
+                            {% if obra.image %}
+                                <img src="{{ media_resize(obra.image, 'medium') }}" alt="{{ obra.title }}" class="obra-image" />
                             {% else %}
                                 <div class="no-image">Sin imagen</div>
                             {% endif %}

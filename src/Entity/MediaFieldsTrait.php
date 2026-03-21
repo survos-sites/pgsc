@@ -8,48 +8,55 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Survos\MediaBundle\Entity\BaseMedia;
 use Symfony\Component\Serializer\Attribute\Groups;
 
 /**
  * Canonical media trait: persisted codes + virtual relations + helpers.
+ *
+ * imageCodes stores the BaseMedia->id values (xxh3 hash of URL, from MediaIdentity).
+ * The $images collection is populated on postLoad by PopulateImagesListener.
+ * Use the Twig function media_resize($image, 'small'|'medium'|'large') for URLs.
  */
 trait MediaFieldsTrait
 {
     use CollectionNullHelperTrait;
+
     // ---- persisted fields ----
 
-    /** Primary media source (e.g. a Google Drive URL for the main image) */
+    /** Primary media source URL (e.g. Google Drive URL for the artwork photo) */
     #[ORM\Column(length: 1024, nullable: true)]
-    #[Groups(['media.read','artist.read','obra.read'])]
+    #[Groups(['media.read', 'artist.read', 'obra.read'])]
     public ?string $driveUrl = null;
 
     /** YouTube URL (not stored as Media) */
     #[ORM\Column(length: 1024, nullable: true)]
-    #[Groups(['media.read','artist.read','obra.read'])]
+    #[Groups(['media.read', 'artist.read', 'obra.read'])]
     public ?string $youtubeUrl = null;
 
-    /** Single audio media code (resolved to Media by listener) */
+    /** Single audio media id (BaseMedia->id, resolved by listener) */
     #[ORM\Column(length: 128, nullable: true)]
-    #[Groups(['media.read','artist.read','obra.read'])]
+    #[Groups(['media.read', 'artist.read', 'obra.read'])]
     public ?string $audioCode = null;
 
-    #[Groups(['media.read','artist.read','obra.read', 'obra.embedded'])]
+    #[Groups(['artist.read', 'obra.read'])]
     public ?string $youtubeId {
         get => $this->youtubeUrl ? pathinfo($this->youtubeUrl, PATHINFO_BASENAME) : null;
     }
 
-    /** Array of SAIS media codes for images */
+    /** Array of BaseMedia->id values for images */
     #[ORM\Column(type: Types::JSON, nullable: true)]
-    #[Groups(['media.read','artist.read','obra.read'])]
+    #[Groups(['media.read', 'artist.read', 'obra.read'])]
     public ?array $imageCodes = null;
 
-    // ---- virtual (populated by PopulateImagesListener) ----
+    // ---- virtual (populated by PopulateImagesListener on postLoad) ----
 
-    /**
-     * @var Collection<int,\App\Entity\Media>
-     */
-    #[Groups(['media.read','artist.read','obra.read'])]
+    /** @var Collection<int, BaseMedia> */
+    #[Groups(['media.read', 'artist.read', 'obra.read'])]
     public Collection $images;
+
+    public ?BaseMedia $audio = null;
+    public ?BaseMedia $video = null;
 
     protected function initMediaCollections(): void
     {
@@ -90,14 +97,13 @@ trait MediaFieldsTrait
         return $this;
     }
 
-    #[Groups(['artist.read','obra.read'])]
+    #[Groups(['artist.read', 'obra.read'])]
     public function getPrimaryImageCode(): ?string
     {
-        $codes = $this->getImageCodes();
-        return $codes[0] ?? null;
+        return $this->getImageCodes()[0] ?? null;
     }
 
-    #[Groups(['artist.read','obra.read'])]
+    #[Groups(['artist.read', 'obra.read'])]
     public function getImageCount(): int
     {
         return count($this->getImageCodes());
@@ -115,36 +121,9 @@ trait MediaFieldsTrait
         return $this;
     }
 
-    #[Groups(['media.read','media.embedded'])]
-    public ?string $thumbnailUrl {
-        get => $this->firstOrNull($this->images)?->thumbnailUrl;
+    /** First image BaseMedia entity, or null. Use media_resize() in Twig for the URL. */
+    #[Groups(['media.read', 'obra.read', 'artist.read'])]
+    public ?BaseMedia $image {
+        get => $this->firstOrNull($this->images);
     }
-    #[Groups(['media.read'])]
-    public ?string $medium {
-        get => $this->firstOrNull($this->images)?->resized['medium']??null;
-    }
-    #[Groups(['media.read'])]
-    public ?string $large {
-        get => $this->firstOrNull($this->images)?->resized['large']??null;
-    }
-
-    #[Groups(['media.read'])]
-    public ?Media $image { get => $this->firstByType('image'); }
-    #[Groups(['media.read'])]
-    // populated in PopulateImagesListener
-    public ?Media $video; #  { get => $this->firstByType('video'); }
-    public ?Media $audio; #  { get => $this->firstByType('audio'); }
-    #[Groups(['media.read'])]
-    public ?string $audioUrl {
-        get => $this->audio?->resized ? $this->audio->resized['large'] : null;
-    }
-
-    private function firstByType(string $type): ?Media
-    {
-        $image =  $this->images->filter(fn($m) => $m->type === $type)->first();
-        return $image ?: null;
-    }
-
-
-
 }

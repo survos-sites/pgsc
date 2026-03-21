@@ -18,15 +18,13 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AvatarField;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Survos\TranslatableFieldBundle\EasyAdmin\Field\TranslationsField;
-use App\Repository\MediaRepository;
 //base crud controller
-use Survos\CoreBundle\Controller\BaseCrudController;
+use Survos\EzBundle\Controller\BaseCrudController;
 
 class ArtistCrudController extends BaseCrudController
 {
     public function __construct(
         protected AdminUrlGenerator $adminUrlGenerator,
-        protected MediaRepository $imageRepository
     ) {
     }
 
@@ -68,30 +66,11 @@ class ArtistCrudController extends BaseCrudController
                 ->setHelp('Artist biography'),
 
             // Avatar field - show artist thumbnails with nice styling
-            AvatarField::new('thumbnailUrl', 'Media')
+            AvatarField::new('smallUrl', 'Media')
                 ->formatValue(function ($value, Artist $entity) {
-                    $imageCodes = $entity->getImageCodes();
-                    if (empty($imageCodes) || !is_array($imageCodes)) {
-                        return null; // AvatarField will show a default avatar
-                    }
-
-                    try {
-                        // Get the first image entity
-                        $primaryImageCode = $imageCodes[0];
-                        $image = $this->imageRepository->findByCode($primaryImageCode);
-
-                        if (!$image) {
-                            return null; // AvatarField will show default avatar
-                        }
-
-                        $thumbnailUrl = $image->getThumbnailUrl(); // Gets the 'small' size URL
-                        return $thumbnailUrl; // Return URL or null for default avatar
-
-                    } catch (\Exception $e) {
-                        return null; // AvatarField will show default avatar
-                    }
+                    return $entity->image?->smallUrl;
                 })
-                ->setHeight(40) // Set avatar size
+                ->setHeight(40)
                 ->onlyOnIndex(),
 
             // Media codes field - show comma-delimited image codes

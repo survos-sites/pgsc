@@ -2,47 +2,43 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Media;
-use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AvatarField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-use Survos\CoreBundle\Controller\BaseCrudController;
+use Survos\EzBundle\Controller\BaseCrudController;
 use Survos\FlickrBundle\Services\FlickrService;
+use Survos\MediaBundle\Entity\Photo;
 
 class MediaCrudController extends BaseCrudController
 {
     public function __construct(
         private FlickrService $flickrService,
-    )
-    {
+    ) {
     }
 
     public static function getEntityFqcn(): string
     {
-        return Media::class;
+        return Photo::class;
     }
 
     public function configureFields(string $pageName): iterable
     {
         return [
             IdField::new('id'),
-            TextField::new('flickrId')
+            TextField::new('rawData[flickr_id]', 'Flickr ID')
                 ->formatValue(function ($value, $entity) {
-                    if (!$value) {
+                    $flickrId = $entity->rawData['flickr_id'] ?? null;
+                    if (!$flickrId) {
                         return null;
                     }
-                    $url = $this->flickrService->flickrPageUrl($value);
-                    return sprintf('<a href="%s" target="_blank">%s</a>', $url, htmlspecialchars($value . '/' . $entity->title));
+                    $url = $this->flickrService->flickrPageUrl($flickrId);
+                    return sprintf('<a href="%s" target="_blank">%s</a>', $url, htmlspecialchars($flickrId));
                 })
                 ->renderAsHtml(),
-            AvatarField::new('thumbnailUrl'),
+            AvatarField::new('smallUrl'),
             TextField::new('description'),
-            TextField::new('originalUrl'),
-            TextField::new('type'),
-            ArrayField::new('resized')->onlyOnDetail(),
+            TextField::new('externalUrl'),
+            TextField::new('status'),
         ];
     }
 }

@@ -17,7 +17,6 @@
             <div class="card-body p-0">
                 <ol class="list-group list-group-flush">
                     {% for obra in obras|default([]) %}
-                        {% set thumbnailUrl =  obra.thumbnailUrl %}
                         {% set linkToVoxitour = voxitourEndpoint ~ app.request.locale ~ '/chijal?obraId=' ~ obra.code ~ '#tab-obras' %}
                         <li class="list-group-item">
                             <div class="d-flex align-items-start gap-3">
@@ -27,9 +26,9 @@
                                          class="img-thumbnail" style="width:64px;height:64px;object-fit:contain;">
                                 </a>
 
-                                {% if thumbnailUrl %}
+                                {% if obra.image %}
                                 <a href="{{ linkToVoxitour }}" target="_blank" class="text-decoration-none" title="Abrir en Voxitour">
-                                    <img src="{{ thumbnailUrl }}"
+                                    <img src="{{ media_resize(obra.image, 'small') }}"
                                          class="img-thumbnail" style="width:64px;height:64px;object-fit:contain;">
                                 </a>
                                 {% endif %}
@@ -72,9 +71,9 @@
                         {% for artist in limitedArtists %}
                             <li class="list-group-item">
                                 <div class="d-flex align-items-start gap-3">
-                                    {% if artist.thumbnailUrl %}
+                                    {% if artist.image %}
                                         <img class="img-thumbnail" style="width:48px;height:48px;object-fit:cover;"
-                                             src="{{ artist.thumbnailUrl }}" alt="artist image" />
+                                             src="{{ media_resize(artist.image, 'small') }}" alt="artist image" />
                                     {% endif %}
 
                                     {% set linkToVoxitour = voxitourEndpoint ~ app.request.locale ~ '/chijal?artistId='

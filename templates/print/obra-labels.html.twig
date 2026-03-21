@@ -289,8 +289,8 @@
                     </div>
 
                     {% set primaryImage = obra.image %}
-                    {% if primaryImage and primaryImage.resized %}
-                        <img src="{{ primaryImage.resized.large }}"
+                    {% if primaryImage %}
+                        <img src="{{ media_resize(primaryImage, 'large') }}"
                              alt="{{ obra.title }}"
                              class="artwork-image" />
                     {% else %}

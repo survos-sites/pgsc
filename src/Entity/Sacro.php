@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Survos\BabelBundle\Attribute\BabelLocale;
 use Survos\BabelBundle\Attribute\BabelStorage;
 use Survos\BabelBundle\Attribute\Translatable;
+use Survos\BabelBundle\Contract\BabelHooksInterface;
 use Survos\StateBundle\Traits\MarkingInterface;
 use Survos\StateBundle\Traits\MarkingTrait;
 use Symfony\Component\Serializer\Attribute\Groups;
@@ -31,7 +32,7 @@ use Doctrine\ORM\Mapping\Column;
     ]
 )]
 #[BabelStorage]
-class Sacro implements \Stringable, MarkingInterface
+class Sacro implements \Stringable, MarkingInterface, BabelHooksInterface
 {
     use BabelHooksTrait;
 

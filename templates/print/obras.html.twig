@@ -51,6 +51,12 @@
             </div>
         </section>
 
+        {% if obra.image %}
+            <div class="artwork-image-wrap">
+                <img src="{{ media_resize(obra.image, 'small') }}" alt="{{ obra.title }}" class="artwork-image" />
+            </div>
+        {% endif %}
+
         {% include 'print/print_footer.html.twig' %}
     </main>
 {% endfor %}

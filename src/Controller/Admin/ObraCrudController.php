@@ -20,14 +20,12 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
-use App\Repository\MediaRepository;
-use Survos\CoreBundle\Controller\BaseCrudController;
+use Survos\EzBundle\Controller\BaseCrudController;
 
 class ObraCrudController extends BaseCrudController
 {
     public function __construct(
         protected AdminUrlGenerator $adminUrlGenerator,
-        protected MediaRepository $imageRepository,
         private ObraRepository $obraRepository,
     ) {
     }
@@ -40,31 +38,11 @@ class ObraCrudController extends BaseCrudController
     public function configureFields(string $pageName): iterable
     {
 //        yield EasyMediaField::new('audio');
-        yield AvatarField::new('thumbnailUrl', 'Media')
-//            ->formatValue(function ($value, Obra $entity) {
-//                $imageCodes = $entity->getImageCodes();
-//                if (empty($imageCodes) || !is_array($imageCodes)) {
-//                    return null; // AvatarField will show a default avatar
-//                }
-//
-//                try {
-//                    // Get the first image entity (primary image for obra)
-//                    if ($primaryImageCode = $imageCodes[0]) {
-//                        $image = $this->imageRepository->findByCode($primaryImageCode);
-//                    }
-//
-//                    if (!$image) {
-//                        return null; // AvatarField will show default avatar
-//                    }
-//
-//                    $thumbnailUrl = $image->getThumbnail(); // Gets the 'small' size URL
-//                    return $thumbnailUrl; // Return URL or null for default avatar
-//
-//                } catch (\Exception $e) {
-//                    return null; // AvatarField will show default avatar
-//                }
-//            })
-            ->setHeight(40) // Set avatar size
+        yield AvatarField::new('smallUrl', 'Media')
+            ->formatValue(function ($value, Obra $entity) {
+                return $entity->image?->smallUrl;
+            })
+            ->setHeight(40)
             ->onlyOnIndex();
         foreach (['width', 'height', 'depth'] as $fieldName) {
             yield IntegerField::new($fieldName)->setColumns(3)->onlyOnForms();

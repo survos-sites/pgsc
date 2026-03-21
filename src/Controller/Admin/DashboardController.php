@@ -5,7 +5,6 @@ namespace App\Controller\Admin;
 use App\Entity\AltosObj;
 use App\Entity\Artist;
 use App\Entity\Loc;
-use App\Entity\Media;
 use App\Entity\Location;
 use App\Entity\Obra;
 use App\Entity\Sacro;
@@ -13,7 +12,8 @@ use App\Repository\ArtistRepository;
 use App\Repository\LocationRepository;
 use App\Repository\ObraRepository;
 use App\Repository\SacroRepository;
-use App\Repository\MediaRepository;
+use Survos\MediaBundle\Entity\Photo;
+use Survos\MediaBundle\Repository\MediaRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminDashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
@@ -78,17 +78,6 @@ class DashboardController extends AbstractDashboardController
         // Process artists and build separate images array
         $artists = $this->artistRepository->findAll();
         $artistImages = [];
-
-        foreach ($artists as $artist) {
-            if ($artist->imageCodes) {
-                if ($imageCode = $artist->getImageCodes()[0]??null) {
-                    $image = $this->imageRepository->findOneBy(['code' => $imageCode]);
-                    if ($image && $image->getResized()) {
-                        $artistImages[$artist->id] = $image->getResized();
-                    }
-                } // Get first image code
-            }
-        }
 
         return $this->render('admin/dashboard.html.twig', [
             'artists' => $artists,
@@ -155,7 +144,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('objects', 'ri:image-line', Obra::class)
             ->setBadge($this->obraRepository->count())
         ;
-        yield MenuItem::linkToCrud('media', 'ri:image-line', Media::class)
+        yield MenuItem::linkToCrud('media', 'ri:image-line', Photo::class)
             ->setBadge($this->imageRepository->count())
         ;
         yield MenuItem::linkToCrud('sacro', 'ri:image-line', Sacro::class)

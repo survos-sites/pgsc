@@ -163,4 +163,240 @@ return [
     'robust-predicates' => [
         'version' => '3.0.0',
     ],
+    'twig' => [
+        'version' => '1.17.1',
+    ],
+    'locutus/php/strings/sprintf' => [
+        'version' => '2.0.16',
+    ],
+    'locutus/php/strings/vsprintf' => [
+        'version' => '2.0.16',
+    ],
+    'locutus/php/math/round' => [
+        'version' => '2.0.16',
+    ],
+    'locutus/php/math/max' => [
+        'version' => '2.0.16',
+    ],
+    'locutus/php/math/min' => [
+        'version' => '2.0.16',
+    ],
+    'locutus/php/strings/strip_tags' => [
+        'version' => '2.0.16',
+    ],
+    'locutus/php/datetime/strtotime' => [
+        'version' => '2.0.16',
+    ],
+    'locutus/php/datetime/date' => [
+        'version' => '2.0.16',
+    ],
+    'locutus/php/var/boolval' => [
+        'version' => '2.0.16',
+    ],
+    'debug' => [
+        'version' => '4.4.3',
+    ],
+    'ms' => [
+        'version' => '2.1.3',
+    ],
+    'stimulus-attributes' => [
+        'version' => '1.0.2',
+    ],
+    'escape-html' => [
+        'version' => '1.0.3',
+    ],
+    'fos-routing' => [
+        'version' => '0.0.6',
+    ],
+    'instantsearch.js' => [
+        'version' => '4.90.0',
+    ],
+    '@swc/helpers/cjs/_sliced_to_array.cjs' => [
+        'version' => '0.5.18',
+    ],
+    '@swc/helpers/cjs/_to_consumable_array.cjs' => [
+        'version' => '0.5.18',
+    ],
+    '@swc/helpers/cjs/_define_property.cjs' => [
+        'version' => '0.5.18',
+    ],
+    '@swc/helpers/cjs/_extends.cjs' => [
+        'version' => '0.5.18',
+    ],
+    '@swc/helpers/cjs/_object_destructuring_empty.cjs' => [
+        'version' => '0.5.18',
+    ],
+    '@swc/helpers/cjs/_object_spread.cjs' => [
+        'version' => '0.5.18',
+    ],
+    '@swc/helpers/cjs/_object_spread_props.cjs' => [
+        'version' => '0.5.18',
+    ],
+    '@swc/helpers/cjs/_type_of.cjs' => [
+        'version' => '0.5.18',
+    ],
+    '@swc/helpers/cjs/_instanceof.cjs' => [
+        'version' => '0.5.18',
+    ],
+    '@swc/helpers/cjs/_object_without_properties.cjs' => [
+        'version' => '0.5.18',
+    ],
+    '@swc/helpers/cjs/_call_super.cjs' => [
+        'version' => '0.5.18',
+    ],
+    '@swc/helpers/cjs/_class_call_check.cjs' => [
+        'version' => '0.5.18',
+    ],
+    '@swc/helpers/cjs/_create_class.cjs' => [
+        'version' => '0.5.18',
+    ],
+    '@swc/helpers/cjs/_inherits.cjs' => [
+        'version' => '0.5.18',
+    ],
+    '@algolia/events' => [
+        'version' => '4.0.1',
+    ],
+    'algoliasearch-helper' => [
+        'version' => '3.28.0',
+    ],
+    'qs' => [
+        'version' => '6.15.0',
+    ],
+    'algoliasearch-helper/types/algoliasearch.js' => [
+        'version' => '3.28.0',
+    ],
+    'side-channel' => [
+        'version' => '1.1.0',
+    ],
+    'es-errors/type' => [
+        'version' => '1.3.0',
+    ],
+    'object-inspect' => [
+        'version' => '1.13.3',
+    ],
+    'side-channel-list' => [
+        'version' => '1.0.0',
+    ],
+    'side-channel-map' => [
+        'version' => '1.0.1',
+    ],
+    'side-channel-weakmap' => [
+        'version' => '1.0.2',
+    ],
+    'get-intrinsic' => [
+        'version' => '1.2.5',
+    ],
+    'call-bound' => [
+        'version' => '1.0.2',
+    ],
+    'es-errors' => [
+        'version' => '1.3.0',
+    ],
+    'es-errors/eval' => [
+        'version' => '1.3.0',
+    ],
+    'es-errors/range' => [
+        'version' => '1.3.0',
+    ],
+    'es-errors/ref' => [
+        'version' => '1.3.0',
+    ],
+    'es-errors/syntax' => [
+        'version' => '1.3.0',
+    ],
+    'es-errors/uri' => [
+        'version' => '1.3.0',
+    ],
+    'gopd' => [
+        'version' => '1.2.0',
+    ],
+    'es-define-property' => [
+        'version' => '1.0.1',
+    ],
+    'has-symbols' => [
+        'version' => '1.1.0',
+    ],
+    'dunder-proto/get' => [
+        'version' => '1.0.0',
+    ],
+    'call-bind-apply-helpers/functionApply' => [
+        'version' => '1.0.0',
+    ],
+    'call-bind-apply-helpers/functionCall' => [
+        'version' => '1.0.0',
+    ],
+    'function-bind' => [
+        'version' => '1.1.2',
+    ],
+    'hasown' => [
+        'version' => '2.0.2',
+    ],
+    'call-bind' => [
+        'version' => '1.0.8',
+    ],
+    'call-bind-apply-helpers' => [
+        'version' => '1.0.0',
+    ],
+    'set-function-length' => [
+        'version' => '1.2.2',
+    ],
+    'call-bind-apply-helpers/applyBind' => [
+        'version' => '1.0.0',
+    ],
+    'define-data-property' => [
+        'version' => '1.1.4',
+    ],
+    'has-property-descriptors' => [
+        'version' => '1.0.2',
+    ],
+    'instantsearch.js/es/widgets' => [
+        'version' => '4.90.0',
+    ],
+    'instantsearch-ui-components' => [
+        'version' => '0.20.0',
+    ],
+    'preact' => [
+        'version' => '10.28.4',
+    ],
+    'hogan.js' => [
+        'version' => '3.0.2',
+    ],
+    'htm/preact' => [
+        'version' => '3.1.1',
+    ],
+    'preact/hooks' => [
+        'version' => '10.28.4',
+    ],
+    'markdown-to-jsx' => [
+        'version' => '7.7.17',
+    ],
+    'htm' => [
+        'version' => '3.1.1',
+    ],
+    'react' => [
+        'version' => '19.2.0',
+    ],
+    'instantsearch.css/themes/algolia.min.css' => [
+        'version' => '8.11.0',
+        'type' => 'css',
+    ],
+    '@meilisearch/instant-meilisearch' => [
+        'version' => '0.29.1',
+    ],
+    'meilisearch' => [
+        'version' => '0.55.0',
+    ],
+    '@stimulus-components/dialog' => [
+        'version' => '1.0.1',
+    ],
+    '@andypf/json-viewer' => [
+        'version' => '2.2.0',
+    ],
+    'pretty-print-json' => [
+        'version' => '3.0.7',
+    ],
+    'pretty-print-json/dist/css/pretty-print-json.min.css' => [
+        'version' => '3.0.7',
+        'type' => 'css',
+    ],
 ];

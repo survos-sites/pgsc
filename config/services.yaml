@@ -25,5 +25,10 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.response }
 
+    Survos\MediaBundle\Repository\MediaRepository:
+        factory: ['@doctrine.orm.default_entity_manager', 'getRepository']
+        arguments:
+            - Survos\MediaBundle\Entity\BaseMedia
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

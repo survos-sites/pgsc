@@ -37,7 +37,6 @@ return [
     Survos\GeoapifyBundle\SurvosGeoapifyBundle::class => ['all' => true],
     Survos\GoogleSheetsBundle\SurvosGoogleSheetsBundle::class => ['all' => true],
     Survos\FlickrBundle\SurvosFlickrBundle::class => ['all' => true],
-    Survos\SaisBundle\SurvosSaisBundle::class => ['all' => true],
     Survos\CodeBundle\SurvosCodeBundle::class => ['dev' => true, 'test' => true],
     Survos\SimpleDatatables\SurvosSimpleDatatablesBundle::class => ['all' => true],
     Jawira\DoctrineDiagramBundle\DoctrineDiagramBundle::class => ['dev' => true, 'test' => true],
@@ -46,4 +45,8 @@ return [
     Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle::class => ['all' => true],
     Survos\InspectionBundle\SurvosInspectionBundle::class => ['all' => true],
     Survos\StateBundle\SurvosStateBundle::class => ['all' => true],
+    Survos\MediaBundle\SurvosMediaBundle::class => ['all' => true],
+    Survos\JsonlBundle\SurvosJsonlBundle::class => ['all' => true],
+    Survos\MeiliBundle\SurvosMeiliBundle::class => ['all' => true],
+    Survos\EzBundle\SurvosEzBundle::class => ['all' => true],
 ];

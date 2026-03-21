@@ -11,6 +11,8 @@ use App\Repository\ObraRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Survos\BabelBundle\Attribute\BabelStorage;
+use Survos\BabelBundle\Contract\BabelHooksInterface;
+use Survos\BabelBundle\Entity\Traits\BabelHooksTrait;
 use Survos\CoreBundle\Entity\RouteParametersInterface;
 use Survos\CoreBundle\Entity\RouteParametersTrait;
 use Symfony\Component\Serializer\Attribute\Groups;
@@ -22,8 +24,9 @@ use App\Trait\CollectionNullHelperTrait;
     normalizationContext: ['groups' => ['obra.read', 'translatable', 'obra.location.read', 'obra.artist.read', 'media.read']]
 )]
 #[BabelStorage]
-class Obra implements \Stringable, RouteParametersInterface
+class Obra implements \Stringable, RouteParametersInterface, BabelHooksInterface
 {
+    use BabelHooksTrait;
     use CollectionNullHelperTrait;
     use RouteParametersTrait;
     use MediaFieldsTrait;

@@ -213,13 +213,7 @@
 
         <footer class="foot">
             <div class="footer-content">
-                {% set primaryImage = null %}
-                {% if obra.imageCodes and obra.imageCodes|length > 0 %}
-                    {% set primaryImageCode = obra.imageCodes[0] %}
-                    {% if imagesByCode[primaryImageCode] is defined %}
-                        {% set primaryImage = imagesByCode[primaryImageCode] %}
-                    {% endif %}
-                {% endif %}
+                {% set primaryImage = obra.image %}
 
                 <div style="display: flex; align-items: center; gap: 8pt;">
                     <img src="{{ asset('/chijal-landscape.jpg') }}" alt="Chijal" style="height:48pt; width:auto;" />
@@ -227,7 +221,7 @@
                 </div>
 
                 {% if primaryImage %}
-                    <img src="{{ primaryImage.resized.medium ?? primaryImage.originalUrl }}"
+                    <img src="{{ media_resize(primaryImage, 'medium') }}"
                          alt="{{ obra.title }}"
                          class="artwork-image" />
                 {% else %}

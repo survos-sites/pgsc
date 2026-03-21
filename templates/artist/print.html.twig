@@ -144,8 +144,8 @@
         <div class="artist-header">
             {% set primaryImageCode = artist.primaryImageCode %}
             {% set primaryImage = primaryImageCode ? imagesByCode[primaryImageCode] : null %}
-            {% if primaryImage and primaryImage.thumbnailUrl %}
-                <img src="{{ primaryImage.thumbnailUrl }}" alt="{{ artist.name }}" class="artist-photo" />
+            {% if primaryImage %}
+                <img src="{{ media_resize(primaryImage, 'small') }}" alt="{{ artist.name }}" class="artist-photo" />
             {% else %}
                 <div class="no-photo">Sin foto</div>
             {% endif %}
@@ -175,8 +175,8 @@
                     <div class="obra-item">
                         {% set primaryImageCode = obra.primaryImageCode %}
                         {% set primaryImage = primaryImageCode ? imagesByCode[primaryImageCode] : null %}
-                        {% if primaryImage and primaryImage.thumbnailUrl %}
-                            <img src="{{ primaryImage.thumbnailUrl }}" alt="{{ obra.title }}" class="obra-image" />
+                        {% if primaryImage %}
+                            <img src="{{ media_resize(primaryImage, 'medium') }}" alt="{{ obra.title }}" class="obra-image" />
                         {% else %}
                             <div class="no-image">Sin imagen</div>
                         {% endif %}
