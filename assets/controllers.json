@@ -7,6 +7,18 @@
                 "autoimport": []
             }
         },
+        "@survos/js-twig-bundle": {
+            "dexie": {
+                "enabled": true,
+                "fetch": "eager",
+                "autoimport": []
+            },
+            "js_twig": {
+                "enabled": true,
+                "fetch": "lazy",
+                "autoimport": []
+            }
+        },
         "@survos/meili-bundle": {
             "insta": {
                 "enabled": true,
@@ -20,6 +32,13 @@
                 "enabled": true,
                 "fetch": "lazy",
                 "autoimport": []
+            },
+            "chat": {
+                "enabled": true,
+                "fetch": "lazy",
+                "autoimport": {
+                    "@survos/meili/styles/chat.css": true
+                }
             }
         },
         "@survos/simple-datatables-bundle": {
@@ -29,6 +48,22 @@
                 "autoimport": {
                     "@survos/simple-datatables/style.css": true
                 }
+            }
+        },
+        "@survos/state-bundle": {
+            "workflow": {
+                "enabled": true,
+                "fetch": "eager"
+            }
+        },
+        "@survos/tabler-bundle": {
+            "accordion": {
+                "enabled": true,
+                "fetch": "lazy"
+            },
+            "search": {
+                "enabled": true,
+                "fetch": "lazy"
             }
         },
         "@symfony/ux-leaflet-map": {

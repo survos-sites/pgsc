@@ -49,10 +49,10 @@ return [
         'path' => './vendor/symfony/ux-leaflet-map/assets/dist/map_controller.js',
     ],
     'simple-datatables' => [
-        'version' => '9.2.2',
+        'version' => '10.2.0',
     ],
     'simple-datatables/dist/style.min.css' => [
-        'version' => '9.2.2',
+        'version' => '10.2.0',
         'type' => 'css',
     ],
     'd3-graphviz' => [
@@ -209,7 +209,7 @@ return [
         'version' => '0.0.6',
     ],
     'instantsearch.js' => [
-        'version' => '4.90.0',
+        'version' => '4.94.0',
     ],
     '@swc/helpers/cjs/_sliced_to_array.cjs' => [
         'version' => '0.5.18',
@@ -257,13 +257,13 @@ return [
         'version' => '4.0.1',
     ],
     'algoliasearch-helper' => [
-        'version' => '3.28.0',
+        'version' => '3.28.1',
     ],
     'qs' => [
-        'version' => '6.15.0',
+        'version' => '6.15.1',
     ],
     'algoliasearch-helper/types/algoliasearch.js' => [
-        'version' => '3.28.0',
+        'version' => '3.28.1',
     ],
     'side-channel' => [
         'version' => '1.1.0',
@@ -350,13 +350,13 @@ return [
         'version' => '1.0.2',
     ],
     'instantsearch.js/es/widgets' => [
-        'version' => '4.90.0',
+        'version' => '4.94.0',
     ],
     'instantsearch-ui-components' => [
-        'version' => '0.20.0',
+        'version' => '0.24.0',
     ],
     'preact' => [
-        'version' => '10.28.4',
+        'version' => '10.29.1',
     ],
     'hogan.js' => [
         'version' => '3.0.2',
@@ -365,7 +365,7 @@ return [
         'version' => '3.1.1',
     ],
     'preact/hooks' => [
-        'version' => '10.28.4',
+        'version' => '10.29.1',
     ],
     'markdown-to-jsx' => [
         'version' => '7.7.17',
@@ -377,20 +377,20 @@ return [
         'version' => '19.2.0',
     ],
     'instantsearch.css/themes/algolia.min.css' => [
-        'version' => '8.11.0',
+        'version' => '8.14.0',
         'type' => 'css',
     ],
     '@meilisearch/instant-meilisearch' => [
-        'version' => '0.29.1',
+        'version' => '0.30.0',
     ],
     'meilisearch' => [
-        'version' => '0.55.0',
+        'version' => '0.54.0',
     ],
     '@stimulus-components/dialog' => [
         'version' => '1.0.1',
     ],
     '@andypf/json-viewer' => [
-        'version' => '2.2.0',
+        'version' => '2.3.2',
     ],
     'pretty-print-json' => [
         'version' => '3.0.7',
@@ -398,5 +398,59 @@ return [
     'pretty-print-json/dist/css/pretty-print-json.min.css' => [
         'version' => '3.0.7',
         'type' => 'css',
+    ],
+    'dexie' => [
+        'version' => '4.4.2',
+    ],
+    '@tacman1123/twig-browser' => [
+        'version' => '0.4.18',
+    ],
+    '@tacman1123/twig-browser/src/compat/compileTwigBlocks.js' => [
+        'version' => '0.4.18',
+    ],
+    '@tacman1123/twig-browser/adapters/symfony' => [
+        'version' => '0.4.18',
+    ],
+    '@swc/helpers/esm/_sliced_to_array.js' => [
+        'version' => '0.5.18',
+    ],
+    '@swc/helpers/esm/_to_consumable_array.js' => [
+        'version' => '0.5.18',
+    ],
+    '@swc/helpers/esm/_define_property.js' => [
+        'version' => '0.5.18',
+    ],
+    '@swc/helpers/esm/_extends.js' => [
+        'version' => '0.5.18',
+    ],
+    '@swc/helpers/esm/_object_destructuring_empty.js' => [
+        'version' => '0.5.18',
+    ],
+    '@swc/helpers/esm/_object_spread.js' => [
+        'version' => '0.5.18',
+    ],
+    '@swc/helpers/esm/_object_spread_props.js' => [
+        'version' => '0.5.18',
+    ],
+    '@swc/helpers/esm/_type_of.js' => [
+        'version' => '0.5.18',
+    ],
+    '@swc/helpers/esm/_instanceof.js' => [
+        'version' => '0.5.18',
+    ],
+    '@swc/helpers/esm/_object_without_properties.js' => [
+        'version' => '0.5.18',
+    ],
+    '@swc/helpers/esm/_call_super.js' => [
+        'version' => '0.5.18',
+    ],
+    '@swc/helpers/esm/_class_call_check.js' => [
+        'version' => '0.5.18',
+    ],
+    '@swc/helpers/esm/_create_class.js' => [
+        'version' => '0.5.18',
+    ],
+    '@swc/helpers/esm/_inherits.js' => [
+        'version' => '0.5.18',
     ],
 ];
