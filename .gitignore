@@ -36,3 +36,5 @@ phpstan.neon
 /data
 
 .castor.stub.php
+config.bat
+node_modules
