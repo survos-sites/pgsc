@@ -1,7 +1,7 @@
 {
     "controllers": {
-        "@survos/bootstrap-bundle": {
-            "search": {
+        "@survos/imgproxy-bundle": {
+            "imgproxy": {
                 "enabled": true,
                 "fetch": "lazy",
                 "autoimport": []

@@ -1,39 +1,20 @@
-{% extends "@SurvosBootstrap/%s/base.html.twig"|format(theme_option('theme')) %}
-{#{% extends "@SurvosBootstrap/sneat/" ~ layout|default('base') ~ ".html.twig" %}#}
-{#{% extends "@SurvosBootstrap/tabler/layout-" ~ layout|default('vertical') ~ ".html.twig" %}#}
-
-    {% block stylesheets %}
-        {#        <link rel="stylesheet" href="https://kit.fontawesome.com/821a06d4ef.css" crossorigin="anonymous">#}
-{#        <link rel="stylesheet" type="text/css" href="{{ asset('bundles/survosapigrid/style.css') }}" ></link>#}
-                <link rel="stylesheet" type="text/css" href="{{ asset('bundles/survosbootstrap/bootstrap/style.css') }}">
-
-        {{ parent() }}
-
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-{#        <link rel="manifest" href="/site.webmanifest">#}
-
-    {% endblock %}
-
+{% extends "@SurvosTabler/layout/base.html.twig" %}
 
 {% block description "Popup Galleries of San Cris" %}
 
-
 {% set appShortName = 'PGSC' %}
-
 
 {% block logo_mini %}<b>Chijal</b>{% endblock %}
 {% block logo_large '<b>popup</b> Galleries' %}
 
-{#    {% block stylesheets %}#}
-{#        {{ parent() }}#}
-{#    {% endblock %}#}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+{% endblock %}
 
-    {% block javascripts %}
-        {{ parent() }}
-        {% block importmap %}{{ importmap('app') }}{% endblock %}
-
-    {% endblock %}
-
-
+{% block javascripts %}
+    {{ parent() }}
+    {% block importmap %}{{ importmap('app') }}{% endblock %}
+{% endblock %}

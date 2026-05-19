@@ -5,12 +5,6 @@
     "a2lix/translation-form-bundle": {
         "version": "3.2.4"
     },
-    "alexandre-fernandez/json-translation-bundle": {
-        "version": "1.0.5"
-    },
-    "alexandre-fernandez/key-value-form-bundle": {
-        "version": "1.1.4"
-    },
     "api-platform/symfony": {
         "version": "4.1",
         "recipe": {
@@ -103,18 +97,6 @@
             "config/packages/google_apiclient.yaml"
         ]
     },
-    "inspector-apm/inspector-symfony": {
-        "version": "1.8",
-        "recipe": {
-            "repo": "github.com/symfony/recipes-contrib",
-            "branch": "main",
-            "version": "1.4",
-            "ref": "60ac12d92b25c43830fdf25922e53467058feab1"
-        },
-        "files": [
-            "config/packages/inspector.yaml"
-        ]
-    },
     "jawira/doctrine-diagram-bundle": {
         "version": "1.0",
         "recipe": {
@@ -204,14 +186,17 @@
             "config/packages/stof_doctrine_extensions.yaml"
         ]
     },
+    "survos/atlas-bundle": {
+        "version": "2.3.0"
+    },
     "survos/auth-bundle": {
         "version": "1.5.529"
     },
     "survos/babel-bundle": {
         "version": "dev-main"
     },
-    "survos/bootstrap-bundle": {
-        "version": "1.5.529"
+    "survos/claims-bundle": {
+        "version": "2.3.0"
     },
     "survos/code-bundle": {
         "version": "dev-main"
@@ -253,6 +238,9 @@
     },
     "survos/ez-bundle": {
         "version": "2.0.116"
+    },
+    "survos/field-bundle": {
+        "version": "2.3.0"
     },
     "survos/flickr-bundle": {
         "version": "1.5.529"
