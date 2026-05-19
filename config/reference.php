@@ -2153,8 +2153,8 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     metadata_cache_pool?: scalar|Param|null, // Default: null
  * }
  * @psalm-type SurvosStateConfig = array{
- *     routes_enabled?: bool|Param, // Auto-register this bundle's controllers via attribute scanning. Set false to manage routes manually in your app's config/routes/. // Default: true
- *     route_prefix?: scalar|Param|null, // URL prefix applied to this bundle's routes. // Default: "/state"
+ *     routes_enabled?: bool|Param, // Set false to manage this bundle's routes manually in your app. // Default: true
+ *     route_prefix?: scalar|Param|null, // URL prefix applied to all routes from this bundle. // Default: "/state"
  *     queue_prefix?: scalar|Param|null, // Default: ""
  *     base_layout?: scalar|Param|null, // Default: "base.html.twig"
  *     enable_dynamic_routing?: bool|Param, // Default: true
@@ -2278,12 +2278,12 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     builders?: array<string, list<mixed>>,
  * }
  * @psalm-type SurvosFieldConfig = array{
- *     routes_enabled?: bool|Param, // Auto-register this bundle's controllers via attribute scanning. Set false to manage routes manually in your app's config/routes/. // Default: true
- *     route_prefix?: scalar|Param|null, // URL prefix applied to this bundle's routes. // Default: ""
+ *     routes_enabled?: bool|Param, // Set false to manage this bundle's routes manually in your app. // Default: true
+ *     route_prefix?: scalar|Param|null, // URL prefix applied to all routes from this bundle. // Default: ""
  * }
  * @psalm-type SurvosImgproxyConfig = array{
- *     routes_enabled?: bool|Param, // Auto-register this bundle's controllers via attribute scanning. Set false to manage routes manually in your app's config/routes/. // Default: true
- *     route_prefix?: scalar|Param|null, // URL prefix applied to this bundle's routes. // Default: ""
+ *     routes_enabled?: bool|Param, // Set false to manage this bundle's routes manually in your app. // Default: true
+ *     route_prefix?: scalar|Param|null, // URL prefix applied to all routes from this bundle. // Default: ""
  *     host?: scalar|Param|null, // Default: "%env(default::IMGPROXY_HOST)%"
  *     key?: scalar|Param|null, // Default: "%env(default::IMGPROXY_KEY)%"
  *     salt?: scalar|Param|null, // Default: "%env(default::IMGPROXY_SALT)%"
@@ -2307,9 +2307,6 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         url?: scalar|Param|null, // the API to use to load if empty. json-ld iterates through pages
  *         response_key?: scalar|Param|null, // key if API returns an object response, e.g. dummyjson returns {'products': [...]}
  *     }>,
- * }
- * @psalm-type SurvosClaimsConfig = array{
- *     list_predicates?: list<scalar|Param|null>,
  * }
  * @psalm-type ConfigType = array{
  *     imports?: ImportsConfig,
@@ -2350,7 +2347,6 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     survos_field?: SurvosFieldConfig,
  *     survos_imgproxy?: SurvosImgproxyConfig,
  *     survos_js_twig?: SurvosJsTwigConfig,
- *     survos_claims?: SurvosClaimsConfig,
  *     "when@dev"?: array{
  *         imports?: ImportsConfig,
  *         parameters?: ParametersConfig,
@@ -2398,7 +2394,6 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         survos_field?: SurvosFieldConfig,
  *         survos_imgproxy?: SurvosImgproxyConfig,
  *         survos_js_twig?: SurvosJsTwigConfig,
- *         survos_claims?: SurvosClaimsConfig,
  *     },
  *     "when@prod"?: array{
  *         imports?: ImportsConfig,
@@ -2439,7 +2434,6 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         survos_field?: SurvosFieldConfig,
  *         survos_imgproxy?: SurvosImgproxyConfig,
  *         survos_js_twig?: SurvosJsTwigConfig,
- *         survos_claims?: SurvosClaimsConfig,
  *     },
  *     "when@test"?: array{
  *         imports?: ImportsConfig,
@@ -2486,7 +2480,6 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         survos_field?: SurvosFieldConfig,
  *         survos_imgproxy?: SurvosImgproxyConfig,
  *         survos_js_twig?: SurvosJsTwigConfig,
- *         survos_claims?: SurvosClaimsConfig,
  *     },
  *     ...<string, ExtensionType|array{ // extra keys must follow the when@%env% pattern or match an extension alias
  *         imports?: ImportsConfig,

@@ -49,5 +49,5 @@ return [
     Survos\FieldBundle\SurvosFieldBundle::class => ['all' => true],
     Survos\ImgproxyBundle\SurvosImgproxyBundle::class => ['all' => true],
     Survos\JsTwigBundle\SurvosJsTwigBundle::class => ['all' => true],
-    Survos\ClaimsBundle\SurvosClaimsBundle::class => ['all' => true],
+    Survos\Kit\SurvosKitBundle::class => ['all' => true],
 ];

@@ -1,90 +1,77 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Menu;
 
 use App\Repository\ArtistRepository;
 use App\Repository\LocationRepository;
 use App\Repository\ObraRepository;
-use Survos\BootstrapBundle\Event\KnpMenuEvent;
-use Survos\BootstrapBundle\Service\MenuService;
-use Survos\BootstrapBundle\Traits\KnpMenuHelperInterface;
-use Survos\BootstrapBundle\Traits\KnpMenuHelperTrait;
+use Survos\TablerBundle\Event\MenuEvent;
+use Survos\TablerBundle\Menu\MenuBuilderTrait;
+use Survos\TablerBundle\Service\IconService;
+use Survos\TablerBundle\Service\RouteAliasService;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Routing\RouterInterface;
 
-// events are
-/*
-// #[AsEventListener(event: KnpMenuEvent::NAVBAR_MENU2)]
-#[AsEventListener(event: KnpMenuEvent::SIDEBAR_MENU, method: 'sidebarMenu')]
-#[AsEventListener(event: KnpMenuEvent::PAGE_MENU, method: 'pageMenu')]
-#[AsEventListener(event: KnpMenuEvent::FOOTER_MENU, method: 'footerMenu')]
-#[AsEventListener(event: KnpMenuEvent::AUTH_MENU, method: 'appAuthMenu')]
-*/
-
-final class AppMenu implements KnpMenuHelperInterface
+final class AppMenu
 {
-    use KnpMenuHelperTrait;
+    use MenuBuilderTrait;
 
     public function __construct(
-        #[Autowire('%kernel.environment%')] protected string $env,
+        #[Autowire('%kernel.environment%')] private string $env,
         private ArtistRepository $artistRepo,
         private LocationRepository $locationRepo,
         private ObraRepository $obraRepo,
-        private MenuService $menuService,
         private Security $security,
-        private ?AuthorizationCheckerInterface $authorizationChecker = null,
-    ) {
-    }
+        protected ?RouterInterface $router = null,
+        protected ?RouteAliasService $routeAliasService = null,
+        protected ?IconService $iconService = null,
+    ) {}
 
-    public function appAuthMenu(KnpMenuEvent $event): void
+    #[AsEventListener(event: MenuEvent::NAVBAR_MENU)]
+    public function onNavbar(MenuEvent $event): void
     {
         $menu = $event->getMenu();
-        $this->menuService->addAuthMenu($menu);
-    }
-
-    #[AsEventListener(event: KnpMenuEvent::NAVBAR_MENU2)]
-    public function navbarMenu(KnpMenuEvent $event): void
-    {
-        $menu = $event->getMenu();
-        $options = $event->getOptions();
 
         $this->add($menu, 'app_homepage');
-        $this->add($menu, 'app_sync', label: 'Sync');
+        $this->add($menu, 'app_sync', label: 'Sync', icon: 'mdi:sync');
+        $this->add($menu, 'admin', label: 'Admin', icon: 'tabler:dashboard');
 
-        $labelsMenu = $this->addSubmenu($menu, 'Labels');
+        $labelsMenu = $this->addSubmenu($menu, 'Labels', 'tabler:printer');
         foreach (['obra', 'artist', 'location'] as $shortClass) {
             $this->add($labelsMenu, 'print_labels_config', ['shortClass' => $shortClass], label: ucfirst($shortClass) . ' labels');
         }
 
-        $nestedMenu = $this->addSubmenu($menu, 'Artists');
+        $artistMenu = $this->addSubmenu($menu, 'Artists', 'tabler:user');
         foreach ($this->artistRepo->findAll() as $artist) {
-            $this->add($nestedMenu, 'artist_show', $artist,
+            $this->add($artistMenu, 'artist_show', $artist,
                 translationDomain: false,
                 label: $artist->name,
                 badge: $artist->obraCount);
         }
 
-        $nestedMenu = $this->addSubmenu($menu, 'Locations');
+        $locationMenu = $this->addSubmenu($menu, 'Locations', 'tabler:location');
         foreach ($this->locationRepo->findAll() as $location) {
-            $this->add($nestedMenu, 'location_show', $location,
+            $this->add($locationMenu, 'location_show', $location,
                 translationDomain: false,
-                label: $location->name, badge: $location->obraCount);
+                label: $location->name,
+                badge: $location->obraCount);
         }
 
-        $subMenu = $this->addSubmenu($menu, 'Dev');
-        $this->add($subMenu, 'api_doc', label: 'API');
-        $this->add($subMenu, 'survos_commands');
-        $this->add($subMenu, 'survos_command', ['commandName' => 'app:load'], 'app:load');
-        $this->add($subMenu, 'survos_command', ['commandName' => 'survos:flickr:import'], 'survos:flickr:import');
-        $this->add($subMenu, 'jsonrpc_test');
         if ('dev' === $this->env) {
-            $this->add($subMenu, 'survos_workflows');
-            $this->add($subMenu, 'survos_crawler_data');
+            $devMenu = $this->addSubmenu($menu, 'Dev', 'tabler:code');
+            $this->add($devMenu, 'api_doc', label: 'API');
+            $this->add($devMenu, 'survos_commands');
         }
+    }
 
-        $this->add($menu, 'admin', translationDomain: false, label: 'EZ');
-        $this->appAuthMenu($event);
+    #[AsEventListener(event: MenuEvent::ADMIN_NAVBAR_MENU)]
+    public function onAdminNavbar(MenuEvent $event): void
+    {
+        $menu = $event->getMenu();
+        $this->add($menu, 'app_sync', label: 'Sync', icon: 'mdi:sync');
     }
 }

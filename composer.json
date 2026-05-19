@@ -22,7 +22,7 @@
         "easycorp/easyadmin-bundle": "^5.0.8",
         "endroid/qr-code-bundle": "^7.0",
         "google/apiclient": "^2.19.3",
-        "survos/field-bundle": "^2.3",
+        "survos/field-bundle": "^2.4.1",
         "league/csv": "^9.28.0",
         "meilisearch/meilisearch-php": "dev-main",
         "nelmio/cors-bundle": "^2.6.1",
@@ -30,22 +30,22 @@
         "phpdocumentor/reflection-docblock": "^5.0|^6.0.3",
         "phpstan/phpdoc-parser": "^2.3.2",
         "stof/doctrine-extensions-bundle": "^1.15.3",
-        "survos/auth-bundle": "^2.3",
-        "survos/babel-bundle": "^2.3",
-        "survos/command-bundle": "^2.3",
-        "survos/core-bundle": "^2.3",
-        "survos/deployment-bundle": "^2.3",
-        "survos/ez-bundle": "^2.3",
-        "survos/flickr-bundle": "^2.3",
-        "survos/geoapify-bundle": "^2.3",
+        "survos/auth-bundle": "^2.4.1",
+        "survos/babel-bundle": "^2.4.1",
+        "survos/command-bundle": "^2.4.1",
+        "survos/core-bundle": "^2.4.1",
+        "survos/deployment-bundle": "^2.4.1",
+        "survos/ez-bundle": "^2.4.1",
+        "survos/flickr-bundle": "^2.4.1",
+        "survos/geoapify-bundle": "^2.4.1",
         "survos/google-sheets-bundle": "2.0.83",
-        "survos/imgproxy-bundle": "^2.3",
-        "survos/js-twig-bundle": "^2.3",
-        "survos/media-bundle": "^2.3",
-        "survos/meili-bundle": "^2.3",
-        "survos/simple-datatables-bundle": "^2.3",
-        "survos/state-bundle": "^2.3",
-        "survos/tabler-bundle": "^2.3",
+        "survos/imgproxy-bundle": "^2.4.1",
+        "survos/js-twig-bundle": "^2.4.1",
+        "survos/media-bundle": "^2.4.1",
+        "survos/meili-bundle": "^2.4.1",
+        "survos/simple-datatables-bundle": "^2.4.1",
+        "survos/state-bundle": "^2.4.1",
+        "survos/tabler-bundle": "^2.4.1",
         "symfony/asset": "^8.1",
         "symfony/asset-mapper": "^8.1",
         "symfony/console": "^8.1",
@@ -152,9 +152,9 @@
         "pelmered/fake-car": "^2.1",
         "phpstan/phpstan": "^2.1.55",
         "phpunit/phpunit": "^13.1.10",
-        "survos/code-bundle": "^2.3",
-        "survos/crawler-bundle": "^2.3",
-        "survos/doc-bundle": "^2.3",
+        "survos/code-bundle": "^2.4.1",
+        "survos/crawler-bundle": "^2.4.1",
+        "survos/doc-bundle": "^2.4.1",
         "symfony/browser-kit": "^8.1",
         "symfony/css-selector": "^8.1",
         "symfony/debug-bundle": "^8.1",
@@ -170,16 +170,6 @@
         "behaviors": {
             "type": "vcs",
             "url": "git@github.com:tacman/DoctrineBehaviors.git"
-        },
-        "google-sheets-bundle": {
-            "type": "path",
-            "url": "lib/google-sheets-bundle",
-            "options": {
-                "symlink": false,
-                "versions": {
-                    "survos/google-sheets-bundle": "2.0.83"
-                }
-            }
         }
     }
 }

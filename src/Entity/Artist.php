@@ -17,21 +17,26 @@ use Survos\BabelBundle\Attribute\BabelStorage;
 use Survos\BabelBundle\Attribute\Translatable;
 use Survos\BabelBundle\Contract\BabelHooksInterface;
 use Survos\BabelBundle\Entity\Traits\BabelHooksTrait;
-use Survos\CoreBundle\Entity\RouteParametersInterface;
-use Survos\CoreBundle\Entity\RouteParametersTrait;
+use Survos\FieldBundle\Attribute\EntityMeta;
+use Survos\FieldBundle\Entity\RouteParametersInterface;
+use Survos\FieldBundle\Attribute\Field;
+use Survos\FieldBundle\Attribute\RouteIdentity;
+use Survos\FieldBundle\Entity\RouteIdentityTrait;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ArtistRepository::class)]
 #[ApiResource(
     normalizationContext: ['groups' => ['artist.read', 'artist.obra.read', 'media.read', 'media.embedded']],
-    operations: [new Get(), new GetCollection()]
+    operations: [new Get(uriTemplate: '/artists/{code}'), new GetCollection(uriTemplate: '/artists')]
 )]
 #[Assert\EnableAutoMapping]
 #[BabelStorage]
+#[EntityMeta(icon: 'mdi:palette', group: 'Content')]
+#[RouteIdentity(field: 'code')]
 class Artist implements \Stringable, RouteParametersInterface, BabelHooksInterface
 {
-    use RouteParametersTrait;
+    use RouteIdentityTrait;
     use BabelHooksTrait;
     use MediaFieldsTrait;
 
@@ -40,41 +45,38 @@ class Artist implements \Stringable, RouteParametersInterface, BabelHooksInterfa
     const GENDER_OTHER = 'other';
     const GENDERS = [self::GENDER_FEMALE, self::GENDER_MALE, self::GENDER_OTHER];
 
-    // make this an ENUM?
     public const STUDIO_VISITABLE = [
-            'studio.open',
-            'studio.appointment',
-            'studio.closed',
-        ];
-
-
-
-    public const array UNIQUE_PARAMETERS = ['artistId' => 'code'];
+        'studio.open',
+        'studio.appointment',
+        'studio.closed',
+    ];
 
     public function __construct(
         #[ORM\Id]
         #[ORM\Column(length: 32)]
         #[Groups(['artist.read'])]
         #[ApiProperty(identifier: true)]
+        #[Field(searchable: true, sortable: true, order: 10)]
         public string $code,
     ) {
         $this->obras = new ArrayCollection();
         $this->initMediaCollections();
     }
 
-    public string $id { get => $this->code; }
-
     #[ORM\Column(length: 255)]
     #[Groups(['artist.read','obra.artist.read', 'obra.embedded'])]
+    #[Field(searchable: true, sortable: true, order: 20)]
     public ?string $name = null;
 
     #[ORM\Column(nullable: true)]
     #[Groups(['artist.read'])]
+    #[Field(sortable: true, order: 30)]
     public ?int $birthYear = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\Email]
     #[Groups(['artist.read'])]
+    #[Field(searchable: true, order: 40)]
     public ?string $email = null;
 
     #[ORM\Column(length: 24, nullable: true)]

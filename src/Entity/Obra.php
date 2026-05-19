@@ -13,11 +13,14 @@ use Doctrine\ORM\Mapping as ORM;
 use Survos\BabelBundle\Attribute\BabelStorage;
 use Survos\BabelBundle\Contract\BabelHooksInterface;
 use Survos\BabelBundle\Entity\Traits\BabelHooksTrait;
-use Survos\CoreBundle\Entity\RouteParametersInterface;
-use Survos\CoreBundle\Entity\RouteParametersTrait;
+use Survos\FieldBundle\Entity\RouteParametersInterface;
+use Survos\FieldBundle\Attribute\RouteIdentity;
+use Survos\FieldBundle\Entity\RouteIdentityTrait;
+
 use Symfony\Component\Serializer\Attribute\Groups;
 use App\Trait\CollectionNullHelperTrait;
 
+#[RouteIdentity(field: 'code')]
 #[ORM\Entity(repositoryClass: ObraRepository::class)]
 #[ApiResource(
     operations: [new Get(), new GetCollection()],
@@ -28,10 +31,9 @@ class Obra implements \Stringable, RouteParametersInterface, BabelHooksInterface
 {
     use BabelHooksTrait;
     use CollectionNullHelperTrait;
-    use RouteParametersTrait;
+    use RouteIdentityTrait;
     use MediaFieldsTrait;
 
-    public const array UNIQUE_PARAMETERS = ['obraId' => 'code'];
 
     public function __construct(
         #[ORM\Id]

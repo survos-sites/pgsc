@@ -12,13 +12,16 @@ use App\Repository\LocationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Survos\CoreBundle\Entity\RouteParametersInterface;
-use Survos\CoreBundle\Entity\RouteParametersTrait;
+use Survos\FieldBundle\Entity\RouteParametersInterface;
+use Survos\FieldBundle\Attribute\RouteIdentity;
+use Survos\FieldBundle\Entity\RouteIdentityTrait;
+
 use Survos\StateBundle\Traits\MarkingInterface;
 use Survos\StateBundle\Traits\MarkingTrait;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Serializer\Attribute\SerializedName;
 
+#[RouteIdentity(field: 'code')]
 #[ORM\Entity(repositoryClass: LocationRepository::class)]
 #[ApiResource(
     normalizationContext: ['groups' => ['location.obra.read', 'location.read','obra.embedded', 'media.embedded']],
@@ -26,11 +29,10 @@ use Symfony\Component\Serializer\Attribute\SerializedName;
 )]
 class Location implements \Stringable, RouteParametersInterface, MarkingInterface
 {
-    use RouteParametersTrait;
+    use RouteIdentityTrait;
     use MarkingTrait;
     use HasGeoTrait;
 
-    public const array UNIQUE_PARAMETERS = ['locationId' => 'code'];
 
     public function __construct(
         #[ORM\Id]
