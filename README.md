@@ -47,6 +47,47 @@ Admin from fixtures:
 bin/console workflow:iterate App\\Entity\\Location --marking=new --transition=geocode
 ```
 
+## Loading real tour data (Artists / Locations / Obras)
+
+`doctrine:fixtures:load` (above) seeds dummy/dev data. Real content comes from CSV exports in
+`data/` via `app:load`:
+
+```bash
+bin/console app:load                # imports data/artistas.csv + artists.csv, locations.csv, and obras
+bin/console app:load --reset        # same, but purges Artist/Location/Obra first
+```
+
+**Known gotcha:** `app:load` currently reads Obras from `data/omar_exhibition.csv` (legacy
+filename), but the CSV actually checked into `data/` is `piezas.csv` — same columns
+(`code,artist_code,loc_code,photoUrl,...,title,material,size,year,description,price`), just a
+different name. Until `LoadCommand.php` is updated to read `piezas.csv` directly, copy it first:
+
+```bash
+cp data/piezas.csv data/omar_exhibition.csv
+bin/console app:load
+```
+
+Rows with a blank `artist_code` will currently fail the import (not-null constraint on
+`obra.artist_code`) — skip or fix those rows in the CSV if you hit this.
+
+Production (`chijal.org`) is kept in sync from Kryzia's Google Spreadsheet — see
+`config/packages/survos_google_sheets.yaml` — not from these CSVs directly; the CSVs are a
+point-in-time export usable for local dev. This whole pipeline (spreadsheet -> DB) is a known
+rough edge, kept only because it was the safe path during a database migration; a real admin UI
+is the intended replacement (see Project Goals below), not the spreadsheet sync.
+
+## Tour data endpoint (for the `sos` tour viewer)
+
+`GET /tourforge.json` aggregates every geocoded Location (with its Obras folded in as
+gallery/narration/description) into [TourForge](https://github.com/tourforge)'s `tourforge.json`
+shape — this is what `sos`'s `bin/console tourforge:fetch chijal` consumes, the same way it
+already consumes the Florence Navigator / FMU Campus Tour sources. `GET /tourforge/asset/{hash}`
+serves/redirects to the actual image or audio file for an asset hash referenced in that JSON.
+
+One Location = one tour "stop" (a physical place with lat/lng); Locations without both `lat` and
+`lng` set are skipped, since TourForge stops require coordinates. See `sos`'s
+`docs/tourforge-integration.md` for the full schema and the rest of the pipeline.
+
 
 
 ## Database
