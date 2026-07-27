@@ -8,6 +8,7 @@ use App\Entity\Location;
 use App\Entity\Obra;
 use App\Repository\LocationRepository;
 use Survos\MediaBundle\Entity\BaseMedia;
+use Survos\MediaBundle\Repository\MediaRepository;
 use Survos\MediaBundle\Service\MediaUrlGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -28,6 +29,7 @@ final class TourForgeController extends AbstractController
     public function __construct(
         private readonly LocationRepository $locationRepository,
         private readonly MediaUrlGenerator $mediaUrlGenerator,
+        private readonly MediaRepository $mediaRepository,
     ) {
     }
 
@@ -97,7 +99,18 @@ final class TourForgeController extends AbstractController
     #[Route('/tourforge/asset/{hash}', name: 'tourforge_asset', methods: ['GET'])]
     public function asset(string $hash): RedirectResponse
     {
-        return new RedirectResponse($this->mediaUrlGenerator->resize($hash, MediaUrlGenerator::PRESET_LARGE));
+        $media = $this->mediaRepository->find($hash) ?? throw $this->createNotFoundException(sprintf('No media "%s"', $hash));
+
+        // Only images can go through the imgproxy resize pipeline; audio/video must redirect
+        // straight to the archived file, or imgproxy 404s trying to "resize" a non-image.
+        if ($media->getType() !== 'photo') {
+            $url = $media->s3Url ?? $media->externalUrl
+                ?? throw $this->createNotFoundException(sprintf('No raw URL for media "%s"', $hash));
+
+            return new RedirectResponse($url);
+        }
+
+        return new RedirectResponse($this->mediaUrlGenerator->resize($media, MediaUrlGenerator::PRESET_LARGE));
     }
 
     /**
