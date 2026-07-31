@@ -248,6 +248,9 @@
     "survos/google-sheets-bundle": {
         "version": "1.5.529"
     },
+    "survos/js-twig-bundle": {
+        "version": "2.17.6"
+    },
     "survos/jsonl-bundle": {
         "version": "2.0.116"
     },
