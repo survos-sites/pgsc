@@ -236,6 +236,9 @@
     "survos/ez-bundle": {
         "version": "2.0.116"
     },
+    "survos/fetch-bundle": {
+        "version": "2.19.2"
+    },
     "survos/field-bundle": {
         "version": "2.3.0"
     },
@@ -247,6 +250,9 @@
     },
     "survos/google-sheets-bundle": {
         "version": "1.5.529"
+    },
+    "survos/imgproxy-bundle": {
+        "version": "2.4.1"
     },
     "survos/js-twig-bundle": {
         "version": "2.17.6"
@@ -281,6 +287,9 @@
     },
     "survos/state-bundle": {
         "version": "1.7"
+    },
+    "survos/tabler-bundle": {
+        "version": "2.4.1"
     },
     "survos/translatable-field-bundle": {
         "version": "dev-main"
@@ -624,18 +633,6 @@
     },
     "twig/extra-bundle": {
         "version": "v3.20.0"
-    },
-    "vich/uploader-bundle": {
-        "version": "2.5",
-        "recipe": {
-            "repo": "github.com/symfony/recipes-contrib",
-            "branch": "main",
-            "version": "1.13",
-            "ref": "1b3064c2f6b255c2bc2f56461aaeb76b11e07e36"
-        },
-        "files": [
-            "config/packages/vich_uploader.yaml"
-        ]
     },
     "zenstruck/browser": {
         "version": "1.9",

@@ -148,7 +148,7 @@ class FlickrCommand
         return null;
     }
 
-    private function fetchAllPhotos(string $albumId, string $userId, int $perPage, SymfonyStyle $io, callable $photoCallback = null): array
+    private function fetchAllPhotos(string $albumId, string $userId, int $perPage, SymfonyStyle $io, ?callable $photoCallback = null): array
     {
         $allPhotos = [];
         $page = 1;

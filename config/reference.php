@@ -1789,10 +1789,12 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     },
  * }
  * @psalm-type SurvosCommandConfig = array{
- *     routes_enabled?: bool|Param, // Auto-register this bundle's controllers via attribute scanning. Set false to manage routes manually in your app's config/routes/. // Default: true
- *     route_prefix?: scalar|Param|null, // URL prefix applied to this bundle's routes. // Default: "/admin/commands"
+ *     routes_enabled?: bool|Param, // Set false to manage this bundle's routes manually in your app. Bundles exposing sensitive routes (e.g. running console commands) should default this off. // Default: false
+ *     route_prefix?: scalar|Param|null, // URL prefix applied to all routes from this bundle. // Default: "/admin/commands"
+ *     locale_prefix?: bool|Param, // Prepend {_locale} (constrained to kernel.enabled_locales) to this bundle's route prefix, e.g. /{_locale}/f instead of /f -- for bundles whose routes are meant to be shared/bookmarked, so the URL itself carries the locale instead of a query param. // Default: false
  *     base_layout?: scalar|Param|null, // Default: null
  *     subdomain_variable?: scalar|Param|null, // Default: "subdomain"
+ *     track?: bool|Param, // Record each (namespaced) command run as a CommandProcess row for monitoring. // Default: true
  *     namespaces?: list<scalar|Param|null>,
  * }
  * @psalm-type TwigComponentConfig = array{
@@ -1819,8 +1821,9 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     clients?: array<string, array<string, mixed>>,
  * }
  * @psalm-type SurvosAuthConfig = array{
- *     routes_enabled?: bool|Param, // Auto-register this bundle's controllers via attribute scanning. Set false to manage routes manually in your app's config/routes/. // Default: true
- *     route_prefix?: scalar|Param|null, // URL prefix applied to this bundle's routes. // Default: "/auth"
+ *     routes_enabled?: bool|Param, // Set false to manage this bundle's routes manually in your app. Bundles exposing sensitive routes (e.g. running console commands) should default this off. // Default: true
+ *     route_prefix?: scalar|Param|null, // URL prefix applied to all routes from this bundle. // Default: "/auth"
+ *     locale_prefix?: bool|Param, // Prepend {_locale} (constrained to kernel.enabled_locales) to this bundle's route prefix, e.g. /{_locale}/f instead of /f -- for bundles whose routes are meant to be shared/bookmarked, so the URL itself carries the locale instead of a query param. // Default: false
  *     providers?: array<string, array{ // Default: []
  *         type?: scalar|Param|null, // Default: null
  *         client_id?: scalar|Param|null, // Default: null
@@ -1908,6 +1911,13 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *             },
  *         },
  *     },
+ *     favicon?: array{
+ *         enabled?: bool|Param, // Serve a dynamic SVG favicon at /favicon.svg so apps get a useful icon without a favicon-generator workflow. // Default: true
+ *         text?: scalar|Param|null, // 1-2 characters shown on the icon. Defaults to initials derived from app.code. // Default: null
+ *         background?: scalar|Param|null, // Background fill, e.g. a distinct color per environment (prod/wip/dev/test). // Default: "#206bc4"
+ *         foreground?: scalar|Param|null, // Text color. // Default: "#ffffff"
+ *         shape?: "square"|"rounded"|"circle"|Param, // Default: "rounded"
+ *     },
  *     routes?: array{
  *         home?: scalar|Param|null, // Default: "app_homepage"
  *         login?: scalar|Param|null, // Default: null
@@ -1919,6 +1929,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     },
  *     debug?: array{
  *         menu_slots?: bool|Param, // Default: false
+ *         admin_toolbar?: bool|Param, // Render the orange admin menu toolbar (navbar_admin) for admins/debug. Defaults to the TABLER_ADMIN_TOOLBAR env var (1); developers can set TABLER_ADMIN_TOOLBAR=0 in .env.local to hide it. // Default: "%env(bool:TABLER_ADMIN_TOOLBAR)%"
  *     },
  *     options?: array{
  *         theme?: scalar|Param|null, // Default: "tabler"
@@ -1928,6 +1939,9 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     },
  *     menu_options?: array<string, scalar|Param|null>,
  *     impersonate?: array<string, scalar|Param|null>,
+ *     routes_enabled?: bool|Param, // Set false to manage this bundle's routes manually in your app. Bundles exposing sensitive routes (e.g. running console commands) should default this off. // Default: true
+ *     route_prefix?: scalar|Param|null, // URL prefix applied to all routes from this bundle. // Default: ""
+ *     locale_prefix?: bool|Param, // Prepend {_locale} (constrained to kernel.enabled_locales) to this bundle's route prefix, e.g. /{_locale}/f instead of /f -- for bundles whose routes are meant to be shared/bookmarked, so the URL itself carries the locale instead of a query param. // Default: false
  * }
  * @psalm-type KnpMenuConfig = array{
  *     providers?: array{
@@ -1939,44 +1953,6 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     templating?: bool|Param, // Default: false
  *     default_renderer?: scalar|Param|null, // Default: "twig"
  * }
- * @psalm-type VichUploaderConfig = array{
- *     default_filename_attribute_suffix?: scalar|Param|null, // Default: "_name"
- *     db_driver?: scalar|Param|null,
- *     storage?: scalar|Param|null, // Default: "file_system"
- *     use_flysystem_to_resolve_uri?: bool|Param, // Default: false
- *     twig?: scalar|Param|null, // twig requires templating // Default: true
- *     form?: scalar|Param|null, // Default: true
- *     metadata?: array{
- *         cache?: scalar|Param|null, // Default: "file"
- *         type?: scalar|Param|null, // Default: "attribute"
- *         file_cache?: array{
- *             dir?: scalar|Param|null, // Default: "%kernel.cache_dir%/vich_uploader"
- *         },
- *         auto_detection?: bool|Param, // Default: true
- *         directories?: list<array{ // Default: []
- *             path?: scalar|Param|null,
- *             namespace_prefix?: scalar|Param|null, // Default: ""
- *         }>,
- *     },
- *     mappings?: array<string, array{ // Default: []
- *         uri_prefix?: scalar|Param|null, // Default: "/uploads"
- *         upload_destination?: scalar|Param|null, // Default: null
- *         namer?: string|array{
- *             service?: scalar|Param|null, // Default: null
- *             options?: mixed, // Default: null
- *         },
- *         directory_namer?: string|array{
- *             service?: scalar|Param|null, // Default: null
- *             options?: mixed, // Default: null
- *         },
- *         delete_on_remove?: scalar|Param|null, // Default: true
- *         erase_fields?: scalar|Param|null, // Default: true
- *         delete_on_update?: scalar|Param|null, // Default: true
- *         inject_on_load?: scalar|Param|null, // Default: false
- *         namer_keep_extension?: scalar|Param|null, // Default: false
- *         db_driver?: scalar|Param|null, // Default: null
- *     }>,
- * }
  * @psalm-type UxMapConfig = array{
  *     renderer?: scalar|Param|null, // Default: null
  *     google_maps?: array{
@@ -1984,15 +1960,19 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     },
  * }
  * @psalm-type SurvosDocConfig = array{
- *     routes_enabled?: bool|Param, // Auto-register this bundle's controllers via attribute scanning. Set false to manage routes manually in your app's config/routes/. // Default: true
- *     route_prefix?: scalar|Param|null, // URL prefix applied to this bundle's routes. // Default: "/doc"
- *     screenshow_endpoint?: scalar|Param|null, // Default: "%env(default::SCREENSHOW_ENDPOINT)%"
+ *     routes_enabled?: bool|Param, // Set false to manage this bundle's routes manually in your app. Bundles exposing sensitive routes (e.g. running console commands) should default this off. // Default: true
+ *     route_prefix?: scalar|Param|null, // URL prefix applied to all routes from this bundle. // Default: "/doc"
+ *     locale_prefix?: bool|Param, // Prepend {_locale} (constrained to kernel.enabled_locales) to this bundle's route prefix, e.g. /{_locale}/f instead of /f -- for bundles whose routes are meant to be shared/bookmarked, so the URL itself carries the locale instead of a query param. // Default: false
  *     user_provider?: scalar|Param|null, // Default: null
  *     user_class?: scalar|Param|null, // Default: "App\\Entity\\User"
+ *     console?: array{
+ *         include?: list<scalar|Param|null>,
+ *     },
  * }
  * @psalm-type SurvosCrawlerConfig = array{
- *     routes_enabled?: bool|Param, // Auto-register this bundle's controllers via attribute scanning. Set false to manage routes manually in your app's config/routes/. // Default: true
- *     route_prefix?: scalar|Param|null, // URL prefix applied to this bundle's routes. // Default: "/crawler"
+ *     routes_enabled?: bool|Param, // Set false to manage this bundle's routes manually in your app. Bundles exposing sensitive routes (e.g. running console commands) should default this off. // Default: true
+ *     route_prefix?: scalar|Param|null, // URL prefix applied to all routes from this bundle. // Default: "/crawler"
+ *     locale_prefix?: bool|Param, // Prepend {_locale} (constrained to kernel.enabled_locales) to this bundle's route prefix, e.g. /{_locale}/f instead of /f -- for bundles whose routes are meant to be shared/bookmarked, so the URL itself carries the locale instead of a query param. // Default: false
  *     users?: list<mixed>,
  *     routes_to_ignore?: list<mixed>,
  *     paths_to_ignore?: list<mixed>,
@@ -2163,11 +2143,11 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     enable_dynamic_routing?: bool|Param, // Default: true
  *     workflow_paths?: list<scalar|Param|null>,
  *     async_transport_dsn?: scalar|Param|null, // Default: "doctrine://default"
+ *     queue_driver?: "doctrine"|"rabbitmq"|Param, // Default: "doctrine"
  * }
  * @psalm-type SurvosMediaConfig = array{
  *     default_locale?: scalar|Param|null, // Default: "en"
  *     cache_ttl?: scalar|Param|null, // Default: 3600
- *     sais_integration?: bool|Param, // Default: true
  *     media_server?: array{
  *         host?: scalar|Param|null, // Default: "https://media.wip"
  *         apiKey?: scalar|Param|null, // Default: null
@@ -2293,10 +2273,13 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     host?: scalar|Param|null, // Default: "%env(default::IMGPROXY_HOST)%"
  *     key?: scalar|Param|null, // Default: "%env(default::IMGPROXY_KEY)%"
  *     salt?: scalar|Param|null, // Default: "%env(default::IMGPROXY_SALT)%"
- *     presets?: array<string, array{ // Default: {"ai":{"width":512,"height":512,"resize":"fit"},"ai_thumbnail":{"width":512,"height":512,"resize":"fit"},"ai_hires":{"width":2048,"height":2048,"resize":"fit"},"thumb":{"width":300,"height":300,"resize":"fit"},"small":{"width":192,"height":192,"resize":"fit"},"medium":{"width":600,"height":400,"resize":"fit"},"large":{"width":1600,"height":1600,"resize":"fit"}}
+ *     presets?: array<string, array{ // Default: {"tiny":{"width":200,"height":200,"resize":"fit","quality":70,"format":"webp"},"thumb":{"width":400,"height":400,"resize":"fit","quality":80,"format":"webp"},"observe":{"width":512,"height":512,"resize":"fit","quality":80,"format":"webp"},"display":{"width":600,"height":400,"resize":"fit","quality":80,"format":"webp"},"archive":{"width":0,"height":0,"resize":"fit","quality":88,"format":"webp","strip_metadata":false}}
  *         width?: int|Param,
  *         height?: int|Param,
  *         resize?: scalar|Param|null, // Default: "fit"
+ *         quality?: int|Param, // Default: null
+ *         format?: scalar|Param|null, // Default: null
+ *         strip_metadata?: bool|Param|null, // Default: null
  *     }>,
  * }
  * @psalm-type SurvosJsTwigConfig = array{
@@ -2313,6 +2296,9 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         url?: scalar|Param|null, // the API to use to load if empty. json-ld iterates through pages
  *         response_key?: scalar|Param|null, // key if API returns an object response, e.g. dummyjson returns {'products': [...]}
  *     }>,
+ * }
+ * @psalm-type SurvosFetchConfig = array{
+ *     persistent_cache_path?: scalar|Param|null, // SQLite file backing PersistentFetcher -- an app-controlled-TTL cache independent of what (if anything) the origin sends as Cache-Control/Expires. Deliberately outside %kernel.cache_dir% so it survives cache:clear. // Default: "%kernel.project_dir%/var/data/fetch_cache.db"
  * }
  * @psalm-type ConfigType = array{
  *     imports?: ImportsConfig,
@@ -2338,7 +2324,6 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     survos_core?: SurvosCoreConfig,
  *     survos_tabler?: SurvosTablerConfig,
  *     knp_menu?: KnpMenuConfig,
- *     vich_uploader?: VichUploaderConfig,
  *     ux_map?: UxMapConfig,
  *     survos_geoapify?: SurvosGeoapifyConfig,
  *     survos_google_sheets?: SurvosGoogleSheetsConfig,
@@ -2353,6 +2338,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     survos_field?: SurvosFieldConfig,
  *     survos_imgproxy?: SurvosImgproxyConfig,
  *     survos_js_twig?: SurvosJsTwigConfig,
+ *     survos_fetch?: SurvosFetchConfig,
  *     "when@dev"?: array{
  *         imports?: ImportsConfig,
  *         parameters?: ParametersConfig,
@@ -2380,7 +2366,6 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         survos_core?: SurvosCoreConfig,
  *         survos_tabler?: SurvosTablerConfig,
  *         knp_menu?: KnpMenuConfig,
- *         vich_uploader?: VichUploaderConfig,
  *         ux_map?: UxMapConfig,
  *         survos_doc?: SurvosDocConfig,
  *         survos_crawler?: SurvosCrawlerConfig,
@@ -2400,6 +2385,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         survos_field?: SurvosFieldConfig,
  *         survos_imgproxy?: SurvosImgproxyConfig,
  *         survos_js_twig?: SurvosJsTwigConfig,
+ *         survos_fetch?: SurvosFetchConfig,
  *     },
  *     "when@prod"?: array{
  *         imports?: ImportsConfig,
@@ -2425,7 +2411,6 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         survos_core?: SurvosCoreConfig,
  *         survos_tabler?: SurvosTablerConfig,
  *         knp_menu?: KnpMenuConfig,
- *         vich_uploader?: VichUploaderConfig,
  *         ux_map?: UxMapConfig,
  *         survos_geoapify?: SurvosGeoapifyConfig,
  *         survos_google_sheets?: SurvosGoogleSheetsConfig,
@@ -2440,6 +2425,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         survos_field?: SurvosFieldConfig,
  *         survos_imgproxy?: SurvosImgproxyConfig,
  *         survos_js_twig?: SurvosJsTwigConfig,
+ *         survos_fetch?: SurvosFetchConfig,
  *     },
  *     "when@test"?: array{
  *         imports?: ImportsConfig,
@@ -2466,7 +2452,6 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         survos_core?: SurvosCoreConfig,
  *         survos_tabler?: SurvosTablerConfig,
  *         knp_menu?: KnpMenuConfig,
- *         vich_uploader?: VichUploaderConfig,
  *         ux_map?: UxMapConfig,
  *         survos_doc?: SurvosDocConfig,
  *         survos_crawler?: SurvosCrawlerConfig,
@@ -2486,6 +2471,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         survos_field?: SurvosFieldConfig,
  *         survos_imgproxy?: SurvosImgproxyConfig,
  *         survos_js_twig?: SurvosJsTwigConfig,
+ *         survos_fetch?: SurvosFetchConfig,
  *     },
  *     ...<string, ExtensionType|array{ // extra keys must follow the when@%env% pattern or match an extension alias
  *         imports?: ImportsConfig,

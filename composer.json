@@ -22,7 +22,6 @@
         "easycorp/easyadmin-bundle": "^5.0.8",
         "endroid/qr-code-bundle": "^7.0",
         "google/apiclient": "^2.19.3",
-        "survos/field-bundle": "^2.4.1",
         "league/csv": "^9.28.0",
         "meilisearch/meilisearch-php": "dev-main",
         "nelmio/cors-bundle": "^2.6.1",
@@ -36,6 +35,8 @@
         "survos/core-bundle": "^2.4.1",
         "survos/deployment-bundle": "^2.4.1",
         "survos/ez-bundle": "^2.4.1",
+        "survos/fetch-bundle": "^2.19",
+        "survos/field-bundle": "^2.4.1",
         "survos/flickr-bundle": "^2.4.1",
         "survos/geoapify-bundle": "^2.4.1",
         "survos/google-sheets-bundle": "2.0.83",
@@ -81,8 +82,7 @@
         "symfony/yaml": "^8.1",
         "symfonycasts/verify-email-bundle": "^1.18.0",
         "twig/extra-bundle": "^3.24.0",
-        "twig/twig": "^3.25.0",
-        "vich/uploader-bundle": ">=2.9.2"
+        "twig/twig": "^3.25.0"
     },
     "config": {
         "allow-plugins": {
