@@ -124,7 +124,11 @@ final class AppController extends AbstractController
         ];
     }
 
-    #[Route('/landing', name: 'app_homepage')]
+    // Not /landing: survos_tabler_landing already owns /{_locale}/landing at
+    // priority 100, and the generic Tabler page silently shadowed this one —
+    // which is how the CHIJAL homepage went missing. Own a path instead of
+    // out-bidding a bundle for one.
+    #[Route('/chijal', name: 'app_homepage')]
     #[Template('landing.html.twig')]
     public function landing(): Response|array
     {
