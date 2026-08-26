@@ -13,6 +13,7 @@ use App\Repository\ObraRepository;
 use Survos\GristBundle\Model\FormBlueprint;
 use Survos\GristBundle\Service\GristFormManager;
 use Survos\RecordStoreBundle\Adapter\Grist\GristClient;
+use Survos\RecordStoreBundle\Registry\RecordStoreRegistry;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Attribute\Option;
 use Symfony\Component\Console\Command\Command;
@@ -25,10 +26,22 @@ final readonly class PgscGristService
      * Choice colors for Locations.Status. Grist renders the cell with these, so the
      * status reads at a glance instead of being one more text column to squint at.
      */
+    /**
+     * The record-store application these constants describe.
+     *
+     * TABLES and FORMS are both keyed by the LOGICAL table name configured under
+     * survos_record_store.applications.pgsc.tables, which is NOT the remote Grist
+     * table id (`artists` -> `Artists`). FORMS already went through the bundle, which
+     * resolves that mapping; TABLES is used against GristClient directly, so it must
+     * resolve through remoteTable() first. Keying both the same way is the point --
+     * two constants describing one schema under different key conventions is a trap.
+     */
+    private const string APPLICATION = 'pgsc';
+
     private const string STATUS_WIDGET_OPTIONS = '{"choices":["activo","inactivo"],"choiceOptions":{"activo":{"fillColor":"#D7F0DB","textColor":"#12683A"},"inactivo":{"fillColor":"#EDEDED","textColor":"#6B6B6B"}}}';
 
     private const array TABLES = [
-        'Artists' => [
+        'artists' => [
             ['id' => 'Code', 'fields' => ['type' => 'Text', 'label' => 'Code']],
             ['id' => 'Name', 'fields' => ['type' => 'Text', 'label' => 'Name']],
             ['id' => 'BirthYear', 'fields' => ['type' => 'Int', 'label' => 'Birth year']],
@@ -44,7 +57,7 @@ final readonly class PgscGristService
             ['id' => 'DriveUrl', 'fields' => ['type' => 'Text', 'label' => 'Image / Drive URL']],
             ['id' => 'YoutubeUrl', 'fields' => ['type' => 'Text', 'label' => 'YouTube URL']],
         ],
-        'Locations' => [
+        'locations' => [
             ['id' => 'Code', 'fields' => ['type' => 'Text', 'label' => 'Code']],
             ['id' => 'Name', 'fields' => ['type' => 'Text', 'label' => 'Name']],
             ['id' => 'Status', 'fields' => ['type' => 'Choice', 'label' => 'Status', 'widgetOptions' => self::STATUS_WIDGET_OPTIONS]],
@@ -56,7 +69,7 @@ final readonly class PgscGristService
             ['id' => 'Latitude', 'fields' => ['type' => 'Numeric', 'label' => 'Latitude']],
             ['id' => 'Longitude', 'fields' => ['type' => 'Numeric', 'label' => 'Longitude']],
         ],
-        'Obras' => [
+        'obras' => [
             ['id' => 'Code', 'fields' => ['type' => 'Text', 'label' => 'Code']],
             ['id' => 'Artist', 'fields' => ['type' => 'Ref:Artists', 'label' => 'Artist']],
             ['id' => 'Location', 'fields' => ['type' => 'Ref:Locations', 'label' => 'Location']],
@@ -99,6 +112,7 @@ final readonly class PgscGristService
     public function __construct(
         private GristClient $grist,
         private GristFormManager $forms,
+        private RecordStoreRegistry $stores,
         private SyncService $source,
         private ArtistRepository $artists,
         private LocationRepository $locations,
@@ -119,11 +133,11 @@ final readonly class PgscGristService
         $this->provisionTables();
         $this->configureRelations();
         $io->writeln('Uploading artists…');
-        $artistIds = $this->upsert('Artists', array_map($this->artistFields(...), $this->artists->findAll()));
+        $artistIds = $this->upsert($this->remoteTable('artists'), array_map($this->artistFields(...), $this->artists->findAll()));
         $io->writeln('Uploading locations…');
-        $locationIds = $this->upsert('Locations', array_map($this->locationFields(...), $this->locations->findAll()));
+        $locationIds = $this->upsert($this->remoteTable('locations'), array_map($this->locationFields(...), $this->locations->findAll()));
         $io->writeln('Uploading obras…');
-        $this->upsert('Obras', array_map(
+        $this->upsert($this->remoteTable('obras'), array_map(
             fn (Obra $obra): array => $this->obraFields($obra, $artistIds, $locationIds),
             $this->obras->findAll(),
         ));
@@ -147,10 +161,24 @@ final readonly class PgscGristService
         return Command::SUCCESS;
     }
 
+    /**
+     * Map a logical table name onto the remote Grist table id.
+     *
+     * GristFormManager already does this internally, so the form path was correct;
+     * everything that talks to GristClient directly has to do it here or it will
+     * silently operate on a table that does not exist -- creating a duplicate rather
+     * than failing.
+     */
+    private function remoteTable(string $logical): string
+    {
+        return $this->stores->application(self::APPLICATION)->table($logical)->id;
+    }
+
     private function provisionTables(): void
     {
         $existing = array_column($this->grist->tables($this->documentId), 'id');
-        foreach (self::TABLES as $tableId => $columns) {
+        foreach (self::TABLES as $logicalTable => $columns) {
+            $tableId = $this->remoteTable($logicalTable);
             if (!in_array($tableId, $existing, true)) {
                 $this->grist->request('POST', sprintf('docs/%s/tables', rawurlencode($this->documentId)), [
                     'json' => ['tables' => [['id' => $tableId, 'columns' => $columns]]],
@@ -179,14 +207,15 @@ final readonly class PgscGristService
 
     private function configureRelations(): void
     {
-        $columns = array_column($this->grist->columns($this->documentId, 'Obras'), 'fields', 'id');
+        $obras = $this->remoteTable('obras');
+        $columns = array_column($this->grist->columns($this->documentId, $obras), 'fields', 'id');
         $actions = [
-            ['SetDisplayFormula', 'Obras', null, 'Artist', '$Artist.Name'],
-            ['SetDisplayFormula', 'Obras', null, 'Location', '$Location.Name'],
+            ['SetDisplayFormula', $obras, null, 'Artist', '$Artist.Name'],
+            ['SetDisplayFormula', $obras, null, 'Location', '$Location.Name'],
         ];
         foreach (['Artist', 'Location'] as $columnId) {
             if (0 === ($columns[$columnId]['reverseCol'] ?? 0)) {
-                $actions[] = ['AddReverseColumn', 'Obras', $columnId];
+                $actions[] = ['AddReverseColumn', $obras, $columnId];
             }
         }
         $this->grist->request('POST', sprintf('docs/%s/apply', rawurlencode($this->documentId)), ['json' => $actions]);
@@ -228,7 +257,7 @@ final readonly class PgscGristService
         $created = [];
         foreach (self::FORMS as $table => $form) {
             $definition = $this->forms->upsert(new FormBlueprint(
-                application: 'pgsc',
+                application: self::APPLICATION,
                 table: $table,
                 title: $form['title'],
                 intro: $form['intro'],
