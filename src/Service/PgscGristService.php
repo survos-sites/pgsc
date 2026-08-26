@@ -10,6 +10,8 @@ use App\Entity\Obra;
 use App\Repository\ArtistRepository;
 use App\Repository\LocationRepository;
 use App\Repository\ObraRepository;
+use Survos\GristBundle\Model\FormBlueprint;
+use Survos\GristBundle\Service\GristFormManager;
 use Survos\RecordStoreBundle\Adapter\Grist\GristClient;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Attribute\Option;
@@ -77,17 +79,17 @@ final readonly class PgscGristService
     ];
 
     private const array FORMS = [
-        'Artists' => [
+        'artists' => [
             'title' => 'Artist intake',
             'intro' => 'Add or update an artist. Use a short, stable code such as maria-lopez; artworks will link to this artist.',
             'fields' => ['Code', 'Name', 'Email', 'Phone', 'BirthYear', 'Social', 'Tagline', 'Bio', 'DriveUrl', 'YoutubeUrl'],
         ],
-        'Locations' => [
+        'locations' => [
             'title' => 'Location intake',
             'intro' => 'Add a studio, gallery, business, or exhibition location. Artworks can then select it from a searchable list.',
             'fields' => ['Code', 'Name', 'Type', 'Status', 'Barrio', 'Address', 'ContactName', 'Phone', 'Latitude', 'Longitude'],
         ],
-        'Obras' => [
+        'obras' => [
             'title' => 'Artwork intake',
             'intro' => 'Add an artwork and connect it to an existing artist and, when known, a location. The selectors show names while storing real references.',
             'fields' => ['Code', 'Title', 'Artist', 'Location', 'Exhibition', 'Type', 'Year', 'Materials', 'Size', 'Width', 'Height', 'Depth', 'Price', 'Description', 'DriveUrl', 'YoutubeUrl'],
@@ -96,6 +98,7 @@ final readonly class PgscGristService
 
     public function __construct(
         private GristClient $grist,
+        private GristFormManager $forms,
         private SyncService $source,
         private ArtistRepository $artists,
         private LocationRepository $locations,
@@ -131,6 +134,15 @@ final readonly class PgscGristService
             count($artistIds), count($locationIds), count($this->obras->findAll()), implode(', ', $forms),
         ));
         $io->writeln(sprintf('%s/doc/%s', rtrim($this->host, '/'), $this->documentId));
+
+        return Command::SUCCESS;
+    }
+
+    #[AsCommand('app:grist:forms', 'Apply the PGSC form blueprints without importing records')]
+    public function forms(SymfonyStyle $io): int
+    {
+        $created = $this->provisionForms();
+        $io->success('Forms applied: '.implode(', ', $created));
 
         return Command::SUCCESS;
     }
@@ -213,146 +225,22 @@ final readonly class PgscGristService
     /** @return list<string> */
     private function provisionForms(): array
     {
-        $tableRefs = [];
-        foreach ($this->grist->tables($this->documentId) as $table) {
-            if (isset($table['id'], $table['fields']['tableRef']) && is_string($table['id'])) {
-                $tableRefs[$table['id']] = (int) $table['fields']['tableRef'];
-            }
-        }
-        $sections = $this->metadata('_grist_Views_section');
         $created = [];
-        foreach (self::FORMS as $tableId => $form) {
-            $name = $form['title'];
-            $section = array_find($sections, static fn (array $record): bool =>
-                'form' === ($record['fields']['parentKey'] ?? null)
-                && $tableRefs[$tableId] === ($record['fields']['tableRef'] ?? null)
-            );
-            if (null === $section) {
-                $this->grist->request('POST', sprintf('docs/%s/apply', rawurlencode($this->documentId)), [
-                    'json' => [['CreateViewSection', $tableRefs[$tableId], 0, 'form', null, $name]],
-                ]);
-                $sections = $this->metadata('_grist_Views_section');
-                $section = array_find($sections, static fn (array $record): bool =>
-                    'form' === ($record['fields']['parentKey'] ?? null)
-                    && $tableRefs[$tableId] === ($record['fields']['tableRef'] ?? null)
-                );
-            }
-
-            if (null === $section) {
-                throw new \RuntimeException(sprintf('Grist did not create the %s form section.', $tableId));
-            }
-            $sectionId = (int) $section['id'];
-            $viewId = (int) $section['fields']['parentId'];
-            $fieldRecords = array_values(array_filter(
-                $this->metadata('_grist_Views_section_field'),
-                static fn (array $record): bool => $sectionId === ($record['fields']['parentId'] ?? null),
+        foreach (self::FORMS as $table => $form) {
+            $definition = $this->forms->upsert(new FormBlueprint(
+                application: 'pgsc',
+                table: $table,
+                title: $form['title'],
+                intro: $form['intro'],
+                fields: $form['fields'],
+                submitLabel: 'Save '.$form['title'],
+                publish: true,
+                linkId: $table.'-intake',
             ));
-            $columns = [];
-            foreach ($this->grist->columns($this->documentId, $tableId) as $column) {
-                if (isset($column['id'], $column['fields']['colRef']) && is_string($column['id'])) {
-                    $columns[(int) $column['fields']['colRef']] = $column['id'];
-                }
-            }
-            $columnRefs = array_flip($columns);
-            $fieldsByColumn = [];
-            foreach ($fieldRecords as $record) {
-                $columnId = $columns[$record['fields']['colRef']] ?? null;
-                if (is_string($columnId)) {
-                    $fieldsByColumn[$columnId] = $record;
-                }
-            }
-            $missingFields = [];
-            foreach ($form['fields'] as $columnId) {
-                if (!isset($fieldsByColumn[$columnId]) && isset($columnRefs[$columnId])) {
-                    $missingFields[] = ['AddRecord', '_grist_Views_section_field', null, [
-                        'parentId' => $sectionId,
-                        'colRef' => $columnRefs[$columnId],
-                    ]];
-                }
-            }
-            if ([] !== $missingFields) {
-                $this->grist->request('POST', sprintf('docs/%s/apply', rawurlencode($this->documentId)), ['json' => $missingFields]);
-                $fieldRecords = array_values(array_filter(
-                    $this->metadata('_grist_Views_section_field'),
-                    static fn (array $record): bool => $sectionId === ($record['fields']['parentId'] ?? null),
-                ));
-                $fieldsByColumn = [];
-                foreach ($fieldRecords as $record) {
-                    $columnId = $columns[$record['fields']['colRef']] ?? null;
-                    if (is_string($columnId)) {
-                        $fieldsByColumn[$columnId] = $record;
-                    }
-                }
-            }
-            $orderedFields = [];
-            foreach ($form['fields'] as $columnId) {
-                if (isset($fieldsByColumn[$columnId])) {
-                    $orderedFields[] = $fieldsByColumn[$columnId];
-                }
-            }
-            $layout = ['type' => 'Layout', 'id' => 'layout-'.$sectionId, 'children' => [
-                ['type' => 'Paragraph', 'id' => 'heading-'.$sectionId, 'text' => '# '.$name],
-                ['type' => 'Paragraph', 'id' => 'intro-'.$sectionId, 'text' => $form['intro']],
-                ['type' => 'Section', 'id' => 'fields-'.$sectionId, 'children' => array_map(
-                    static fn (array $record): array => ['type' => 'Field', 'id' => 'field-'.$record['id'], 'leaf' => (int) $record['id']],
-                    $orderedFields,
-                )],
-                ['type' => 'Submit', 'id' => 'submit-'.$sectionId, 'text' => 'Save '.$form['title']],
-            ]];
-
-            $this->grist->request('POST', sprintf('docs/%s/apply', rawurlencode($this->documentId)), ['json' => [
-                ['UpdateRecord', '_grist_Views', $viewId, ['name' => $name]],
-                ['UpdateRecord', '_grist_Views_section', $sectionId, [
-                    'title' => $name,
-                    'layoutSpec' => json_encode($layout, JSON_THROW_ON_ERROR),
-                    'shareOptions' => json_encode(['publish' => true, 'form' => new \stdClass()], JSON_THROW_ON_ERROR),
-                ]],
-            ]]);
-            $this->publishForm($viewId, strtolower($tableId).'-intake', $name);
-            $created[] = $name;
+            $created[] = $definition->title;
         }
 
         return $created;
-    }
-
-    /** @return list<array{id:int, fields:array<string, mixed>}> */
-    private function metadata(string $tableId): array
-    {
-        $result = $this->grist->request('GET', sprintf(
-            'docs/%s/tables/%s/records?limit=500', rawurlencode($this->documentId), rawurlencode($tableId),
-        ));
-
-        return $result['records'] ?? [];
-    }
-
-    private function publishForm(int $viewId, string $linkId, string $label): void
-    {
-        $shares = $this->metadata('_grist_Shares');
-        $share = array_find($shares, static fn (array $record): bool => $linkId === ($record['fields']['linkId'] ?? null));
-        if (null === $share) {
-            $this->grist->request('POST', sprintf('docs/%s/apply', rawurlencode($this->documentId)), ['json' => [[
-                'AddRecord', '_grist_Shares', null, [
-                    'linkId' => $linkId,
-                    'options' => json_encode(['publish' => true], JSON_THROW_ON_ERROR),
-                    'label' => $label,
-                ],
-            ]]]);
-            $shares = $this->metadata('_grist_Shares');
-            $share = array_find($shares, static fn (array $record): bool => $linkId === ($record['fields']['linkId'] ?? null));
-        }
-        if (null === $share) {
-            throw new \RuntimeException(sprintf('Grist did not create the %s public share.', $label));
-        }
-        $page = array_find(
-            $this->metadata('_grist_Pages'),
-            static fn (array $record): bool => $viewId === ($record['fields']['viewRef'] ?? null),
-        );
-        if (null === $page) {
-            throw new \RuntimeException(sprintf('Grist page for %s was not found.', $label));
-        }
-        $this->grist->request('POST', sprintf('docs/%s/apply', rawurlencode($this->documentId)), ['json' => [[
-            'UpdateRecord', '_grist_Pages', (int) $page['id'], ['shareRef' => (int) $share['id']],
-        ]]]);
     }
 
     /** @return array<string, mixed> */

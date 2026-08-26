@@ -51,4 +51,5 @@ return [
     Survos\Kit\SurvosKitBundle::class => ['all' => true],
     Survos\FetchBundle\SurvosFetchBundle::class => ['all' => true],
     Survos\RecordStoreBundle\SurvosRecordStoreBundle::class => ['all' => true],
+    Survos\GristBundle\SurvosGristBundle::class => ['all' => true],
 ];

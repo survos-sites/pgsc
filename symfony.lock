@@ -251,6 +251,9 @@
     "survos/google-sheets-bundle": {
         "version": "1.5.529"
     },
+    "survos/grist-bundle": {
+        "version": "2.24.37"
+    },
     "survos/imgproxy-bundle": {
         "version": "2.4.1"
     },

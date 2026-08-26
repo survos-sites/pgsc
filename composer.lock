@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "aa629a74e57bc27c6d5427c8655ba399",
+    "content-hash": "36dff514bdf79278b34d32321006920d",
     "packages": [
         {
             "name": "adbario/php-dot-notation",
@@ -6262,6 +6262,67 @@
             "time": "2025-10-27T12:45:39+00:00"
         },
         {
+            "name": "survos/grist-bundle",
+            "version": "2.24.37",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/survos/grist-bundle.git",
+                "reference": "63f5f4d305235256a610b6d4572d500f4c8c28bf"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/survos/grist-bundle/zipball/63f5f4d305235256a610b6d4572d500f4c8c28bf",
+                "reference": "63f5f4d305235256a610b6d4572d500f4c8c28bf",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.5",
+                "survos/kit-bundle": "^2.6",
+                "survos/record-store-bundle": "^2.6",
+                "symfony/config": "^8.1",
+                "symfony/console": "^8.1",
+                "symfony/dependency-injection": "^8.1",
+                "symfony/http-kernel": "^8.1"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^2.0",
+                "phpunit/phpunit": "^13.0",
+                "symfony/ai-agent": "^0.4",
+                "symfony/mcp-bundle": "^0.9"
+            },
+            "suggest": {
+                "symfony/ai-agent": "Expose Grist agent tools.",
+                "symfony/mcp-bundle": "Expose Grist tools over MCP."
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "symfony": {
+                    "require": "^8.1"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Survos\\GristBundle\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Grist forms and agent tools for Symfony.",
+            "support": {
+                "issues": "https://github.com/survos/grist-bundle/issues",
+                "source": "https://github.com/survos/grist-bundle/tree/2.24.37"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/kbond",
+                    "type": "github"
+                }
+            ],
+            "time": "2026-08-26T21:22:23+00:00"
+        },
+        {
             "name": "survos/imgproxy-bundle",
             "version": "2.4.1",
             "source": {
@@ -6767,16 +6828,16 @@
         },
         {
             "name": "survos/record-store-bundle",
-            "version": "2.24.36",
+            "version": "2.24.37",
             "source": {
                 "type": "git",
                 "url": "https://github.com/survos/record-store-bundle.git",
-                "reference": "a08bf5b295790bdb3b7e5d784fd0c53e24c74982"
+                "reference": "612a5b17485e117c2a5536aded11a28d94c1a5ea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/survos/record-store-bundle/zipball/a08bf5b295790bdb3b7e5d784fd0c53e24c74982",
-                "reference": "a08bf5b295790bdb3b7e5d784fd0c53e24c74982",
+                "url": "https://api.github.com/repos/survos/record-store-bundle/zipball/612a5b17485e117c2a5536aded11a28d94c1a5ea",
+                "reference": "612a5b17485e117c2a5536aded11a28d94c1a5ea",
                 "shasum": ""
             },
             "require": {
@@ -6819,7 +6880,7 @@
             ],
             "support": {
                 "issues": "https://github.com/survos/record-store-bundle/issues",
-                "source": "https://github.com/survos/record-store-bundle/tree/2.24.36"
+                "source": "https://github.com/survos/record-store-bundle/tree/2.24.37"
             },
             "funding": [
                 {
@@ -6827,7 +6888,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-08-25T19:53:58+00:00"
+            "time": "2026-08-26T21:23:18+00:00"
         },
         {
             "name": "survos/simple-datatables-bundle",
