@@ -12,7 +12,6 @@ use App\Repository\ObraRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use League\Csv\Reader;
 use Psr\Log\LoggerInterface;
-use Survos\CoreBundle\Service\SurvosUtils;
 use Survos\GoogleSheetsBundle\Service\SheetService;
 use Survos\MediaBundle\Entity\Audio;
 use Survos\MediaBundle\Service\MediaRegistry;
@@ -258,9 +257,11 @@ class SyncService
                 continue;
             }
 
-            SurvosUtils::assertKeyExists('artist_code', $row,
-                "Sheet '$sheetName' row $rowNum (obra=$code) has no artist_code column at all"
-            );
+            if (!array_key_exists('artist_code', $row)) {
+                throw new \UnexpectedValueException(
+                    "Sheet '$sheetName' row $rowNum (obra=$code) has no artist_code column at all",
+                );
+            }
             $artistCode = $row['artist_code'];
 
             if (!$artistCode) {
