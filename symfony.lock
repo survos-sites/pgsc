@@ -282,6 +282,9 @@
             "config/routes/survos_meili.yaml"
         ]
     },
+    "survos/record-store-bundle": {
+        "version": "2.24.36"
+    },
     "survos/simple-datatables-bundle": {
         "version": "1.5.529"
     },

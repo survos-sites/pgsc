@@ -1,6 +1,14 @@
 # see https://symfony.com/doc/current/reference/configuration/framework.html
 framework:
     secret: '%env(APP_SECRET)%'
+    http_client:
+        scoped_clients:
+            pgsc.grist.client:
+                base_uri: '%env(GRIST_HOST)%/api/'
+                headers:
+                    Authorization: 'Bearer %env(GRIST_API_KEY)%'
+                    Accept: 'application/json'
+                    Content-Type: 'application/json'
 
     # Note that the session will be started ONLY if you read or write from it.
     session: true

@@ -1,0 +1,15 @@
+survos_record_store:
+    connections:
+        pgsc_grist:
+            driver: grist
+            options:
+                base_uri: '%env(GRIST_HOST)%/api/'
+                token: '%env(GRIST_API_KEY)%'
+    applications:
+        pgsc:
+            connection: pgsc_grist
+            id: '%env(GRIST_DOC_ID)%'
+            tables:
+                artists: { id: Artists }
+                locations: { id: Locations }
+                obras: { id: Obras }

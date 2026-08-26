@@ -44,6 +44,7 @@
         "survos/js-twig-bundle": "^2.17.6",
         "survos/media-bundle": "^2.4.1",
         "survos/meili-bundle": "^2.18.1",
+        "survos/record-store-bundle": "^2.24.36",
         "survos/simple-datatables-bundle": "^2.4.1",
         "survos/state-bundle": "^2.4.1",
         "survos/tabler-bundle": "^2.4.1",
