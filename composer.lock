@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "36dff514bdf79278b34d32321006920d",
+    "content-hash": "20bfa1c3aea3ddce803f72be92fb5139",
     "packages": [
         {
             "name": "adbario/php-dot-notation",
@@ -6323,6 +6323,59 @@
             "time": "2026-08-26T21:22:23+00:00"
         },
         {
+            "name": "survos/grist-php",
+            "version": "2.26.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/survos/grist-php.git",
+                "reference": "345f84dd4b9a11bfd3e8fee95babc266b1c951b4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/survos/grist-php/zipball/345f84dd4b9a11bfd3e8fee95babc266b1c951b4",
+                "reference": "345f84dd4b9a11bfd3e8fee95babc266b1c951b4",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.5",
+                "survos/record-store": "^2.24",
+                "symfony/http-client-contracts": "^3.7"
+            },
+            "suggest": {
+                "symfony/http-client": "A PSR-compatible HttpClientInterface implementation; any implementation will do."
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Survos\\Grist\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Grist API client, record-store adapter, and form/webhook schema model. Framework-agnostic -- usable from Symfony, WordPress, or plain PHP.",
+            "keywords": [
+                "api",
+                "client",
+                "database",
+                "grist",
+                "record-store",
+                "spreadsheet"
+            ],
+            "support": {
+                "issues": "https://github.com/survos/grist-php/issues",
+                "source": "https://github.com/survos/grist-php/tree/2.26.1"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/kbond",
+                    "type": "github"
+                }
+            ],
+            "time": "2026-08-27T12:26:38+00:00"
+        },
+        {
             "name": "survos/imgproxy-bundle",
             "version": "2.4.1",
             "source": {
@@ -6825,6 +6878,46 @@
                 }
             ],
             "time": "2026-07-31T14:44:49+00:00"
+        },
+        {
+            "name": "survos/record-store",
+            "version": "2.26.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/survos/record-store.git",
+                "reference": "293e30ee0b9bc305ffa446c7778ce2e89e439383"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/survos/record-store/zipball/293e30ee0b9bc305ffa446c7778ce2e89e439383",
+                "reference": "293e30ee0b9bc305ffa446c7778ce2e89e439383",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Survos\\RecordStore\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Provider-neutral contracts and models for application-backend record stores (Grist, Quickbase, ...). Framework-agnostic: no Symfony kernel, no container.",
+            "support": {
+                "issues": "https://github.com/survos/record-store/issues",
+                "source": "https://github.com/survos/record-store/tree/2.26.1"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/kbond",
+                    "type": "github"
+                }
+            ],
+            "time": "2026-08-27T12:26:40+00:00"
         },
         {
             "name": "survos/record-store-bundle",

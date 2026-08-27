@@ -30,7 +30,7 @@ services:
         arguments:
             - Survos\MediaBundle\Entity\BaseMedia
 
-    Survos\RecordStoreBundle\Adapter\Grist\GristClient:
+    Survos\Grist\Client\GristClient:
         arguments:
             $http: '@pgsc.grist.client'
 
