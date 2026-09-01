@@ -376,8 +376,12 @@
 
             <div class="right-content">
                 {# Location image #}
-                {% if location.image|default(false) %}
-                    <img src="{{ location.image }}"
+                {# media_resize() is the documented way to get a URL out of these -- see
+                   MediaFieldsTrait. Printing the object directly raised "Photo could not be
+                   converted to string", which only appeared once locations had images. #}
+                {% set locationImage = location.images|default([])|first %}
+                {% if locationImage %}
+                    <img src="{{ media_resize(locationImage, 'medium') }}"
                          alt="{{ location.name ?? location.title }}"
                          class="location-image" />
                 {% else %}
@@ -390,8 +394,9 @@
                 {% if location.obras is defined and location.obras|length > 0 %}
                     <div class="artwork-thumbnails">
                         {% for obra in location.obras|slice(0, 4) %}
-                            {% if obra.image %}
-                                <img src="{{ obra.image }}"
+                            {% set obraImage = obra.images|default([])|first %}
+                            {% if obraImage %}
+                                <img src="{{ media_resize(obraImage, 'small') }}"
                                      alt="{{ obra.title ?? obra.name }}"
                                      class="artwork-thumb" />
                             {% endif %}

@@ -11,12 +11,15 @@ use App\Service\SyncService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class PrintController extends AbstractController
 {
     public function __construct(
+        #[Autowire('%env(GRIST_HOST)%')] private readonly ?string $gristHost,
+        #[Autowire('%env(GRIST_DOC_ID)%')] private readonly ?string $gristDocId,
         private ObraRepository $obraRepository,
         private LocationRepository $locationRepository,
         private ArtistRepository $artistRepository,
@@ -42,7 +45,13 @@ final class PrintController extends AbstractController
             'method'      => 'GET',
         ]);
 
-        $form->handleRequest($request);
+        // Only treat this as a submission when the query actually carries the form.
+        // It is a GET form, so without this guard the first visit counts as an empty
+        // submission, render() sees a submitted-and-invalid form, and the page Kryzia
+        // starts from answers 422 -- it draws correctly, which is why it went unnoticed.
+        if ($request->query->has($form->getName())) {
+            $form->handleRequest($request);
+        }
 
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
@@ -69,6 +78,12 @@ final class PrintController extends AbstractController
             'exhibitions'    => $exhibitions,
             'spreadsheetUrl' => $spreadsheetUrl,
             'syncUrl'        => $this->generateUrl('app_sync'),
+            // The spreadsheet is still what app:sync reads, but Grist is where the data
+            // is actually edited now -- so the page offers both rather than only the one
+            // the sync happens to use.
+            'gristUrl'       => ($this->gristHost && $this->gristDocId)
+                ? rtrim($this->gristHost, '/') . '/o/docs/' . $this->gristDocId
+                : null,
         ]);
     }
 
@@ -95,13 +110,16 @@ final class PrintController extends AbstractController
         $entities = match ($shortClass) {
             'obra'     => $obras,
             'location' => $this->locationRepository->findAll(),
-            'artists'  => $this->artistRepository->findAll(),
+            // 'artist', singular -- AppMenu builds these links from
+            // ['obra', 'artist', 'location'], so 'artists' matched nothing and artist
+            // labels fell through to default and printed obras instead.
+            'artist'   => $this->artistRepository->findAll(),
             default    => $obras,
         };
 
         $template = match ($shortClass) {
             'location' => 'print/location-labels.html.twig',
-            'artists'  => 'print/artist-labels.html.twig',
+            'artist'   => 'print/artist-labels.html.twig',
             default    => 'print/obras.html.twig',
         };
 

@@ -12,6 +12,11 @@
             📊 Open spreadsheet
         </a>
         {% endif %}
+        {% if gristUrl %}
+        <a href="{{ gristUrl }}" target="_blank" class="btn btn-outline-info btn-sm">
+            🗃️ Open Grist
+        </a>
+        {% endif %}
         <a href="{{ syncUrl }}" class="btn btn-outline-primary btn-sm">
             🔄 Sync from spreadsheet
         </a>

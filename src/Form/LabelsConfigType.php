@@ -45,6 +45,10 @@ class LabelsConfigType extends AbstractType
         $resolver->setDefaults([
             'exhibitions' => [],
             'short_class' => 'obra',
+            // A GET form that only picks filters changes nothing on the server, so a
+            // CSRF token buys no protection -- it just adds a hidden field to a URL
+            // the user is meant to be able to bookmark and re-print from.
+            'csrf_protection' => false,
         ]);
     }
 }
