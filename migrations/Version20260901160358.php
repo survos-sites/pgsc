@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20260519141046 extends AbstractMigration
+final class Version20260901160358 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -65,7 +65,9 @@ final class Version20260519141046 extends AbstractMigration
 
     public function down(Schema $schema): void
     {
-        // this down() migration is auto-generated, please modify it to your needs
+        // The generated down() also emitted CREATE SCHEMA for timescaledb's own schemas.
+        // up() never drops them -- doctrine.dbal.schema_filter keeps them out of the diff --
+        // so recreating them here would fail on the first one, since they already exist.
         $this->addSql('ALTER TABLE altos_obj DROP CONSTRAINT FK_5FEBF59F6505CAD1');
         $this->addSql('ALTER TABLE babel_term DROP CONSTRAINT FK_77FE42F2F3AD3475');
         $this->addSql('ALTER TABLE babel_term DROP CONSTRAINT FK_77FE42F2727ACA70');

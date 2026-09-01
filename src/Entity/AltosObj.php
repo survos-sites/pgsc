@@ -144,7 +144,10 @@ final class AltosObj implements \Stringable
     /**
      * Resolved relation to Loc (resolve by Loc.code in importer).
      */
-    #[ORM\ManyToOne(targetEntity: Loc::class)]
+    // inversedBy pairs this with Loc::$altosObjects, which declares mappedBy: 'loc'.
+    // Doctrine requires both halves to name each other; with only one side declared
+    // the mapping is reported as invalid by d:sc:validate.
+    #[ORM\ManyToOne(targetEntity: Loc::class, inversedBy: 'altosObjects')]
     #[ORM\JoinColumn(onDelete: 'SET NULL', nullable: true)]
     public ?Loc $loc = null;
 
