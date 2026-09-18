@@ -33,6 +33,11 @@ class ArtistCrudController extends BaseCrudController
         return Artist::class;
     }
 
+    public function createEntity(string $entityFqcn): Artist
+    {
+        return new Artist((new \Symfony\Component\Uid\Ulid())->toBase32());
+    }
+
     public function configureFields(string $pageName): iterable
     {
         return [
@@ -101,11 +106,6 @@ class ArtistCrudController extends BaseCrudController
             // Obra count (read-only)
             IntegerField::new('obraCount', 'Obra Count')
                 ->onlyOnIndex(),
-
-            // Studio visitable
-            ChoiceField::new('studioVisitable', 'Studio Visitable')->setChoices(
-                array_combine(Artist::STUDIO_VISITABLE, Artist::STUDIO_VISITABLE),
-            )->renderExpanded(),
 
             // Obras collection
             CollectionField::new('obras')

@@ -5,7 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\Obra;
 use App\Repository\ObraRepository;
 use App\Security\Voter\ObjVoter;
-use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminAction;
+use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminRoute;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -33,6 +33,11 @@ class ObraCrudController extends BaseCrudController
     public static function getEntityFqcn(): string
     {
         return Obra::class;
+    }
+
+    public function createEntity(string $entityFqcn): Obra
+    {
+        return new Obra((new \Symfony\Component\Uid\Ulid())->toBase32());
     }
 
     public function configureFields(string $pageName): iterable
@@ -126,7 +131,7 @@ class ObraCrudController extends BaseCrudController
         ;
     }
 
-    #[AdminAction(routePath: '/batch-print', routeName: 'batch_print', methods: ['POST'])]
+    #[AdminRoute(path: '/batch-print', name: 'batch_print', options: ['methods' => ['POST']])]
     public function batchPrint(BatchActionDto $batchActionDto, AdminContext $context)
     {
         $ids = $batchActionDto->getEntityIds();

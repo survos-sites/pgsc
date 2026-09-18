@@ -34,7 +34,7 @@ final class AppCmasCommand
 
     public function __invoke(
         SymfonyStyle $io,
-        #[Argument('', 'path file downloaded csv')]
+        #[Argument('Path to downloaded CSV')]
         string $path = 'cmas.csv',
         #[Option(description: 'Process Google Drive images')]
         bool $images = false,
@@ -48,10 +48,13 @@ final class AppCmasCommand
             $io->error(sprintf('File "%s" does not exist', $path));
             return Command::FAILURE;
         }
-        $reader = Reader::createFromPath($path, 'r');
+        $reader = Reader::from($path, 'r');
         $reader->setHeaderOffset(0);
-        $index = 0;
-        foreach ($reader as $index => $row) {
+        $processed = 0;
+        foreach ($reader as $row) {
+            if ($processed >= $limit) {
+                break;
+            }
             $extra = [];
             foreach ($row as $column => $value) {
                 // dots mean translation
@@ -98,13 +101,11 @@ final class AppCmasCommand
                 }
             }
 
-            if ($index >= $limit) {
-                break;
-            }
+            ++$processed;
         }
 
         $this->entityManager->flush();
-        $io->success(self::class . ' success: ' . $index. ' total is now ' . $this->sacroRepository->count());
+        $io->success(self::class . ' success: ' . $processed. ' total is now ' . $this->sacroRepository->count());
 
         return Command::SUCCESS;
     }

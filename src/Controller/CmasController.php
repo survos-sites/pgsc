@@ -24,7 +24,6 @@ use function Symfony\Component\String\u;
 final class CmasController extends AbstractController
 {
     public function __construct(
-        private SheetService $sheetService,
         private SluggerInterface $asciiSlugger,
         private EntityManagerInterface $entityManager,
         private SacroRepository $sacroRepository,
@@ -51,32 +50,8 @@ final class CmasController extends AbstractController
 
     #[Route('/cmas/import', name: 'cmas_import')]
     #[Template('cmas/index.html.twig')]
-    public function import(
-        GoogleSheetsApiService $sheetService,
-        #[Autowire('%kernel.project_dir%')] string $projectDir
-    ): Response|array {
-
-        //return temp response
+    public function import(): Response
+    {
         return new Response('Importing...');
-
-        //dd("bin/console app:cmas OR use this to test import with API?");
-
-        // using the api instead of downloading.
-        //        return
-        $id = '1PnSESwWyJQI7T6L8g94zQzMFA0vITkGeWqOkGT7pxnw';
-//        $id = '10MBxAwPuCuC8o4EwzYxc2-0ziRCMxB09W750rVnGc6M'; // COPY of Cmas
-
-//        $sheetService->setSheetServices($id);
-
-        $spreadsheet = $this->sheetService->getGoogleSpreadSheet($id);
-        foreach ($spreadsheet->getSheets() as $sheet) {
-            $title = $sheet->getProperties()->getTitle();
-            $data = $sheet->getData();
-            dd($data, $sheet, $title);
-        }
-
-        return $this->render('cmas/index.html.twig', [
-        ]);
     }
-
 }

@@ -34,7 +34,6 @@ return [
     Survos\FlickrBundle\SurvosFlickrBundle::class => ['all' => true],
     Survos\CodeBundle\SurvosCodeBundle::class => ['dev' => true, 'test' => true],
     Survos\SimpleDatatables\SurvosSimpleDatatablesBundle::class => ['all' => true],
-    Jawira\DoctrineDiagramBundle\DoctrineDiagramBundle::class => ['dev' => true, 'test' => true],
     Survos\BabelBundle\SurvosBabelBundle::class => ['all' => true],
     Zenstruck\Foundry\ZenstruckFoundryBundle::class => ['dev' => true, 'test' => true],
     Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle::class => ['all' => true],
@@ -52,4 +51,5 @@ return [
     Survos\FetchBundle\SurvosFetchBundle::class => ['all' => true],
     Survos\RecordStoreBundle\SurvosRecordStoreBundle::class => ['all' => true],
     Survos\GristBundle\SurvosGristBundle::class => ['all' => true],
+    Survos\IiifBundle\SurvosIiifBundle::class => ['all' => true],
 ];

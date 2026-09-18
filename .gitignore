@@ -38,3 +38,6 @@ phpstan.neon
 .castor.stub.php
 config.bat
 node_modules
+
+# Local Panther browser binaries (vendor/bin/bdi detect drivers)
+/drivers/

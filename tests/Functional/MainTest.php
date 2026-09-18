@@ -1,23 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Functional;
 
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Zenstruck\Browser\Test\HasBrowser;
+use Doctrine\ORM\Tools\SchemaTool;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class MainTest extends KernelTestCase
+final class MainTest extends WebTestCase
 {
-    use HasBrowser;
-
     public function testHomepage(): void
     {
-        $kernel = self::bootKernel();
-        $this->assertSame('test', $kernel->getEnvironment());
+        $client = self::createClient();
+        $client->disableReboot();
+        $em = self::getContainer()->get('doctrine.orm.entity_manager');
+        self::assertTrue($em->getConnection()->getParams()['memory'] ?? false);
+        (new SchemaTool($em))->createSchema($em->getMetadataFactory()->getAllMetadata());
 
-        $this->browser()
-            ->visit('/')
-            ->assertSuccessful()
-            ->saveSource('home.html')
-        ;
+        $client->request('GET', '/');
+        self::assertResponseRedirects('/en/chijal');
+        $client->followRedirect();
+        self::assertResponseIsSuccessful();
+        self::assertSelectorTextContains('h1', 'CHIJAL');
     }
 }

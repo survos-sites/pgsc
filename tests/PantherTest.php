@@ -1,66 +1,88 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests;
 
+use App\Entity\User;
+use Doctrine\ORM\Tools\SchemaTool;
 use Symfony\Component\Panther\PantherTestCase;
-use Zenstruck\Browser\Test\HasBrowser;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-class PantherTest extends PantherTestCase
+final class PantherTest extends PantherTestCase
 {
-    use HasBrowser;
+    private string $databaseFile;
+    private ?string $originalDatabaseUrl;
+    private ?string $originalEnvDatabaseUrl;
+    private array $serverEnvironment;
 
-    //    public function testSomething(): void
-    //    {
-    //        $client = static::createPantherClient();
-    //        $crawler = $client->request('GET', '/');
-    //        $this->assertSelectorTextContains('h1', 'Hello World');
-    //    }
-
-    public function testBatsi(): void
+    protected function setUp(): void
     {
-        // the home page that browses projects (not fw7)
-        $browser = $this->pantherBrowser()
-            ->visit('/')
-            ->assertOn('/')
-            ->takeScreenshot('home.png');
-
-        $browser = $this->pantherBrowser()
-            ->visit('/en/admin/artist')
-            ->assertOn('/en/admin/artist')
-            ->takeScreenshot('artist.png');
-
-        return;
-
-        $browser
-            ->visit('/en/batsi#tab-locations')
-            ->takeScreenshot('basti-locations.png');
-
-        $browser
-//            ->waitUntilSeeIn('body', '#tab-artists')
-            ->click('#tab-artists') // click on the artists
-            ->takeScreenshot('artists.png');
-
-        $browser->click('Artwork')
-            ->wait(200) // @todo: wait for the tab 'obras' to be visible in the dom, or the tab to be marked as selected.
-            ->takeScreenshot('artwork.png')
-        ;
+        parent::setUp();
+        self::stopWebServer();
+        $this->databaseFile = tempnam(sys_get_temp_dir(), 'pgsc-browser-');
+        $this->originalDatabaseUrl = $_SERVER['DATABASE_URL'] ?? null;
+        $this->originalEnvDatabaseUrl = $_ENV['DATABASE_URL'] ?? null;
+        $_ENV['DATABASE_URL'] = $_SERVER['DATABASE_URL'] = 'sqlite:///'.$this->databaseFile;
+        self::bootKernel();
+        $em = self::getContainer()->get('doctrine.orm.entity_manager');
+        self::assertSame($this->databaseFile, $em->getConnection()->getParams()['path']);
+        (new SchemaTool($em))->createSchema($em->getMetadataFactory()->getAllMetadata());
+        $user = (new User())->setEmail('admin@example.test')->setRoles(['ROLE_ADMIN'])->setIsVerified(true);
+        $user->setPassword(self::getContainer()->get(UserPasswordHasherInterface::class)->hashPassword($user, 'test-password'));
+        $em->persist($user);
+        $em->flush();
+        $this->serverEnvironment = [
+            'APP_ENV' => 'test',
+            'APP_DEBUG' => '1',
+            'DATABASE_URL' => $_SERVER['DATABASE_URL'],
+            'MAILER_DSN' => 'null://null',
+        ];
+        self::ensureKernelShutdown();
     }
 
-    public function testEz(): void
+    protected function tearDown(): void
     {
-        // the home page that browses projects (not fw7)
-        $browser = $this->pantherBrowser()
-            ->visit('/en/admin')
-            ->assertOn('/login')
-            ->fillField('Email', 'admin@test.com')
-            ->fillField('Password', 'admin')
-            ->click('Sign in');
-        $browser
-//            ->assertAuthenticated()
-            ->assertSee('Batsi')
-            ->takeScreenshot('ez.dashboard.png');
+        try {
+            parent::tearDown();
+        } finally {
+            self::stopWebServer();
+            if ($this->originalDatabaseUrl === null) {
+                unset($_SERVER['DATABASE_URL']);
+            } else {
+                $_SERVER['DATABASE_URL'] = $this->originalDatabaseUrl;
+            }
+            if ($this->originalEnvDatabaseUrl === null) {
+                unset($_ENV['DATABASE_URL']);
+            } else {
+                $_ENV['DATABASE_URL'] = $this->originalEnvDatabaseUrl;
+            }
+            if (is_file($this->databaseFile)) {
+                unlink($this->databaseFile);
+            }
+        }
+    }
 
-        $browser->click('Artistas')
-            ->takeScreenshot('artists.png');
+    public function testPublicHomepageAndArtists(): void
+    {
+        $client = self::createPantherClient(['env' => $this->serverEnvironment]);
+        $client->request('GET', '/');
+        self::assertSelectorTextContains('h1', 'CHIJAL');
+        $client->request('GET', '/en/admin/artist');
+        self::assertSelectorExists('table.datagrid');
+    }
+
+    public function testAdminLogin(): void
+    {
+        $client = self::createPantherClient(['env' => $this->serverEnvironment]);
+        $client->request('GET', '/login');
+        $client->submitForm('Sign in', [
+            '_username' => 'admin@example.test',
+            '_password' => 'test-password',
+        ]);
+        $client->waitFor('a[href="/logout"]');
+        self::assertSelectorExists('a[href="/logout"]');
+        $client->request('GET', '/en/admin/artist');
+        self::assertSelectorExists('table.datagrid');
     }
 }

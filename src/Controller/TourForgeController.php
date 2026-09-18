@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use Survos\MediaBundle\Service\MediaUrlGenerator;
+
+use Survos\DataContracts\Vocabulary\MediaPreset;
+
 use App\Entity\Location;
 use App\Entity\Obra;
 use App\Repository\LocationRepository;
 use Survos\MediaBundle\Entity\BaseMedia;
 use Survos\MediaBundle\Repository\MediaRepository;
-use Survos\MediaBundle\Service\MediaUrlGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -110,7 +113,7 @@ final class TourForgeController extends AbstractController
             return new RedirectResponse($url);
         }
 
-        return new RedirectResponse($this->mediaUrlGenerator->resize($media, MediaUrlGenerator::PRESET_LARGE));
+        return new RedirectResponse($this->mediaUrlGenerator->resize($media, MediaPreset::LARGE));
     }
 
     /**

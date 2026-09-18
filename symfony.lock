@@ -97,18 +97,6 @@
             "config/packages/google_apiclient.yaml"
         ]
     },
-    "jawira/doctrine-diagram-bundle": {
-        "version": "1.0",
-        "recipe": {
-            "repo": "github.com/symfony/recipes-contrib",
-            "branch": "main",
-            "version": "1.0",
-            "ref": "85fa28662e332ab5da7a48802517e8313500add5"
-        },
-        "files": [
-            "config/packages/doctrine_diagram.yaml"
-        ]
-    },
     "knplabs/knp-menu-bundle": {
         "version": "v3.5.0"
     },
@@ -253,6 +241,9 @@
     },
     "survos/grist-bundle": {
         "version": "2.24.37"
+    },
+    "survos/iiif-bundle": {
+        "version": "2.30.1"
     },
     "survos/imgproxy-bundle": {
         "version": "2.4.1"
@@ -620,6 +611,18 @@
         "files": [
             "config/packages/web_profiler.yaml",
             "config/routes/web_profiler.yaml"
+        ]
+    },
+    "symfony/webhook": {
+        "version": "8.1",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "7.3",
+            "ref": "b70844963dc84e9a99b94ae552efe691d74b087f"
+        },
+        "files": [
+            "config/routes/webhook.yaml"
         ]
     },
     "symfony/workflow": {

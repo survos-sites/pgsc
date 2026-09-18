@@ -31,6 +31,11 @@ class LocationCrudController extends AbstractCrudController
         return Location::class;
     }
 
+    public function createEntity(string $entityFqcn): Location
+    {
+        return new Location((new \Symfony\Component\Uid\Ulid())->toBase32());
+    }
+
     public function configureFields(string $pageName): iterable
     {
         return [

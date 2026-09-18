@@ -11,6 +11,6 @@ final class AppControllerTest extends WebTestCase
         $client = static::createClient();
         $client->request('GET', '/');
 
-        self::assertResponseIsSuccessful();
+        self::assertResponseRedirects('/en/chijal');
     }
 }

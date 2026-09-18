@@ -16,19 +16,17 @@ class RegistrationControllerTest extends WebTestCase
     protected function setUp(): void
     {
         $this->client = static::createClient();
+        $this->client->disableReboot();
 
-        // Ensure we have a clean database
+        // Build a fresh isolated schema; never remove users from an existing database.
         $container = static::getContainer();
 
         /** @var EntityManager $em */
         $em = $container->get('doctrine')->getManager();
         $this->userRepository = $container->get(UserRepository::class);
 
-        foreach ($this->userRepository->findAll() as $user) {
-            $em->remove($user);
-        }
-
-        $em->flush();
+        self::assertTrue($em->getConnection()->getParams()['memory'] ?? false);
+        (new \Doctrine\ORM\Tools\SchemaTool($em))->createSchema($em->getMetadataFactory()->getAllMetadata());
     }
 
     public function testRegister(): void
@@ -44,10 +42,13 @@ class RegistrationControllerTest extends WebTestCase
             'registration_form[agreeTerms]' => true,
         ]);
 
+        self::assertResponseRedirects();
+
         // Ensure the response redirects after submitting the form, the user exists, and is not verified
         // self::assertResponseRedirects('/');  @TODO: set the appropriate path that the user is redirected to.
         self::assertCount(1, $this->userRepository->findAll());
         self::assertFalse(($user = $this->userRepository->findAll()[0])->isVerified());
+        self::assertTrue(\Symfony\Component\Uid\Ulid::isValid($user->getCode()));
 
         // Ensure the verification email was sent
         // Use either assertQueuedEmailCount() || assertEmailCount() depending on your mailer setup

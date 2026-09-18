@@ -1,52 +1,42 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Load;
 
-use PHPUnit\Framework\Attributes\Test;
+use App\Entity\Sacro;
+use App\Command\AppCmasCommand;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Tester\CommandTester;
+use Doctrine\ORM\Tools\SchemaTool;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Zenstruck\Console\Test\InteractsWithConsole;
 
-class LoadCommandTest extends KernelTestCase
+final class LoadCommandTest extends KernelTestCase
 {
-    use InteractsWithConsole;
-
-    #[Test]
-    public function loadCmas(): void
+    public function testCmasImportHonorsLimitAndIsIdempotent(): void
     {
-        $this->executeConsoleCommand('app:cmas')
-            ->assertSuccessful() // command exit code is 0
-            ->assertOutputContains('success: 3')
-            ->assertOutputNotContains('failed')
-        ;
-
-        // advanced usage
-        if (0)
-        $this->consoleCommand(LoadProductsCommand::class) // can use the command class or "name"
-        ->splitOutputStreams() // by default stdout/stderr are combined, this options splits them
-        ->addArgument('kbond')
-            ->addOption('--admin') // with or without "--" prefix
-            ->addOption('role', ['ROLE_EMPLOYEE', 'ROLE_MANAGER'])
-            ->addOption('-R') // shortcut options require the "-" prefix
-            ->addOption('-vv') // by default, output has normal verbosity, use the standard options to change (-q, -v, -vv, -vvv)
-            ->addOption('--ansi') // by default, output is undecorated, use this option to decorate
-            ->execute() // run the command
-            ->assertSuccessful()
-            ->assertStatusCode(0) // equivalent to ->assertSuccessful()
-            ->assertOutputContains('Creating admin user "kbond"')
-            ->assertErrorOutputContains('this is in stderr') // used in conjunction with ->splitOutputStreams()
-            ->assertErrorOutputNotContains('admin user') // used in conjunction with ->splitOutputStreams()
-            ->dump() // dump() the status code/outputs and continue
-            ->dd() // dd() the status code/outputs
-        ;
-
-    }
-
-    #[Test]
-    public function loadDarta(): void
-    {
-        $this->executeConsoleCommand('app:cmas')
-            ->assertSuccessful() // command exit code is 0
-            ->assertOutputContains('success: 3')
-            ->assertOutputNotContains('failed');
+        self::bootKernel();
+        $em = self::getContainer()->get('doctrine.orm.entity_manager');
+        self::assertTrue($em->getConnection()->getParams()['memory'] ?? false);
+        (new SchemaTool($em))->createSchema($em->getMetadataFactory()->getAllMetadata());
+        $file = tempnam(sys_get_temp_dir(), 'pgsc-cmas-');
+        try {
+            $stream = fopen($file, 'w');
+            fputcsv($stream, ['code', 'vinculo', 'label.es', 'description.es', 'notes.es'], escape: '');
+            for ($i = 1; $i <= 4; ++$i) {
+                fputcsv($stream, ['fixture-'.$i, 'https://example.test/image-'.$i, 'Objeto '.$i, 'Descripción', 'Notas'], escape: '');
+            }
+            fclose($stream);
+            for ($i = 0; $i < 2; ++$i) {
+                $tester = new CommandTester(new Command('app:cmas', self::getContainer()->get(AppCmasCommand::class)));
+                $tester->execute(['path' => $file, '--limit' => 3]);
+                $tester->assertCommandIsSuccessful();
+                self::assertStringContainsString('success: 3', $tester->getDisplay());
+                self::assertSame(3, $em->getRepository(Sacro::class)->count([]));
+            }
+            self::assertNull($em->find(Sacro::class, 'fixture-4'));
+        } finally {
+            unlink($file);
+        }
     }
 }

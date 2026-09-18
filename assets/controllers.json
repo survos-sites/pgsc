@@ -1,5 +1,22 @@
 {
     "controllers": {
+        "@survos/iiif-bundle": {
+            "iiif-viewer": {
+                "enabled": true,
+                "fetch": "lazy",
+                "autoimport": []
+            },
+            "iiif-diva": {
+                "enabled": true,
+                "fetch": "lazy",
+                "autoimport": []
+            },
+            "iiif-pdf": {
+                "enabled": true,
+                "fetch": "lazy",
+                "autoimport": []
+            }
+        },
         "@survos/imgproxy-bundle": {
             "imgproxy": {
                 "enabled": true,
@@ -62,6 +79,22 @@
                 "fetch": "lazy"
             },
             "search": {
+                "enabled": true,
+                "fetch": "lazy"
+            },
+            "clipboard": {
+                "enabled": true,
+                "fetch": "lazy"
+            },
+            "closeable": {
+                "enabled": true,
+                "fetch": "lazy"
+            },
+            "tooltip": {
+                "enabled": true,
+                "fetch": "lazy"
+            },
+            "conditional-fields": {
                 "enabled": true,
                 "fetch": "lazy"
             }

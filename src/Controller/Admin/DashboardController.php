@@ -125,15 +125,15 @@ class DashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToDashboard('dashboard', 'tabler:home');
-        yield MenuItem::linkToCrud('artists', 'tabler:list', Artist::class)
+        yield MenuItem::linkTo(ArtistCrudController::class, 'artists', 'tabler:list')
             ->setBadge($this->artistRepository->count())
         ;
-        yield MenuItem::linkToCrud('locations', 'tabler:location', Location::class)
+        yield MenuItem::linkTo(LocationCrudController::class, 'locations', 'tabler:location')
             ->setBadge($this->locationRepository->count())
         ;
-        foreach ([Loc::class, AltosObj::class] as $class) {
+        foreach ([Loc::class => LocCrudController::class, AltosObj::class => AltosObjCrudController::class] as $class => $controller) {
             $shortName = new \ReflectionClass($class)->getShortName();
-            yield MenuItem::linkToCrud($shortName, 'tabler:location', $class)
+            yield MenuItem::linkTo($controller, $shortName, 'tabler:location')
                 ->setBadge($this->entityManager->getRepository($class)->count())
             ;
 
@@ -141,13 +141,13 @@ class DashboardController extends AbstractDashboardController
 
         yield MenuItem::linkToRoute('map', 'tabler:map', 'app_map');
 
-        yield MenuItem::linkToCrud('objects', 'ri:image-line', Obra::class)
+        yield MenuItem::linkTo(ObraCrudController::class, 'objects', 'ri:image-line')
             ->setBadge($this->obraRepository->count())
         ;
-        yield MenuItem::linkToCrud('media', 'ri:image-line', Photo::class)
+        yield MenuItem::linkTo(MediaCrudController::class, 'media', 'ri:image-line')
             ->setBadge($this->imageRepository->count())
         ;
-        yield MenuItem::linkToCrud('sacro', 'ri:image-line', Sacro::class)
+        yield MenuItem::linkTo(SacroCrudController::class, 'sacro', 'ri:image-line')
             ->setBadge($this->sacroRepository->count())
         ;
         //         yield MenuItem::linkToRoute('home', 'tabler:home', 'app_homepage');
@@ -199,7 +199,7 @@ class DashboardController extends AbstractDashboardController
         $filters = [];
         foreach ($this->locationRepository->findAll() as $location) {
             $filters[] =
-                MenuItem::linkToCrud($location->name, null, Obra::class)
+                MenuItem::linkTo(ObraCrudController::class, $location->name)
                 ->setQueryParameter('filters[location][comparison]', '=')
                 ->setQueryParameter('filters[location][value]', $location->code)
             ;
@@ -209,7 +209,7 @@ class DashboardController extends AbstractDashboardController
         $filters = [];
         foreach ($this->artistRepository->findAll() as $entity) {
             $filters[] =
-                MenuItem::linkToCrud($entity->name, null, Obra::class)
+                MenuItem::linkTo(ObraCrudController::class, $entity->name)
                     ->setQueryParameter('filters[artist][comparison]', '=')
                     ->setQueryParameter('filters[artist][value]', $entity->code)
             ;

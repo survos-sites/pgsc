@@ -144,8 +144,8 @@ return [
     'htm' => ['version' => '3.1.1'],
     'react' => ['version' => '19.2.0'],
     'instantsearch.css/themes/algolia.min.css' => ['version' => '8.19.0', 'type' => 'css'],
-    '@meilisearch/instant-meilisearch' => ['version' => '0.30.0'],
-    'meilisearch' => ['version' => '0.54.0'],
+    '@meilisearch/instant-meilisearch' => ['version' => '0.31.4'],
+    'meilisearch' => ['version' => '0.60.0'],
     '@stimulus-components/dialog' => ['version' => '1.0.1'],
     '@andypf/json-viewer' => ['version' => '2.8.0'],
     'pretty-print-json' => ['version' => '3.0.8'],
@@ -175,4 +175,7 @@ return [
     '@floating-ui/core' => ['version' => '1.8.0'],
     '@floating-ui/utils' => ['version' => '0.2.12'],
     '@floating-ui/utils/dom' => ['version' => '0.2.12'],
+    'openseadragon' => ['version' => '6.1.1'],
+    'diva.js' => ['version' => '7.5.1'],
+    'pdfjs-dist' => ['version' => '6.3.289'],
 ];

@@ -35,20 +35,18 @@ final class AppController extends AbstractController
         private MediaRepository $mediaRepository,
         private EntityManagerInterface $entityManager,
         private PropertyAccessorInterface $propertyAccessor,
-        private GoogleDriveService $driveService,
         private \Psr\Log\LoggerInterface $logger,
 
-        #[Autowire('%env(GOOGLE_SPREADSHEET_ID)%')] private ?string $googleSpreadsheetId = null,
     ) {
     }
 
     #[Route('/extract', name: 'app_download_photos')]
-    public function downloadPhotos(): Response
+    public function downloadPhotos(GoogleDriveService $driveService): Response
     {
         $cmas = 'https://drive.google.com/file/d/19g88GXmI5DejvnhDQNBQ7lUSZb8Ziq32/view?usp=drivesdk';
         $artist =  'https://drive.google.com/open?id=1BA9tNu-1TpfVD8cx4UfdETobyQ1nzHBi';
         //return a simple text render
-        $this->driveService->downloadFileFromUrl(
+        $driveService->downloadFileFromUrl(
            $artist,
             'uploads/photos.jpg'
         );
@@ -60,13 +58,14 @@ final class AppController extends AbstractController
     public function sync(
         SyncService $syncService,
         #[MapQueryParameter] bool $refresh = false,
+        #[Autowire('%env(default::GOOGLE_SPREADSHEET_ID)%')] ?string $googleSpreadsheetId = null,
     ): Response {
-        if (empty($this->googleSpreadsheetId)) {
+        if (empty($googleSpreadsheetId)) {
             $this->addFlash('warning', 'GOOGLE_SPREADSHEET_ID is not configured.');
             return $this->redirectToRoute('app_homepage');
         }
 
-        $spreadsheetUrl = 'https://docs.google.com/spreadsheets/d/' . $this->googleSpreadsheetId;
+        $spreadsheetUrl = 'https://docs.google.com/spreadsheets/d/' . $googleSpreadsheetId;
 
         try {
             $counts = $syncService->sync($refresh);
@@ -364,37 +363,4 @@ final class AppController extends AbstractController
         ]);
     }
 
-    //A Temp route to test  JsonRPC\Client;
-    #[Route('/jsonrpc/test', name: 'jsonrpc_test')]
-    public function jsonRpcTest(): Response
-    {
-        $client = 'sais';
-        $tools = $this->mcpClientService->listTools($client);
-
-//        //prepare the http client from the jsonrpc pack
-//        $httpClient = new \JsonRPC\HttpClient(
-//            'https://sais.wip/tools',
-//        );
-//
-//        //add curl proxy option
-//        $httpClient->addOption(
-//            CURLOPT_PROXY,
-//            'http://127.0.0.1:7080'
-//        );
-//
-//        // This is a temporary route to test JsonRPC\Client
-//        // You can use this to test the JsonRPC\Client functionality
-//        $client = new \JsonRPC\Client('https://sais.wip/tools', false, $httpClient);
-//
-        $arguments = ['username' => 'rootdd', 'quota' => 1400];
-
-        $result = $this->mcpClientService->callTool($client,
-            'create_account',
-            $arguments
-        );
-
-        dd($result, $tools);
-
-        return new Response('JsonRPC Client created successfully: ' . get_class($client));
-    }
 }
