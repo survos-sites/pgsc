@@ -52,4 +52,5 @@ return [
     Survos\RecordStoreBundle\SurvosRecordStoreBundle::class => ['all' => true],
     Survos\GristBundle\SurvosGristBundle::class => ['all' => true],
     Survos\IiifBundle\SurvosIiifBundle::class => ['all' => true],
+    Pentiminax\UX\DataTables\PentiminaxDataTablesBundle::class => ['all' => true],
 ];

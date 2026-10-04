@@ -687,7 +687,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         signing_algorithm?: scalar|Param|null, // Default: "sha256"
  *         routing?: array<string, array{ // Default: []
  *             service?: scalar|Param|null,
- *             secret?: scalar|Param|null, // The secret used to verify incoming request signatures. It must be set in production: with an empty value, requests from any sender are accepted. // Default: ""
+ *             secret?: scalar|Param|null, // The secret used to verify incoming request signatures. It must be set in production: with an empty value, depending on the parser, requests from any sender are accepted or every request is rejected. // Default: ""
  *         }>,
  *     },
  *     remote_event?: bool|array{ // RemoteEvent configuration
@@ -1301,9 +1301,9 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *             lifetime?: int|Param, // Default: 31536000
  *             path?: scalar|Param|null, // Default: "/"
  *             domain?: scalar|Param|null, // Default: null
- *             secure?: true|false|"auto"|Param, // Default: "auto"
+ *             secure?: true|false|"auto"|Param, // Defaults to the value of "framework.session.cookie_secure", or to "auto".
  *             httponly?: bool|Param, // Default: true
- *             samesite?: null|"lax"|"strict"|"none"|Param, // Default: "lax"
+ *             samesite?: null|"lax"|"strict"|"none"|Param, // Defaults to the value of "framework.session.cookie_samesite", or to "lax".
  *             always_remember_me?: bool|Param, // Default: false
  *             remember_me_parameter?: scalar|Param|null, // Default: "_remember_me"
  *         },
@@ -1325,6 +1325,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  * }
  * @psalm-type MonologConfig = array{
  *     use_microseconds?: scalar|Param|null, // Default: true
+ *     timezone?: string|Param, // The timezone used for the timestamp of every log record (e.g. "UTC" or "Europe/Paris"). Defaults to the PHP default timezone. // Default: null
  *     channels?: list<scalar|Param|null>,
  *     handlers?: array<string, array{ // Default: []
  *         type?: scalar|Param|null,
@@ -1336,6 +1337,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         interactive_only?: bool|Param, // Default: false
  *         app_name?: scalar|Param|null, // Default: null
  *         include_stacktraces?: bool|Param, // Default: false
+ *         base_path?: scalar|Param|null, // Default: null
  *         process_psr_3_messages?: array{
  *             enabled?: bool|Param|null, // Default: null
  *             date_format?: scalar|Param|null,
@@ -1347,7 +1349,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         use_locking?: bool|Param, // Default: false
  *         filename_format?: scalar|Param|null, // Default: "{filename}-{date}"
  *         date_format?: scalar|Param|null, // Default: "Y-m-d"
- *         ident?: scalar|Param|null, // Default: false
+ *         ident?: scalar|Param|null, // Default: "php"
  *         logopts?: scalar|Param|null, // Default: 1
  *         facility?: scalar|Param|null, // Default: "user"
  *         max_files?: scalar|Param|null, // Default: 0
@@ -1384,6 +1386,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         title?: scalar|Param|null, // Default: null
  *         host?: scalar|Param|null, // Default: null
  *         port?: scalar|Param|null, // Default: 514
+ *         rfc?: scalar|Param|null, // Default: 1
  *         config?: list<scalar|Param|null>,
  *         members?: list<scalar|Param|null>,
  *         connection_string?: scalar|Param|null,
@@ -1394,6 +1397,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         connection_timeout?: scalar|Param|null,
  *         persistent?: bool|Param,
  *         message_type?: scalar|Param|null, // Default: 0
+ *         expand_newlines?: bool|Param, // Default: false
  *         parse_mode?: scalar|Param|null, // Default: null
  *         disable_webpage_preview?: bool|Param|null, // Default: null
  *         disable_notification?: bool|Param|null, // Default: null
@@ -1440,7 +1444,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *             database?: scalar|Param|null, // Default: 0
  *             key_name?: scalar|Param|null, // Default: "monolog_redis"
  *         },
- *         predis?: Param|string|array{
+ *         predis?: Param|string|array{ // Deprecated: The "predis" option is deprecated and ignored, use the "redis" option to configure the Predis client.
  *             id?: scalar|Param|null,
  *             host?: scalar|Param|null,
  *         },
@@ -1449,6 +1453,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         subject?: scalar|Param|null,
  *         content_type?: scalar|Param|null, // Default: null
  *         headers?: list<scalar|Param|null>,
+ *         parameters?: list<scalar|Param|null>,
  *         mailer?: scalar|Param|null, // Default: null
  *         email_prototype?: Param|string|array{
  *             id?: scalar|Param|null,
@@ -1804,6 +1809,21 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     subdomain_variable?: scalar|Param|null, // Default: "subdomain"
  *     track?: bool|Param, // Record each (namespaced) command run as a CommandProcess row for monitoring. // Default: true
  *     namespaces?: list<scalar|Param|null>,
+ *     agent_tools?: list<Param|string|array{ // Default: []
+ *         command?: scalar|Param|null,
+ *         name?: scalar|Param|null, // Default: null
+ *         description?: scalar|Param|null, // Agent-facing description; default: the command's one-line description (its CLI help is never sent) // Default: null
+ *         title?: scalar|Param|null, // Default: null
+ *         readOnly?: bool|Param, // Default: false
+ *         destructive?: bool|Param, // Default: false
+ *         idempotent?: bool|Param, // Default: false
+ *         public?: bool|Param, // no sign-in needed; readOnly tools only // Default: false
+ *         role?: scalar|Param|null, // checked unless public; null = ROLE_ADMIN // Default: null
+ *     }>,
+ *     agent?: array{ // Bearer-token sign-in for /mcp (see Survos\CommandBundle\Security\AgentTokenHandler).
+ *         token?: scalar|Param|null, // e.g. %env(default::AGENT_TOKEN)%; unset = no token accepted // Default: null
+ *         user?: scalar|Param|null, // user identifier the token signs in as, e.g. an admin email // Default: null
+ *     },
  * }
  * @psalm-type TwigComponentConfig = array{
  *     defaults?: array<string, Param|string|array{ // Default: []
@@ -1841,6 +1861,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         redirect_params?: list<scalar|Param|null>,
  *         use_state?: bool|Param|null, // Default: null
  *     }>,
+ *     login_route?: scalar|Param|null, // Default: "app_login"
  *     new_user_redirect_route?: scalar|Param|null, // Default: "oauth_profile"
  *     production_url_base?: scalar|Param|null, // Default: null
  *     user_provider?: scalar|Param|null, // Default: null
@@ -1950,6 +1971,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         dark_mode?: bool|Param, // Default: false
  *         show_locale_dropdown?: bool|Param, // Default: true
  *     },
+ *     auto_breadcrumbs?: bool|Param, // Build the BREADCRUMB slot from the page's entities: each object option whose class has a #[RouteMeta(entity:, purpose: Show)] route becomes a crumb. See BreadcrumbMenuSubscriber. // Default: false
  *     menu_options?: array<string, scalar|Param|null>,
  *     impersonate?: array<string, scalar|Param|null>,
  *     routes_enabled?: bool|Param, // Set false to manage this bundle's routes manually in your app. Bundles exposing sensitive routes (e.g. running console commands) should default this off. // Default: true
@@ -2024,8 +2046,9 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     base_layout?: scalar|Param|null, // Default: "base.html.twig"
  * }
  * @psalm-type SurvosSimpleDatatablesConfig = array{
+ *     backend?: "simple"|"ux"|Param, // Default: "simple"
  *     stimulus_controller?: scalar|Param|null, // Default: "@survos/simple-datatables-bundle/table"
- *     per_page?: bool|Param, // Default: 10
+ *     per_page?: int|Param, // Default: 10
  *     searchable?: bool|Param, // Default: true
  *     fixed_height?: scalar|Param|null, // Default: true
  * }
@@ -2053,7 +2076,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         reset?: array{
  *             connections?: list<scalar|Param|null>,
  *             entity_managers?: list<scalar|Param|null>,
- *             mode?: \Zenstruck\Foundry\ORM\ResetDatabase\ResetDatabaseMode::SCHEMA|\Zenstruck\Foundry\ORM\ResetDatabase\ResetDatabaseMode::MIGRATE|Param, // Reset mode to use with ResetDatabase trait // Default: "schema"
+ *             mode?: \Zenstruck\Foundry\ORM\ResetDatabase\ResetDatabaseMode::SCHEMA|\Zenstruck\Foundry\ORM\ResetDatabase\ResetDatabaseMode::MIGRATE|"schema"|"migrate"|Param, // Reset mode to use with ResetDatabase trait // Default: "schema"
  *             migrations?: array{
  *                 configurations?: list<scalar|Param|null>,
  *             },
@@ -2175,6 +2198,9 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         options?: list<mixed>,
  *     }>,
  * }
+ * @psalm-type SurvosJsonlConfig = array{
+ *     compression_level?: int|Param, // Default: 1
+ * }
  * @psalm-type SurvosMeiliConfig = array{
  *     routes_enabled?: bool|Param, // Set false to manage this bundle's routes manually in your app. Bundles exposing sensitive routes (e.g. running console commands) should default this off. // Default: true
  *     route_prefix?: scalar|Param|null, // URL prefix applied to all routes from this bundle. // Default: "/meili"
@@ -2268,7 +2294,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  * @psalm-type EndroidQrCodeConfig = array{
  *     route_prefix?: scalar|Param|null, // Default: "/qr-code"
  *     route_enabled?: bool|Param, // Default: true
- *     builders?: array<string, list<mixed>>,
+ *     builders?: array<string, array<string, mixed>>,
  * }
  * @psalm-type SurvosFieldConfig = array{
  *     routes_enabled?: bool|Param, // Set false to manage this bundle's routes manually in your app. Bundles exposing sensitive routes (e.g. running console commands) should default this off. // Default: true
@@ -2340,6 +2366,38 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     route_prefix?: scalar|Param|null, // URL prefix applied to all routes from this bundle. // Default: ""
  *     locale_prefix?: bool|Param, // Prepend {_locale} (constrained to kernel.enabled_locales) to this bundle's route prefix, e.g. /{_locale}/f instead of /f -- for bundles whose routes are meant to be shared/bookmarked, so the URL itself carries the locale instead of a query param. // Default: false
  * }
+ * @psalm-type DataTablesConfig = array{
+ *     max_page_length?: int|Param, // Upper bound applied to the DataTables "length" parameter on Ajax requests. "length=-1" (show all) is honored only when the table declares -1 in lengthMenu(); otherwise it is capped to this value. // Default: 1000
+ *     options?: array{
+ *         language?: scalar|Param|null, // Default: "en-GB"
+ *         stateSave?: bool|Param,
+ *         showHeaderResetButton?: bool|Param,
+ *         layout?: mixed, // Default: {"topStart":"pageLength","topEnd":"search","bottomStart":"info","bottomEnd":"paging"}
+ *         lengthMenu?: list<scalar|Param|null>,
+ *         pageLength?: int|Param,
+ *         paging?: array{
+ *             boundaryNumbers?: bool|Param, // Default: true
+ *             buttons?: int|Param, // Default: 7
+ *             firstLast?: bool|Param, // Default: true
+ *             numbers?: bool|Param, // Default: true
+ *             previousNext?: bool|Param, // Default: true
+ *         },
+ *     },
+ *     table_attributes?: array{
+ *         class?: scalar|Param|null, // Default: "table"
+ *     },
+ *     extensions?: array{
+ *         buttons?: list<scalar|Param|null>,
+ *         select?: array{
+ *             style?: scalar|Param|null, // Default: "single"
+ *         },
+ *     },
+ *     edit_modal?: array{
+ *         template?: scalar|Param|null, // Default: "@PentiminaxDataTables/modal/datatables/edit_modal.html.twig"
+ *         body_template?: scalar|Param|null, // Default: "@PentiminaxDataTables/modal/datatables/_form_body.html.twig"
+ *         default_title?: scalar|Param|null, // Default: "Edit"
+ *     },
+ * }
  * @psalm-type ConfigType = array{
  *     imports?: ImportsConfig,
  *     parameters?: ParametersConfig,
@@ -2372,6 +2430,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     stof_doctrine_extensions?: StofDoctrineExtensionsConfig,
  *     survos_state?: SurvosStateConfig,
  *     survos_media?: SurvosMediaConfig,
+ *     survos_jsonl?: SurvosJsonlConfig,
  *     survos_meili?: SurvosMeiliConfig,
  *     survos_ez?: SurvosEzConfig,
  *     endroid_qr_code?: EndroidQrCodeConfig,
@@ -2383,6 +2442,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     survos_record_store?: SurvosRecordStoreConfig,
  *     survos_grist?: SurvosGristConfig,
  *     survos_iiif?: SurvosIiifConfig,
+ *     data_tables?: DataTablesConfig,
  *     "when@dev"?: array{
  *         imports?: ImportsConfig,
  *         parameters?: ParametersConfig,
@@ -2422,6 +2482,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         stof_doctrine_extensions?: StofDoctrineExtensionsConfig,
  *         survos_state?: SurvosStateConfig,
  *         survos_media?: SurvosMediaConfig,
+ *         survos_jsonl?: SurvosJsonlConfig,
  *         survos_meili?: SurvosMeiliConfig,
  *         survos_ez?: SurvosEzConfig,
  *         endroid_qr_code?: EndroidQrCodeConfig,
@@ -2433,6 +2494,53 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         survos_record_store?: SurvosRecordStoreConfig,
  *         survos_grist?: SurvosGristConfig,
  *         survos_iiif?: SurvosIiifConfig,
+ *         data_tables?: DataTablesConfig,
+ *     },
+ *     "when@panther"?: array{
+ *         imports?: ImportsConfig,
+ *         parameters?: ParametersConfig,
+ *         services?: ServicesConfig,
+ *         framework?: FrameworkConfig,
+ *         doctrine?: DoctrineConfig,
+ *         doctrine_migrations?: DoctrineMigrationsConfig,
+ *         twig?: TwigConfig,
+ *         stimulus?: StimulusConfig,
+ *         twig_extra?: TwigExtraConfig,
+ *         security?: SecurityConfig,
+ *         monolog?: MonologConfig,
+ *         nelmio_cors?: NelmioCorsConfig,
+ *         api_platform?: ApiPlatformConfig,
+ *         survos_command?: SurvosCommandConfig,
+ *         twig_component?: TwigComponentConfig,
+ *         survos_deployment?: SurvosDeploymentConfig,
+ *         knpu_oauth2_client?: KnpuOauth2ClientConfig,
+ *         survos_auth?: SurvosAuthConfig,
+ *         symfonycasts_verify_email?: SymfonycastsVerifyEmailConfig,
+ *         ux_icons?: UxIconsConfig,
+ *         survos_core?: SurvosCoreConfig,
+ *         survos_tabler?: SurvosTablerConfig,
+ *         knp_menu?: KnpMenuConfig,
+ *         ux_map?: UxMapConfig,
+ *         survos_geoapify?: SurvosGeoapifyConfig,
+ *         survos_google_sheets?: SurvosGoogleSheetsConfig,
+ *         survos_flickr?: SurvosFlickrConfig,
+ *         survos_simple_datatables?: SurvosSimpleDatatablesConfig,
+ *         stof_doctrine_extensions?: StofDoctrineExtensionsConfig,
+ *         survos_state?: SurvosStateConfig,
+ *         survos_media?: SurvosMediaConfig,
+ *         survos_jsonl?: SurvosJsonlConfig,
+ *         survos_meili?: SurvosMeiliConfig,
+ *         survos_ez?: SurvosEzConfig,
+ *         endroid_qr_code?: EndroidQrCodeConfig,
+ *         survos_field?: SurvosFieldConfig,
+ *         survos_imgproxy?: SurvosImgproxyConfig,
+ *         survos_js_twig?: SurvosJsTwigConfig,
+ *         survos_kit?: SurvosKitConfig,
+ *         survos_fetch?: SurvosFetchConfig,
+ *         survos_record_store?: SurvosRecordStoreConfig,
+ *         survos_grist?: SurvosGristConfig,
+ *         survos_iiif?: SurvosIiifConfig,
+ *         data_tables?: DataTablesConfig,
  *     },
  *     "when@prod"?: array{
  *         imports?: ImportsConfig,
@@ -2466,6 +2574,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         stof_doctrine_extensions?: StofDoctrineExtensionsConfig,
  *         survos_state?: SurvosStateConfig,
  *         survos_media?: SurvosMediaConfig,
+ *         survos_jsonl?: SurvosJsonlConfig,
  *         survos_meili?: SurvosMeiliConfig,
  *         survos_ez?: SurvosEzConfig,
  *         endroid_qr_code?: EndroidQrCodeConfig,
@@ -2477,6 +2586,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         survos_record_store?: SurvosRecordStoreConfig,
  *         survos_grist?: SurvosGristConfig,
  *         survos_iiif?: SurvosIiifConfig,
+ *         data_tables?: DataTablesConfig,
  *     },
  *     "when@test"?: array{
  *         imports?: ImportsConfig,
@@ -2515,6 +2625,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         stof_doctrine_extensions?: StofDoctrineExtensionsConfig,
  *         survos_state?: SurvosStateConfig,
  *         survos_media?: SurvosMediaConfig,
+ *         survos_jsonl?: SurvosJsonlConfig,
  *         survos_meili?: SurvosMeiliConfig,
  *         survos_ez?: SurvosEzConfig,
  *         endroid_qr_code?: EndroidQrCodeConfig,
@@ -2526,6 +2637,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         survos_record_store?: SurvosRecordStoreConfig,
  *         survos_grist?: SurvosGristConfig,
  *         survos_iiif?: SurvosIiifConfig,
+ *         data_tables?: DataTablesConfig,
  *     },
  *     ...<string, ExtensionType|array{ // extra keys must follow the when@%env% pattern or match an extension alias
  *         imports?: ImportsConfig,
@@ -2610,6 +2722,7 @@ namespace Symfony\Component\Routing\Loader\Configurator;
  * }
  * @psalm-type RoutesConfig = array{
  *     "when@dev"?: array<string, RouteConfig|ImportConfig|AliasConfig>,
+ *     "when@panther"?: array<string, RouteConfig|ImportConfig|AliasConfig>,
  *     "when@prod"?: array<string, RouteConfig|ImportConfig|AliasConfig>,
  *     "when@test"?: array<string, RouteConfig|ImportConfig|AliasConfig>,
  *     ...<string, RouteConfig|ImportConfig|AliasConfig>
