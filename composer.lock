@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b900b09686208666018cd81bbdff3ced",
+    "content-hash": "d995651a2d04318e26b5fc7632aa8999",
     "packages": [
         {
             "name": "adbario/php-dot-notation",
@@ -4694,103 +4694,6 @@
             "time": "2026-08-18T23:46:48+00:00"
         },
         {
-            "name": "pentiminax/ux-datatables",
-            "version": "v1.1.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/pentiminax/ux-datatables.git",
-                "reference": "8eadecfae42eb7e1aeb93ee9d2477fa86944b815"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/pentiminax/ux-datatables/zipball/8eadecfae42eb7e1aeb93ee9d2477fa86944b815",
-                "reference": "8eadecfae42eb7e1aeb93ee9d2477fa86944b815",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=8.3",
-                "symfony/config": "^7.0 || ^8.0",
-                "symfony/dependency-injection": "^7.0 || ^8.0",
-                "symfony/deprecation-contracts": "^2.5 || ^3.0",
-                "symfony/http-kernel": "^7.0 || ^8.0",
-                "symfony/property-access": "^7.0 || ^8.0",
-                "symfony/security-bundle": "^7.0 || ^8.0",
-                "symfony/security-csrf": "^7.0 || ^8.0",
-                "symfony/stimulus-bundle": "^2.0 || ^3.0"
-            },
-            "conflict": {
-                "symfony/flex": "<1.13"
-            },
-            "require-dev": {
-                "api-platform/core": "^3.0 || ^4.0 || ^5.0",
-                "doctrine/orm": "^3.0",
-                "friendsofphp/php-cs-fixer": "^3.95",
-                "openspout/openspout": "^4.0",
-                "phpunit/phpunit": "^12.0",
-                "symfony/asset-mapper": "^7.0 || ^8.0",
-                "symfony/browser-kit": "^7.0 || ^8.0",
-                "symfony/css-selector": "^7.0 || ^8.0",
-                "symfony/dom-crawler": "^7.0 || ^8.0",
-                "symfony/expression-language": "^7.0 || ^8.0",
-                "symfony/form": "^7.0 || ^8.0",
-                "symfony/framework-bundle": "^7.0 || ^8.0",
-                "symfony/maker-bundle": "^1.66",
-                "symfony/mercure-bundle": "^0.5.0",
-                "symfony/phpunit-bridge": "^7.0 || ^8.0",
-                "symfony/property-info": "^7.0 || ^8.0",
-                "symfony/translation": "^7.0 || ^8.0",
-                "symfony/twig-bundle": "^7.0 || ^8.0",
-                "symfony/var-dumper": "^7.0 || ^8.0",
-                "symfony/web-profiler-bundle": "^7.0 || ^8.0"
-            },
-            "suggest": {
-                "api-platform/core": "To auto-detect columns from API Platform metadata.",
-                "openspout/openspout": "To enable server-side CSV and XLSX export via Button::csv(serverSide: true) and Button::excel(serverSide: true).",
-                "symfony/browser-kit": "To test your tables with Pentiminax\\UX\\DataTables\\Test\\DataTableTestCase.",
-                "symfony/css-selector": "To let DataTableTestCase::dataTableView() locate a rendered table in the page.",
-                "symfony/dom-crawler": "To assert on client-side tables with DataTableTestCase::dataTableView().",
-                "symfony/expression-language": "To use Symfony Expression objects with setPermission().",
-                "symfony/form": "To enable inline edit modal with auto-generated forms.",
-                "symfony/maker-bundle": "To use the make:datatable command.",
-                "symfony/mercure-bundle": "To enable real-time DataTable updates via Mercure SSE.",
-                "symfony/translation": "To translate DataTable column titles and the filter bar labels (Filters/Reset/Apply/All).",
-                "symfony/twig-bundle": "To render edit form and TwigColumn"
-            },
-            "type": "symfony-bundle",
-            "extra": {
-                "thanks": {
-                    "url": "https://github.com/symfony/ux",
-                    "name": "symfony/ux"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Pentiminax\\UX\\DataTables\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Tanguy Lemarié",
-                    "email": "tanguy.lemarie6@gmail.com"
-                }
-            ],
-            "description": "DataTables.net integration for Symfony",
-            "homepage": "https://github.com/pentiminax/ux-datatables",
-            "keywords": [
-                "datatables",
-                "symfony-ux"
-            ],
-            "support": {
-                "issues": "https://github.com/pentiminax/ux-datatables/issues",
-                "source": "https://github.com/pentiminax/ux-datatables/tree/v1.1.1"
-            },
-            "time": "2026-10-01T13:15:35+00:00"
-        },
-        {
             "name": "php-http/discovery",
             "version": "1.20.0",
             "source": {
@@ -6061,16 +5964,16 @@
         },
         {
             "name": "survos/data-contracts",
-            "version": "2.34.13",
+            "version": "2.35.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/survos/data-contracts.git",
-                "reference": "fbcbcae4ec0754afd78ed709e3c7f48492516906"
+                "reference": "8bad366098576e65db9ea17698381f4040c96afc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/survos/data-contracts/zipball/fbcbcae4ec0754afd78ed709e3c7f48492516906",
-                "reference": "fbcbcae4ec0754afd78ed709e3c7f48492516906",
+                "url": "https://api.github.com/repos/survos/data-contracts/zipball/8bad366098576e65db9ea17698381f4040c96afc",
+                "reference": "8bad366098576e65db9ea17698381f4040c96afc",
                 "shasum": ""
             },
             "require": {
@@ -6100,7 +6003,7 @@
             "description": "Shared data vocabularies, content metadata, and item DTO contracts for Survos data/media/import packages.",
             "support": {
                 "issues": "https://github.com/survos/data-contracts/issues",
-                "source": "https://github.com/survos/data-contracts/tree/2.34.13"
+                "source": "https://github.com/survos/data-contracts/tree/2.35.8"
             },
             "funding": [
                 {
@@ -6108,7 +6011,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-09-28T13:14:11+00:00"
+            "time": "2026-10-05T13:13:35+00:00"
         },
         {
             "name": "survos/debug-utils",
@@ -6285,16 +6188,16 @@
         },
         {
             "name": "survos/fetch-bundle",
-            "version": "2.34.29",
+            "version": "2.35.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/survos/fetch-bundle.git",
-                "reference": "1dc8ac858e1aabd76b7d57fbecaf00a65d23f1ce"
+                "reference": "ba29694a46dc9dca64df0ed8390a76eb492db7ac"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/survos/fetch-bundle/zipball/1dc8ac858e1aabd76b7d57fbecaf00a65d23f1ce",
-                "reference": "1dc8ac858e1aabd76b7d57fbecaf00a65d23f1ce",
+                "url": "https://api.github.com/repos/survos/fetch-bundle/zipball/ba29694a46dc9dca64df0ed8390a76eb492db7ac",
+                "reference": "ba29694a46dc9dca64df0ed8390a76eb492db7ac",
                 "shasum": ""
             },
             "require": {
@@ -6336,7 +6239,7 @@
             "description": "HTTP fetch utilities for Symfony: caching (RFC 9111 or app-controlled TTL), retry/backoff, bounded concurrency, and resumable downloads. Optional JSONL dataset-harvesting pagination on top if survos/jsonl-bundle is installed.",
             "support": {
                 "issues": "https://github.com/survos/fetch-bundle/issues",
-                "source": "https://github.com/survos/fetch-bundle/tree/2.34.29"
+                "source": "https://github.com/survos/fetch-bundle/tree/2.35.12"
             },
             "funding": [
                 {
@@ -6344,7 +6247,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-10-01T17:15:19+00:00"
+            "time": "2026-10-06T14:43:46+00:00"
         },
         {
             "name": "survos/field-bundle",
@@ -6879,16 +6782,16 @@
         },
         {
             "name": "survos/js-twig-bundle",
-            "version": "2.34.38",
+            "version": "2.35.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/survos/js-twig-bundle.git",
-                "reference": "ca49761792749154f31154d9ea16b463e86cd11c"
+                "reference": "944852d90b3f0cca71a31bec7f94e8f371a0fc8e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/survos/js-twig-bundle/zipball/ca49761792749154f31154d9ea16b463e86cd11c",
-                "reference": "ca49761792749154f31154d9ea16b463e86cd11c",
+                "url": "https://api.github.com/repos/survos/js-twig-bundle/zipball/944852d90b3f0cca71a31bec7f94e8f371a0fc8e",
+                "reference": "944852d90b3f0cca71a31bec7f94e8f371a0fc8e",
                 "shasum": ""
             },
             "require": {
@@ -6927,7 +6830,7 @@
             ],
             "support": {
                 "issues": "https://github.com/survos/js-twig-bundle/issues",
-                "source": "https://github.com/survos/js-twig-bundle/tree/2.34.38"
+                "source": "https://github.com/survos/js-twig-bundle/tree/2.35.6"
             },
             "funding": [
                 {
@@ -6935,7 +6838,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-10-04T18:03:08+00:00"
+            "time": "2026-10-05T11:50:37+00:00"
         },
         {
             "name": "survos/jsonl-bundle",
@@ -7160,16 +7063,16 @@
         },
         {
             "name": "survos/media-bundle",
-            "version": "2.34.14",
+            "version": "2.35.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/survos/media-bundle.git",
-                "reference": "58aac05f3fd3104af272f5c6efef154d29e12b74"
+                "reference": "f21eabb7529f9b4e5b21fc4e473825a8b44faa00"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/survos/media-bundle/zipball/58aac05f3fd3104af272f5c6efef154d29e12b74",
-                "reference": "58aac05f3fd3104af272f5c6efef154d29e12b74",
+                "url": "https://api.github.com/repos/survos/media-bundle/zipball/f21eabb7529f9b4e5b21fc4e473825a8b44faa00",
+                "reference": "f21eabb7529f9b4e5b21fc4e473825a8b44faa00",
                 "shasum": ""
             },
             "require": {
@@ -7225,7 +7128,7 @@
             ],
             "support": {
                 "issues": "https://github.com/survos/media-bundle/issues",
-                "source": "https://github.com/survos/media-bundle/tree/2.34.14"
+                "source": "https://github.com/survos/media-bundle/tree/2.35.11"
             },
             "funding": [
                 {
@@ -7233,7 +7136,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-09-28T13:31:34+00:00"
+            "time": "2026-10-06T12:44:42+00:00"
         },
         {
             "name": "survos/meili-bundle",
@@ -7436,20 +7339,19 @@
         },
         {
             "name": "survos/simple-datatables-bundle",
-            "version": "2.35.1",
+            "version": "2.35.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/survos/simple-datatables-bundle.git",
-                "reference": "5720b5b773a1209aefc3b1a54bb062e8918ae509"
+                "reference": "29184293be48674079e4b502c70d8e928d3fa8c9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/survos/simple-datatables-bundle/zipball/5720b5b773a1209aefc3b1a54bb062e8918ae509",
-                "reference": "5720b5b773a1209aefc3b1a54bb062e8918ae509",
+                "url": "https://api.github.com/repos/survos/simple-datatables-bundle/zipball/29184293be48674079e4b502c70d8e928d3fa8c9",
+                "reference": "29184293be48674079e4b502c70d8e928d3fa8c9",
                 "shasum": ""
             },
             "require": {
-                "pentiminax/ux-datatables": "^1.0",
                 "php": "^8.5",
                 "survos/kit-bundle": "^2.5",
                 "symfony/config": "^7.4||^8.1",
@@ -7501,7 +7403,7 @@
             ],
             "support": {
                 "issues": "https://github.com/survos/simple-datatables-bundle/issues",
-                "source": "https://github.com/survos/simple-datatables-bundle/tree/2.35.1"
+                "source": "https://github.com/survos/simple-datatables-bundle/tree/2.35.7"
             },
             "funding": [
                 {
@@ -7509,20 +7411,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-10-04T18:47:28+00:00"
+            "time": "2026-10-05T13:03:21+00:00"
         },
         {
             "name": "survos/state-bundle",
-            "version": "2.35.1",
+            "version": "2.35.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/survos/state-bundle.git",
-                "reference": "34d846c253507cfaf21f514671695af219d21722"
+                "reference": "041c3d141ab2ad935001186d339b0797abdb4c79"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/survos/state-bundle/zipball/34d846c253507cfaf21f514671695af219d21722",
-                "reference": "34d846c253507cfaf21f514671695af219d21722",
+                "url": "https://api.github.com/repos/survos/state-bundle/zipball/041c3d141ab2ad935001186d339b0797abdb4c79",
+                "reference": "041c3d141ab2ad935001186d339b0797abdb4c79",
                 "shasum": ""
             },
             "require": {
@@ -7588,7 +7490,7 @@
             ],
             "support": {
                 "issues": "https://github.com/survos/state-bundle/issues",
-                "source": "https://github.com/survos/state-bundle/tree/2.35.1"
+                "source": "https://github.com/survos/state-bundle/tree/2.35.6"
             },
             "funding": [
                 {
@@ -7596,7 +7498,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-10-04T18:46:52+00:00"
+            "time": "2026-10-05T11:51:08+00:00"
         },
         {
             "name": "survos/tabler-bundle",

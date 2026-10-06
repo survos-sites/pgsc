@@ -2046,7 +2046,6 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     base_layout?: scalar|Param|null, // Default: "base.html.twig"
  * }
  * @psalm-type SurvosSimpleDatatablesConfig = array{
- *     backend?: "simple"|"ux"|Param, // Default: "simple"
  *     stimulus_controller?: scalar|Param|null, // Default: "@survos/simple-datatables-bundle/table"
  *     per_page?: int|Param, // Default: 10
  *     searchable?: bool|Param, // Default: true
@@ -2366,38 +2365,6 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     route_prefix?: scalar|Param|null, // URL prefix applied to all routes from this bundle. // Default: ""
  *     locale_prefix?: bool|Param, // Prepend {_locale} (constrained to kernel.enabled_locales) to this bundle's route prefix, e.g. /{_locale}/f instead of /f -- for bundles whose routes are meant to be shared/bookmarked, so the URL itself carries the locale instead of a query param. // Default: false
  * }
- * @psalm-type DataTablesConfig = array{
- *     max_page_length?: int|Param, // Upper bound applied to the DataTables "length" parameter on Ajax requests. "length=-1" (show all) is honored only when the table declares -1 in lengthMenu(); otherwise it is capped to this value. // Default: 1000
- *     options?: array{
- *         language?: scalar|Param|null, // Default: "en-GB"
- *         stateSave?: bool|Param,
- *         showHeaderResetButton?: bool|Param,
- *         layout?: mixed, // Default: {"topStart":"pageLength","topEnd":"search","bottomStart":"info","bottomEnd":"paging"}
- *         lengthMenu?: list<scalar|Param|null>,
- *         pageLength?: int|Param,
- *         paging?: array{
- *             boundaryNumbers?: bool|Param, // Default: true
- *             buttons?: int|Param, // Default: 7
- *             firstLast?: bool|Param, // Default: true
- *             numbers?: bool|Param, // Default: true
- *             previousNext?: bool|Param, // Default: true
- *         },
- *     },
- *     table_attributes?: array{
- *         class?: scalar|Param|null, // Default: "table"
- *     },
- *     extensions?: array{
- *         buttons?: list<scalar|Param|null>,
- *         select?: array{
- *             style?: scalar|Param|null, // Default: "single"
- *         },
- *     },
- *     edit_modal?: array{
- *         template?: scalar|Param|null, // Default: "@PentiminaxDataTables/modal/datatables/edit_modal.html.twig"
- *         body_template?: scalar|Param|null, // Default: "@PentiminaxDataTables/modal/datatables/_form_body.html.twig"
- *         default_title?: scalar|Param|null, // Default: "Edit"
- *     },
- * }
  * @psalm-type ConfigType = array{
  *     imports?: ImportsConfig,
  *     parameters?: ParametersConfig,
@@ -2442,7 +2409,6 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     survos_record_store?: SurvosRecordStoreConfig,
  *     survos_grist?: SurvosGristConfig,
  *     survos_iiif?: SurvosIiifConfig,
- *     data_tables?: DataTablesConfig,
  *     "when@dev"?: array{
  *         imports?: ImportsConfig,
  *         parameters?: ParametersConfig,
@@ -2494,53 +2460,6 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         survos_record_store?: SurvosRecordStoreConfig,
  *         survos_grist?: SurvosGristConfig,
  *         survos_iiif?: SurvosIiifConfig,
- *         data_tables?: DataTablesConfig,
- *     },
- *     "when@panther"?: array{
- *         imports?: ImportsConfig,
- *         parameters?: ParametersConfig,
- *         services?: ServicesConfig,
- *         framework?: FrameworkConfig,
- *         doctrine?: DoctrineConfig,
- *         doctrine_migrations?: DoctrineMigrationsConfig,
- *         twig?: TwigConfig,
- *         stimulus?: StimulusConfig,
- *         twig_extra?: TwigExtraConfig,
- *         security?: SecurityConfig,
- *         monolog?: MonologConfig,
- *         nelmio_cors?: NelmioCorsConfig,
- *         api_platform?: ApiPlatformConfig,
- *         survos_command?: SurvosCommandConfig,
- *         twig_component?: TwigComponentConfig,
- *         survos_deployment?: SurvosDeploymentConfig,
- *         knpu_oauth2_client?: KnpuOauth2ClientConfig,
- *         survos_auth?: SurvosAuthConfig,
- *         symfonycasts_verify_email?: SymfonycastsVerifyEmailConfig,
- *         ux_icons?: UxIconsConfig,
- *         survos_core?: SurvosCoreConfig,
- *         survos_tabler?: SurvosTablerConfig,
- *         knp_menu?: KnpMenuConfig,
- *         ux_map?: UxMapConfig,
- *         survos_geoapify?: SurvosGeoapifyConfig,
- *         survos_google_sheets?: SurvosGoogleSheetsConfig,
- *         survos_flickr?: SurvosFlickrConfig,
- *         survos_simple_datatables?: SurvosSimpleDatatablesConfig,
- *         stof_doctrine_extensions?: StofDoctrineExtensionsConfig,
- *         survos_state?: SurvosStateConfig,
- *         survos_media?: SurvosMediaConfig,
- *         survos_jsonl?: SurvosJsonlConfig,
- *         survos_meili?: SurvosMeiliConfig,
- *         survos_ez?: SurvosEzConfig,
- *         endroid_qr_code?: EndroidQrCodeConfig,
- *         survos_field?: SurvosFieldConfig,
- *         survos_imgproxy?: SurvosImgproxyConfig,
- *         survos_js_twig?: SurvosJsTwigConfig,
- *         survos_kit?: SurvosKitConfig,
- *         survos_fetch?: SurvosFetchConfig,
- *         survos_record_store?: SurvosRecordStoreConfig,
- *         survos_grist?: SurvosGristConfig,
- *         survos_iiif?: SurvosIiifConfig,
- *         data_tables?: DataTablesConfig,
  *     },
  *     "when@prod"?: array{
  *         imports?: ImportsConfig,
@@ -2586,7 +2505,6 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         survos_record_store?: SurvosRecordStoreConfig,
  *         survos_grist?: SurvosGristConfig,
  *         survos_iiif?: SurvosIiifConfig,
- *         data_tables?: DataTablesConfig,
  *     },
  *     "when@test"?: array{
  *         imports?: ImportsConfig,
@@ -2637,7 +2555,6 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         survos_record_store?: SurvosRecordStoreConfig,
  *         survos_grist?: SurvosGristConfig,
  *         survos_iiif?: SurvosIiifConfig,
- *         data_tables?: DataTablesConfig,
  *     },
  *     ...<string, ExtensionType|array{ // extra keys must follow the when@%env% pattern or match an extension alias
  *         imports?: ImportsConfig,
@@ -2722,7 +2639,6 @@ namespace Symfony\Component\Routing\Loader\Configurator;
  * }
  * @psalm-type RoutesConfig = array{
  *     "when@dev"?: array<string, RouteConfig|ImportConfig|AliasConfig>,
- *     "when@panther"?: array<string, RouteConfig|ImportConfig|AliasConfig>,
  *     "when@prod"?: array<string, RouteConfig|ImportConfig|AliasConfig>,
  *     "when@test"?: array<string, RouteConfig|ImportConfig|AliasConfig>,
  *     ...<string, RouteConfig|ImportConfig|AliasConfig>

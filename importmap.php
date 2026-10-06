@@ -86,7 +86,6 @@ return [
     'ms' => ['version' => '2.1.3'],
     'stimulus-attributes' => ['version' => '1.0.2'],
     'escape-html' => ['version' => '1.0.3'],
-    'fos-routing' => ['version' => '0.0.6'],
     'instantsearch.js' => ['version' => '4.111.1'],
     '@swc/helpers/cjs/_sliced_to_array.cjs' => ['version' => '0.5.18'],
     '@swc/helpers/cjs/_to_consumable_array.cjs' => ['version' => '0.5.18'],
