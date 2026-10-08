@@ -29,7 +29,7 @@ final class AltosObjImportCommand extends Command
         #[Option(description: 'If using Google Sheets, optional gid of the tab to import')] ?string $gid = null,
         #[Option(description: 'Dry run (parse only)')] ?bool $dryRun = null,
         #[Option(description: 'Truncate AltosObj table before import')] ?bool $truncate = null,
-        #[Option(description: 'Batch size for flush')] ?int $batch = 200,
+        #[Option(description: 'Batch size for flush')] int $batch = 200,
     ): int {
         $io->title('Altos CSV Import');
 
