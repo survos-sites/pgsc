@@ -14,6 +14,8 @@ final class NativeWorkflowTest extends KernelTestCase
     public function testBothWorkflowsDiscoverTheirSubjectsAndGuards(): void
     {
         self::bootKernel();
+        self::assertArrayNotHasKey('SurvosStateBundle', self::$kernel->getBundles());
+        self::assertArrayHasKey('SurvosMenuBundle', self::$kernel->getBundles());
         $registry = self::getContainer()->get(Registry::class);
         $location = new Location('test-location');
         $locationWorkflow = $registry->get($location, 'LocationWorkflow');

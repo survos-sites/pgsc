@@ -285,9 +285,6 @@
     "survos/simple-datatables-bundle": {
         "version": "1.5.529"
     },
-    "survos/state-bundle": {
-        "version": "1.7"
-    },
     "survos/tabler-bundle": {
         "version": "2.4.1"
     },
