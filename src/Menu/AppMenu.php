@@ -13,7 +13,8 @@ use Survos\TablerBundle\Service\IconService;
 use Survos\TablerBundle\Service\RouteAliasService;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
-use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
+use Survos\MenuBundle\Attribute\AsMenuListener;
+use Survos\MenuBundle\MenuSlot;
 use Symfony\Component\Routing\RouterInterface;
 
 final class AppMenu
@@ -31,7 +32,7 @@ final class AppMenu
         protected ?IconService $iconService = null,
     ) {}
 
-    #[AsEventListener(event: MenuEvent::NAVBAR_MENU)]
+    #[AsMenuListener(MenuSlot::NAVBAR_MENU)]
     public function onNavbar(MenuEvent $event): void
     {
         $menu = $event->getMenu();
@@ -68,7 +69,7 @@ final class AppMenu
         }
     }
 
-    #[AsEventListener(event: MenuEvent::ADMIN_NAVBAR_MENU)]
+    #[AsMenuListener(MenuSlot::ADMIN_NAVBAR_MENU)]
     public function onAdminNavbar(MenuEvent $event): void
     {
         $menu = $event->getMenu();

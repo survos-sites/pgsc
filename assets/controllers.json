@@ -54,7 +54,7 @@
                 "enabled": true,
                 "fetch": "lazy",
                 "autoimport": {
-                    "@survos/meili/styles/chat.css": true
+                    "@survos/meili-bundle/styles/chat.css": true
                 }
             }
         },
@@ -97,6 +97,12 @@
             "conditional-fields": {
                 "enabled": true,
                 "fetch": "lazy"
+            }
+        },
+        "@survos/workflow-extras-bundle": {
+            "workflow": {
+                "enabled": true,
+                "fetch": "eager"
             }
         },
         "@symfony/ux-leaflet-map": {

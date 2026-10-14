@@ -1,14 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Workflow;
 
 use App\Entity\Sacro;
 use App\Workflow\ISacroWorkflow as WF;
-use Survos\StateBundle\Attribute\Place;
-use Survos\StateBundle\Attribute\Transition;
-use Survos\StateBundle\Attribute\Workflow;
+use Survos\WorkflowExtrasBundle\Attribute\Place;
+use Survos\WorkflowExtrasBundle\Attribute\Transition;
+use Survos\WorkflowExtrasBundle\Attribute\AsWorkflow;
 
-#[Workflow(supports: [Sacro::class], name: WF::WORKFLOW_NAME)]
+#[AsWorkflow(supports: [Sacro::class], name: WF::WORKFLOW_NAME)]
 class ISacroWorkflow
 {
 	public const WORKFLOW_NAME = 'SacroWorkflow';

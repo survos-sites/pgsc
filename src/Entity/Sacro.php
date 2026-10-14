@@ -13,8 +13,6 @@ use Survos\BabelBundle\Attribute\BabelLocale;
 use Survos\BabelBundle\Attribute\BabelStorage;
 use Survos\BabelBundle\Attribute\Translatable;
 use Survos\BabelBundle\Contract\BabelHooksInterface;
-use Survos\StateBundle\Traits\MarkingInterface;
-use Survos\StateBundle\Traits\MarkingTrait;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Serializer\Attribute\SerializedName;
 
@@ -32,11 +30,22 @@ use Doctrine\ORM\Mapping\Column;
     ]
 )]
 #[BabelStorage]
-class Sacro implements \Stringable, MarkingInterface, BabelHooksInterface
+class Sacro implements \Stringable, BabelHooksInterface
 {
     use BabelHooksTrait;
 
-    use MarkingTrait;
+    #[ORM\Column(type: 'string', length: 32, nullable: true)]
+    #[Groups(['transition', 'minimum', 'marking', 'searchable'])]
+    public ?string $marking = null;
+
+    public function getMarking(): ?string { return $this->marking; }
+
+    public function setMarking(?string $marking, array $context = []): self
+    {
+        $this->marking = $marking;
+        return $this;
+    }
+
 
     public function __construct(
         #[ORM\Id]

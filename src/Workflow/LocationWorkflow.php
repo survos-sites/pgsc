@@ -4,7 +4,6 @@ namespace App\Workflow;
 
 use App\Entity\Location;
 use Survos\GeoapifyBundle\Service\GeoapifyService;
-use Survos\StateBundle\Attribute\Workflow;
 use Symfony\Component\Workflow\Attribute\AsGuardListener;
 use Symfony\Component\Workflow\Attribute\AsTransitionListener;
 use Symfony\Component\Workflow\Event\CompletedEvent;
@@ -30,8 +29,8 @@ class LocationWorkflow
     public function onGeocode(TransitionEvent $event): void
     {
         $location = $this->getLocation($event);
-        if ($location->getAddress()) {
-            $geo = $this->geoapifyService->lookup($location->getAddress())['features'][0]['properties'];
+        if ($location->address) {
+            $geo = $this->geoapifyService->lookup($location->address)['features'][0]['properties'];
             if (!array_key_exists('lat', $geo)) {
                 dd($geo);
             }

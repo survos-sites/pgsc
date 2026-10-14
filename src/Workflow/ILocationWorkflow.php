@@ -1,14 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Workflow;
 
 use App\Entity\Location;
-use Survos\StateBundle\Attribute\Place;
-use Survos\StateBundle\Attribute\Transition;
-use Survos\StateBundle\Attribute\Workflow;
+use Survos\WorkflowExtrasBundle\Attribute\Place;
+use Survos\WorkflowExtrasBundle\Attribute\Transition;
+use Survos\WorkflowExtrasBundle\Attribute\AsWorkflow;
 
-#[Workflow(type: 'state_machine', supports: [Location::class], name: self::WORKFLOW_NAME)]
-interface ILocationWorkflow
+#[AsWorkflow(supports: [Location::class], name: self::WORKFLOW_NAME)]
+final class ILocationWorkflow
 {
     public const WORKFLOW_NAME = 'LocationWorkflow';
 
@@ -24,7 +26,7 @@ interface ILocationWorkflow
     #[Transition(
         from: [self::PLACE_NEW],
         to: self::PLACE_GEOCODED,
-        guard: 'subject.getAddress()',
+        guard: 'subject.address',
         metadata: [
 //            'color' => 'green',
 //            'arrow_color' => 'blue',

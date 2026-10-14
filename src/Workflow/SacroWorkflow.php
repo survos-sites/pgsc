@@ -3,7 +3,6 @@
 namespace App\Workflow;
 
 use App\Entity\Sacro;
-use Survos\StateBundle\Attribute\Workflow;
 use Symfony\Component\Workflow\Attribute\AsGuardListener;
 use Symfony\Component\Workflow\Attribute\AsTransitionListener;
 use Symfony\Component\Workflow\Event\GuardEvent;
